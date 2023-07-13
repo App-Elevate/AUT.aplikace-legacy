@@ -1,16 +1,11 @@
 # autojidelna
 
-A new Flutter project.
+Aplikace pro objednávání ze systému Icanteen. Cíl této aplikace je zjednodušit, zrychlit, (případně i zautomatizovat) objednávání obědů.
 
-## Getting Started
+## Kompilování
 
-This project is a starting point for a Flutter application.
+Pro systém android stačí mít nainstalovaný [Flutter](https://docs.flutter.dev/get-started/install) a poté ```flutter build apk``` pro android na windows nebo ```flutter build ipa``` pro ios na macbooku.
 
-A few resources to get you started if this is your first Flutter project:
+## Prémiové Featury
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Featury pro prémiové uživatele jsou na našem server-side softwaru a tato aplikace pouze tyto featury používá.
