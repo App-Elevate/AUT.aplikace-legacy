@@ -53,7 +53,7 @@ late Canteen canteenInstance;
 late CanteenData canteenData;
 
 /// Returns a [Canteen] instance with logged in user.
-/// Has to be called before using [canteen].
+/// Has to be called before using [canteenInstance].
 /// If [hasToBeNew] is true, it will create a new instance of [Canteen] even if there is already one.
 /// If [url], [username] or [password] is null, it will try to get it from storage.
 /// Can throw errors if login is not successful or when bad connection.
@@ -80,7 +80,15 @@ Future<Canteen> initCanteen(
 
   await canteenInstance.login(username, password);
   if (!canteenInstance.prihlasen) {
-    throw Exception('Login failed');
+    await Future.delayed(const Duration(seconds: 2));
+    await canteenInstance.login(username, password);
+    if (!canteenInstance.prihlasen) {
+      await Future.delayed(const Duration(seconds: 2));
+      await canteenInstance.login(username, password);
+      if (!canteenInstance.prihlasen) {
+        throw Exception('Login failed');
+      }
+    }
   }
   //get last monday
   DateTime currentDate = DateTime.now();
@@ -134,8 +142,12 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
 
 Future<void> preIndexLunches(DateTime start, int howManyDays) async {
   for (int i = 0; i < howManyDays; i++) {
-    canteenData.jidelnicky[start.add(Duration(days: i))] =
-        await getLunchesForDay(start.add(Duration(days: i)));
+    try {
+      canteenData.jidelnicky[start.add(Duration(days: i))] =
+          await getLunchesForDay(start.add(Duration(days: i)));
+    } catch (e) {
+      return;
+    }
   }
 }
 
@@ -155,6 +167,17 @@ Future<Jidelnicek> getLunchesForDay(DateTime date) async {
 
 CanteenData getCanteenData() {
   return canteenData;
+}
+
+bool jeJidloNaBurze(Jidlo jidlo) {
+  String varianta = jidlo.varianta;
+  DateTime den = jidlo.den;
+  for (var jidloNaBurze in canteenData.jidlaNaBurze) {
+    if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void setCanteenData(CanteenData data) {
