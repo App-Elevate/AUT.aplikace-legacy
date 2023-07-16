@@ -8,4 +8,4 @@ Pro systém android stačí mít nainstalovaný [Flutter](https://docs.flutter.d
 
 ## Prémiové Featury
 
-Featury pro prémiové uživatele jsou na našem server-side softwaru a tato aplikace pouze tyto featury používá.
+Featury pro prémiové uživatele jsou na našem server-side softwaru a tato aplikace pouze tyto featury používá. V kódu je tu tedy nenajdete.
