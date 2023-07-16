@@ -4,6 +4,14 @@ import 'package:flutter/cupertino.dart';
 
 import '../methods/icanteen.dart';
 import './all.dart';
+import './../sharedWidgets/all.dart';
+
+class SnackBarShown {
+  SnackBarShown({required this.shown});
+  bool shown = false;
+}
+
+SnackBarShown snackbarshown = SnackBarShown(shown: false);
 
 enum StavJidla {
   /// je objednano a lze odebrat
@@ -121,9 +129,26 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
             ],
           ),
           onTap: () async {
+            if (refreshing) return;
             loading(true);
-            await initCanteen(hasToBeNew: true);
+            refreshing = true;
+            try {
+              await initCanteen(hasToBeNew: true);
+            } catch (e) {
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              if (context.mounted && !snackbarshown.shown) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(snackbarFunction(
+                        'nastala chyba při aktualizaci dat, dejte tomu chvilku a zkuste to prosím znovu'))
+                    .closed
+                    .then((SnackBarClosedReason reason) {
+                  snackbarshown.shown = false;
+                });
+              }
+            }
             loading(false);
+            refreshing = false;
             setScaffoldBody(
                 JidelnicekDenWidget(customCanteenData: getCanteenData()));
           },
@@ -488,7 +513,6 @@ class ObjednatJidloTlacitko extends StatefulWidget {
 }
 
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
-  bool snackBarShown = false;
   Color? buttonColor;
   Widget? icon;
   Jidlo? jidlo;
@@ -546,31 +570,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
       );
     }
 
-    SnackBar snackbarFunction(String snackBarText) {
-      return SnackBar(
-        content:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(snackBarText),
-          )),
-          Builder(builder: (context) {
-            return ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color.fromARGB(255, 40, 40, 40)),
-              ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-              child: const Icon(Icons.close),
-            );
-          }),
-        ]),
-      );
-    }
-
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(buttonColor),
@@ -604,14 +603,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 // and use it to show a SnackBar.
                 // toto je upozornění dole (Snackbar)
                 // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackBarShown == false) {
-                  snackBarShown = true;
+                if (context.mounted && snackbarshown.shown == false) {
+                  snackbarshown.shown = true;
                   ScaffoldMessenger.of(context)
                       .showSnackBar(snackbarFunction(
                           'nastala chyba při obejnávání jídla: $e'))
                       .closed
                       .then((SnackBarClosedReason reason) {
-                    snackBarShown = false;
+                    snackbarshown.shown = false;
                   });
                 }
               }
@@ -633,14 +632,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     // and use it to show a SnackBar.
                     // toto je upozornění dole (Snackbar)
                     // snackbarshown je aby se snackbar nezobrazil vícekrát
-                    if (context.mounted && snackBarShown == false) {
-                      snackBarShown = true;
+                    if (context.mounted && snackbarshown.shown == false) {
+                      snackbarshown.shown = true;
                       ScaffoldMessenger.of(context)
                           .showSnackBar(snackbarFunction(
                               'nastala chyba při obejnávání jídla z burzy: $e'))
                           .closed
                           .then((SnackBarClosedReason reason) {
-                        snackBarShown = false;
+                        snackbarshown.shown = false;
                       });
                     }
                   }
@@ -654,14 +653,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
               // and use it to show a SnackBar.
               // toto je upozornění dole (Snackbar)
               // snackbarshown je aby se snackbar nezobrazil vícekrát
-              if (context.mounted && snackBarShown == false) {
-                snackBarShown = true;
+              if (context.mounted && snackbarshown.shown == false) {
+                snackbarshown.shown = true;
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackbarFunction(
                         'Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)'))
                     .closed
                     .then((SnackBarClosedReason reason) {
-                  snackBarShown = false;
+                  snackbarshown.shown = false;
                 });
               }
             }
@@ -677,14 +676,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 // and use it to show a SnackBar.
                 // toto je upozornění dole (Snackbar)
                 // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackBarShown == false) {
-                  snackBarShown = true;
+                if (context.mounted && snackbarshown.shown == false) {
+                  snackbarshown.shown = true;
                   ScaffoldMessenger.of(context)
                       .showSnackBar(snackbarFunction(
                           'nastala chyba při dávání jídla na burzu: $e'))
                       .closed
                       .then((SnackBarClosedReason reason) {
-                    snackBarShown = false;
+                    snackbarshown.shown = false;
                   });
                 }
               }
@@ -696,14 +695,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
               // and use it to show a SnackBar.
               // toto je upozornění dole (Snackbar)
               // snackbarshown je aby se snackbar nezobrazil vícekrát
-              if (context.mounted && snackBarShown == false) {
-                snackBarShown = true;
+              if (context.mounted && snackbarshown.shown == false) {
+                snackbarshown.shown = true;
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackbarFunction(
                         'Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)'))
                     .closed
                     .then((SnackBarClosedReason reason) {
-                  snackBarShown = false;
+                  snackbarshown.shown = false;
                 });
               }
             }
@@ -719,14 +718,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 // and use it to show a SnackBar.
                 // toto je upozornění dole (Snackbar)
                 // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackBarShown == false) {
-                  snackBarShown = true;
+                if (context.mounted && snackbarshown.shown == false) {
+                  snackbarshown.shown = true;
                   ScaffoldMessenger.of(context)
                       .showSnackBar(snackbarFunction(
                           'nastala chyba při rušení objednávky: $e'))
                       .closed
                       .then((SnackBarClosedReason reason) {
-                    snackBarShown = false;
+                    snackbarshown.shown = false;
                   });
                 }
               }
@@ -743,14 +742,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 // and use it to show a SnackBar.
                 // toto je upozornění dole (Snackbar)
                 // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackBarShown == false) {
-                  snackBarShown = true;
+                if (context.mounted && snackbarshown.shown == false) {
+                  snackbarshown.shown = true;
                   ScaffoldMessenger.of(context)
                       .showSnackBar(snackbarFunction(
                           'nastala chyba při dávání jídla na burzu: $e'))
                       .closed
                       .then((SnackBarClosedReason reason) {
-                    snackBarShown = false;
+                    snackbarshown.shown = false;
                   });
                 }
               }

@@ -51,6 +51,7 @@ class CanteenData {
 
 late Canteen canteenInstance;
 late CanteenData canteenData;
+bool refreshing = false;
 
 /// Returns a [Canteen] instance with logged in user.
 /// Has to be called before using [canteenInstance].
@@ -143,6 +144,9 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
 Future<void> preIndexLunches(DateTime start, int howManyDays) async {
   for (int i = 0; i < howManyDays; i++) {
     try {
+      if (refreshing) {
+        return;
+      }
       canteenData.jidelnicky[start.add(Duration(days: i))] =
           await getLunchesForDay(start.add(Duration(days: i)));
     } catch (e) {
