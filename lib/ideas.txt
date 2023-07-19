@@ -1,0 +1,17 @@
+showDialog(
+context: context,
+builder: (BuildContext context) {
+    return AlertDialog(
+    title: Text("Alert"),
+    content: Text("This is an alert message."),
+    actions: [
+        TextButton(
+        child: Text("OK"),
+        onPressed: () {
+            Navigator.of(context).pop();
+        },
+        ),
+    ],
+    );
+},
+);

@@ -1,8 +1,4 @@
-import 'package:canteenlib/canteenlib.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-export 'package:canteenlib/canteenlib.dart';
+import '../every_import.dart';
 
 String ziskatDenZData(int den) {
   switch (den) {
@@ -25,33 +21,10 @@ String ziskatDenZData(int den) {
   }
 }
 
-class CanteenData {
-  /// login uživatele
-  String username;
-
-  /// url kantýny
-  String url;
-
-  /// info o uživateli - např kredit,jméno,příjmení...
-  Uzivatel uzivatel;
-
-  /// seznam jídelníčků začínající Od Pondělí tohoto týdne
-  Map<DateTime, Jidelnicek> jidelnicky;
-
-  /// seznam jídel, které jsou na burze
-  List<Burza> jidlaNaBurze;
-  CanteenData({
-    required this.username,
-    required this.url,
-    required this.uzivatel,
-    required this.jidelnicky,
-    required this.jidlaNaBurze,
-  });
-}
-
 late Canteen canteenInstance;
 late CanteenData canteenData;
 bool refreshing = false;
+bool loggedOut = true;
 
 /// Returns a [Canteen] instance with logged in user.
 /// Has to be called before using [canteenInstance].
@@ -64,14 +37,18 @@ Future<Canteen> initCanteen(
     String? username,
     String? password}) async {
   url ??= await readData('url');
+  if (!url!.contains('https://')) {
+    url = 'https://$url';
+    saveData('url', url);
+  }
   try {
     if (canteenInstance.prihlasen && !hasToBeNew) {
       return canteenInstance;
     } else {
-      canteenInstance = Canteen(url!);
+      canteenInstance = Canteen(url);
     }
   } catch (e) {
-    canteenInstance = Canteen(url!);
+    canteenInstance = Canteen(url);
   }
   username ??= await getDataFromSecureStorage('username');
   password ??= await getDataFromSecureStorage('password');
@@ -80,15 +57,15 @@ Future<Canteen> initCanteen(
   }
 
   await canteenInstance.login(username, password);
+  await Future.delayed(const Duration(milliseconds: 100));
   if (!canteenInstance.prihlasen) {
-    await Future.delayed(const Duration(seconds: 2));
-    await canteenInstance.login(username, password);
+    await Future.delayed(const Duration(seconds: 1));
     if (!canteenInstance.prihlasen) {
-      await Future.delayed(const Duration(seconds: 2));
       await canteenInstance.login(username, password);
-      if (!canteenInstance.prihlasen) {
-        throw Exception('Login failed');
-      }
+    }
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (!(canteenInstance.prihlasen)) {
+      throw Exception('Login failed');
     }
   }
   //get last monday
@@ -123,6 +100,7 @@ Future<Canteen> initCanteen(
                   })
                 })
       });
+  loggedOut = false;
   return canteenInstance;
 }
 
@@ -144,7 +122,7 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
 Future<void> preIndexLunches(DateTime start, int howManyDays) async {
   for (int i = 0; i < howManyDays; i++) {
     try {
-      if (refreshing) {
+      if (refreshing || loggedOut) {
         return;
       }
       canteenData.jidelnicky[start.add(Duration(days: i))] =
@@ -217,4 +195,5 @@ void logout() {
   saveDataToSecureStorage('username', '');
   saveDataToSecureStorage('password', '');
   saveData('loggedIn', '0');
+  loggedOut = true;
 }

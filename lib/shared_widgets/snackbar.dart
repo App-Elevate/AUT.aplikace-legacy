@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import './../every_import.dart';
 
 SnackBar snackbarFunction(String snackBarText) {
   return SnackBar(

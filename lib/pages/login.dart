@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../methods/icanteen.dart';
-import './all.dart';
-
-enum LoginFormErrorField { password, url }
+import './../every_import.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({
@@ -248,6 +243,9 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
                 saveData('loggedIn', '1');
                 setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
               } else {
+                setState(() {
+                  loggingIn = false;
+                });
                 widget.errorSetter!('Špatné heslo nebo uživatelské jméno',
                     LoginFormErrorField.password);
               }
@@ -262,10 +260,10 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
               widget.errorSetter!(
                   'Připojení k serveru selhalo', LoginFormErrorField.url);
             }
+            setState(() {
+              loggingIn = false;
+            });
           }
-          setState(() {
-            loggingIn = false;
-          });
         }
       },
       child: Builder(

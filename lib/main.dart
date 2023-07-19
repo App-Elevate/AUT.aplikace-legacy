@@ -1,12 +1,5 @@
-// Flutter widget imports
-import 'package:flutter/material.dart';
-
-//storage
-import 'package:shared_preferences/shared_preferences.dart';
-
 //other imports from current project
-import './pages/all.dart';
-import 'methods/icanteen.dart';
+import "every_import.dart";
 
 void main() async {
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.

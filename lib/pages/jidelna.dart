@@ -1,52 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../methods/icanteen.dart';
-import './all.dart';
-import './../sharedWidgets/all.dart';
-
-class SnackBarShown {
-  SnackBarShown({required this.shown});
-  bool shown = false;
-}
-
-SnackBarShown snackbarshown = SnackBarShown(shown: false);
-
-enum StavJidla {
-  /// je objednano a lze odebrat
-  objednano,
-
-  /// je objednano a lze pouze dát na burzu
-  objednanoNelzeOdebrat,
-
-  /// bylo objednano a pravděpodobně snězeno ;)
-  objednanoVyprsenaPlatnost,
-
-  /// nabízíme jídlo na burze
-  naBurze,
-
-  /// jídlo nemáme objednané, ale je dostupné na burze
-  dostupneNaBurze,
-
-  /// jídlo nemáme objednané, ale můžeme stále ještě normálně objednat
-  neobjednano,
-
-  /// jídlo nemáme objednané a není dostupné na burze nebo vypršela platnost
-  nedostupne
-}
-
-class JidelnicekPageNum {
-  JidelnicekPageNum({required this.pageNumber});
-  int pageNumber;
-}
-
-final JidelnicekPageNum jidelnicekPageNum = JidelnicekPageNum(
-    pageNumber: DateTime.now().difference(DateTime(2006, 5, 23)).inDays);
-
-JidelnicekPageNum getJidelnicekPageNum() {
-  return jidelnicekPageNum;
-}
+import './../every_import.dart';
 
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({
@@ -99,6 +53,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
       ),
       drawer: MainAppDrawer(
         setHomeWidget: widget.setHomeWidget,
+        page: NavigationDrawerItem.jidelnicek,
       ),
     );
   }
@@ -164,52 +119,14 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
             ),
             onTap: () {
               logout();
-              widget.setHomeWidget(LoginScreen(
-                setHomeWidget: widget.setHomeWidget,
-              ));
-              //to be implemented
+              widget.setHomeWidget(
+                LoginScreen(
+                  setHomeWidget: widget.setHomeWidget,
+                ),
+              );
             }),
       ];
     });
-  }
-}
-
-class MainAppDrawer extends StatelessWidget {
-  const MainAppDrawer({
-    super.key,
-    required this.setHomeWidget,
-  });
-  final Function setHomeWidget;
-
-  @override
-  Widget build(BuildContext context) {
-    final String username = getCanteenData().username;
-    return Drawer(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-          title: const Text('Autojídelna'),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Jste přihlášen jako $username'),
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: ElevatedButton(
-            child: const Text('Odhlásit se'),
-            onPressed: () => {
-              logout(),
-              setHomeWidget(LoginScreen(
-                setHomeWidget: setHomeWidget,
-              ))
-            },
-          ),
-        ),
-      ),
-    );
   }
 }
 
