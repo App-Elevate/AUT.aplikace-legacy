@@ -164,8 +164,8 @@ class JidelnicekDenWidget extends StatelessWidget {
           .add(Duration(days: getJidelnicekPageNum().pageNumber)));
   final ValueNotifier<CanteenData> canteenDataListener =
       ValueNotifier<CanteenData>(getCanteenData());
-  final ValueNotifier<CanteenData> canteenDataRefreshListener =
-      ValueNotifier<CanteenData>(getCanteenData());
+
+
   final PageController pageviewController =
       PageController(initialPage: getJidelnicekPageNum().pageNumber);
   final DateTime minimalDate = DateTime(2006, 5, 23);
@@ -209,18 +209,12 @@ class JidelnicekDenWidget extends StatelessWidget {
     }
   }
 
-  void refresh() async {
-    await initCanteen(hasToBeNew: true);
-    canteenDataRefreshListener.value = getCanteenData();
-    canteenDataListener.value = canteenDataRefreshListener.value;
-  }
 
   @override
   Widget build(BuildContext context) {
     //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
     if (customCanteenData != null) {
       canteenDataListener.value = customCanteenData!;
-      canteenDataRefreshListener.value = customCanteenData!;
     }
     return Scaffold(
       appBar: AppBar(
@@ -294,15 +288,11 @@ class JidelnicekDenWidget extends StatelessWidget {
                 },
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return ValueListenableBuilder(
-                      valueListenable: canteenDataRefreshListener,
-                      builder: (ctx, value, child) {
-                        return JidelnicekWidget(
-                          minimalDate: minimalDate,
-                          widget: this,
-                          index: index,
-                        );
-                      });
+                  return JidelnicekWidget(
+                    minimalDate: minimalDate,
+                    widget: this,
+                    index: index,
+                  );
                 },
               ),
             ),
@@ -351,14 +341,16 @@ class ListJidel extends StatelessWidget {
   final Jidelnicek? jidelnicek;
   final JidelnicekWidget widget;
   final Widget? errorWidget;
-  const ListJidel({
+  ListJidel({
     this.jidelnicek,
     super.key,
     required this.widget,
     this.errorWidget,
   });
+  final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
   @override
   Widget build(BuildContext context) {
+    jidlaListener.value = jidelnicek!.jidla;
     return Column(
       children: [
         Builder(builder: (_) {
@@ -384,6 +376,7 @@ class ListJidel extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
                           child: ObjednatJidloTlacitko(
                             widget: this,
+                            jidlaListener: jidlaListener,
                             index: index,
                           ),
                         ),
@@ -420,8 +413,9 @@ class ObjednatJidloTlacitko extends StatefulWidget {
     super.key,
     required this.widget,
     required this.index,
+    required this.jidlaListener
   });
-
+  final ValueNotifier jidlaListener;
   final ListJidel widget;
   final int index;
 
@@ -430,119 +424,92 @@ class ObjednatJidloTlacitko extends StatefulWidget {
 }
 
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
-  Color? buttonColor;
-  Widget? icon;
-  Jidlo? jidlo;
-  late Jidelnicek jidelnicek;
-  late StavJidla stavJidla;
   @override
   Widget build(BuildContext context) {
-    String obedText;
-    jidelnicek =
-        widget.widget.jidelnicek!; //this is also a permanent referrence
-    final int index = widget.index; //this doesn't change after pressing buttons
-    jidlo ??= jidelnicek.jidla[
-        index]; //only set this so that we don't overwrite it after the button has been clicked
+    Color? buttonColor;
+    Widget? icon;
+    Jidlo? jidlo;
+    late Jidelnicek jidelnicek;
+    late StavJidla stavJidla;
+    return ValueListenableBuilder(
+      valueListenable: widget.jidlaListener,
+      builder: (context, value, child) {
+      String obedText;
+      jidelnicek =
+          widget.widget.jidelnicek!; //this is a permanent referrence that doesn't need to change in the button scope (if refreshed it changes higher in the highearchy)
+      final int index = widget.index; //this doesn't change even after pressing buttons
+      jidlo = value[index]; //only set this so that we don't overwrite it after the button has been clicked
 
-    if (jidlo!.naBurze) {
-      stavJidla = StavJidla.naBurze;
-      obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-    } else if (jidlo!.objednano) {
-      stavJidla = StavJidla.objednano;
-      obedText = 'Objednáno ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-      buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-      if (!jidlo!.lzeObjednat) {
-        stavJidla = StavJidla.objednanoNelzeOdebrat;
-        icon = const Icon(
-          Icons.block,
-          color: Color.fromRGBO(0, 0, 0, 1),
-        );
-      }
-      if (jidlo!.burzaUrl == null || jidlo!.burzaUrl!.isEmpty) {
-        stavJidla = StavJidla.objednanoVyprsenaPlatnost;
-        icon = const Icon(
-          Icons.block,
-          color: Color.fromRGBO(0, 0, 0, 1),
-        );
-      }
-    } else if (jidlo!.lzeObjednat) {
-      stavJidla = StavJidla.neobjednano;
-      obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-      buttonColor = const Color.fromRGBO(173, 165, 52, 1);
-    } else if (jeJidloNaBurze(jidlo!)) {
-      stavJidla = StavJidla.dostupneNaBurze;
-      obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-      buttonColor = const Color.fromARGB(255, 180, 116, 6);
-      icon = const Icon(
-        Icons.shopping_bag,
-        color: Color.fromRGBO(0, 0, 0, 1),
-      );
-    } else {
-      stavJidla = StavJidla.nedostupne;
-      obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-      buttonColor = const Color.fromARGB(255, 247, 75, 75);
-      icon = const Icon(
-        Icons.block,
-        color: Color.fromRGBO(0, 0, 0, 1),
-      );
-    }
-
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(buttonColor),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ),
-        ),
-      ),
-      onPressed: () async {
-        setState(() {
-          icon = const SizedBox(
-            height: 20,
-            width: 20,
-            child: CircularProgressIndicator(
-              color: Color.fromARGB(255, 34, 150, 243),
-              strokeWidth: 3.5,
-            ),
+      if (jidlo!.naBurze) {
+        stavJidla = StavJidla.naBurze;
+        obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena} Kč';
+      } else if (jidlo!.objednano) {
+        stavJidla = StavJidla.objednano;
+        obedText = 'Objednáno ${jidlo!.varianta} za ${jidlo!.cena} Kč';
+        buttonColor = const Color.fromRGBO(17, 201, 11, 1);
+        if (!jidlo!.lzeObjednat) {
+          stavJidla = StavJidla.objednanoNelzeOdebrat;
+          icon = const Icon(
+            Icons.block,
+            color: Color.fromRGBO(0, 0, 0, 1),
           );
-        });
-        switch (stavJidla) {
-          case StavJidla.neobjednano:
-            {
-              Canteen canteen = await initCanteen();
-              try {
-                canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
-                    await canteen.objednat(jidlo!);
-                widget.widget.widget.widget.restartCanteen();
-              } catch (e) {
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                // toto je upozornění dole (Snackbar)
-                // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackbarshown.shown == false) {
-                  snackbarshown.shown = true;
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction(
-                          'nastala chyba při obejnávání jídla: $e'))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
-                }
-              }
-            }
-            break;
-          case StavJidla.dostupneNaBurze:
-            {
-              String varianta = jidlo!.varianta;
-              DateTime den = jidlo!.den;
-              for (var jidloNaBurze in canteenData.jidlaNaBurze) {
-                if (jidloNaBurze.den == den &&
-                    jidloNaBurze.varianta == varianta) {
+        }
+        if ((jidlo!.burzaUrl == null || jidlo!.burzaUrl!.isEmpty) &&
+            !jidlo!.lzeObjednat) {
+          stavJidla = StavJidla.objednanoVyprsenaPlatnost;
+          icon = const Icon(
+            Icons.block,
+            color: Color.fromRGBO(0, 0, 0, 1),
+          );
+        }
+      } else if (jidlo!.lzeObjednat) {
+        stavJidla = StavJidla.neobjednano;
+        obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena} Kč';
+        buttonColor = const Color.fromRGBO(173, 165, 52, 1);
+      } else if (jeJidloNaBurze(jidlo!)) {
+        stavJidla = StavJidla.dostupneNaBurze;
+        obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena} Kč';
+        buttonColor = const Color.fromARGB(255, 180, 116, 6);
+        icon = const Icon(
+          Icons.shopping_bag,
+          color: Color.fromRGBO(0, 0, 0, 1),
+        );
+      } else {
+        stavJidla = StavJidla.nedostupne;
+        obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena} Kč';
+        buttonColor = const Color.fromARGB(255, 247, 75, 75);
+        icon = const Icon(
+          Icons.block,
+          color: Color.fromRGBO(0, 0, 0, 1),
+        );
+      }
+        return ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(buttonColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+            ),
+          ),
+          onPressed: () async {
+            setState(() {
+              icon = const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 34, 150, 243),
+                  strokeWidth: 3.5,
+                ),
+              );
+            });
+            switch (stavJidla) {
+              case StavJidla.neobjednano:
+                {
+                  Canteen canteen = await initCanteen();
                   try {
-                    Canteen canteen = await initCanteen();
-                    canteen.objednatZBurzy(jidloNaBurze);
+                    canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
+                        await canteen.objednat(jidlo!);
                     widget.widget.widget.widget.restartCanteen();
                   } catch (e) {
                     // Find the ScaffoldMessenger in the widget tree
@@ -553,7 +520,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       snackbarshown.shown = true;
                       ScaffoldMessenger.of(context)
                           .showSnackBar(snackbarFunction(
-                              'nastala chyba při obejnávání jídla z burzy: $e'))
+                              'nastala chyba při obejnávání jídla: $e'))
                           .closed
                           .then((SnackBarClosedReason reason) {
                         snackbarshown.shown = false;
@@ -561,123 +528,154 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     }
                   }
                 }
-              }
-            }
-            break;
-          case StavJidla.objednanoVyprsenaPlatnost:
-            {
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              // toto je upozornění dole (Snackbar)
-              // snackbarshown je aby se snackbar nezobrazil vícekrát
-              if (context.mounted && snackbarshown.shown == false) {
-                snackbarshown.shown = true;
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackbarFunction(
-                        'Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)'))
-                    .closed
-                    .then((SnackBarClosedReason reason) {
-                  snackbarshown.shown = false;
-                });
-              }
-            }
-            break;
-          case StavJidla.objednanoNelzeOdebrat:
-            {
-              Canteen canteen = await initCanteen();
-              try {
-                canteen.doBurzy(jidlo!);
-                //není potřeba restartCanteen, protože se nedějí změny kreditu
-              } catch (e) {
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                // toto je upozornění dole (Snackbar)
-                // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackbarshown.shown == false) {
-                  snackbarshown.shown = true;
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction(
-                          'nastala chyba při dávání jídla na burzu: $e'))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
+                break;
+              case StavJidla.dostupneNaBurze:
+                {
+                  String varianta = jidlo!.varianta;
+                  DateTime den = jidlo!.den;
+                  for (var jidloNaBurze in canteenData.jidlaNaBurze) {
+                    if (jidloNaBurze.den == den &&
+                        jidloNaBurze.varianta == varianta) {
+                      try {
+                        Canteen canteen = await initCanteen();
+                        canteen.objednatZBurzy(jidloNaBurze);
+                        widget.widget.widget.widget.restartCanteen();
+                      } catch (e) {
+                        // Find the ScaffoldMessenger in the widget tree
+                        // and use it to show a SnackBar.
+                        // toto je upozornění dole (Snackbar)
+                        // snackbarshown je aby se snackbar nezobrazil vícekrát
+                        if (context.mounted && snackbarshown.shown == false) {
+                          snackbarshown.shown = true;
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(snackbarFunction(
+                                  'nastala chyba při obejnávání jídla z burzy: $e'))
+                              .closed
+                              .then((SnackBarClosedReason reason) {
+                            snackbarshown.shown = false;
+                          });
+                        }
+                      }
+                    }
+                  }
                 }
-              }
-            }
-            break;
-          case StavJidla.nedostupne:
-            {
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              // toto je upozornění dole (Snackbar)
-              // snackbarshown je aby se snackbar nezobrazil vícekrát
-              if (context.mounted && snackbarshown.shown == false) {
-                snackbarshown.shown = true;
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackbarFunction(
-                        'Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)'))
-                    .closed
-                    .then((SnackBarClosedReason reason) {
-                  snackbarshown.shown = false;
-                });
-              }
-            }
-            break;
-          case StavJidla.objednano:
-            {
-              Canteen canteen = await initCanteen();
-              try {
-                canteen.objednat(jidlo!);
-                widget.widget.widget.widget.restartCanteen();
-              } catch (e) {
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                // toto je upozornění dole (Snackbar)
-                // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackbarshown.shown == false) {
-                  snackbarshown.shown = true;
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction(
-                          'nastala chyba při rušení objednávky: $e'))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
+                break;
+              case StavJidla.objednanoVyprsenaPlatnost:
+                {
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  // toto je upozornění dole (Snackbar)
+                  // snackbarshown je aby se snackbar nezobrazil vícekrát
+                  if (context.mounted && snackbarshown.shown == false) {
+                    snackbarshown.shown = true;
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(snackbarFunction(
+                            'Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)'))
+                        .closed
+                        .then((SnackBarClosedReason reason) {
+                      snackbarshown.shown = false;
+                    });
+                  }
                 }
-              }
-            }
-            break;
-          case StavJidla.naBurze:
-            {
-              Canteen canteen = await initCanteen();
-              try {
-                canteen.doBurzy(jidlo!);
-                //není potřeba restartCanteen, protože se nedějí změny kreditu
-              } catch (e) {
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                // toto je upozornění dole (Snackbar)
-                // snackbarshown je aby se snackbar nezobrazil vícekrát
-                if (context.mounted && snackbarshown.shown == false) {
-                  snackbarshown.shown = true;
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction(
-                          'nastala chyba při dávání jídla na burzu: $e'))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
+                break;
+              case StavJidla.objednanoNelzeOdebrat:
+                {
+                  Canteen canteen = await initCanteen();
+                  try {
+                    canteen.doBurzy(jidlo!);
+                    //není potřeba restartCanteen, protože se nedějí změny kreditu
+                  } catch (e) {
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    // toto je upozornění dole (Snackbar)
+                    // snackbarshown je aby se snackbar nezobrazil vícekrát
+                    if (context.mounted && snackbarshown.shown == false) {
+                      snackbarshown.shown = true;
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(snackbarFunction(
+                              'nastala chyba při dávání jídla na burzu: $e'))
+                          .closed
+                          .then((SnackBarClosedReason reason) {
+                        snackbarshown.shown = false;
+                      });
+                    }
+                  }
                 }
-              }
+                break;
+              case StavJidla.nedostupne:
+                {
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  // toto je upozornění dole (Snackbar)
+                  // snackbarshown je aby se snackbar nezobrazil vícekrát
+                  if (context.mounted && snackbarshown.shown == false) {
+                    snackbarshown.shown = true;
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(snackbarFunction(
+                            'Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)'))
+                        .closed
+                        .then((SnackBarClosedReason reason) {
+                      snackbarshown.shown = false;
+                    });
+                  }
+                }
+                break;
+              case StavJidla.objednano:
+                {
+                  Canteen canteen = await initCanteen();
+                  try {
+                    canteen.objednat(jidlo!);
+                    widget.widget.widget.widget.restartCanteen();
+                  } catch (e) {
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    // toto je upozornění dole (Snackbar)
+                    // snackbarshown je aby se snackbar nezobrazil vícekrát
+                    if (context.mounted && snackbarshown.shown == false) {
+                      snackbarshown.shown = true;
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(snackbarFunction(
+                              'nastala chyba při rušení objednávky: $e'))
+                          .closed
+                          .then((SnackBarClosedReason reason) {
+                        snackbarshown.shown = false;
+                      });
+                    }
+                  }
+                }
+                break;
+              case StavJidla.naBurze:
+                {
+                  Canteen canteen = await initCanteen();
+                  try {
+                    canteen.doBurzy(jidlo!);
+                    //není potřeba restartCanteen, protože se nedějí změny kreditu
+                  } catch (e) {
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    // toto je upozornění dole (Snackbar)
+                    // snackbarshown je aby se snackbar nezobrazil vícekrát
+                    if (context.mounted && snackbarshown.shown == false) {
+                      snackbarshown.shown = true;
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(snackbarFunction(
+                              'nastala chyba při dávání jídla na burzu: $e'))
+                          .closed
+                          .then((SnackBarClosedReason reason) {
+                        snackbarshown.shown = false;
+                      });
+                    }
+                  }
+                }
+                break;
             }
-            break;
-        }
-      },
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(obedText),
-        icon == null ? const Icon(null) : icon!,
-      ]),
+          },
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(obedText),
+            icon == null ? const Icon(null) : icon!,
+          ]),
+        );
+      }
     );
   }
 }
