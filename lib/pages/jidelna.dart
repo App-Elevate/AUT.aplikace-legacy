@@ -424,10 +424,10 @@ class ObjednatJidloTlacitko extends StatefulWidget {
 }
 
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
+  Widget? icon;
   @override
   Widget build(BuildContext context) {
     Color? buttonColor;
-    Widget? icon;
     Jidlo? jidlo;
     late Jidelnicek jidelnicek;
     late StavJidla stavJidla;
