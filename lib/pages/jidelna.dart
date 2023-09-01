@@ -235,7 +235,7 @@ class JidelnicekDenWidget extends StatelessWidget {
         automaticallyImplyLeading: false,
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Text('Obědy'),
+          const Text('Jídelníček'),
           ValueListenableBuilder(
               valueListenable: canteenDataListener,
               builder: (ctx, value, child) {

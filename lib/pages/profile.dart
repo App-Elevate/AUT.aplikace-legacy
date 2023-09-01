@@ -121,20 +121,6 @@ class ProfilePage extends StatelessWidget {
                       return const SizedBox(width: 0, height: 0);
                     }
                   }),
-                  const Divider(),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(child: Text('Autojídelna')),
-                  ),
-                  const Text('Pro verze: není dostupná'),
-                  const Text('počet objednávek s autojídelnou: 0'),
-                  const Text('počet automatických objenávek: 0'),
-                  const Text('počet objednávek chycených burza Catcherem: 0'),
-                  const Divider(),
-                  ElevatedButton(
-                      onPressed: () {}, child: const Text('Nastavení')),
-                  ElevatedButton(
-                      onPressed: () {}, child: const Text('Zakoupit Pro')),
                 ],
               ),
             );
