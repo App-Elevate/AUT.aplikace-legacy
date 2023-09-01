@@ -127,6 +127,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const Text('Pro verze: není dostupná'),
                   const Text('počet objednávek s autojídelnou: 0'),
+                  const Text('počet automatických objenávek: 0'),
                   const Text('počet objednávek chycených burza Catcherem: 0'),
                   const Divider(),
                   ElevatedButton(
