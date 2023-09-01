@@ -3,6 +3,11 @@ import './../every_import.dart';
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }
 
+class Ordering {
+  bool ordering;
+  Ordering({this.ordering = false});
+}
+
 ///Třída pro kešování dat Canteeny
 class CanteenData {
   /// login uživatele
@@ -26,6 +31,15 @@ class CanteenData {
     required this.jidelnicky,
     required this.jidlaNaBurze,
   });
+  CanteenData copyWith(){
+    return CanteenData(
+      username: username,
+      url: url,
+      uzivatel: uzivatel,
+      jidelnicky: jidelnicky,
+      jidlaNaBurze: jidlaNaBurze,
+    );
+  }
 }
 
 ///class pro general access o stavu snackbaru

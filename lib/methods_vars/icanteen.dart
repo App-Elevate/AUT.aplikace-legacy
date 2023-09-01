@@ -25,6 +25,8 @@ late Canteen canteenInstance;
 late CanteenData canteenData;
 bool refreshing = false;
 bool loggedOut = true;
+Ordering ordering = Ordering();
+
 
 /// Returns a [Canteen] instance with logged in user.
 /// Has to be called before using [canteenInstance].
@@ -133,10 +135,11 @@ Future<void> preIndexLunches(DateTime start, int howManyDays) async {
   }
 }
 
-Future<Jidelnicek> getLunchesForDay(DateTime date) async {
+Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
   late Jidelnicek jidelnicek;
+  requireNew ??= false;
   if (canteenData.jidelnicky
-      .containsKey(DateTime(date.year, date.month, date.day))) {
+      .containsKey(DateTime(date.year, date.month, date.day)) && !requireNew) {
     jidelnicek =
         canteenData.jidelnicky[DateTime(date.year, date.month, date.day)]!;
   } else {
@@ -145,6 +148,13 @@ Future<Jidelnicek> getLunchesForDay(DateTime date) async {
   canteenData.jidelnicky[DateTime(date.year, date.month, date.day)] =
       jidelnicek;
   return jidelnicek;
+}
+
+Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
+  canteenData.jidelnicky = {};
+      preIndexLunches(currentDate, 7).then((_) =>
+          preIndexLunches(currentDate.subtract(const Duration(days: 7)), 7));
+  return await getLunchesForDay(currentDate); 
 }
 
 CanteenData getCanteenData() {
