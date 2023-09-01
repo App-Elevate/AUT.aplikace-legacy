@@ -30,6 +30,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        themeMode: ThemeMode.system,
         home: Navigator(
           pages: [
             MaterialPage(child: homeWidget),

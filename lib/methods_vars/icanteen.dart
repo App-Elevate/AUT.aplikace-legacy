@@ -85,6 +85,7 @@ Future<Canteen> initCanteen(
     uzivatel: await canteenInstance.ziskejUzivatele(),
     jidlaNaBurze: await canteenInstance.ziskatBurzu(),
     jidelnicky: jidelnicky,
+    pocetJidel: {lastMondayWithoutTime: jidelnicky[lastMondayWithoutTime]!.jidla.length},
   );
 
   preIndexLunches(lastMondayWithoutTime, 14).then((_) => {
@@ -145,8 +146,12 @@ Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
   } else {
     jidelnicek = await ziskatJidelnicekDen(date);
   }
+  if(canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] != null && canteenData.pocetJidel[DateTime(date.year, date.month, date.day)]! > jidelnicek.jidla.length ){
+    return getLunchesForDay(date,requireNew: requireNew);
+  }
   canteenData.jidelnicky[DateTime(date.year, date.month, date.day)] =
       jidelnicek;
+  canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] = jidelnicek.jidla.length;
   return jidelnicek;
 }
 

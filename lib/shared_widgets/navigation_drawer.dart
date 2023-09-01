@@ -36,13 +36,13 @@ class MainAppDrawer extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      color: const Color(0xfffafafa),
+                      color: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color(0xff2e2e2e):const Color(0xfffafafa),
                       child: Column(children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: FloatingActionButton(
                             materialTapTargetSize: MaterialTapTargetSize.padded,
-                            backgroundColor: Colors.black,
+                            backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark?Colors.black:Colors.black,
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -53,7 +53,9 @@ class MainAppDrawer extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: const Icon(Icons.person),
+                            child: Icon(
+                              color: MediaQuery.of(context).platformBrightness == Brightness.dark?Colors.white:Colors.white,
+                              Icons.person),
                           ),
                         ),
                         Center(

@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Container(
-                          color: const Color(0xfffafafa),
+                          color: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color(0xff2e2e2e):const Color(0xfffafafa),
                           child: Column(children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -32,7 +32,9 @@ class ProfilePage extends StatelessWidget {
                                     MaterialTapTargetSize.padded,
                                 backgroundColor: Colors.black,
                                 onPressed: () {},
-                                child: const Icon(Icons.person),
+                                child: const Icon(
+                                  color: Colors.white,
+                                  Icons.person),
                               ),
                             ),
                             Center(
@@ -74,7 +76,7 @@ class ProfilePage extends StatelessWidget {
                       return const Placeholder();
                     }
                   }),
-                  Text('Kredit: ${getCanteenData().uzivatel.kredit}'),
+                  Text('Kredit: ${getCanteenData().uzivatel.kredit.toInt()} kč'),
                   Builder(
                     builder: (context) {
                       if (getCanteenData().uzivatel.kategorie != null) {
@@ -97,8 +99,7 @@ class ProfilePage extends StatelessWidget {
                       return Text(
                           'Číslo účtu pro platby: ${getCanteenData().uzivatel.ucetProPlatby}');
                     } else {
-                      return const Text(
-                          'Číslo účtu pro platby: Administrátor zakázal tuto funkci');
+                        return const SizedBox(width: 0, height: 0);
                     }
                   }),
                   Builder(builder: (context) {

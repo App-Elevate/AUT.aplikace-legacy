@@ -22,9 +22,13 @@ class CanteenData {
   /// seznam jídelníčků začínající Od Pondělí tohoto týdne
   Map<DateTime, Jidelnicek> jidelnicky;
 
+  /// fix pro api vracející méně jídel než by mělo
+  Map<DateTime, int> pocetJidel;
+
   /// seznam jídel, které jsou na burze
   List<Burza> jidlaNaBurze;
   CanteenData({
+    required this.pocetJidel,
     required this.username,
     required this.url,
     required this.uzivatel,
@@ -33,6 +37,7 @@ class CanteenData {
   });
   CanteenData copyWith(){
     return CanteenData(
+      pocetJidel: pocetJidel,
       username: username,
       url: url,
       uzivatel: uzivatel,

@@ -33,7 +33,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-          title: const Center(child: Text('Autojídelna Přihlášeno')),
+          title: const Center(child: Text('Autojídelna')),
           actions: [
             PopupMenuButtonInAppbar(
               widget: widget,
@@ -239,7 +239,7 @@ class JidelnicekDenWidget extends StatelessWidget {
           ValueListenableBuilder(
               valueListenable: canteenDataListener,
               builder: (ctx, value, child) {
-                return Text('Kredit: ${canteenData.uzivatel.kredit}');
+                return Text('Kredit: ${canteenData.uzivatel.kredit.toInt()} kč');
               })
         ]),
       ),
@@ -252,44 +252,47 @@ class JidelnicekDenWidget extends StatelessWidget {
                 builder: (ctx, value, child) {
                   DateTime currentDate = value;
                   String dayOfWeek = ziskatDenZData(currentDate.weekday);
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            changeDate(daysChange: -1);
+                  return SizedBox(
+                    height: 70,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              changeDate(daysChange: -1);
+                            },
+                            icon: const Icon(Icons.arrow_left)),
+                        CupertinoButton(
+                          onPressed: () async {
+                            var datePicked = await showDatePicker(
+                              context: context,
+                              helpText: 'Vyberte datum Jídelníčku',
+                              initialDate: currentDate,
+                              currentDate: DateTime.now(),
+                              firstDate: minimalDate,
+                              lastDate:
+                                  currentDate.add(const Duration(days: 365 * 2)),
+                            );
+                            if (datePicked == null) return;
+                            changeDate(newDate: datePicked);
                           },
-                          icon: const Icon(Icons.arrow_left)),
-                      CupertinoButton(
-                        onPressed: () async {
-                          var datePicked = await showDatePicker(
-                            context: context,
-                            helpText: 'Vyberte datum Jídelníčku',
-                            initialDate: currentDate,
-                            currentDate: DateTime.now(),
-                            firstDate: minimalDate,
-                            lastDate:
-                                currentDate.add(const Duration(days: 365 * 2)),
-                          );
-                          if (datePicked == null) return;
-                          changeDate(newDate: datePicked);
-                        },
-                        child: SizedBox(
-                          //relative to the width of the viewport
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: Center(
-                            child: Text(
-                                style: const TextStyle(color: Colors.purple),
-                                "${currentDate.day}. ${currentDate.month}. ${currentDate.year} - $dayOfWeek"),
+                          child: SizedBox(
+                            //relative to the width of the viewport
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Center(
+                              child: Text(
+                                  style: const TextStyle(color: Colors.purple),
+                                  "${currentDate.day}. ${currentDate.month}. ${currentDate.year} - $dayOfWeek"),
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            changeDate(daysChange: 1);
-                          },
-                          icon: const Icon(Icons.arrow_right))
-                    ],
+                        IconButton(
+                            onPressed: () {
+                              changeDate(daysChange: 1);
+                            },
+                            icon: const Icon(Icons.arrow_right))
+                      ],
+                    ),
                   );
                 }),
             Expanded(
@@ -390,23 +393,82 @@ class ListJidel extends StatelessWidget {
                   title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 8.0),
-                          child: ObjednatJidloTlacitko(
-                            widget: this,
-                            jidlaListener: jidlaListener,
-                            index: index,
-                          ),
-                        ),
                         Builder(builder: (_) {
                           if (jidlo.contains('<span')) {
                             List<String> listJidel = jidlo.split('<span');
                             String cistyNazevJidla = listJidel[0];
+                            cistyNazevJidla = cistyNazevJidla.replaceAll(' *', '');
                             listJidel.removeAt(0);
                             String alergeny = '<span${listJidel.join('<span')}';
-                            String htmlString =
-                                '$cistyNazevJidla<br> alergeny: $alergeny';
-                            return HtmlWidget(htmlString);
+                            List<String> cistyListJidel = cistyNazevJidla.split(', ');
+                            String polevka = '';
+                            String hlavniJidlo = '';
+                            String salatovyBar = '';
+                            String piti = '';
+                            for(int i = 0; i < cistyListJidel.length; i++){
+                              if(cistyListJidel[i].contains('Polévka')){
+                                if(polevka != ''){
+                                  polevka += ', ';
+                                }
+                                polevka = '$polevka ${cistyListJidel[i]}';
+                              }
+                              else if(cistyListJidel[i].contains('salátový bar')){
+                                if(salatovyBar != ''){
+                                  salatovyBar += ', ';
+                                }
+                                salatovyBar = '$salatovyBar ${cistyListJidel[i]}';
+                              }
+                              else if(cistyListJidel[i].contains('nápoj') || cistyListJidel[i].contains('čaj') || cistyListJidel[i].contains('káva')){
+                                if(piti != ''){
+                                  piti += ', ';
+                                }
+                                piti = '$piti ${cistyListJidel[i]}';
+                              }
+                              else {
+                                if(hlavniJidlo != ''){
+                                  hlavniJidlo += ', ';
+                                }
+                                hlavniJidlo = '$hlavniJidlo ${cistyListJidel[i]}';
+                              }
+                            }
+                            cistyNazevJidla = '';
+                            String plnyNazevJidla = cistyNazevJidla;
+                            if(polevka != ''){
+                              if(plnyNazevJidla != ''){
+                                plnyNazevJidla += '<br>';
+                              }
+                              plnyNazevJidla += polevka;
+                            }
+                            if(hlavniJidlo != ''){
+                              if(cistyNazevJidla != ''){
+                                cistyNazevJidla += '<br>';
+                              }
+                              if(plnyNazevJidla != '') {
+                                plnyNazevJidla += '<br>';
+                              }
+                              plnyNazevJidla += hlavniJidlo;
+                              cistyNazevJidla += hlavniJidlo;
+                            }
+                            if(piti != ''){
+                              if(plnyNazevJidla != ''){
+                                plnyNazevJidla += '<br>';
+                              }
+                              plnyNazevJidla += piti;
+                            }
+                            if(salatovyBar != '') {
+                              if(plnyNazevJidla != ''){
+                                plnyNazevJidla += '<br>';
+                              }
+                              plnyNazevJidla += salatovyBar;
+                            }
+                            cistyNazevJidla = cistyNazevJidla.trimLeft();
+                            if(cistyNazevJidla.substring(0,3) == 'N. ') {
+                              cistyNazevJidla = cistyNazevJidla.substring(3);
+                            }
+                            String htmlString = cistyNazevJidla.substring(0, 1).toUpperCase() + cistyNazevJidla.substring(1);
+                            String fullHtmlString =
+                                '$plnyNazevJidla<br> alergeny: $alergeny';
+                            return HtmlWidget(htmlString, textStyle: const TextStyle(fontSize: 30));
                           } else if (jidelnicek
                               .jidla[index].alergeny.isNotEmpty) {
                             return HtmlWidget(
@@ -414,7 +476,15 @@ class ListJidel extends StatelessWidget {
                           } else {
                             return HtmlWidget(jidlo);
                           }
-                        })
+                        }),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 30.0),
+                          child: ObjednatJidloTlacitko(
+                            widget: this,
+                            jidlaListener: jidlaListener,
+                            index: index,
+                          ),
+                        ),
                       ]),
                 );
               },
@@ -444,34 +514,41 @@ class ObjednatJidloTlacitko extends StatefulWidget {
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   Widget? icon;
   Jidlo? jidlo;
+  //fix for api returning garbage when switching orders
   void cannotBeOrderedFix() async {
     try{
       if((await getLunchesForDay(widget.widget.widget.minimalDate.add(Duration(days: widget.widget.widget.index)), requireNew: true)).jidla[widget.index].lzeObjednat != jidlo!.lzeObjednat){
+        icon = null;
         widget.widget.refreshButtons();
       }
     }
     catch(e){
+      icon = null;
       widget.widget.refreshButtons();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Color? buttonColor;
     late Jidelnicek jidelnicek;
     late StavJidla stavJidla;
+    final int index = widget.index;
+    String obedText;
     return ValueListenableBuilder(
       valueListenable: widget.jidlaListener,
       builder: (context, value, child) {
-      String obedText;
       jidelnicek =
           widget.widget.jidelnicek!; //this is a permanent referrence that doesn't need to change in the button scope (if refreshed it changes higher in the highearchy)
-      final int index = widget.index; //this doesn't change even after pressing buttons
       try{
         jidlo = value[index]; //only set this so that we don't overwrite it after the button has been clicked
       }
+      //if we went out of bounds that means that api returned not enough lunches so we need to try again (refresh). This doesn't fix the problem of api returning garbage
       catch(e){
         widget.widget.refreshButtons();
+        //giving a placeholder until the button refreshes
         return ElevatedButton(
+          //rounding the button
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(buttonColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -496,61 +573,109 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           ),
           );
       }
-      if (jidlo!.naBurze) {
+      if(jidlo!.naBurze){//pokud je od nás vloženo na burze, tak není potřeba kontrolovat nic jiného
         stavJidla = StavJidla.naBurze;
-        obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-        if(!ordering.ordering)icon = null;
-      } else if (jidlo!.objednano) {
+      }
+      else if(jidlo!.objednano && jidlo!.lzeObjednat){
         stavJidla = StavJidla.objednano;
-        obedText = 'Objednáno ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-        buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-        if(!ordering.ordering)icon = null;
-        if (!jidlo!.lzeObjednat) {
-          stavJidla = StavJidla.objednanoNelzeOdebrat;
-          if(!ordering.ordering){
+      }
+      else if(jidlo!.objednano && !jidlo!.lzeObjednat && (jidlo!.burzaUrl == null || jidlo!.burzaUrl!.isEmpty)){//pokud nelze dát na burzu, tak už je po platnosti (nic už s tím neuděláme)
+        stavJidla = StavJidla.objednanoVyprsenaPlatnost;
+      }
+      else if(jidlo!.objednano && !jidlo!.lzeObjednat){
+        stavJidla = StavJidla.objednanoNelzeOdebrat;
+      }
+      else if(!jidlo!.objednano && jidlo!.lzeObjednat){
+        stavJidla = StavJidla.neobjednano;
+      }
+      else if(jeJidloNaBurze(jidlo!)){
+        stavJidla = StavJidla.dostupneNaBurze;
+      }
+      else if(!jidlo!.objednano && !jidlo!.lzeObjednat){
+        stavJidla = StavJidla.nedostupne;
+      }
+
+      switch(stavJidla){
+        //jednoduché operace
+        case StavJidla.objednano:
+          buttonColor = const Color.fromRGBO(17, 201, 11, 1);
+          obedText = 'zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+        case StavJidla.neobjednano:
+          buttonColor = const Color.fromARGB(255, 252, 144, 98);
+          obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+        //operace v minulosti
+        case StavJidla.objednanoVyprsenaPlatnost:
+          buttonColor = const Color.fromARGB(255, 247, 75, 75);
+          obedText = 'nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+        case StavJidla.nedostupne:
+          cannotBeOrderedFix();
+          buttonColor = const Color.fromARGB(255, 247, 75, 75);
+          obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+        //operace na burze
+        case StavJidla.objednanoNelzeOdebrat:
+          buttonColor = const Color.fromRGBO(17, 201, 11, 1);
+          obedText = 'vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+        case StavJidla.dostupneNaBurze:
+          buttonColor = const Color.fromARGB(255, 180, 116, 6);
+          obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+        case StavJidla.naBurze:
+          buttonColor = const Color.fromARGB(255, 180, 116, 6);
+          obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+          break;
+      }
+      if(!ordering.ordering){
+        switch(stavJidla){
+          case StavJidla.objednano:
+            icon = null;
+            break;
+          case StavJidla.neobjednano:
+            icon = null;
+            break;
+          //operace v minulosti
+          case StavJidla.objednanoVyprsenaPlatnost:
             icon = const Icon(
               Icons.block,
               color: Color.fromRGBO(0, 0, 0, 1),
             );
+            break;
+          case StavJidla.nedostupne:
+            icon = const Icon(
+              Icons.block,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            );
+            break;
+          //operace na burze
+          case StavJidla.objednanoNelzeOdebrat:
+            icon = const Icon(
+              Icons.shopping_bag,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            );
+            break;
+          case StavJidla.dostupneNaBurze:
+            icon = const Icon(
+              Icons.shopping_bag,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            );
+            break;
+          case StavJidla.naBurze:
+            icon = const Icon(
+              //market icon
+              Icons.shopping_bag,
+              color: Color.fromRGBO(0, 0, 0, 1),
+            );
+            break;
           }
-        }
-        if ((jidlo!.burzaUrl == null || jidlo!.burzaUrl!.isEmpty) &&
-            !jidlo!.lzeObjednat) {
-          stavJidla = StavJidla.objednanoVyprsenaPlatnost;
-          if(!ordering.ordering){icon = const Icon(
-            Icons.block,
-            color: Color.fromRGBO(0, 0, 0, 1),
-          );}
-        }
-      } else if (jidlo!.lzeObjednat) {
-        stavJidla = StavJidla.neobjednano;
-        obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-        if(!ordering.ordering)icon = null;
-        buttonColor = const Color.fromRGBO(173, 165, 52, 1);
-      } else if (jeJidloNaBurze(jidlo!)) {
-        stavJidla = StavJidla.dostupneNaBurze;
-        obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-        buttonColor = const Color.fromARGB(255, 180, 116, 6);
-        if(!ordering.ordering){
-          icon = const Icon(
-            Icons.shopping_bag,
-            color: Color.fromRGBO(0, 0, 0, 1),
-          );
-
-        }
-      } else {
-        stavJidla = StavJidla.nedostupne;
-        //adressing bug where api returns garbage (lzeObjednat false and objednano false even though it is available)
-        cannotBeOrderedFix();
-        obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena} Kč';
-        buttonColor = const Color.fromARGB(255, 247, 75, 75);
-        if(!ordering.ordering){icon = const Icon(
-          Icons.block,
-          color: Color.fromRGBO(0, 0, 0, 1),
-        );}
       }
+
         return ElevatedButton(
           style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(const Size(100, 50)),
             backgroundColor: MaterialStateProperty.all(buttonColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
@@ -559,6 +684,22 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             ),
           ),
           onPressed: () async {
+            void snackBarMessage(String message){
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              // toto je upozornění dole (Snackbar)
+              // snackbarshown je aby se snackbar nezobrazil vícekrát
+              if (context.mounted && snackbarshown.shown == false) {
+                snackbarshown.shown = true;
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(snackbarFunction(
+                        message))
+                    .closed
+                    .then((SnackBarClosedReason reason) {
+                  snackbarshown.shown = false;
+                });
+              }
+            }
             if(ordering.ordering){return;}
             ordering.ordering = true;
             setState(() {
@@ -571,32 +712,19 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 ),
               );
             });
+            Canteen canteen = await initCanteen();
             switch (stavJidla) {
               case StavJidla.neobjednano:
                 {
-                  Canteen canteen = await initCanteen();
                   try {
                     for(int i = 0; i<20 && canteenData.jidelnicky[jidelnicek.den] == null;i++){
-                      if(i>=19){throw Exception('nepovedlo načíst jídelníček, aktualizujte stránku');}
+                      if(i>=19){throw Exception('nepovedl se načíst jídelníček, aktualizujte stránku');}
                       await Future.delayed(const Duration(milliseconds: 100));
                     }
                     canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
                         await canteen.objednat(jidlo!);
                   } catch (e) {
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    // toto je upozornění dole (Snackbar)
-                    // snackbarshown je aby se snackbar nezobrazil vícekrát
-                    if (context.mounted && snackbarshown.shown == false) {
-                      snackbarshown.shown = true;
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(snackbarFunction(
-                              'nastala chyba při objednávání jídla: $e'))
-                          .closed
-                          .then((SnackBarClosedReason reason) {
-                        snackbarshown.shown = false;
-                      });
-                    }
+                    snackBarMessage('nastala chyba při objednávání jídla: $e');
                   }
                 }
                 break;
@@ -604,95 +732,43 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 {
                   String varianta = jidlo!.varianta;
                   DateTime den = jidlo!.den;
+                  bool nalezenoJidloNaBurze = false;
                   for (var jidloNaBurze in canteenData.jidlaNaBurze) {
                     if (jidloNaBurze.den == den &&
                         jidloNaBurze.varianta == varianta) {
                       try {
-                        Canteen canteen = await initCanteen();
-                        canteen.objednatZBurzy(jidloNaBurze);
+                        await canteen.objednatZBurzy(jidloNaBurze);
                       } catch (e) {
-                        // Find the ScaffoldMessenger in the widget tree
-                        // and use it to show a SnackBar.
-                        // toto je upozornění dole (Snackbar)
-                        // snackbarshown je aby se snackbar nezobrazil vícekrát
-                        if (context.mounted && snackbarshown.shown == false) {
-                          snackbarshown.shown = true;
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(snackbarFunction(
-                                  'nastala chyba při objednávání jídla z burzy: $e'))
-                              .closed
-                              .then((SnackBarClosedReason reason) {
-                            snackbarshown.shown = false;
-                          });
-                        }
+                        snackBarMessage('nastala chyba při objednávání jídla z burzy: $e');
                       }
                     }
+                  }
+                  if(nalezenoJidloNaBurze == false){
+                    snackBarMessage('nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
                   }
                 }
                 break;
               case StavJidla.objednanoVyprsenaPlatnost:
                 {
-                  // Find the ScaffoldMessenger in the widget tree
-                  // and use it to show a SnackBar.
-                  // toto je upozornění dole (Snackbar)
-                  // snackbarshown je aby se snackbar nezobrazil vícekrát
-                  if (context.mounted && snackbarshown.shown == false) {
-                    snackbarshown.shown = true;
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(snackbarFunction(
-                            'Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)'))
-                        .closed
-                        .then((SnackBarClosedReason reason) {
-                      snackbarshown.shown = false;
-                    });
-                  }
+                  snackBarMessage('Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)');
                 }
                 break;
               case StavJidla.objednanoNelzeOdebrat:
                 {
-                  Canteen canteen = await initCanteen();
                   try {
-                    canteen.doBurzy(jidlo!);
-                    //není potřeba restartCanteen, protože se nedějí změny kreditu
+                    await canteen.doBurzy(jidlo!);
                   } catch (e) {
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    // toto je upozornění dole (Snackbar)
-                    // snackbarshown je aby se snackbar nezobrazil vícekrát
-                    if (context.mounted && snackbarshown.shown == false) {
-                      snackbarshown.shown = true;
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(snackbarFunction(
-                              'nastala chyba při dávání jídla na burzu: $e'))
-                          .closed
-                          .then((SnackBarClosedReason reason) {
-                        snackbarshown.shown = false;
-                      });
-                    }
+                    snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
                   }
                 }
                 break;
               case StavJidla.nedostupne:
                 {
-                  // Find the ScaffoldMessenger in the widget tree
-                  // and use it to show a SnackBar.
-                  // toto je upozornění dole (Snackbar)
-                  // snackbarshown je aby se snackbar nezobrazil vícekrát
-                  if (context.mounted && snackbarshown.shown == false) {
-                    snackbarshown.shown = true;
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(snackbarFunction(
-                            'Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)'))
-                        .closed
-                        .then((SnackBarClosedReason reason) {
-                      snackbarshown.shown = false;
-                    });
-                  }
+                  snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)');
                 }
                 break;
               case StavJidla.objednano:
                 {
-                  Canteen canteen = await initCanteen();
                   try {
                     for(int i = 0; i<20 && canteenData.jidelnicky[jidelnicek.den] == null;i++){
                       if(i>=19){throw Exception('nepovedlo načíst jídelníček, aktualizujte stránku');}
@@ -701,44 +777,16 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
                         await canteen.objednat(jidlo!);
                   } catch (e) {
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    // toto je upozornění dole (Snackbar)
-                    // snackbarshown je aby se snackbar nezobrazil vícekrát
-                    if (context.mounted && snackbarshown.shown == false) {
-                      snackbarshown.shown = true;
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(snackbarFunction(
-                              'nastala chyba při rušení objednávky: $e'))
-                          .closed
-                          .then((SnackBarClosedReason reason) {
-                        snackbarshown.shown = false;
-                      });
-                    }
+                    snackBarMessage('nastala chyba při rušení objednávky: $e');
                   }
                 }
                 break;
               case StavJidla.naBurze:
                 {
-                  Canteen canteen = await initCanteen();
                   try {
-                    canteen.doBurzy(jidlo!);
-                    //není potřeba restartCanteen, protože se nedějí změny kreditu
+                    await canteen.doBurzy(jidlo!);
                   } catch (e) {
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    // toto je upozornění dole (Snackbar)
-                    // snackbarshown je aby se snackbar nezobrazil vícekrát
-                    if (context.mounted && snackbarshown.shown == false) {
-                      snackbarshown.shown = true;
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(snackbarFunction(
-                              'nastala chyba při dávání jídla na burzu: $e'))
-                          .closed
-                          .then((SnackBarClosedReason reason) {
-                        snackbarshown.shown = false;
-                      });
-                    }
+                    snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
                   }
                 }
                 break;
@@ -753,7 +801,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             }
           },
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(obedText),
+            Text(obedText, style: const TextStyle(fontSize: 20)),
             icon == null ? const Icon(null) : icon!,
           ]),
         );
