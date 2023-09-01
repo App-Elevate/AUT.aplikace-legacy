@@ -399,7 +399,7 @@ class ListJidel extends StatelessWidget {
                             String cistyNazevJidla = listJidel[0];
                             cistyNazevJidla = cistyNazevJidla.replaceAll(' *', '');
                             listJidel.removeAt(0);
-                            String alergeny = '<span${listJidel.join('<span')}';
+                            //String alergeny = '<span${listJidel.join('<span')}';
                             List<String> cistyListJidel = cistyNazevJidla.split(', ');
                             String polevka = '';
                             String hlavniJidlo = '';
@@ -466,8 +466,9 @@ class ListJidel extends StatelessWidget {
                               cistyNazevJidla = cistyNazevJidla.substring(3);
                             }
                             String htmlString = cistyNazevJidla.substring(0, 1).toUpperCase() + cistyNazevJidla.substring(1);
+                            /*
                             String fullHtmlString =
-                                '$plnyNazevJidla<br> alergeny: $alergeny';
+                                '$plnyNazevJidla<br> alergeny: $alergeny';*/
                             return HtmlWidget(htmlString, textStyle: const TextStyle(fontSize: 30));
                           } else if (jidelnicek
                               .jidla[index].alergeny.isNotEmpty) {
@@ -641,33 +642,33 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           case StavJidla.objednanoVyprsenaPlatnost:
             icon = const Icon(
               Icons.block,
-              color: Color.fromRGBO(0, 0, 0, 1),
+              color: Color.fromRGBO(255, 255, 255, 1),
             );
             break;
           case StavJidla.nedostupne:
             icon = const Icon(
               Icons.block,
-              color: Color.fromRGBO(0, 0, 0, 1),
+              color: Color.fromRGBO(255, 255, 255, 1),
             );
             break;
           //operace na burze
           case StavJidla.objednanoNelzeOdebrat:
             icon = const Icon(
               Icons.shopping_bag,
-              color: Color.fromRGBO(0, 0, 0, 1),
+              color: Color.fromRGBO(255, 255, 255, 1),
             );
             break;
           case StavJidla.dostupneNaBurze:
             icon = const Icon(
               Icons.shopping_bag,
-              color: Color.fromRGBO(0, 0, 0, 1),
+              color: Color.fromRGBO(255, 255, 255, 1),
             );
             break;
           case StavJidla.naBurze:
             icon = const Icon(
               //market icon
               Icons.shopping_bag,
-              color: Color.fromRGBO(0, 0, 0, 1),
+              color: Color.fromRGBO(255, 255, 255, 1),
             );
             break;
           }
