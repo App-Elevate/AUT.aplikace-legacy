@@ -13,6 +13,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
+  Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
+  //Checks if current Navigator still has screens on the stack.
+  if (yourKey.currentState!.canPop()) {
+    // 'maybePop' method handles the decision of 'pop' to another WillPopScope if they exist. 
+    //If no other WillPopScope exists, it returns true
+    yourKey.currentState!.maybePop();
+    return Future<bool>.value(false);
+  }
+  //if nothing remains in the stack, it simply pops
+  return Future<bool>.value(true);
+  }
   void setHomeWidget(Widget widget) {
     setState(() {
       homeWidget = widget;
@@ -33,13 +45,17 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.system,
-        home: Navigator(
-          pages: [
-            MaterialPage(child: homeWidget),
-          ],
-          onPopPage: (route, result) {
-            return route.didPop(result);
-          },
+        home: WillPopScope(
+          onWillPop: () => _backPressed(_myAppKey),
+          child: Navigator(
+            key: _myAppKey,
+            pages: [
+              MaterialPage(child: homeWidget),
+            ],
+            onPopPage: (route, result) {
+              return route.didPop(result);
+            },
+          ),
         ));
   }
 }

@@ -51,11 +51,25 @@ class _MainAppScreenState extends State<MainAppScreen> {
                   child: const Center(child: CircularProgressIndicator())),
           ],
         ),
-        drawer: MainAppDrawer(
-          setHomeWidget: widget.setHomeWidget,
-          page: NavigationDrawerItem.jidelnicek,
+        drawer: Builder(
+          builder: (context) {
+            return WillPopScope(
+              onWillPop: () async {
+                //if the drawer is open close the drawer
+                if (Scaffold.of(context).isDrawerOpen) {
+                  Navigator.pop(context);
+                  return Future.value(false);
+                }
+                return Future.value(true);
+              },
+            child: MainAppDrawer(
+              setHomeWidget: widget.setHomeWidget,
+              page: NavigationDrawerItem.jidelnicek,
+            ),
+            );
+          }
         ),
-    );
+        );
   }
 }
 
@@ -95,7 +109,7 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
               if (context.mounted && !snackbarshown.shown) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackbarFunction(
-                        'nastala chyba při aktualizaci dat, dejte tomu chvilku a zkuste to prosím znovu'))
+                        'nastala chyba při aktualizaci dat, dejte tomu chvilku a zkuste to prosím znovu',context))
                     .closed
                     .then((SnackBarClosedReason reason) {
                   snackbarshown.shown = false;
@@ -631,7 +645,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 snackbarshown.shown = true;
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackbarFunction(
-                        message))
+                        message, context))
                     .closed
                     .then((SnackBarClosedReason reason) {
                   snackbarshown.shown = false;
