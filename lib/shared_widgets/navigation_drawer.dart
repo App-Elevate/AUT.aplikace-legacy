@@ -17,6 +17,7 @@ class MainAppDrawer extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 148, 18, 148),
           title: const Text('Autojídelna'),
+          centerTitle: true,
         ),
         body: Column(
           children: [

@@ -79,7 +79,7 @@ enum StavJidla {
   /// jídlo nemáme objednané, ale můžeme stále ještě normálně objednat
   neobjednano,
 
-  /// jídlo nemáme objednané a není dostupné na burze nebo vypršela platnost
+  /// jídlo nemáme objednané a není dostupné na burze, vypršela platnost nebo nemá uživatel dostatečný kredit
   nedostupne
 }
 

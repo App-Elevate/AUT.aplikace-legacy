@@ -34,6 +34,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   canteenlib: ^1.1.1
   flutter_widget_from_html: ^0.10.2
+  http: ^0.13.0
   fluttertoast: ^8.0.8
 
 

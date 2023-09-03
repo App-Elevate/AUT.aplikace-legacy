@@ -123,9 +123,10 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
   }
   else if(alergeny != null){
     type = ParsedFoodStringType.alergeny;
-    zkracenyNazevJidla += ', alergeny: $alergeny';
+    zkracenyNazevJidla = '$jidlo, alergeny: $alergeny';
   }
   else{
+    zkracenyNazevJidla = jidlo;
     type = ParsedFoodStringType.bezAlergenu;
   }
   zkracenyNazevJidla = zkracenyNazevJidla.replaceAll(' *', '');
@@ -134,6 +135,9 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
   String hlavniJidlo = '';
   String salatovyBar = '';
   String piti = '';
+  for(int i = 0;i < cistyListJidel.length;i++){
+    cistyListJidel[i] = cistyListJidel[i].trimLeft();
+  }
   for(int i = 0; i < cistyListJidel.length; i++){
     if(cistyListJidel[i].contains('Polévka')){
       if(polevka != ''){
@@ -162,13 +166,21 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
   }
   zkracenyNazevJidla = '';
   plnyNazevJidla = '';
+  hlavniJidlo = hlavniJidlo.trimLeft();
+  polevka = polevka.trimLeft();
+  piti = piti.trimLeft();
+  salatovyBar = salatovyBar.trimLeft();
   if(polevka != ''){
     if(plnyNazevJidla != ''){
       plnyNazevJidla += '<br>';
     }
+    //make first letter of polevka capital
+    polevka = polevka.substring(0, 1).toUpperCase() + polevka.substring(1);
     plnyNazevJidla += polevka;
   }
   if(hlavniJidlo != ''){
+    //make first letter of hlavniJidlo capital
+    hlavniJidlo = hlavniJidlo.substring(0, 1).toUpperCase() + hlavniJidlo.substring(1);
     if(zkracenyNazevJidla != ''){
       zkracenyNazevJidla += '<br>';
     }
@@ -179,28 +191,37 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
     zkracenyNazevJidla += hlavniJidlo;
   }
   if(piti != ''){
+    //make first letter of piti capital
+    piti = piti.substring(0, 1).toUpperCase() + piti.substring(1);
     if(plnyNazevJidla != ''){
       plnyNazevJidla += '<br>';
     }
     plnyNazevJidla += piti;
   }
   if(salatovyBar != '') {
+    //make first letter of salatovyBar capital
+    salatovyBar = salatovyBar.substring(0, 1).toUpperCase() + salatovyBar.substring(1);
     if(plnyNazevJidla != ''){
       plnyNazevJidla += '<br>';
     }
     plnyNazevJidla += salatovyBar;
   }
-  zkracenyNazevJidla = zkracenyNazevJidla.trimLeft();
-  plnyNazevJidla = plnyNazevJidla.trimLeft();
   if(zkracenyNazevJidla.substring(0,3) == 'N. ') {
     zkracenyNazevJidla = zkracenyNazevJidla.substring(3);
   }
   if(plnyNazevJidla.substring(0,3) == 'N. ') {
     plnyNazevJidla = plnyNazevJidla.substring(3);
   }
-  zkracenyNazevJidla = zkracenyNazevJidla.substring(0, 1).toUpperCase() + zkracenyNazevJidla.substring(1);
-  plnyNazevJidla = plnyNazevJidla.substring(0, 1).toUpperCase() + plnyNazevJidla.substring(1);
-  plnyNazevJidla = '$plnyNazevJidla<br>Alergeny: $alergeny';
+  //first regex match for '(' and last for ')' gets replaced with ''
+  if(alergeny != null){
+    if(alergeny.lastIndexOf(')') != -1){
+      alergeny = alergeny.substring(0, alergeny.lastIndexOf(')')) + alergeny.substring(alergeny.lastIndexOf(')') + 1);
+    }
+  }
+  alergeny = alergeny?.replaceFirst('(', '');
+  if(alergeny != null){
+    plnyNazevJidla = '$plnyNazevJidla<br>Alergeny: $alergeny';
+  }
   return ParsedFoodString(
     polevka: polevka,
     hlavniJidlo: hlavniJidlo,

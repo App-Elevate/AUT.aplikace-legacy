@@ -33,7 +33,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
       return Scaffold(
         appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-            title: const Center(child: Text('Autojídelna')),
+            centerTitle: true,
+            title: const Text('Autojídelna'),
             actions: [
               PopupMenuButtonInAppbar(
                 widget: widget,
@@ -410,33 +411,45 @@ class ListJidel extends StatelessWidget {
                         builder: (context) => JidloDetail(
                           datumJidla: widget.minimalDate.add(Duration(days: widget.index)),
                           indexDne: index,
+                          widget: this,
                         ),
                       ),
                     );
                   },
                   child: ListTile(
-                    title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Builder(builder: (_) {
-                            String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
-                            return HtmlWidget(
-                              jidlo,
-                              textStyle: const TextStyle(
-                                fontSize: 30,
-                              ),
-                            );
-
-                          }),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 30.0),
-                            child: ObjednatJidloTlacitko(
-                              widget: this,
-                              jidlaListener: jidlaListener,
-                              index: index,
-                            ),
-                          ),
-                        ]),
+                    title: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color.fromARGB(255, 122, 122, 122), width: 2),
+                          borderRadius: const BorderRadius.all(Radius.circular(20))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Builder(builder: (_) {
+                                  String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
+                                  return HtmlWidget(
+                                    jidlo,
+                                    textStyle: const TextStyle(
+                                      fontSize: 30,
+                                    ),
+                                  );
+                                            
+                                }),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
+                                  child: ObjednatJidloTlacitko(
+                                    widget: this,
+                                    jidlaListener: jidlaListener,
+                                    index: index,
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
@@ -716,6 +729,10 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 break;
               case StavJidla.nedostupne:
                 {
+                  if(getCanteenData().uzivatel.kredit < jidlo!.cena!){
+                    snackBarMessage('Oběd nelze objednat - Nedostatečný kredit');
+                    break;
+                  }
                   snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)');
                 }
                 break;
