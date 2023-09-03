@@ -107,6 +107,112 @@ Future<Canteen> initCanteen(
   return canteenInstance;
 }
 
+ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
+  late ParsedFoodStringType type;
+  String zkracenyNazevJidla = '';
+  String plnyNazevJidla = '';
+  if(alergeny == ''){
+    alergeny = null;
+  }
+  if (jidlo.contains('<span')) {
+    type = ParsedFoodStringType.span;
+    List<String> listJidel = jidlo.split('<span');
+    zkracenyNazevJidla = listJidel[0];
+    listJidel.removeAt(0);
+    alergeny = '<span${listJidel.join('<span')}';
+  }
+  else if(alergeny != null){
+    type = ParsedFoodStringType.alergeny;
+    zkracenyNazevJidla += ', alergeny: $alergeny';
+  }
+  else{
+    type = ParsedFoodStringType.bezAlergenu;
+  }
+  zkracenyNazevJidla = zkracenyNazevJidla.replaceAll(' *', '');
+  List<String> cistyListJidel = zkracenyNazevJidla.split(', ');
+  String polevka = '';
+  String hlavniJidlo = '';
+  String salatovyBar = '';
+  String piti = '';
+  for(int i = 0; i < cistyListJidel.length; i++){
+    if(cistyListJidel[i].contains('Polévka')){
+      if(polevka != ''){
+        polevka += ', ';
+      }
+      polevka = '$polevka ${cistyListJidel[i]}';
+    }
+    else if(cistyListJidel[i].contains('salátový bar')){
+      if(salatovyBar != ''){
+        salatovyBar += ', ';
+      }
+      salatovyBar = '$salatovyBar ${cistyListJidel[i]}';
+    }
+    else if(cistyListJidel[i].contains('nápoj') || cistyListJidel[i].contains('čaj') || cistyListJidel[i].contains('káva')){
+      if(piti != ''){
+        piti += ', ';
+      }
+      piti = '$piti ${cistyListJidel[i]}';
+    }
+    else {
+      if(hlavniJidlo != ''){
+        hlavniJidlo += ', ';
+      }
+      hlavniJidlo = '$hlavniJidlo ${cistyListJidel[i]}';
+    }
+  }
+  zkracenyNazevJidla = '';
+  plnyNazevJidla = '';
+  if(polevka != ''){
+    if(plnyNazevJidla != ''){
+      plnyNazevJidla += '<br>';
+    }
+    plnyNazevJidla += polevka;
+  }
+  if(hlavniJidlo != ''){
+    if(zkracenyNazevJidla != ''){
+      zkracenyNazevJidla += '<br>';
+    }
+    if(plnyNazevJidla != '') {
+      plnyNazevJidla += '<br>';
+    }
+    plnyNazevJidla += hlavniJidlo;
+    zkracenyNazevJidla += hlavniJidlo;
+  }
+  if(piti != ''){
+    if(plnyNazevJidla != ''){
+      plnyNazevJidla += '<br>';
+    }
+    plnyNazevJidla += piti;
+  }
+  if(salatovyBar != '') {
+    if(plnyNazevJidla != ''){
+      plnyNazevJidla += '<br>';
+    }
+    plnyNazevJidla += salatovyBar;
+  }
+  zkracenyNazevJidla = zkracenyNazevJidla.trimLeft();
+  plnyNazevJidla = plnyNazevJidla.trimLeft();
+  if(zkracenyNazevJidla.substring(0,3) == 'N. ') {
+    zkracenyNazevJidla = zkracenyNazevJidla.substring(3);
+  }
+  if(plnyNazevJidla.substring(0,3) == 'N. ') {
+    plnyNazevJidla = plnyNazevJidla.substring(3);
+  }
+  zkracenyNazevJidla = zkracenyNazevJidla.substring(0, 1).toUpperCase() + zkracenyNazevJidla.substring(1);
+  plnyNazevJidla = plnyNazevJidla.substring(0, 1).toUpperCase() + plnyNazevJidla.substring(1);
+  plnyNazevJidla = '$plnyNazevJidla<br>Alergeny: $alergeny';
+  return ParsedFoodString(
+    polevka: polevka,
+    hlavniJidlo: hlavniJidlo,
+    salatovyBar: salatovyBar,
+    piti: piti,
+    alergeny: alergeny,
+    type: type,
+    plnyNazevJidla: plnyNazevJidla,
+    zkracenyNazevJidla: zkracenyNazevJidla,
+  );
+}
+
 Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
   try {
     return await canteenInstance.jidelnicekDen(den: den);

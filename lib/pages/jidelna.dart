@@ -30,31 +30,31 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-          title: const Center(child: Text('Autojídelna')),
-          actions: [
-            PopupMenuButtonInAppbar(
-              widget: widget,
-              setScaffoldBody: setScaffoldBody,
-              loading: loading,
-            ),
-          ]),
-      body: Stack(
-        children: [
-          scaffoldBody,
-          if (loadingIndicator)
-            Container(
-                alignment: Alignment.center,
-                color: Colors.white.withOpacity(0.5),
-                child: const Center(child: CircularProgressIndicator())),
-        ],
-      ),
-      drawer: MainAppDrawer(
-        setHomeWidget: widget.setHomeWidget,
-        page: NavigationDrawerItem.jidelnicek,
-      ),
+      return Scaffold(
+        appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 148, 18, 148),
+            title: const Center(child: Text('Autojídelna')),
+            actions: [
+              PopupMenuButtonInAppbar(
+                widget: widget,
+                setScaffoldBody: setScaffoldBody,
+                loading: loading,
+              ),
+            ]),
+        body: Stack(
+          children: [
+            scaffoldBody,
+            if (loadingIndicator)
+              Container(
+                  alignment: Alignment.center,
+                  color: Colors.white.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator())),
+          ],
+        ),
+        drawer: MainAppDrawer(
+          setHomeWidget: widget.setHomeWidget,
+          page: NavigationDrawerItem.jidelnicek,
+        ),
     );
   }
 }
@@ -235,7 +235,7 @@ class JidelnicekDenWidget extends StatelessWidget {
         automaticallyImplyLeading: false,
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Text('Obědy'),
+          const Text('Jídelníček'),
           ValueListenableBuilder(
               valueListenable: canteenDataListener,
               builder: (ctx, value, child) {
@@ -388,105 +388,42 @@ class ListJidel extends StatelessWidget {
             child: ListView.builder(
               itemCount: jidelnicek.jidla.length,
               itemBuilder: (context, index) {
-                String jidlo = jidelnicek.jidla[index].nazev;
-                return ListTile(
-                  title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Builder(builder: (_) {
-                          if (jidlo.contains('<span')) {
-                            List<String> listJidel = jidlo.split('<span');
-                            String cistyNazevJidla = listJidel[0];
-                            cistyNazevJidla = cistyNazevJidla.replaceAll(' *', '');
-                            listJidel.removeAt(0);
-                            //String alergeny = '<span${listJidel.join('<span')}';
-                            List<String> cistyListJidel = cistyNazevJidla.split(', ');
-                            String polevka = '';
-                            String hlavniJidlo = '';
-                            String salatovyBar = '';
-                            String piti = '';
-                            for(int i = 0; i < cistyListJidel.length; i++){
-                              if(cistyListJidel[i].contains('Polévka')){
-                                if(polevka != ''){
-                                  polevka += ', ';
-                                }
-                                polevka = '$polevka ${cistyListJidel[i]}';
-                              }
-                              else if(cistyListJidel[i].contains('salátový bar')){
-                                if(salatovyBar != ''){
-                                  salatovyBar += ', ';
-                                }
-                                salatovyBar = '$salatovyBar ${cistyListJidel[i]}';
-                              }
-                              else if(cistyListJidel[i].contains('nápoj') || cistyListJidel[i].contains('čaj') || cistyListJidel[i].contains('káva')){
-                                if(piti != ''){
-                                  piti += ', ';
-                                }
-                                piti = '$piti ${cistyListJidel[i]}';
-                              }
-                              else {
-                                if(hlavniJidlo != ''){
-                                  hlavniJidlo += ', ';
-                                }
-                                hlavniJidlo = '$hlavniJidlo ${cistyListJidel[i]}';
-                              }
-                            }
-                            cistyNazevJidla = '';
-                            String plnyNazevJidla = cistyNazevJidla;
-                            if(polevka != ''){
-                              if(plnyNazevJidla != ''){
-                                plnyNazevJidla += '<br>';
-                              }
-                              plnyNazevJidla += polevka;
-                            }
-                            if(hlavniJidlo != ''){
-                              if(cistyNazevJidla != ''){
-                                cistyNazevJidla += '<br>';
-                              }
-                              if(plnyNazevJidla != '') {
-                                plnyNazevJidla += '<br>';
-                              }
-                              plnyNazevJidla += hlavniJidlo;
-                              cistyNazevJidla += hlavniJidlo;
-                            }
-                            if(piti != ''){
-                              if(plnyNazevJidla != ''){
-                                plnyNazevJidla += '<br>';
-                              }
-                              plnyNazevJidla += piti;
-                            }
-                            if(salatovyBar != '') {
-                              if(plnyNazevJidla != ''){
-                                plnyNazevJidla += '<br>';
-                              }
-                              plnyNazevJidla += salatovyBar;
-                            }
-                            cistyNazevJidla = cistyNazevJidla.trimLeft();
-                            if(cistyNazevJidla.substring(0,3) == 'N. ') {
-                              cistyNazevJidla = cistyNazevJidla.substring(3);
-                            }
-                            String htmlString = cistyNazevJidla.substring(0, 1).toUpperCase() + cistyNazevJidla.substring(1);
-                            /*
-                            String fullHtmlString =
-                                '$plnyNazevJidla<br> alergeny: $alergeny';*/
-                            return HtmlWidget(htmlString, textStyle: const TextStyle(fontSize: 30));
-                          } else if (jidelnicek
-                              .jidla[index].alergeny.isNotEmpty) {
-                            return HtmlWidget(
-                                '$jidlo<br> alergeny: ${jidelnicek.jidla[index].alergeny}');
-                          } else {
-                            return HtmlWidget(jidlo);
-                          }
-                        }),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 30.0),
-                          child: ObjednatJidloTlacitko(
-                            widget: this,
-                            jidlaListener: jidlaListener,
-                            index: index,
-                          ),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => JidloDetail(
+                          datumJidla: widget.minimalDate.add(Duration(days: widget.index)),
+                          indexDne: index,
                         ),
-                      ]),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Builder(builder: (_) {
+                            String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
+                            return HtmlWidget(
+                              jidlo,
+                              textStyle: const TextStyle(
+                                fontSize: 30,
+                              ),
+                            );
+
+                          }),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 30.0),
+                            child: ObjednatJidloTlacitko(
+                              widget: this,
+                              jidlaListener: jidlaListener,
+                              index: index,
+                            ),
+                          ),
+                        ]),
+                  ),
                 );
               },
             ),
