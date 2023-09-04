@@ -18,7 +18,79 @@ class JidloDetail extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Jidlo jidlo = canteenData.jidelnicky[datumJidla]!.jidla[indexDne];
-    String text = parseJidlo(jidlo.nazev).plnyNazevJidla;
+    ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
+    List<Widget> jidloWidgets = [];
+    if(jidloString.polevka != null){
+      jidloWidgets.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: HtmlWidget(
+              jidloString.polevka!, textStyle: const TextStyle(
+              fontSize: 30,height: 1.5),),
+          ),
+        ),
+      );
+    }
+    if(jidloString.hlavniJidlo != null){
+      jidloWidgets.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: HtmlWidget(
+              jidloString.hlavniJidlo!, textStyle: const TextStyle(
+              fontSize: 30,height: 1.5),),
+          ),
+        ),
+      );
+    }
+    if(jidloString.piti != null){
+      jidloWidgets.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: HtmlWidget(
+              jidloString.piti!, textStyle: const TextStyle(
+              fontSize: 30,height: 1.5),),
+          ),
+        ),
+      );
+    }
+    if(jidloString.salatovyBar != null){
+      jidloWidgets.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: HtmlWidget(
+              jidloString.salatovyBar!, textStyle: const TextStyle(
+              fontSize: 30,height: 1.5),),
+          ),
+        ),
+      );
+    }
+    if(jidloString.alergeny != null){
+      jidloWidgets.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: HtmlWidget(
+              'Alergeny: ${jidloString.alergeny!}', textStyle: const TextStyle(
+              fontSize: 30,height: 1.5),),
+          ),
+        ),
+      );
+    }
+    jidloWidgets.add(
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+        child: ObjednatJidloTlacitko(widget: widget, index: indexDne, jidlaListener: widget.jidlaListener),
+      )
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(jidlo.varianta),
@@ -28,13 +100,7 @@ class JidloDetail extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: HtmlWidget(text, textStyle: const TextStyle(fontSize: 30,height: 1.5),),
-              ),
-              ObjednatJidloTlacitko(widget: widget, index: indexDne, jidlaListener: widget.jidlaListener)
-            ],
+            children: jidloWidgets,
           ),
         ),
       ),

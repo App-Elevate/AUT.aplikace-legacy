@@ -420,24 +420,35 @@ class ListJidel extends StatelessWidget {
                     title: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
                       child: Container(
+
                         decoration: BoxDecoration(
-                          border: Border.all(color: Color.fromARGB(255, 122, 122, 122), width: 2),
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color.fromARGB(20, 0, 0, 0),
+                                offset: Offset(0, 0),
+                                blurRadius: 4
+                            )
+                          ],
+                          border: Border.all(color: const Color.fromARGB(255, 122, 122, 122), width: 2),
                           borderRadius: const BorderRadius.all(Radius.circular(20))),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Builder(builder: (_) {
-                                  String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
-                                  return HtmlWidget(
-                                    jidlo,
-                                    textStyle: const TextStyle(
-                                      fontSize: 30,
-                                    ),
-                                  );
-                                            
-                                }),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0.5, 4, 0.5, 0),
+                                  child: Builder(builder: (_) {
+                                    String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
+                                    return HtmlWidget(
+                                      jidlo,
+                                      textStyle: const TextStyle(
+                                        fontSize: 30,
+                                      ),
+                                    );
+                                              
+                                  }),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
                                   child: ObjednatJidloTlacitko(
