@@ -400,70 +400,76 @@ class ListJidel extends StatelessWidget {
                 child: Center(child: Text('Žádná Jídla pro tento den')));
           }
           return Expanded(
-            child: ListView.builder(
-              itemCount: jidelnicek.jidla.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => JidloDetail(
-                          datumJidla: widget.minimalDate.add(Duration(days: widget.index)),
-                          indexDne: index,
-                          widget: this,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  return;
+                },
+              child: ListView.builder(
+                itemCount: jidelnicek.jidla.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JidloDetail(
+                            datumJidla: widget.minimalDate.add(Duration(days: widget.index)),
+                            indexDne: index,
+                            widget: this,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: ListTile(
-                    title: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-                      child: Container(
-
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                                color: Color.fromARGB(20, 0, 0, 0),
-                                offset: Offset(0, 0),
-                                blurRadius: 4
-                            )
-                          ],
-                          border: Border.all(color: const Color.fromARGB(255, 122, 122, 122), width: 2),
-                          borderRadius: const BorderRadius.all(Radius.circular(20))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0.5, 4, 0.5, 0),
-                                  child: Builder(builder: (_) {
-                                    String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
-                                    return HtmlWidget(
-                                      jidlo,
-                                      textStyle: const TextStyle(
-                                        fontSize: 30,
-                                      ),
-                                    );
-                                              
-                                  }),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
-                                  child: ObjednatJidloTlacitko(
-                                    widget: this,
-                                    jidlaListener: jidlaListener,
-                                    index: index,
+                      );
+                    },
+                    child: ListTile(
+                      title: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                        child: Container(
+            
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color.fromARGB(20, 255, 255, 255):const Color.fromARGB(20, 0, 0, 0),
+                                  offset: const Offset(0, 0),
+                                  blurRadius: 4
+                              )
+                            ],
+                            border: Border.all(color: const Color.fromARGB(255, 122, 122, 122), width: 2),
+                            borderRadius: const BorderRadius.all(Radius.circular(20))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0.5, 4, 0.5, 0),
+                                    child: Builder(builder: (_) {
+                                      String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
+                                      return HtmlWidget(
+                                        jidlo,
+                                        textStyle: const TextStyle(
+                                          fontSize: 30,
+                                        ),
+                                      );
+                                                
+                                    }),
                                   ),
-                                ),
-                              ]),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
+                                    child: ObjednatJidloTlacitko(
+                                      widget: this,
+                                      jidlaListener: jidlaListener,
+                                      index: index,
+                                    ),
+                                  ),
+                                ]),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           );
         }),
@@ -583,7 +589,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           break;
         //operace v minulosti
         case StavJidla.objednanoVyprsenaPlatnost:
-          buttonColor = const Color.fromARGB(255, 247, 75, 75);
+          buttonColor = const Color.fromRGBO(17, 201, 11, 1);
           obedText = 'nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
           break;
         case StavJidla.nedostupne:

@@ -219,7 +219,6 @@ class Canteen {
         var vydejna = RegExp(r'(?<=<span style="color: #1b75bb;">).+?(?=<)')
             .firstMatch(s); // název výdejny / verze 2.18
         vydejna ??= RegExp(
-                // TODO: Lepší systém pro podporu různých verzí iCanteen
                 r'(?<=<span class="smallBoldTitle" style="color: #1b75bb;">).+?(?=<)')
             .firstMatch(s); // název výdejny / verze 2.10
 
