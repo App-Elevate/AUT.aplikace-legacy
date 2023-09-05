@@ -312,7 +312,6 @@ class JidelnicekDenWidget extends StatelessWidget {
                 }),
             Expanded(
               child: PageView.builder(
-                physics: const ClampingScrollPhysics(),
                 controller: pageviewController,
                 onPageChanged: (value) {
                   changeDate(index: value);
@@ -402,8 +401,8 @@ class ListJidel extends StatelessWidget {
           return Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                  await Future.delayed(const Duration(milliseconds: 500));
-                  return;
+                  await initCanteen(hasToBeNew: true);
+                  getCanteenData().jidelnicky[jidelnicek.den];
                 },
               child: ListView.builder(
                 itemCount: jidelnicek.jidla.length,
@@ -576,7 +575,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
       else if(!jidlo!.objednano && !jidlo!.lzeObjednat){
         stavJidla = StavJidla.nedostupne;
       }
-
       switch(stavJidla){
         //jednoduché operace
         case StavJidla.objednano:
@@ -657,7 +655,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
 
         return ElevatedButton(
           style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(const Size(100, 50)),
+            minimumSize: MaterialStateProperty.all(const Size(500, 50)),
             backgroundColor: MaterialStateProperty.all(buttonColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
@@ -786,8 +784,17 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
               });
             }
           },
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(obedText, style: const TextStyle(fontSize: 20)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
+                  child: Text(obedText, style: const TextStyle(fontSize: 20),),
+                ),
+              ),
+            ),
             icon == null ? const Icon(null) : icon!,
           ]),
         );

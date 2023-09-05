@@ -9,13 +9,13 @@ class AutoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Autojídelna'),
+        centerTitle: true,
       ),
-      body: const Center(
-        child: Text('Tato feature není hotová, ale je v pořadí'),
-      ),
+      //TODO: vytvořit stránku
+      body: const Placeholder(),
       drawer: MainAppDrawer(
-          setHomeWidget: setHomeWidget,
-          page: NavigationDrawerItem.automatickeObjednavky),
+        setHomeWidget: setHomeWidget,
+        page: NavigationDrawerItem.automatickeObjednavky),
     );
   }
 }

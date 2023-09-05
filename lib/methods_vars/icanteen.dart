@@ -139,7 +139,7 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
     cistyListJidel[i] = cistyListJidel[i].trimLeft();
   }
   for(int i = 0; i < cistyListJidel.length; i++){
-    if(cistyListJidel[i].contains('Polévka')){
+    if(cistyListJidel[i].contains('Polévka') || cistyListJidel[i].contains('fridátové nudle')){
       if(polevka != ''){
         polevka += ', ';
       }
