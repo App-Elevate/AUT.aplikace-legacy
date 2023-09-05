@@ -6,7 +6,7 @@ export './shared_widgets/all.dart';
 export './pages/all.dart';
 
 //icanteenlib
-export './canteenlib-custom/canteenlib.dart';
+export 'package:canteenlib/canteenlib.dart';
 
 //flutter widgets
 export 'package:flutter/material.dart';
