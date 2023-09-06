@@ -368,31 +368,45 @@ class JidelnicekWidget extends StatelessWidget {
   }
 }
 
-class ListJidel extends StatelessWidget {
+class ListJidel extends StatefulWidget {
   final Jidelnicek? jidelnicek;
   final JidelnicekWidget widget;
   final Widget? errorWidget;
+  final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
   ListJidel({
     this.jidelnicek,
     super.key,
     required this.widget,
     this.errorWidget,
   });
-  final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
   void refreshButtons() async {
     DateTime currentDate = widget.minimalDate.add(Duration(days: widget.index));
     jidlaListener.value = (await refreshLunches(currentDate)).jidla;//error handling please
   }
+
+  @override
+  State<ListJidel> createState() => _ListJidelState();
+}
+
+class _ListJidelState extends State<ListJidel> {
+  Jidelnicek? jidelnicek;
+  late final JidelnicekWidget parentWidget;
+  late final Widget? errorWidget;
+  final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
+
+
   @override
   Widget build(BuildContext context) {
-    jidlaListener.value = jidelnicek!.jidla;
+    parentWidget = widget.widget;
+    errorWidget = widget.errorWidget;
+    jidlaListener.value = widget.jidelnicek!.jidla;
     return Column(
       children: [
         Builder(builder: (_) {
-          if (this.jidelnicek == null) {
-            return errorWidget!;
+          if (widget.jidelnicek == null) {
+            return widget.errorWidget!;
           }
-          Jidelnicek jidelnicek = this.jidelnicek!;
+          Jidelnicek jidelnicek = widget.jidelnicek!;
 
           if (jidelnicek.jidla.isEmpty) {
             return const Expanded(
@@ -403,6 +417,9 @@ class ListJidel extends StatelessWidget {
               onRefresh: () async {
                   await initCanteen(hasToBeNew: true);
                   getCanteenData().jidelnicky[jidelnicek.den];
+                  setState(() {
+                    jidelnicek = getCanteenData().jidelnicky[jidelnicek.den]!;
+                  });
                 },
               child: ListView.builder(
                 itemCount: jidelnicek.jidla.length,
@@ -413,9 +430,9 @@ class ListJidel extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => JidloDetail(
-                            datumJidla: widget.minimalDate.add(Duration(days: widget.index)),
+                            datumJidla: parentWidget.widget.minimalDate.add(Duration(days: widget.widget.index)),
                             indexDne: index,
-                            widget: this,
+                            widget: widget,
                           ),
                         ),
                       );
@@ -456,7 +473,7 @@ class ListJidel extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
                                     child: ObjednatJidloTlacitko(
-                                      widget: this,
+                                      widget: widget,
                                       jidlaListener: jidlaListener,
                                       index: index,
                                     ),
