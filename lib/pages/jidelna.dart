@@ -14,7 +14,7 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
-  Widget scaffoldBody = JidelnicekDenWidget();
+  Widget scaffoldBody = const Placeholder();
   bool loadingIndicator = false;
   void setScaffoldBody(Widget widget) {
     setState(() {
@@ -30,6 +30,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   @override
   Widget build(BuildContext context) {
+    scaffoldBody = JidelnicekDenWidget(
+    setScaffoldBody: setScaffoldBody,
+  );
       return Scaffold(
         appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 148, 18, 148),
@@ -120,7 +123,7 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
             loading(false);
             refreshing = false;
             setScaffoldBody(
-                JidelnicekDenWidget(customCanteenData: getCanteenData()));
+                JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: setScaffoldBody,));
           },
         ),
         PopupMenuItem(
@@ -170,7 +173,9 @@ class JidelnicekDenWidget extends StatelessWidget {
   JidelnicekDenWidget({
     super.key,
     this.customCanteenData,
+    required this.setScaffoldBody,
   });
+  final Function setScaffoldBody;
 
   final DateTime currentDate = DateTime(2006, 5, 23)
       .add(Duration(days: getJidelnicekPageNum().pageNumber));
@@ -368,7 +373,7 @@ class JidelnicekWidget extends StatelessWidget {
   }
 }
 
-class ListJidel extends StatefulWidget {
+class ListJidel extends StatelessWidget {
   final Jidelnicek? jidelnicek;
   final JidelnicekWidget widget;
   final Widget? errorWidget;
@@ -383,46 +388,45 @@ class ListJidel extends StatefulWidget {
     DateTime currentDate = widget.minimalDate.add(Duration(days: widget.index));
     jidlaListener.value = (await refreshLunches(currentDate)).jidla;//error handling please
   }
-
-  @override
-  State<ListJidel> createState() => _ListJidelState();
-}
-
-class _ListJidelState extends State<ListJidel> {
-  Jidelnicek? jidelnicek;
-  late final JidelnicekWidget parentWidget;
-  late final Widget? errorWidget;
-  final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
-
-
   @override
   Widget build(BuildContext context) {
-    parentWidget = widget.widget;
-    errorWidget = widget.errorWidget;
-    jidlaListener.value = widget.jidelnicek!.jidla;
+    jidlaListener.value = jidelnicek!.jidla;
     return Column(
       children: [
         Builder(builder: (_) {
-          if (widget.jidelnicek == null) {
-            return widget.errorWidget!;
+          if (jidelnicek == null) {
+            return errorWidget!;
           }
-          Jidelnicek jidelnicek = widget.jidelnicek!;
-
-          if (jidelnicek.jidla.isEmpty) {
+          if (jidelnicek!.jidla.isEmpty) {
             return const Expanded(
                 child: Center(child: Text('Žádná Jídla pro tento den')));
           }
           return Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
+                if (refreshing) return;
+                refreshing = true;
+                try {
                   await initCanteen(hasToBeNew: true);
-                  getCanteenData().jidelnicky[jidelnicek.den];
-                  setState(() {
-                    jidelnicek = getCanteenData().jidelnicky[jidelnicek.den]!;
-                  });
+                } catch (e) {
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  if (context.mounted && !snackbarshown.shown) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(snackbarFunction(
+                            'nastala chyba při aktualizaci dat, dejte tomu chvilku a zkuste to prosím znovu',context))
+                        .closed
+                        .then((SnackBarClosedReason reason) {
+                      snackbarshown.shown = false;
+                    });
+                  }
+                }
+                refreshing = false;
+                widget.widget.setScaffoldBody(
+                    JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: widget.widget.setScaffoldBody,));
                 },
               child: ListView.builder(
-                itemCount: jidelnicek.jidla.length,
+                itemCount: jidelnicek!.jidla.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
@@ -430,9 +434,9 @@ class _ListJidelState extends State<ListJidel> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => JidloDetail(
-                            datumJidla: parentWidget.widget.minimalDate.add(Duration(days: widget.widget.index)),
+                            datumJidla: widget.widget.minimalDate.add(Duration(days: widget.index)),
                             indexDne: index,
-                            widget: widget,
+                            widget: this,
                           ),
                         ),
                       );
@@ -460,7 +464,7 @@ class _ListJidelState extends State<ListJidel> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0.5, 4, 0.5, 0),
                                     child: Builder(builder: (_) {
-                                      String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
+                                      String jidlo = parseJidlo(jidelnicek!.jidla[index].nazev, alergeny: jidelnicek!.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
                                       return HtmlWidget(
                                         jidlo,
                                         textStyle: const TextStyle(
@@ -473,7 +477,7 @@ class _ListJidelState extends State<ListJidel> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
                                     child: ObjednatJidloTlacitko(
-                                      widget: widget,
+                                      widget: this,
                                       jidlaListener: jidlaListener,
                                       index: index,
                                     ),
