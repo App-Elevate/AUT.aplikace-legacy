@@ -10,6 +10,7 @@
 .svn/
 migrate_working_dir/
 pubspec.lock
+windows/*
 
 # IntelliJ related
 *.iml
@@ -49,3 +50,4 @@ app.*.map.json
 pubspec.lock
 pubspec.lock
 pubspec.lock
+linux/flutter/generated_plugin_registrant.cc
