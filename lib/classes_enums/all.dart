@@ -124,3 +124,12 @@ enum ParsedFoodStringType {
   /// jídlo neobsahovalo span ani alergeny (alergeny vsak ve vysledku mozna jsou)
   bezAlergenu
 }
+
+enum TypStatistiky {
+  ///normální objednávky
+  objednavka,
+  ///automatické objednávky
+  auto,
+  ///objednávky chycené burzaCatherem
+  burzaCatcher
+}

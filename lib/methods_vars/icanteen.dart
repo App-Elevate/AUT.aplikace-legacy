@@ -107,6 +107,18 @@ Future<Canteen> initCanteen(
   return canteenInstance;
 }
 
+void pridatStatistiku(TypStatistiky statistika){
+  switch(statistika){
+    //default case
+    case TypStatistiky.objednavka:
+      break;
+    case TypStatistiky.auto:
+      break;
+    case TypStatistiky.burzaCatcher:
+      break;
+  }
+}
+
 ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
   late ParsedFoodStringType type;
   String zkracenyNazevJidla = '';
