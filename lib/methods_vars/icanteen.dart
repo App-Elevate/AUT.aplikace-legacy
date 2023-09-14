@@ -142,7 +142,11 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
     type = ParsedFoodStringType.bezAlergenu;
   }
   zkracenyNazevJidla = zkracenyNazevJidla.replaceAll(' *', '');
-  List<String> cistyListJidel = zkracenyNazevJidla.split(', ');
+  zkracenyNazevJidla = zkracenyNazevJidla.replaceAll('*', '');
+  List<String> cistyListJidel = zkracenyNazevJidla.split(',');
+  for(int i = 0;i<cistyListJidel.length;i++){
+    cistyListJidel[i] = cistyListJidel[i].trimLeft();
+  }
   String polevka = '';
   String hlavniJidlo = '';
   String salatovyBar = '';
