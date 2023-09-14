@@ -27,6 +27,9 @@ class CanteenData {
 
   /// seznam jídel, které jsou na burze
   List<Burza> jidlaNaBurze;
+
+  /// jídelníčky, které aktuálně načítáme
+  List<DateTime> currentlyLoading = [];
   CanteenData({
     required this.pocetJidel,
     required this.username,

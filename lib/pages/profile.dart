@@ -121,6 +121,7 @@ class ProfilePage extends StatelessWidget {
                       return const SizedBox(width: 0, height: 0);
                     }
                   }),
+                  /*
                   const Divider(),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
@@ -134,7 +135,7 @@ class ProfilePage extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {}, child: const Text('Nastavení')),
                   ElevatedButton(
-                      onPressed: () {}, child: const Text('Zakoupit Pro')),
+                      onPressed: () {}, child: const Text('Zakoupit Pro')),*/
                 ],
               ),
             );

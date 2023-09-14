@@ -85,6 +85,7 @@ class MainAppDrawer extends StatelessWidget {
                 }
               },
             ),
+            /*
             ListTile(
               title: const Text('Automatické objednávky'),
               //icon that signilizes automatization
@@ -116,13 +117,13 @@ class MainAppDrawer extends StatelessWidget {
                     textColor: Colors.white,
                     fontSize: 16.0);
               },
-            ),
+            ),*/
           ],
         ),
         bottomNavigationBar: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(right: 8.0, top: 8.0, left: 8.0),
               child: ElevatedButton(
                 onPressed: () {
@@ -140,7 +141,7 @@ class MainAppDrawer extends StatelessWidget {
                 ),
                 child: const Text('Přepnout účet'),
               ),
-            ),
+            ),*/
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(

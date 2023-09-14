@@ -216,11 +216,7 @@ class JidelnicekDenWidget extends StatelessWidget {
   void changeDate({DateTime? newDate, int? daysChange, int? index}) {
     if (daysChange != null) {
       newDate = dateListener.value.add(Duration(days: daysChange));
-      if (daysChange < 0) {
-        preIndexLunches(newDate.subtract(const Duration(days: 7)), 7);
-      } else {
-        preIndexLunches(newDate, 7);
-      }
+      smartPreIndexing(newDate);
       pageviewController.animateToPage(
         newDate.difference(minimalDate).inDays,
         duration: const Duration(milliseconds: 150),
@@ -228,14 +224,13 @@ class JidelnicekDenWidget extends StatelessWidget {
       );
     } else if (index != null) {
       newDate = minimalDate.add(Duration(days: index));
-      preIndexLunches(newDate, 7).then((_) =>
-          preIndexLunches(newDate!.subtract(const Duration(days: 7)), 7));
+      smartPreIndexing(newDate);
       dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
     } else if (newDate != null) {
-      preIndexLunches(newDate, 7).then((_) =>
-          preIndexLunches(newDate!.subtract(const Duration(days: 7)), 7));
+      smartPreIndexing(newDate);
+      dateListener.value = newDate;
       dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;

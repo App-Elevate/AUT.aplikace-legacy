@@ -55,7 +55,7 @@ Future<Canteen> initCanteen(
   username ??= await getDataFromSecureStorage('username');
   password ??= await getDataFromSecureStorage('password');
   if (username == null || password == null) {
-    throw Exception('No password found');
+    return Future.error('No password found');
   }
 
   await canteenInstance.login(username, password);
@@ -67,17 +67,15 @@ Future<Canteen> initCanteen(
     }
     await Future.delayed(const Duration(milliseconds: 100));
     if (!(canteenInstance.prihlasen)) {
-      throw Exception('Login failed');
+      return Future.error('login failed');
     }
   }
-  //get last monday
+  //get today
   DateTime currentDate = DateTime.now();
-  DateTime lastMonday =
-      currentDate.subtract(Duration(days: (currentDate.weekday - 1)));
-  DateTime lastMondayWithoutTime =
-      DateTime(lastMonday.year, lastMonday.month, lastMonday.day);
+  DateTime currentDateWithoutTime =
+      DateTime(currentDate.year, currentDate.month, currentDate.day);
   Map<DateTime, Jidelnicek> jidelnicky = {
-    lastMondayWithoutTime: await ziskatJidelnicekDen(lastMonday)
+    currentDateWithoutTime: await ziskatJidelnicekDen(currentDateWithoutTime)
   };
   canteenData = CanteenData(
     username: username,
@@ -85,24 +83,8 @@ Future<Canteen> initCanteen(
     uzivatel: await canteenInstance.ziskejUzivatele(),
     jidlaNaBurze: await canteenInstance.ziskatBurzu(),
     jidelnicky: jidelnicky,
-    pocetJidel: {lastMondayWithoutTime: jidelnicky[lastMondayWithoutTime]!.jidla.length},
+    pocetJidel: {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length},
   );
-
-  preIndexLunches(lastMondayWithoutTime, 14).then((_) => {
-        preIndexLunches(
-                lastMondayWithoutTime.subtract(const Duration(days: 7)), 7)
-            .then((_) => {
-                  preIndexLunches(
-                          lastMondayWithoutTime.add(const Duration(days: 14)),
-                          7)
-                      .then((_) {
-                    preIndexLunches(
-                        lastMondayWithoutTime
-                            .subtract(const Duration(days: 14)),
-                        7);
-                  })
-                })
-      });
   loggedOut = false;
   return canteenInstance;
 }
@@ -252,7 +234,13 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
 
 Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
   try {
-    return await canteenInstance.jidelnicekDen(den: den);
+    Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: den);
+    //bad api check
+    if(jidelnicek.jidla.length < 3){
+      Jidelnicek checkjidelnicek = await canteenInstance.jidelnicekDen(den: den);
+      return checkjidelnicek.jidla.length > jidelnicek.jidla.length? checkjidelnicek : jidelnicek;
+    }
+    return jidelnicek;
   } catch (e) {
     if (e == 'Uživatel není přihlášen') {
       await initCanteen(hasToBeNew: true);
@@ -264,15 +252,34 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     }
   }
 }
+void smartPreIndexing(DateTime currentDate){
+    preIndexLunches(currentDate, 1, true)
+    .then((_) => preIndexLunches(currentDate, 1, false))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, true))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, false))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, true))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, false))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, true))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, false));
+}
 
-Future<void> preIndexLunches(DateTime start, int howManyDays) async {
+/// [toTheFuture] is true if you want to get lunches for the next [howManyDays] days
+/// otherwise it will get lunches for the previous [howManyDays] days
+
+Future<void> preIndexLunches(DateTime start, int howManyDays, bool toTheFuture) async {
   for (int i = 0; i < howManyDays; i++) {
     try {
       if (refreshing || loggedOut) {
         return;
       }
-      canteenData.jidelnicky[start.add(Duration(days: i))] =
-          await getLunchesForDay(start.add(Duration(days: i)));
+      if(toTheFuture){
+        canteenData.jidelnicky[start.add(Duration(days: i))] =
+            await getLunchesForDay(start.add(Duration(days: i)));
+      }
+      else{
+        canteenData.jidelnicky[start.subtract(Duration(days: i))] =
+            await getLunchesForDay(start.subtract(Duration(days: i)));
+      }
     } catch (e) {
       return;
     }
@@ -287,7 +294,13 @@ Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
     jidelnicek =
         canteenData.jidelnicky[DateTime(date.year, date.month, date.day)]!;
   } else {
+    if(canteenData.currentlyLoading.contains(date)){
+      await Future.delayed(const Duration(milliseconds: 100));
+      return getLunchesForDay(date,requireNew: requireNew);
+    }
+    canteenData.currentlyLoading.add(date);
     jidelnicek = await ziskatJidelnicekDen(date);
+    canteenData.currentlyLoading.remove(date);
   }
   if(canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] != null && canteenData.pocetJidel[DateTime(date.year, date.month, date.day)]! > jidelnicek.jidla.length ){
     return getLunchesForDay(date,requireNew: requireNew);
@@ -300,8 +313,7 @@ Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
 
 Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
   canteenData.jidelnicky = {};
-      preIndexLunches(currentDate, 7).then((_) =>
-          preIndexLunches(currentDate.subtract(const Duration(days: 7)), 7));
+  smartPreIndexing(currentDate);
   return await getLunchesForDay(currentDate); 
 }
 
@@ -333,8 +345,13 @@ void saveDataToSecureStorage(String key, String value) async {
 /// get data from secure storage used for storing username and password
 Future<String?> getDataFromSecureStorage(String key) async {
   const storage = FlutterSecureStorage();
-  String? value = await storage.read(key: key);
-  return value;
+  try{
+    String? value = await storage.read(key: key);
+    return value;
+  }
+  catch(e){
+    return null;
+  }
 }
 
 /// save data to shared preferences used for storing url and unsecure data
