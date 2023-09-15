@@ -18,3 +18,7 @@ export 'package:fluttertoast/fluttertoast.dart';
 //storage
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+//package info
+export 'package:package_info/package_info.dart';
+export 'package:url_launcher/url_launcher.dart';

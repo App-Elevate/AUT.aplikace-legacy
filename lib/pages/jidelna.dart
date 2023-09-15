@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
+
 import './../every_import.dart';
 
 class MainAppScreen extends StatefulWidget {
@@ -126,6 +127,40 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
                 JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: setScaffoldBody,));
           },
         ),
+        PopupMenuItem(
+          value: 'about',
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('O Aplikaci'),
+              //info icon
+              Icon(Icons.info_rounded, color: Colors.black)
+            ],
+          ),
+          onTap: () async {
+              var packageInfo = await PackageInfo.fromPlatform();
+              // why: it says this is the use case we should use in the docs
+              // ignore: use_build_context_synchronously
+              if (!context.mounted) return;
+              showAboutDialog(
+                  context: context,
+                  applicationName: "Autojidelna",
+                  applicationLegalese:
+                      "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
+                  applicationVersion: packageInfo.version,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,25,0,0),
+                      child: ElevatedButton(
+                        onPressed: (() => launchUrl(
+                            Uri.parse("https://github.com/tpkowastaken/autojidelna"),
+                            mode: LaunchMode.externalApplication)),
+                        child: const Text('Zdrojový kód'),
+                      ),
+                    )
+                  ]);
+
+          }),
         PopupMenuItem(
             value: 'logout',
             child: const Row(
