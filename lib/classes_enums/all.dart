@@ -8,6 +8,17 @@ class Ordering {
   Ordering({this.ordering = false});
 }
 
+class ReleaseInfo {
+  ReleaseInfo({
+    required this.isAndroid,
+  });
+  String? version;
+  String? downloadUrl;
+  String? changelog;
+  bool? currentlyLatestVersion;
+  bool isAndroid;
+}
+
 ///Třída pro kešování dat Canteeny
 class CanteenData {
   /// login uživatele

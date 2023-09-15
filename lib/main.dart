@@ -1,4 +1,6 @@
 //other imports from current project
+import "package:autojidelna/methods_vars/auto_updater.dart";
+
 import "every_import.dart";
 
 void main() async {
@@ -40,6 +42,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    getLatestRelease();
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light(),

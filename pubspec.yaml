@@ -38,6 +38,7 @@ dependencies:
   fluttertoast: ^8.0.8
   package_info: ^2.0.0
   url_launcher: ^6.1.14
+  device_info_plus: ^9.0.3
 
 
   # The following adds the Cupertino Icons font to your application.
