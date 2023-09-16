@@ -1,6 +1,4 @@
 //other imports from current project
-import "package:autojidelna/methods_vars/auto_updater.dart";
-
 import "every_import.dart";
 
 void main() async {
@@ -83,6 +81,7 @@ class LoggingInWidget extends StatelessWidget {
               future: initCanteen(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
+                  Future.delayed(Duration.zero, () => newUpdateDialog(context));
                   late final Canteen canteen;
                   try {
                     canteen = snapshot.data as Canteen;

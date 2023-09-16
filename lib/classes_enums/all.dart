@@ -11,8 +11,12 @@ class Ordering {
 class ReleaseInfo {
   ReleaseInfo({
     required this.isAndroid,
+    this.latestVersion,
+    this.downloadUrl,
+    this.changelog,
+    this.currentlyLatestVersion,
   });
-  String? version;
+  String? latestVersion;
   String? downloadUrl;
   String? changelog;
   bool? currentlyLatestVersion;
