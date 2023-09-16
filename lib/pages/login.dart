@@ -152,13 +152,13 @@ class _LoginFormState extends State<LoginForm> {
                   controller: _urlController,
                   autocorrect: false,
                   decoration: InputDecoration(
-                    labelText: 'Url',
+                    labelText: 'Url stránky icanteen - např. jidelna.trebesin.cz',
                     border: const OutlineInputBorder(),
                     errorText: urlErrorText,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'zadejte prosím url stránky icanteen';
+                      return 'zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
                     }
                     return null;
                   },

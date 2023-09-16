@@ -100,6 +100,7 @@ void failedLoginDialog(BuildContext context, String message, Function setHomeWid
           child: const Text('Zkusit znovu')
           ),
           TextButton(onPressed: () {
+            logout();
             Navigator.of(context).pop();
             setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
           },
