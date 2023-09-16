@@ -80,27 +80,23 @@ class LoggingInWidget extends StatelessWidget {
             return FutureBuilder(
               future: initCanteen(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  Future.delayed(Duration.zero, () => newUpdateDialog(context));
-                  late final Canteen canteen;
-                  try {
-                    canteen = snapshot.data as Canteen;
-                    if (canteen.prihlasen) {
-                      return MainAppScreen(setHomeWidget: setHomeWidget);
-                    }
-                    return LoginScreen(
-                      setHomeWidget: setHomeWidget,
-                    );
-                  } catch (e) {
-                    return LoginScreen(
-                      setHomeWidget: setHomeWidget,
-                    );
+                if (snapshot.hasError) {
+                  if(snapshot.error == 'no internet'){
+                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
+                  }else if(snapshot.error == 'login failed'){
+                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Přihlášení selhalo', setHomeWidget));
                   }
-                } else if (snapshot.hasError) {
-                  return LoginScreen(
-                    setHomeWidget: setHomeWidget,
-                  );
-                } else {
+                  else {
+                    return LoginScreen(setHomeWidget: setHomeWidget);
+                  }
+                  return const LoadingLoginPage(
+                      textWidget: Text('Přihlašování...'));
+                }
+                else if (snapshot.connectionState == ConnectionState.done) {
+                  Future.delayed(Duration.zero, () => newUpdateDialog(context));
+                  return MainAppScreen(setHomeWidget: setHomeWidget);
+                } 
+                else {
                   return const LoadingLoginPage(
                       textWidget: Text('Přihlašování...'));
                 }

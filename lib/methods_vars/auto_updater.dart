@@ -15,7 +15,6 @@ void getLatestRelease() async {
     const Map<String,String> headers = {
       'Accept': 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
-      'Authorization': 'Bearer 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'
     };
     final response = await http.get(url, headers: headers);
     var json = jsonDecode(response.body);

@@ -33,6 +33,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   Widget build(BuildContext context) {
     scaffoldBody = JidelnicekDenWidget(
     setScaffoldBody: setScaffoldBody,
+    setHomeWidget: widget.setHomeWidget,
   );
       return Scaffold(
         appBar: AppBar(
@@ -114,7 +115,7 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
               if (context.mounted && !snackbarshown.shown) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(snackbarFunction(
-                        'nastala chyba při aktualizaci dat, dejte tomu chvilku a zkuste to prosím znovu',context))
+                        'nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',context))
                     .closed
                     .then((SnackBarClosedReason reason) {
                   snackbarshown.shown = false;
@@ -124,7 +125,7 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
             loading(false);
             refreshing = false;
             setScaffoldBody(
-                JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: setScaffoldBody,));
+                JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: setScaffoldBody,setHomeWidget: widget.setHomeWidget,));
           },
         ),
         PopupMenuItem(
@@ -209,7 +210,9 @@ class JidelnicekDenWidget extends StatelessWidget {
     super.key,
     this.customCanteenData,
     required this.setScaffoldBody,
+    required this.setHomeWidget,
   });
+  final Function setHomeWidget;
   final Function setScaffoldBody;
 
   final DateTime currentDate = DateTime(2006, 5, 23)
@@ -386,6 +389,9 @@ class JidelnicekWidget extends StatelessWidget {
       child: FutureBuilder(
           future: getLunchesForDay(minimalDate.add(Duration(days: index))),
           builder: (context, snapshot) {
+            if(snapshot.hasError){
+              Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
+            }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
@@ -420,6 +426,9 @@ class ListJidel extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    if(jidelnicek == null){
+      return const Center(child: CircularProgressIndicator());
+    }
     jidlaListener.value = jidelnicek!.jidla;
     return Column(
       children: [
@@ -444,7 +453,7 @@ class ListJidel extends StatelessWidget {
                   if (context.mounted && !snackbarshown.shown) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(snackbarFunction(
-                            'nastala chyba při aktualizaci dat, dejte tomu chvilku a zkuste to prosím znovu',context))
+                          'nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',context))
                         .closed
                         .then((SnackBarClosedReason reason) {
                       snackbarshown.shown = false;
@@ -453,7 +462,7 @@ class ListJidel extends StatelessWidget {
                 }
                 refreshing = false;
                 widget.widget.setScaffoldBody(
-                    JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: widget.widget.setScaffoldBody,));
+                    JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: widget.widget.setScaffoldBody,setHomeWidget: widget.widget.setHomeWidget,));
                 },
               child: ListView.builder(
                 itemCount: jidelnicek!.jidla.length,

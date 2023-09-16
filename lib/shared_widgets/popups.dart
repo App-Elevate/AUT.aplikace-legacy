@@ -1,6 +1,18 @@
 import 'package:autojidelna/every_import.dart';
+import 'package:autojidelna/main.dart';
 import 'package:markdown/markdown.dart' as md;
-newUpdateDialog(BuildContext context) async {
+void newUpdateDialog(BuildContext context, {int? tries}) async {
+  if(tries != null && tries > 5){
+    return;
+  }
+  try{
+    if(releaseInfo.isAndroid == false){
+      return;
+    }
+  }
+  catch(e){
+    Future.delayed(const Duration(seconds: 1), () => newUpdateDialog(context, tries: tries == null?1:tries+1));
+  }
   showDialog(
     context: context,
     barrierDismissible: true,
@@ -65,6 +77,33 @@ newUpdateDialog(BuildContext context) async {
               ),
             ],
           ),
+        ],
+      );
+    },
+  );
+}
+void failedLoginDialog(BuildContext context, String message, Function setHomeWidget) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Přihlašování selhalo'),
+        content: Text('Při přihlašování došlo k chybě: $message'),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: <Widget>[
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+            setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+          },
+          child: const Text('Zkusit znovu')
+          ),
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+            setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
+          },
+          child: const Text('Odhlásit se')),
         ],
       );
     },

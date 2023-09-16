@@ -50,7 +50,12 @@ Future<Canteen> initCanteen(
       canteenInstance = Canteen(url);
     }
   } catch (e) {
-    canteenInstance = Canteen(url);
+    try{
+      canteenInstance = Canteen(url);
+    }
+    catch(e){
+      Future.error('bad url');
+    }
   }
   username ??= await getDataFromSecureStorage('username');
   password ??= await getDataFromSecureStorage('password');
@@ -58,25 +63,36 @@ Future<Canteen> initCanteen(
     return Future.error('No password found');
   }
 
-  await canteenInstance.login(username, password);
-  await Future.delayed(const Duration(milliseconds: 100));
-  if (!canteenInstance.prihlasen) {
-    await Future.delayed(const Duration(seconds: 1));
-    if (!canteenInstance.prihlasen) {
-      await canteenInstance.login(username, password);
-    }
+  try{
+    await canteenInstance.login(username, password);
     await Future.delayed(const Duration(milliseconds: 100));
-    if (!(canteenInstance.prihlasen)) {
-      return Future.error('login failed');
+    if (!canteenInstance.prihlasen) {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!canteenInstance.prihlasen) {
+        await canteenInstance.login(username, password);
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (!(canteenInstance.prihlasen)) {
+        return Future.error('login failed');
+      }
     }
+  }
+  catch(e){
+    return Future.error('no internet');
   }
   //get today
   DateTime currentDate = DateTime.now();
   DateTime currentDateWithoutTime =
       DateTime(currentDate.year, currentDate.month, currentDate.day);
-  Map<DateTime, Jidelnicek> jidelnicky = {
-    currentDateWithoutTime: await ziskatJidelnicekDen(currentDateWithoutTime)
-  };
+  late Map<DateTime, Jidelnicek> jidelnicky;
+  try{
+    jidelnicky = {
+      currentDateWithoutTime: await ziskatJidelnicekDen(currentDateWithoutTime)
+    };
+  }
+  catch(e){
+    return Future.error('no internet');
+  }
   canteenData = CanteenData(
     username: username,
     url: url,
@@ -243,9 +259,14 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     return jidelnicek;
   } catch (e) {
     if (e == 'Uživatel není přihlášen') {
-      await initCanteen(hasToBeNew: true);
-      await Future.delayed(const Duration(seconds: 1));
-      return await ziskatJidelnicekDen(den);
+      try{
+        await initCanteen(hasToBeNew: true);
+        await Future.delayed(const Duration(seconds: 1));
+        return await ziskatJidelnicekDen(den);
+      }
+      catch(e){
+        return Future.error('no internet');
+      }
     } else {
       await Future.delayed(const Duration(seconds: 1));
       return await ziskatJidelnicekDen(den);
@@ -298,9 +319,15 @@ Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
       await Future.delayed(const Duration(milliseconds: 100));
       return getLunchesForDay(date,requireNew: requireNew);
     }
-    canteenData.currentlyLoading.add(date);
-    jidelnicek = await ziskatJidelnicekDen(date);
-    canteenData.currentlyLoading.remove(date);
+    try{
+      canteenData.currentlyLoading.add(date);
+      jidelnicek = await ziskatJidelnicekDen(date);
+      canteenData.currentlyLoading.remove(date);
+    }
+    catch(e){
+      canteenData.currentlyLoading.remove(date);
+      return Future.error('no internet');
+    }
   }
   if(canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] != null && canteenData.pocetJidel[DateTime(date.year, date.month, date.day)]! > jidelnicek.jidla.length ){
     return getLunchesForDay(date,requireNew: requireNew);
@@ -314,7 +341,13 @@ Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
 Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
   canteenData.jidelnicky = {};
   smartPreIndexing(currentDate);
-  return await getLunchesForDay(currentDate); 
+  try{
+    return await getLunchesForDay(currentDate); 
+  }
+  catch(e){
+    rethrow;
+  }
+
 }
 
 CanteenData getCanteenData() {

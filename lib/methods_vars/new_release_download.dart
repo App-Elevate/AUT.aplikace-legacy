@@ -3,10 +3,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:install_plugin/install_plugin.dart';
 import 'package:autojidelna/every_import.dart';
-void showResMsg(String msg) {
-    print(msg);
-  }
-double _progressValue = 0.0;
 void networkInstallApk(String fileUrl, BuildContext context) async {
     // Find the ScaffoldMessenger in the widget tree
     // and use it to show a SnackBar.
@@ -43,11 +39,7 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
       final value = count / total;
       if (valueNotifier.value != value) {
         valueNotifier.value = value;
-        print("${(valueNotifier.value * 100).toStringAsFixed(0)}%");
       }
     });
-
-    final res = await InstallPlugin.install(savePath);
-    showResMsg(
-        "install apk ${res['isSuccess'] == true ? 'success' : 'fail: ${res['errorMessage'] ?? ''}'}");
+    await InstallPlugin.install(savePath);
   }
