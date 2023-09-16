@@ -9,6 +9,9 @@ void newUpdateDialog(BuildContext context, {int? tries}) async {
     if(releaseInfo.isAndroid == false){
       return;
     }
+    if(releaseInfo.currentlyLatestVersion!){
+      return;
+    }
   }
   catch(e){
     Future.delayed(const Duration(seconds: 1), () => newUpdateDialog(context, tries: tries == null?1:tries+1));
@@ -105,6 +108,34 @@ void failedLoginDialog(BuildContext context, String message, Function setHomeWid
             setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
           },
           child: const Text('Odhlásit se')),
+        ],
+      );
+    },
+  );
+}
+
+void failedDownload(BuildContext context) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Aktualizace aplikace selhala'),
+        content: const Text('Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu...'),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: <Widget>[
+          TextButton(onPressed: () {
+            networkInstallApk(releaseInfo.downloadUrl!, context);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Zkusit znovu')
+          ),
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Zrušit')
+          ),
         ],
       );
     },

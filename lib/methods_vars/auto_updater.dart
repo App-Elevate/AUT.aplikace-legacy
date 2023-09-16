@@ -2,11 +2,11 @@ import 'package:autojidelna/every_import.dart';
 import 'package:http/http.dart' as http;
 late ReleaseInfo releaseInfo;
 
-void getLatestRelease() async {
+Future<ReleaseInfo> getLatestRelease() async {
   try{
     if(!Platform.isAndroid){
       releaseInfo = ReleaseInfo(isAndroid: false);
-      return;
+      return releaseInfo;
     }
 
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -43,9 +43,11 @@ void getLatestRelease() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appVersion = packageInfo.version;
     releaseInfo = ReleaseInfo(isAndroid: true, latestVersion: version, downloadUrl: downloadUrl, changelog: patchNotes, currentlyLatestVersion: version == appVersion);
+    return releaseInfo;
   }
   catch(e){
     //having the last version isn't so important so we can just ignore it if it goes wrong
     releaseInfo = ReleaseInfo(isAndroid: false);
+    return releaseInfo;
   }
 }

@@ -49,6 +49,47 @@ SnackBar dynamicSnackbarFunction(String snackBarText, BuildContext context, Valu
         if(value == -1){
           return Text('Aktualizace - Čeká se na oprávnění...', style: TextStyle(color: color),);
         }
+        if(value == -2){
+          Future.delayed(const Duration(seconds: 4), () {
+            if(context.mounted){
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            }
+          });
+          return Row(
+
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+          //light or dark theme
+              child: Text('Došlo k chybě při stahování... Ověřte připojení a zkuste to znovu', style: TextStyle(color: color),),
+            )),
+            Flexible(child: Builder(builder: (context) {
+              return ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 40, 40, 40)),
+                ),
+                onPressed: () {
+                  networkInstallApk(releaseInfo.downloadUrl!, context);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+                child: const Text('Zkusit znovu'),
+              );
+            })),
+            Builder(builder: (context) {
+              return ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      const Color.fromARGB(255, 40, 40, 40)),
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+                child: const Icon(Icons.close),
+              );
+            }),
+          ]);
+        }
         if(value == 1){
           Future.delayed(const Duration(seconds: 4), () {
             if(context.mounted){
@@ -83,5 +124,3 @@ SnackBar dynamicSnackbarFunction(String snackBarText, BuildContext context, Valu
     ),
   );
 }
-
-                //ScaffoldMessenger.of(context).hideCurrentSnackBar();

@@ -158,7 +158,56 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
                             mode: LaunchMode.externalApplication)),
                         child: const Text('Zdrojový kód'),
                       ),
-                    )
+                    ),
+                    Builder(
+                      builder: (context) {
+                        try{
+                          if(!releaseInfo.isAndroid){
+                            return const SizedBox(
+                              height: 0,
+                              width: 0,
+                            );
+                          }
+                        }
+                        catch(e){
+                            return const SizedBox(
+                              height: 0,
+                              width: 0,
+                            );
+                        }
+                        return ElevatedButton(
+                            onPressed: () async {
+                              await getLatestRelease();
+                              if(releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted){
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackbarFunction(
+                                    'Aktuálně jste na nejnovější verzi aplikace 👍',context))
+                                    .closed
+                                    .then((SnackBarClosedReason reason) {
+                                  snackbarshown.shown = false;
+                                });
+                                return;
+                              }
+                              else if(!releaseInfo.isAndroid){
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackbarFunction(
+                                    'nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...',context))
+                                    .closed
+                                    .then((SnackBarClosedReason reason) {
+                                  snackbarshown.shown = false;
+                                });
+                                return;
+
+                              }
+                              Future.delayed(Duration.zero, () => newUpdateDialog(context));
+
+                            },
+                            child: const Text('Zkontrolovat aktualizace'),
+                          );
+                      }
+                    ),
                   ]);
 
           }),

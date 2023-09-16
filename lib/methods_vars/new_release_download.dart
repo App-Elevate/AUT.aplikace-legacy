@@ -35,11 +35,17 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
     }
     var tempDownloadDir = await getTemporaryDirectory();
     String savePath = "${tempDownloadDir.path}/${fileUrl.substring(fileUrl.lastIndexOf("/") + 1)}";
-    await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
-      final value = count / total;
-      if (valueNotifier.value != value) {
-        valueNotifier.value = value;
-      }
-    });
+    try{
+      await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
+        final value = count / total;
+        if (valueNotifier.value != value) {
+          valueNotifier.value = value;
+        }
+      });
+    }
+    catch(e){
+      valueNotifier.value = -2;
+      return;
+    }
     await InstallPlugin.install(savePath);
   }
