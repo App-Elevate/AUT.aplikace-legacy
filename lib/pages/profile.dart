@@ -136,7 +136,7 @@ class ProfilePage extends StatelessWidget {
                         return Text('počet objednávek s autojídelnou: ${snapshot.data}');
                       }
                       else{
-                        return const Text('počet objednávek s autojídelnou: Načítání...');
+                        return const Text('počet objednávek s autojídelnou: 0');
                       }
                     }
                   ),
