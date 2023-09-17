@@ -812,6 +812,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     }
                     canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
                         await canteen.objednat(jidlo!);
+                    pridatStatistiku(TypStatistiky.objednavka);
                   } catch (e) {
                     snackBarMessage('nastala chyba při objednávání jídla: $e');
                   }
@@ -827,6 +828,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                         jidloNaBurze.varianta == varianta) {
                       try {
                         await canteen.objednatZBurzy(jidloNaBurze);
+                        pridatStatistiku(TypStatistiky.objednavka);
                       } catch (e) {
                         snackBarMessage('nastala chyba při objednávání jídla z burzy: $e');
                       }

@@ -105,14 +105,30 @@ Future<Canteen> initCanteen(
   return canteenInstance;
 }
 
-void pridatStatistiku(TypStatistiky statistika){
+//přidá +1 pro counter statistiky
+void pridatStatistiku(TypStatistiky statistika)async {
   switch(statistika){
     //default case
     case TypStatistiky.objednavka:
+      String? str = await readData('statistika:objednavka');
+      str ??= '0';
+      int pocetStatistiky = int.parse(str);
+      pocetStatistiky++;
+      saveData('statistika:objednavka', '$pocetStatistiky');
       break;
     case TypStatistiky.auto:
+      String? str = await readData('statistika:auto');
+      str ??= '0';
+      int pocetStatistiky = int.parse(str);
+      pocetStatistiky++;
+      saveData('statistika:auto', '$pocetStatistiky');
       break;
     case TypStatistiky.burzaCatcher:
+      String? str = await readData('statistika:burzaCatcher');
+      str ??= '0';
+      int pocetStatistiky = int.parse(str);
+      pocetStatistiky++;
+      saveData('statistika:burzaCatcher', '$pocetStatistiky');
       break;
   }
 }

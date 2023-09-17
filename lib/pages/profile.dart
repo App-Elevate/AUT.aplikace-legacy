@@ -121,14 +121,26 @@ class ProfilePage extends StatelessWidget {
                       return const SizedBox(width: 0, height: 0);
                     }
                   }),
-                  /*
                   const Divider(),
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Center(child: Text('Autojídelna')),
                   ),
-                  const Text('Pro verze: není dostupná'),
-                  const Text('počet objednávek s autojídelnou: 0'),
+                  FutureBuilder(
+                    future: readData('statistika:objednavka'),
+                    builder: (context, snapshot) {
+                      if(snapshot.hasError){
+                        return const Text('počet objednávek s autojídelnou: chyba při načítání dat');
+                      }
+                      else if(snapshot.connectionState == ConnectionState.done && snapshot.hasData){
+                        return Text('počet objednávek s autojídelnou: ${snapshot.data}');
+                      }
+                      else{
+                        return const Text('počet objednávek s autojídelnou: Načítání...');
+                      }
+                    }
+                  ),
+                  /*const Text('Pro verze: není dostupná'),
                   const Text('počet automatických objenávek: 0'),
                   const Text('počet objednávek chycených burza Catcherem: 0'),
                   const Divider(),
