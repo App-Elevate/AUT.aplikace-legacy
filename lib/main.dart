@@ -1,8 +1,17 @@
 //other imports from current project
 import "every_import.dart";
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
+late final FirebaseAnalytics analytics;
 
 void main() async {
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  analytics = FirebaseAnalytics.instance;
 }
 
 class MyApp extends StatefulWidget {

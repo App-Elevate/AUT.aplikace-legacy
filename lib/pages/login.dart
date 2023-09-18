@@ -309,9 +309,9 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
           }
         });
       } catch (e) {
-        if (e.toString().contains('Failed host lookup: ')) {
+        if (e.toString().contains('bad url')) {
           widget.errorSetter!('Nesprávné url', LoginFormErrorField.url);
-        } else if (e.toString().contains('Login failed')) {
+        } else if (e.toString().contains('login failed')) {
           widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         } else {
           widget.errorSetter!('Připojení k serveru selhalo', LoginFormErrorField.url);

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "108088693003",
+    "project_id": "autojidelna",
+    "storage_bucket": "autojidelna.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108088693003:android:a876fdaf042a909d96d20e",
+        "android_client_info": {
+          "package_name": "com.tomprotiva.autojidelna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108088693003-nu0jmettp9aohnmu1kbtdp98ar24n895.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACTnrxRr55tjfBo6asnamXJdB7gy2VqcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108088693003-nu0jmettp9aohnmu1kbtdp98ar24n895.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "108088693003-8svtmkptltbqo5a7a8lj2g04a7m01s95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.autojidelna"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
