@@ -41,6 +41,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         title: const Text('Autojídelna'),
         actions: [
           IconButton(
+            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
             icon: const Icon(
               Icons.refresh_rounded,
               color: Colors.white,
@@ -86,7 +87,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
           if (loadingIndicator)
             Container(
               alignment: Alignment.center,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.5),
               child: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -308,17 +309,6 @@ class JidelnicekDenWidget extends StatelessWidget {
       canteenDataListener.value = customCanteenData!;
     }
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Text('Jídelníček'),
-          ValueListenableBuilder(
-              valueListenable: canteenDataListener,
-              builder: (ctx, value, child) {
-                return Text('Kredit: ${canteenData.uzivatel.kredit.toInt()} kč');
-              })
-        ]),
-      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
         child: Column(

@@ -1,13 +1,15 @@
 import './../every_import.dart';
 
 class MainAccountDrawer extends StatelessWidget {
-  const MainAccountDrawer({
+  MainAccountDrawer({
     super.key,
     required this.setHomeWidget,
     required this.page,
   });
   final Function setHomeWidget;
   final NavigationDrawerItem page;
+
+  final CanteenData canteenData = getCanteenData();
 
   @override
   Widget build(BuildContext context) {
@@ -36,26 +38,115 @@ class MainAccountDrawer extends StatelessWidget {
                       ),
                     ),
                     Center(
-                      child: TextButton(
-                        style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              username,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: TextButton(
+                          style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                          //TODO: make this work (swich account)
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                username,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
+                                ),
                               ),
-                            ),
-                            Icon(
-                              Icons.expand_more,
-                              color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                            )
-                          ],
+                              Icon(
+                                Icons.expand_more,
+                                color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                              )
+                            ],
+                          ),
                         ),
+                      ),
+                    ),
+                    IntrinsicHeight(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.account_balance_wallet,
+                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                                  size: 35,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${canteenData.uzivatel.kredit.toInt()}',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Kč',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                                              ? const Color.fromARGB(175, 255, 255, 255)
+                                              : const Color(0xff323232),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const VerticalDivider(),
+                          const SizedBox(
+                            width: 100,
+                            //  child: Row(
+                            //    mainAxisAlignment: MainAxisAlignment.center,
+                            //    crossAxisAlignment: CrossAxisAlignment.center,
+                            //    children: [
+                            //      Icon(
+                            //        Icons.hub,
+                            //        color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                            //        size: 35,
+                            //      ),
+                            //      Padding(
+                            //        padding: const EdgeInsets.only(left: 10.0),
+                            //        child: Column(
+                            //          mainAxisAlignment: MainAxisAlignment.center,
+                            //          crossAxisAlignment: CrossAxisAlignment.start,
+                            //          children: [
+                            //            const Text(
+                            //              '0',
+                            //              style: TextStyle(
+                            //                fontSize: 20,
+                            //              ),
+                            //            ),
+                            //            Text(
+                            //              'Bodů',
+                            //              style: TextStyle(
+                            //                fontSize: 15,
+                            //                color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                            //                    ? const Color.fromARGB(175, 255, 255, 255)
+                            //                    : const Color(0xff323232),
+                            //              ),
+                            //            ),
+                            //          ],
+                            //        ),
+                            //      ),
+                            //    ],
+                            //  ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -161,25 +252,26 @@ class MainAccountDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                  title: const Text(
-                    'Odhlásit se',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  leading: Icon(
-                    Icons.logout,
-                    color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                    size: 30,
-                  ),
-                  onTap: () {
-                    logout();
-                    Navigator.of(context).pop(
-                      setHomeWidget(
-                        LoginScreen(
-                          setHomeWidget: setHomeWidget,
-                        ),
+                title: const Text(
+                  'Odhlásit se',
+                  style: TextStyle(fontSize: 20),
+                ),
+                leading: Icon(
+                  Icons.logout,
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                  size: 30,
+                ),
+                onTap: () {
+                  logout();
+                  Navigator.of(context).pop(
+                    setHomeWidget(
+                      LoginScreen(
+                        setHomeWidget: setHomeWidget,
                       ),
-                    );
-                  }),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
