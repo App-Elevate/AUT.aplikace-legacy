@@ -19,7 +19,7 @@ class MainAppDrawer extends StatelessWidget {
           centerTitle: true,
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               Padding(
@@ -31,8 +31,9 @@ class MainAppDrawer extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.restaurant,
+                    color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                     size: 30,
                   ),
                   selected: page == NavigationDrawerItem.jidelnicek,

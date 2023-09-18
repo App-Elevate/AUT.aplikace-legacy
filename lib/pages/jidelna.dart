@@ -40,11 +40,44 @@ class _MainAppScreenState extends State<MainAppScreen> {
         centerTitle: true,
         title: const Text('Autojídelna'),
         actions: [
-          PopupMenuButtonInAppbar(
-            widget: widget,
-            setScaffoldBody: setScaffoldBody,
-            loading: loading,
+          IconButton(
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: () async {
+              if (refreshing) return;
+              loading(true);
+              refreshing = true;
+              try {
+                await initCanteen(hasToBeNew: true);
+              } catch (e) {
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                if (context.mounted && !snackbarshown.shown) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                      .closed
+                      .then((SnackBarClosedReason reason) {
+                    snackbarshown.shown = false;
+                  });
+                }
+              }
+              loading(false);
+              refreshing = false;
+              setScaffoldBody(JidelnicekDenWidget(
+                customCanteenData: getCanteenData(),
+                setScaffoldBody: setScaffoldBody,
+                setHomeWidget: widget.setHomeWidget,
+              ));
+            },
           ),
+          //PopupMenuButtonInAppbar(
+          //  widget: widget,
+          //  setScaffoldBody: setScaffoldBody,
+          //  loading: loading,
+          //),
         ],
       ),
       body: Stack(
@@ -70,7 +103,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
             }
             return Future.value(true);
           },
-          child: MainAppDrawer(
+          child: MainAccountDrawer(
             setHomeWidget: widget.setHomeWidget,
             page: NavigationDrawerItem.jidelnicek,
           ),
@@ -95,39 +128,6 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(itemBuilder: (context) {
       return [
-        PopupMenuItem(
-          value: 'refresh',
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text('Aktualizovat'), Icon(Icons.refresh_rounded, color: Colors.black)],
-          ),
-          onTap: () async {
-            if (refreshing) return;
-            loading(true);
-            refreshing = true;
-            try {
-              await initCanteen(hasToBeNew: true);
-            } catch (e) {
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              if (context.mounted && !snackbarshown.shown) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
-                    .closed
-                    .then((SnackBarClosedReason reason) {
-                  snackbarshown.shown = false;
-                });
-              }
-            }
-            loading(false);
-            refreshing = false;
-            setScaffoldBody(JidelnicekDenWidget(
-              customCanteenData: getCanteenData(),
-              setScaffoldBody: setScaffoldBody,
-              setHomeWidget: widget.setHomeWidget,
-            ));
-          },
-        ),
         PopupMenuItem(
             value: 'about',
             child: const Row(
