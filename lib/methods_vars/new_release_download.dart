@@ -1,3 +1,4 @@
+import 'package:autojidelna/main.dart';
 import 'package:autojidelna/pages/needed_install_permission.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
@@ -47,5 +48,8 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
     valueNotifier.value = -2;
     return;
   }
+  final value = await PackageInfo.fromPlatform();
+
+  analytics.logEvent(name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
   await InstallPlugin.install(savePath);
 }

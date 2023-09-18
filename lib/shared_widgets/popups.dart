@@ -1,7 +1,8 @@
 import 'package:autojidelna/every_import.dart';
 import 'package:autojidelna/main.dart';
 import 'package:markdown/markdown.dart' as md;
-void newUpdateDialog(BuildContext context, {int? tries}) async {
+void newUpdateDialog(BuildContext context, {int? tries}) {
+
   if(tries != null && tries > 5){
     return;
   }
@@ -52,6 +53,10 @@ void newUpdateDialog(BuildContext context, {int? tries}) async {
                 child: const Text('Aktualizovat'),
                 onPressed: () {
                   Navigator.of(context).pop();
+
+                  PackageInfo.fromPlatform().then((value) {
+                    analytics.logEvent(name: 'updateButtonClicked', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+                  });
                   networkInstallApk(releaseInfo.downloadUrl!, context);
                 },
               ),
