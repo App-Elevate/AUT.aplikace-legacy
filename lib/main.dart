@@ -1,17 +1,27 @@
 //other imports from current project
+import 'dart:ui';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 late final FirebaseAnalytics analytics;
 
 void main() async {
-  runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+
   analytics = FirebaseAnalytics.instance;
+
+  runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
 }
 
 class MyApp extends StatefulWidget {
