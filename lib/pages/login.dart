@@ -22,10 +22,30 @@ class LoginScreen extends StatelessWidget {
           elevation: 0,
           //title color
           foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
-          title: const Text('Přihlášení'),
         ),
-        body: LoginForm(
-          setHomeWidget: setHomeWidget,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 50.0),
+                height: 60,
+                //cool title
+                child: const Text(
+                  'Autojídelna',
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+              ),
+              LoginForm(
+                setHomeWidget: setHomeWidget,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -48,6 +68,8 @@ class _LoginFormState extends State<LoginForm> {
   late final Function setHomeWidget;
   String? passwordErrorText;
   String? urlErrorText;
+  bool showPasswd = true;
+
   void _setErrorText(String text, LoginFormErrorField field) {
     switch (field) {
       case LoginFormErrorField.password:
@@ -91,78 +113,81 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Container(
-        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 34),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              //cool title
-              child: Text('Autojídelna',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
-                  )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: TextFormField(
+                controller: _urlController,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
+                  border: const OutlineInputBorder(),
+                  errorText: urlErrorText,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
+                  }
+                  return null;
+                },
+              ),
             ),
-            Container(
-                margin: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 2, right: 2),
-                child: TextFormField(
-                  autofillHints: const [AutofillHints.username],
-                  controller: _usernameController,
-                  textInputAction: TextInputAction.next,
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                    labelText: 'Uživatelské jméno',
-                    border: OutlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: TextFormField(
+                autofillHints: const [AutofillHints.username],
+                controller: _usernameController,
+                textInputAction: TextInputAction.next,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  labelText: 'Uživatelské jméno',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Zadejte prosím své uživatelské jméno';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: TextFormField(
+                controller: _passwordController,
+                autofillHints: const [AutofillHints.password],
+                obscureText: showPasswd,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  labelText: 'Heslo',
+                  border: const OutlineInputBorder(),
+                  errorText: passwordErrorText,
+                  suffixIcon: IconButton(
+                    padding: const EdgeInsets.only(right: 10),
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onPressed: () {
+                      setState(() {
+                        showPasswd = !showPasswd;
+                      });
+                    },
+                    icon: Icon(
+                      showPasswd ? Icons.visibility_off : Icons.visibility,
+                      color: const Color(0xff7F7F7F),
+                    ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Zadejte prosím své uživatelské jméno';
-                    }
-                    return null;
-                  },
-                )),
-            Container(
-                margin: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 2, right: 2),
-                child: TextFormField(
-                  controller: _passwordController,
-                  autofillHints: const [AutofillHints.password],
-                  obscureText: true,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    labelText: 'Heslo',
-                    border: const OutlineInputBorder(),
-                    errorText: passwordErrorText,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Zadejte prosím své heslo';
-                    }
-                    return null;
-                  },
-                )),
-            Container(
-                margin: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 2, right: 2),
-                child: TextFormField(
-                  controller: _urlController,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    labelText: 'Url stránky icanteen - např. jidelna.trebesin.cz',
-                    border: const OutlineInputBorder(),
-                    errorText: urlErrorText,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
-                    }
-                    return null;
-                  },
-                )),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Zadejte prosím své heslo';
+                  }
+                  return null;
+                },
+              ),
+            ),
             LoginSubmitButton(
               formKey: _formKey,
               usernameController: _usernameController,
@@ -210,91 +235,91 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        if (widget.formKey.currentState!.validate()) {
-          // If the form is valid, save the form fields.
-          widget.formKey.currentState!.save();
-          setState(() {
-            loggingIn = true;
-          });
-          // Do something with the form fields.
-          // Reset the form fields.
-          //login code
-          String url = widget.urlController.text;
-          if (url.contains('http://') || url.contains('https://')) {
-            url = url;
-          } else {
-            url = 'https://$url';
-          }
-          try {
-            await initCanteen(
-                    hasToBeNew: true,
-                    url: url,
-                    username: widget.usernameController.text,
-                    password: widget.passwordController.text)
-                .then((login) {
-              if (login.prihlasen) {
-                saveDataToSecureStorage(
-                    'username', widget.usernameController.text);
-                saveDataToSecureStorage(
-                    'password', widget.passwordController.text);
-                saveData('url', url);
-                saveData('loggedIn', '1');
-                setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: SizedBox(
+        height: 60,
+        width: 400,
+        child: ElevatedButton(
+          onPressed: loginFieldCheck,
+          child: Builder(
+            builder: (context) {
+              if (loggingIn) {
+                return SizedBox(
+                  height: 50,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 140, vertical: 10),
+                    width: 50,
+                    height: 50,
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 3.5,
+                    ),
+                  ),
+                );
               } else {
-                setState(() {
-                  loggingIn = false;
-                });
-                widget.errorSetter!('Špatné heslo nebo uživatelské jméno',
-                    LoginFormErrorField.password);
+                return const SizedBox(
+                  height: 60,
+                  child: Center(
+                      child: Text(
+                    'Přihlásit se',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  )),
+                );
               }
-            });
-          } catch (e) {
-            if (e.toString().contains('Failed host lookup: ')) {
-              widget.errorSetter!('Nesprávné url', LoginFormErrorField.url);
-            } else if (e.toString().contains('Login failed')) {
-              widget.errorSetter!('Špatné heslo nebo uživatelské jméno',
-                  LoginFormErrorField.password);
-            } else {
-              widget.errorSetter!(
-                  'Připojení k serveru selhalo', LoginFormErrorField.url);
-            }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void loginFieldCheck() async {
+    if (widget.formKey.currentState!.validate()) {
+      // If the form is valid, save the form fields.
+      widget.formKey.currentState!.save();
+      setState(() {
+        loggingIn = true;
+      });
+      // Do something with the form fields.
+      // Reset the form fields.
+      //login code
+      String url = widget.urlController.text;
+      if (url.contains('http://') || url.contains('https://')) {
+        url = url;
+      } else {
+        url = 'https://$url';
+      }
+      try {
+        await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text)
+            .then((login) {
+          if (login.prihlasen) {
+            saveDataToSecureStorage('username', widget.usernameController.text);
+            saveDataToSecureStorage('password', widget.passwordController.text);
+            saveData('url', url);
+            saveData('loggedIn', '1');
+            setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+          } else {
             setState(() {
               loggingIn = false;
             });
+            widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
           }
+        });
+      } catch (e) {
+        if (e.toString().contains('Failed host lookup: ')) {
+          widget.errorSetter!('Nesprávné url', LoginFormErrorField.url);
+        } else if (e.toString().contains('Login failed')) {
+          widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+        } else {
+          widget.errorSetter!('Připojení k serveru selhalo', LoginFormErrorField.url);
         }
-      },
-      child: Builder(
-        builder: (context) {
-          if (loggingIn) {
-            return SizedBox(
-              width: 45,
-              height: 45,
-              child: Container(
-                margin: const EdgeInsets.all(7.0),
-                child: const CircularProgressIndicator(
-                  color: Color.fromARGB(255, 11, 194, 11),
-                  strokeWidth: 3.5,
-                ),
-              ),
-            );
-          } else {
-            return const SizedBox(
-              width: 100,
-              height: 45,
-              child: Center(
-                  child: Text(
-                'Přihlásit se',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              )),
-            );
-          }
-        },
-      ),
-    );
+        setState(() {
+          loggingIn = false;
+        });
+      }
+    }
   }
 }
