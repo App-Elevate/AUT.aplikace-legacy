@@ -1,3 +1,5 @@
+import 'package:autojidelna/main.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import '../every_import.dart';
 
 String ziskatDenZData(int den) {
@@ -50,12 +52,12 @@ Future<Canteen> initCanteen(
       canteenInstance = Canteen(url);
     }
   } catch (e) {
-    try{
       canteenInstance = Canteen(url);
-    }
-    catch(e){
-      Future.error('bad url');
-    }
+  }
+  bool savedCredetnials = false;
+  if(username == null || password == null){
+    savedCredetnials = true;
+    //getting it from secure storage
   }
   username ??= await getDataFromSecureStorage('username');
   password ??= await getDataFromSecureStorage('password');
@@ -73,13 +75,19 @@ Future<Canteen> initCanteen(
       }
       await Future.delayed(const Duration(milliseconds: 100));
       if (!(canteenInstance.prihlasen)) {
+        analytics.logEvent(name: 'incorrectly_typed_credentials');
         return Future.error('login failed');
       }
     }
   }
   catch(e){
+    if(e.toString().contains('Failed host lookup')){
+      analytics.logEvent(name: 'incorrectly_typed_url');
+      return Future.error('bad url');
+    }
     return Future.error('no internet');
   }
+  analytics.logLogin(loginMethod: savedCredetnials? 'saved credentials' : 'manual login');
   //get today
   DateTime currentDate = DateTime.now();
   DateTime currentDateWithoutTime =
@@ -114,6 +122,7 @@ void pridatStatistiku(TypStatistiky statistika)async {
       str ??= '0';
       int pocetStatistiky = int.parse(str);
       pocetStatistiky++;
+      await FirebaseAnalytics.instance.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
       saveData('statistika:objednavka', '$pocetStatistiky');
       break;
     case TypStatistiky.auto:
