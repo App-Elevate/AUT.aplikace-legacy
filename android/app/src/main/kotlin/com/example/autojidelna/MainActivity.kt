@@ -1,4 +1,4 @@
-package com.example.autojidelna
+package com.tomprotiva.autojidelna
 
 import io.flutter.embedding.android.FlutterActivity
 
