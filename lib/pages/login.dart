@@ -176,7 +176,7 @@ class _LoginFormState extends State<LoginForm> {
                     },
                     icon: Icon(
                       showPasswd ? Icons.visibility_off : Icons.visibility,
-                      color: const Color(0xff7F8F8F),
+                      color: const Color(0xff7F7F7F),
                     ),
                   ),
                 ),
