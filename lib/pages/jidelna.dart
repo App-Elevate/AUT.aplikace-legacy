@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-
 import './../every_import.dart';
 
 class MainAppScreen extends StatefulWidget {
@@ -32,50 +31,86 @@ class _MainAppScreenState extends State<MainAppScreen> {
   @override
   Widget build(BuildContext context) {
     scaffoldBody = JidelnicekDenWidget(
-    setScaffoldBody: setScaffoldBody,
-    setHomeWidget: widget.setHomeWidget,
-  );
-      return Scaffold(
-        appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-            centerTitle: true,
-            title: const Text('Autojídelna'),
-            actions: [
-              PopupMenuButtonInAppbar(
-                widget: widget,
-                setScaffoldBody: setScaffoldBody,
-                loading: loading,
-              ),
-            ]),
-        body: Stack(
-          children: [
-            scaffoldBody,
-            if (loadingIndicator)
-              Container(
-                  alignment: Alignment.center,
-                  color: Colors.white.withOpacity(0.5),
-                  child: const Center(child: CircularProgressIndicator())),
-          ],
-        ),
-        drawer: Builder(
-          builder: (context) {
-            return WillPopScope(
-              onWillPop: () async {
-                //if the drawer is open close the drawer
-                if (Scaffold.of(context).isDrawerOpen) {
-                  Navigator.pop(context);
-                  return Future.value(false);
-                }
-                return Future.value(true);
-              },
-            child: MainAppDrawer(
-              setHomeWidget: widget.setHomeWidget,
-              page: NavigationDrawerItem.jidelnicek,
+      setScaffoldBody: setScaffoldBody,
+      setHomeWidget: widget.setHomeWidget,
+    );
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 148, 18, 148),
+        centerTitle: true,
+        title: const Text('Autojídelna'),
+        actions: [
+          IconButton(
+            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.white,
+              size: 30,
             ),
-            );
-          }
-        ),
+            onPressed: () async {
+              if (refreshing) return;
+              loading(true);
+              refreshing = true;
+              try {
+                await initCanteen(hasToBeNew: true);
+              } catch (e) {
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                if (context.mounted && !snackbarshown.shown) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                      .closed
+                      .then((SnackBarClosedReason reason) {
+                    snackbarshown.shown = false;
+                  });
+                }
+              }
+              loading(false);
+              refreshing = false;
+              setScaffoldBody(JidelnicekDenWidget(
+                customCanteenData: getCanteenData(),
+                setScaffoldBody: setScaffoldBody,
+                setHomeWidget: widget.setHomeWidget,
+              ));
+            },
+          ),
+          //PopupMenuButtonInAppbar(
+          //  widget: widget,
+          //  setScaffoldBody: setScaffoldBody,
+          //  loading: loading,
+          //),
+        ],
+      ),
+      body: Stack(
+        children: [
+          scaffoldBody,
+          if (loadingIndicator)
+            Container(
+              alignment: Alignment.center,
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
+      ),
+      drawer: Builder(builder: (context) {
+        return WillPopScope(
+          onWillPop: () async {
+            //if the drawer is open close the drawer
+            if (Scaffold.of(context).isDrawerOpen) {
+              Navigator.pop(context);
+              return Future.value(false);
+            }
+            return Future.value(true);
+          },
+          child: MainAccountDrawer(
+            setHomeWidget: widget.setHomeWidget,
+            page: NavigationDrawerItem.jidelnicek,
+          ),
         );
+      }),
+    );
   }
 }
 
@@ -95,50 +130,16 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
     return PopupMenuButton(itemBuilder: (context) {
       return [
         PopupMenuItem(
-          value: 'refresh',
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Aktualizovat'),
-              Icon(Icons.refresh_rounded, color: Colors.black)
-            ],
-          ),
-          onTap: () async {
-            if (refreshing) return;
-            loading(true);
-            refreshing = true;
-            try {
-              await initCanteen(hasToBeNew: true);
-            } catch (e) {
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              if (context.mounted && !snackbarshown.shown) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackbarFunction(
-                        'nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',context))
-                    .closed
-                    .then((SnackBarClosedReason reason) {
-                  snackbarshown.shown = false;
-                });
-              }
-            }
-            loading(false);
-            refreshing = false;
-            setScaffoldBody(
-                JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: setScaffoldBody,setHomeWidget: widget.setHomeWidget,));
-          },
-        ),
-        PopupMenuItem(
-          value: 'about',
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('O Aplikaci'),
-              //info icon
-              Icon(Icons.info_rounded, color: Colors.black)
-            ],
-          ),
-          onTap: () async {
+            value: 'about',
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('O Aplikaci'),
+                //info icon
+                Icon(Icons.info_rounded, color: Colors.black)
+              ],
+            ),
+            onTap: () async {
               var packageInfo = await PackageInfo.fromPlatform();
               // why: it says this is the use case we should use in the docs
               // ignore: use_build_context_synchronously
@@ -146,80 +147,65 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
               showAboutDialog(
                   context: context,
                   applicationName: "Autojidelna",
-                  applicationLegalese:
-                      "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
+                  applicationLegalese: "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
                   applicationVersion: packageInfo.version,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0,25,0,0),
+                      padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                       child: ElevatedButton(
-                        onPressed: (() => launchUrl(
-                            Uri.parse("https://github.com/tpkowastaken/autojidelna"),
-                            mode: LaunchMode.externalApplication)),
+                        onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna"), mode: LaunchMode.externalApplication)),
                         child: const Text('Zdrojový kód'),
                       ),
                     ),
-                    Builder(
-                      builder: (context) {
-                        try{
-                          if(!releaseInfo.isAndroid){
-                            return const SizedBox(
-                              height: 0,
-                              width: 0,
-                            );
-                          }
-                        }
-                        catch(e){
-                            return const SizedBox(
-                              height: 0,
-                              width: 0,
-                            );
-                        }
-                        return ElevatedButton(
-                            onPressed: () async {
-                              await getLatestRelease();
-                              if(releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted){
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbarFunction(
-                                    'Aktuálně jste na nejnovější verzi aplikace 👍',context))
-                                    .closed
-                                    .then((SnackBarClosedReason reason) {
-                                  snackbarshown.shown = false;
-                                });
-                                return;
-                              }
-                              else if(!releaseInfo.isAndroid){
-                                if(!context.mounted)return;
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbarFunction(
-                                    'nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...',context))
-                                    .closed
-                                    .then((SnackBarClosedReason reason) {
-                                  snackbarshown.shown = false;
-                                });
-                                return;
-
-                              }
-                              Future.delayed(Duration.zero, () => newUpdateDialog(context));
-
-                            },
-                            child: const Text('Zkontrolovat aktualizace'),
+                    Builder(builder: (context) {
+                      try {
+                        if (!releaseInfo.isAndroid) {
+                          return const SizedBox(
+                            height: 0,
+                            width: 0,
                           );
+                        }
+                      } catch (e) {
+                        return const SizedBox(
+                          height: 0,
+                          width: 0,
+                        );
                       }
-                    ),
+                      return ElevatedButton(
+                        onPressed: () async {
+                          await getLatestRelease();
+                          if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍', context))
+                                .closed
+                                .then((SnackBarClosedReason reason) {
+                              snackbarshown.shown = false;
+                            });
+                            return;
+                          } else if (!releaseInfo.isAndroid) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(
+                                    snackbarFunction('nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...', context))
+                                .closed
+                                .then((SnackBarClosedReason reason) {
+                              snackbarshown.shown = false;
+                            });
+                            return;
+                          }
+                          Future.delayed(Duration.zero, () => newUpdateDialog(context));
+                        },
+                        child: const Text('Zkontrolovat aktualizace'),
+                      );
+                    }),
                   ]);
-
-          }),
+            }),
         PopupMenuItem(
             value: 'logout',
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Odhlásit se'),
-                Icon(Icons.logout_rounded, color: Colors.black)
-              ],
+              children: [Text('Odhlásit se'), Icon(Icons.logout_rounded, color: Colors.black)],
             ),
             onTap: () {
               logout();
@@ -265,37 +251,29 @@ class JidelnicekDenWidget extends StatelessWidget {
   final Function setHomeWidget;
   final Function setScaffoldBody;
 
-  final DateTime currentDate = DateTime(2006, 5, 23)
-      .add(Duration(days: getJidelnicekPageNum().pageNumber));
-  final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(
-      DateTime(2006, 5, 23)
-          .add(Duration(days: getJidelnicekPageNum().pageNumber)));
-  final ValueNotifier<CanteenData> canteenDataListener =
-      ValueNotifier<CanteenData>(getCanteenData());
+  final DateTime currentDate = DateTime(2006, 5, 23).add(Duration(days: getJidelnicekPageNum().pageNumber));
+  final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(DateTime(2006, 5, 23).add(Duration(days: getJidelnicekPageNum().pageNumber)));
+  final ValueNotifier<CanteenData> canteenDataListener = ValueNotifier<CanteenData>(getCanteenData());
 
-
-  final PageController pageviewController =
-      PageController(initialPage: getJidelnicekPageNum().pageNumber);
+  final PageController pageviewController = PageController(initialPage: getJidelnicekPageNum().pageNumber);
   final DateTime minimalDate = DateTime(2006, 5, 23);
   final CanteenData canteenData = getCanteenData();
   final CanteenData? customCanteenData;
 
   void refreshCanteenUser() async {
-    try{
-    final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
-    canteenData.uzivatel = uzivatel;
-    setCanteenData(canteenData);
-    canteenDataListener.value = canteenData.copyWith();
-    }
-    catch(e){
-      try{
+    try {
+      final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
+      canteenData.uzivatel = uzivatel;
+      setCanteenData(canteenData);
+      canteenDataListener.value = canteenData.copyWith();
+    } catch (e) {
+      try {
         await Future.delayed(const Duration(milliseconds: 300));
         final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
         canteenData.uzivatel = uzivatel;
         setCanteenData(canteenData);
         canteenDataListener.value = canteenData.copyWith();
-      }
-      catch(e){
+      } catch (e) {
         //if it failed twice the server is either down or the user is spamming it so we don't want to spam it more
       }
     }
@@ -314,18 +292,15 @@ class JidelnicekDenWidget extends StatelessWidget {
       newDate = minimalDate.add(Duration(days: index));
       smartPreIndexing(newDate);
       dateListener.value = newDate;
-      getJidelnicekPageNum().pageNumber =
-          newDate.difference(minimalDate).inDays;
+      getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
     } else if (newDate != null) {
       smartPreIndexing(newDate);
       dateListener.value = newDate;
       dateListener.value = newDate;
-      getJidelnicekPageNum().pageNumber =
-          newDate.difference(minimalDate).inDays;
+      getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
       pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -334,18 +309,6 @@ class JidelnicekDenWidget extends StatelessWidget {
       canteenDataListener.value = customCanteenData!;
     }
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Text('Jídelníček'),
-          ValueListenableBuilder(
-              valueListenable: canteenDataListener,
-              builder: (ctx, value, child) {
-                return Text('Kredit: ${canteenData.uzivatel.kredit.toInt()} kč');
-              })
-        ]),
-      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
         child: Column(
@@ -373,8 +336,7 @@ class JidelnicekDenWidget extends StatelessWidget {
                               initialDate: currentDate,
                               currentDate: DateTime.now(),
                               firstDate: minimalDate,
-                              lastDate:
-                                  currentDate.add(const Duration(days: 365 * 2)),
+                              lastDate: currentDate.add(const Duration(days: 365 * 2)),
                             );
                             if (datePicked == null) return;
                             changeDate(newDate: datePicked);
@@ -423,11 +385,7 @@ class JidelnicekDenWidget extends StatelessWidget {
 }
 
 class JidelnicekWidget extends StatelessWidget {
-  const JidelnicekWidget(
-      {super.key,
-      required this.minimalDate,
-      required this.widget,
-      required this.index});
+  const JidelnicekWidget({super.key, required this.minimalDate, required this.widget, required this.index});
 
   final DateTime minimalDate;
   final JidelnicekDenWidget widget;
@@ -439,15 +397,13 @@ class JidelnicekWidget extends StatelessWidget {
       child: FutureBuilder(
           future: getLunchesForDay(minimalDate.add(Duration(days: index))),
           builder: (context, snapshot) {
-            if(snapshot.hasError){
+            if (snapshot.hasError) {
               Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return ListJidel(
-                  widget: this,
-                  errorWidget: HtmlWidget(snapshot.error.toString()));
+              return ListJidel(widget: this, errorWidget: HtmlWidget(snapshot.error.toString()));
             }
             Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
             return ListJidel(
@@ -472,11 +428,12 @@ class ListJidel extends StatelessWidget {
   });
   void refreshButtons() async {
     DateTime currentDate = widget.minimalDate.add(Duration(days: widget.index));
-    jidlaListener.value = (await refreshLunches(currentDate)).jidla;//error handling please
+    jidlaListener.value = (await refreshLunches(currentDate)).jidla; //error handling please
   }
+
   @override
   Widget build(BuildContext context) {
-    if(jidelnicek == null){
+    if (jidelnicek == null) {
       return const Center(child: CircularProgressIndicator());
     }
     jidlaListener.value = jidelnicek!.jidla;
@@ -487,8 +444,7 @@ class ListJidel extends StatelessWidget {
             return errorWidget!;
           }
           if (jidelnicek!.jidla.isEmpty) {
-            return const Expanded(
-                child: Center(child: Text('Žádná Jídla pro tento den')));
+            return const Expanded(child: Center(child: Text('Žádná Jídla pro tento den')));
           }
           return Expanded(
             child: RefreshIndicator(
@@ -502,8 +458,7 @@ class ListJidel extends StatelessWidget {
                   // and use it to show a SnackBar.
                   if (context.mounted && !snackbarshown.shown) {
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(snackbarFunction(
-                          'nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',context))
+                        .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
                         .closed
                         .then((SnackBarClosedReason reason) {
                       snackbarshown.shown = false;
@@ -511,9 +466,12 @@ class ListJidel extends StatelessWidget {
                   }
                 }
                 refreshing = false;
-                widget.widget.setScaffoldBody(
-                    JidelnicekDenWidget(customCanteenData: getCanteenData(), setScaffoldBody: widget.widget.setScaffoldBody,setHomeWidget: widget.widget.setHomeWidget,));
-                },
+                widget.widget.setScaffoldBody(JidelnicekDenWidget(
+                  customCanteenData: getCanteenData(),
+                  setScaffoldBody: widget.widget.setScaffoldBody,
+                  setHomeWidget: widget.widget.setHomeWidget,
+                ));
+              },
               child: ListView.builder(
                 itemCount: jidelnicek!.jidla.length,
                 itemBuilder: (context, index) {
@@ -534,44 +492,42 @@ class ListJidel extends StatelessWidget {
                       title: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
                         child: Container(
-            
                           decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color.fromARGB(20, 255, 255, 255):const Color.fromARGB(20, 0, 0, 0),
-                                  offset: const Offset(0, 0),
-                                  blurRadius: 4
-                              )
-                            ],
-                            border: Border.all(color: const Color.fromARGB(255, 122, 122, 122), width: 2),
-                            borderRadius: const BorderRadius.all(Radius.circular(20))),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                                        ? const Color.fromARGB(20, 255, 255, 255)
+                                        : const Color.fromARGB(20, 0, 0, 0),
+                                    offset: const Offset(0, 0),
+                                    blurRadius: 4)
+                              ],
+                              border: Border.all(color: const Color.fromARGB(255, 122, 122, 122), width: 2),
+                              borderRadius: const BorderRadius.all(Radius.circular(20))),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.5, 4, 0.5, 0),
-                                    child: Builder(builder: (_) {
-                                      String jidlo = parseJidlo(jidelnicek!.jidla[index].nazev, alergeny: jidelnicek!.jidla[index].alergeny.join(', ')).zkracenyNazevJidla;
-                                      return HtmlWidget(
-                                        jidlo,
-                                        textStyle: const TextStyle(
-                                          fontSize: 30,
-                                        ),
-                                      );
-                                                
-                                    }),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
-                                    child: ObjednatJidloTlacitko(
-                                      widget: this,
-                                      jidlaListener: jidlaListener,
-                                      index: index,
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0.5, 4, 0.5, 0),
+                                child: Builder(builder: (_) {
+                                  String jidlo = parseJidlo(jidelnicek!.jidla[index].nazev, alergeny: jidelnicek!.jidla[index].alergeny.join(', '))
+                                      .zkracenyNazevJidla;
+                                  return HtmlWidget(
+                                    jidlo,
+                                    textStyle: const TextStyle(
+                                      fontSize: 30,
                                     ),
-                                  ),
-                                ]),
+                                  );
+                                }),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
+                                child: ObjednatJidloTlacitko(
+                                  widget: this,
+                                  jidlaListener: jidlaListener,
+                                  index: index,
+                                ),
+                              ),
+                            ]),
                           ),
                         ),
                       ),
@@ -588,12 +544,7 @@ class ListJidel extends StatelessWidget {
 }
 
 class ObjednatJidloTlacitko extends StatefulWidget {
-  const ObjednatJidloTlacitko({
-    super.key,
-    required this.widget,
-    required this.index,
-    required this.jidlaListener
-  });
+  const ObjednatJidloTlacitko({super.key, required this.widget, required this.index, required this.jidlaListener});
   final ValueNotifier jidlaListener;
   final ListJidel widget;
   final int index;
@@ -607,13 +558,15 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   Jidlo? jidlo;
   //fix for api returning garbage when switching orders
   void cannotBeOrderedFix() async {
-    try{
-      if((await getLunchesForDay(widget.widget.widget.minimalDate.add(Duration(days: widget.widget.widget.index)), requireNew: true)).jidla[widget.index].lzeObjednat != jidlo!.lzeObjednat){
+    try {
+      if ((await getLunchesForDay(widget.widget.widget.minimalDate.add(Duration(days: widget.widget.widget.index)), requireNew: true))
+              .jidla[widget.index]
+              .lzeObjednat !=
+          jidlo!.lzeObjednat) {
         icon = null;
         widget.widget.refreshButtons();
       }
-    }
-    catch(e){
+    } catch (e) {
       icon = null;
       widget.widget.refreshButtons();
     }
@@ -627,32 +580,32 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
     final int index = widget.index;
     String obedText;
     return ValueListenableBuilder(
-      valueListenable: widget.jidlaListener,
-      builder: (context, value, child) {
-      jidelnicek =
-          widget.widget.jidelnicek!; //this is a permanent referrence that doesn't need to change in the button scope (if refreshed it changes higher in the highearchy)
-      try{
-        jidlo = value[index]; //only set this so that we don't overwrite it after the button has been clicked
-      }
-      //if we went out of bounds that means that api returned not enough lunches so we need to try again (refresh). This doesn't fix the problem of api returning garbage
-      catch(e){
-        widget.widget.refreshButtons();
-        //giving a placeholder until the button refreshes
-        return ElevatedButton(
-          //rounding the button
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(buttonColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+        valueListenable: widget.jidlaListener,
+        builder: (context, value, child) {
+          jidelnicek = widget.widget
+              .jidelnicek!; //this is a permanent referrence that doesn't need to change in the button scope (if refreshed it changes higher in the highearchy)
+          try {
+            jidlo = value[index]; //only set this so that we don't overwrite it after the button has been clicked
+          }
+          //if we went out of bounds that means that api returned not enough lunches so we need to try again (refresh). This doesn't fix the problem of api returning garbage
+          catch (e) {
+            widget.widget.refreshButtons();
+            //giving a placeholder until the button refreshes
+            return ElevatedButton(
+              //rounding the button
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(buttonColor),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                ),
               ),
-            ),
-          ),
-          onPressed: (){},
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
+              onPressed: () {},
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
                     height: 20,
                     width: 20,
                     child: CircularProgressIndicator(
@@ -660,257 +613,254 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       strokeWidth: 3.5,
                     ),
                   ),
-            ],
-          ),
-          );
-      }
-      if(jidlo!.naBurze){//pokud je od nás vloženo na burze, tak není potřeba kontrolovat nic jiného
-        stavJidla = StavJidla.naBurze;
-      }
-      else if(jidlo!.objednano && jidlo!.lzeObjednat){
-        stavJidla = StavJidla.objednano;
-      }
-      else if(jidlo!.objednano && !jidlo!.lzeObjednat && (jidlo!.burzaUrl == null || jidlo!.burzaUrl!.isEmpty)){//pokud nelze dát na burzu, tak už je po platnosti (nic už s tím neuděláme)
-        stavJidla = StavJidla.objednanoVyprsenaPlatnost;
-      }
-      else if(jidlo!.objednano && !jidlo!.lzeObjednat){
-        stavJidla = StavJidla.objednanoNelzeOdebrat;
-      }
-      else if(!jidlo!.objednano && jidlo!.lzeObjednat){
-        stavJidla = StavJidla.neobjednano;
-      }
-      else if(jeJidloNaBurze(jidlo!)){
-        stavJidla = StavJidla.dostupneNaBurze;
-      }
-      else if(!jidlo!.objednano && !jidlo!.lzeObjednat){
-        stavJidla = StavJidla.nedostupne;
-      }
-      switch(stavJidla){
-        //jednoduché operace
-        case StavJidla.objednano:
-          buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-          obedText = 'zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-        case StavJidla.neobjednano:
-          buttonColor = const Color.fromARGB(255, 252, 144, 98);
-          obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-        //operace v minulosti
-        case StavJidla.objednanoVyprsenaPlatnost:
-          buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-          obedText = 'nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-        case StavJidla.nedostupne:
-          cannotBeOrderedFix();
-          buttonColor = const Color.fromARGB(255, 247, 75, 75);
-          obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-        //operace na burze
-        case StavJidla.objednanoNelzeOdebrat:
-          buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-          obedText = 'vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-        case StavJidla.dostupneNaBurze:
-          buttonColor = const Color.fromARGB(255, 180, 116, 6);
-          obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-        case StavJidla.naBurze:
-          buttonColor = const Color.fromARGB(255, 180, 116, 6);
-          obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
-          break;
-      }
-      if(!ordering.ordering){
-        switch(stavJidla){
-          case StavJidla.objednano:
-            icon = null;
-            break;
-          case StavJidla.neobjednano:
-            icon = null;
-            break;
-          //operace v minulosti
-          case StavJidla.objednanoVyprsenaPlatnost:
-            icon = const Icon(
-              Icons.block,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            );
-            break;
-          case StavJidla.nedostupne:
-            icon = const Icon(
-              Icons.block,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            );
-            break;
-          //operace na burze
-          case StavJidla.objednanoNelzeOdebrat:
-            icon = const Icon(
-              Icons.shopping_bag,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            );
-            break;
-          case StavJidla.dostupneNaBurze:
-            icon = const Icon(
-              Icons.shopping_bag,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            );
-            break;
-          case StavJidla.naBurze:
-            icon = const Icon(
-              //market icon
-              Icons.shopping_bag,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            );
-            break;
-          }
-      }
-
-        return ElevatedButton(
-          style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(const Size(500, 50)),
-            backgroundColor: MaterialStateProperty.all(buttonColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+                ],
               ),
-            ),
-          ),
-          onPressed: () async {
-            void snackBarMessage(String message){
-              // Find the ScaffoldMessenger in the widget tree
-              // and use it to show a SnackBar.
-              // toto je upozornění dole (Snackbar)
-              // snackbarshown je aby se snackbar nezobrazil vícekrát
-              if (context.mounted && snackbarshown.shown == false) {
-                snackbarshown.shown = true;
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(snackbarFunction(
-                        message, context))
-                    .closed
-                    .then((SnackBarClosedReason reason) {
-                  snackbarshown.shown = false;
-                });
-              }
-            }
-            if(ordering.ordering){return;}
-            ordering.ordering = true;
-            setState(() {
-              icon = const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 34, 150, 243),
-                  strokeWidth: 3.5,
-                ),
-              );
-            });
-            Canteen canteen = await initCanteen();
+            );
+          }
+          if (jidlo!.naBurze) {
+            //pokud je od nás vloženo na burze, tak není potřeba kontrolovat nic jiného
+            stavJidla = StavJidla.naBurze;
+          } else if (jidlo!.objednano && jidlo!.lzeObjednat) {
+            stavJidla = StavJidla.objednano;
+          } else if (jidlo!.objednano && !jidlo!.lzeObjednat && (jidlo!.burzaUrl == null || jidlo!.burzaUrl!.isEmpty)) {
+            //pokud nelze dát na burzu, tak už je po platnosti (nic už s tím neuděláme)
+            stavJidla = StavJidla.objednanoVyprsenaPlatnost;
+          } else if (jidlo!.objednano && !jidlo!.lzeObjednat) {
+            stavJidla = StavJidla.objednanoNelzeOdebrat;
+          } else if (!jidlo!.objednano && jidlo!.lzeObjednat) {
+            stavJidla = StavJidla.neobjednano;
+          } else if (jeJidloNaBurze(jidlo!)) {
+            stavJidla = StavJidla.dostupneNaBurze;
+          } else if (!jidlo!.objednano && !jidlo!.lzeObjednat) {
+            stavJidla = StavJidla.nedostupne;
+          }
+          switch (stavJidla) {
+            //jednoduché operace
+            case StavJidla.objednano:
+              buttonColor = const Color.fromRGBO(17, 201, 11, 1);
+              obedText = 'zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+            case StavJidla.neobjednano:
+              buttonColor = const Color.fromARGB(255, 252, 144, 98);
+              obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+            //operace v minulosti
+            case StavJidla.objednanoVyprsenaPlatnost:
+              buttonColor = const Color.fromRGBO(17, 201, 11, 1);
+              obedText = 'nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+            case StavJidla.nedostupne:
+              cannotBeOrderedFix();
+              buttonColor = const Color.fromARGB(255, 247, 75, 75);
+              obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+            //operace na burze
+            case StavJidla.objednanoNelzeOdebrat:
+              buttonColor = const Color.fromRGBO(17, 201, 11, 1);
+              obedText = 'vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+            case StavJidla.dostupneNaBurze:
+              buttonColor = const Color.fromARGB(255, 180, 116, 6);
+              obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+            case StavJidla.naBurze:
+              buttonColor = const Color.fromARGB(255, 180, 116, 6);
+              obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              break;
+          }
+          if (!ordering.ordering) {
             switch (stavJidla) {
+              case StavJidla.objednano:
+                icon = null;
+                break;
               case StavJidla.neobjednano:
-                {
-                  try {
-                    for(int i = 0; i<20 && canteenData.jidelnicky[jidelnicek.den] == null;i++){
-                      if(i>=19){throw Exception('nepovedl se načíst jídelníček, aktualizujte stránku');}
-                      await Future.delayed(const Duration(milliseconds: 100));
-                    }
-                    canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
-                        await canteen.objednat(jidlo!);
-                    pridatStatistiku(TypStatistiky.objednavka);
-                  } catch (e) {
-                    snackBarMessage('nastala chyba při objednávání jídla: $e');
-                  }
-                }
+                icon = null;
                 break;
-              case StavJidla.dostupneNaBurze:
-                {
-                  String varianta = jidlo!.varianta;
-                  DateTime den = jidlo!.den;
-                  bool nalezenoJidloNaBurze = false;
-                  for (var jidloNaBurze in canteenData.jidlaNaBurze) {
-                    if (jidloNaBurze.den == den &&
-                        jidloNaBurze.varianta == varianta) {
-                      try {
-                        await canteen.objednatZBurzy(jidloNaBurze);
-                        pridatStatistiku(TypStatistiky.objednavka);
-                      } catch (e) {
-                        snackBarMessage('nastala chyba při objednávání jídla z burzy: $e');
-                      }
-                    }
-                  }
-                  if(nalezenoJidloNaBurze == false){
-                    snackBarMessage('nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
-                  }
-                }
-                break;
+              //operace v minulosti
               case StavJidla.objednanoVyprsenaPlatnost:
-                {
-                  snackBarMessage('Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)');
-                }
-                break;
-              case StavJidla.objednanoNelzeOdebrat:
-                {
-                  try {
-                    await canteen.doBurzy(jidlo!);
-                  } catch (e) {
-                    snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
-                  }
-                }
+                icon = const Icon(
+                  Icons.block,
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                );
                 break;
               case StavJidla.nedostupne:
-                {
-                  if(getCanteenData().uzivatel.kredit < jidlo!.cena!){
-                    snackBarMessage('Oběd nelze objednat - Nedostatečný kredit');
-                    break;
-                  }
-                  snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)');
-                }
+                icon = const Icon(
+                  Icons.block,
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                );
                 break;
-              case StavJidla.objednano:
-                {
-                  try {
-                    for(int i = 0; i<20 && canteenData.jidelnicky[jidelnicek.den] == null;i++){
-                      if(i>=19){throw Exception('nepovedlo načíst jídelníček, aktualizujte stránku');}
-                      await Future.delayed(const Duration(milliseconds: 100));
-                    }
-                    canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
-                        await canteen.objednat(jidlo!);
-                  } catch (e) {
-                    snackBarMessage('nastala chyba při rušení objednávky: $e');
-                  }
-                }
+              //operace na burze
+              case StavJidla.objednanoNelzeOdebrat:
+                icon = const Icon(
+                  Icons.shopping_bag,
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                );
+                break;
+              case StavJidla.dostupneNaBurze:
+                icon = const Icon(
+                  Icons.shopping_bag,
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                );
                 break;
               case StavJidla.naBurze:
-                {
-                  try {
-                    await canteen.doBurzy(jidlo!);
-                  } catch (e) {
-                    snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
-                  }
-                }
+                icon = const Icon(
+                  //market icon
+                  Icons.shopping_bag,
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                );
                 break;
             }
-            widget.widget.widget.widget.refreshCanteenUser();
-            widget.widget.refreshButtons();
-            ordering.ordering = false;
-            if(context.mounted){
-              setState(() {
-                icon = null;
-              });
-            }
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                  child: Text(obedText, style: const TextStyle(fontSize: 20),),
+          }
+
+          return ElevatedButton(
+            style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all(const Size(500, 50)),
+              backgroundColor: MaterialStateProperty.all(buttonColor),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
               ),
             ),
-            icon == null ? const Icon(null) : icon!,
-          ]),
-        );
-      }
-    );
+            onPressed: () async {
+              void snackBarMessage(String message) {
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                // toto je upozornění dole (Snackbar)
+                // snackbarshown je aby se snackbar nezobrazil vícekrát
+                if (context.mounted && snackbarshown.shown == false) {
+                  snackbarshown.shown = true;
+                  ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(message, context)).closed.then((SnackBarClosedReason reason) {
+                    snackbarshown.shown = false;
+                  });
+                }
+              }
+
+              if (ordering.ordering) {
+                return;
+              }
+              ordering.ordering = true;
+              setState(() {
+                icon = const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    color: Color.fromARGB(255, 34, 150, 243),
+                    strokeWidth: 3.5,
+                  ),
+                );
+              });
+              Canteen canteen = await initCanteen();
+              switch (stavJidla) {
+                case StavJidla.neobjednano:
+                  {
+                    try {
+                      for (int i = 0; i < 20 && canteenData.jidelnicky[jidelnicek.den] == null; i++) {
+                        if (i >= 19) {
+                          throw Exception('nepovedl se načíst jídelníček, aktualizujte stránku');
+                        }
+                        await Future.delayed(const Duration(milliseconds: 100));
+                      }
+                      canteenData.jidelnicky[jidelnicek.den]!.jidla[index] = await canteen.objednat(jidlo!);
+                      pridatStatistiku(TypStatistiky.objednavka);
+                    } catch (e) {
+                      snackBarMessage('nastala chyba při objednávání jídla: $e');
+                    }
+                  }
+                  break;
+                case StavJidla.dostupneNaBurze:
+                  {
+                    String varianta = jidlo!.varianta;
+                    DateTime den = jidlo!.den;
+                    bool nalezenoJidloNaBurze = false;
+                    for (var jidloNaBurze in canteenData.jidlaNaBurze) {
+                      if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
+                        try {
+                          await canteen.objednatZBurzy(jidloNaBurze);
+                          pridatStatistiku(TypStatistiky.objednavka);
+                        } catch (e) {
+                          snackBarMessage('nastala chyba při objednávání jídla z burzy: $e');
+                        }
+                      }
+                    }
+                    if (nalezenoJidloNaBurze == false) {
+                      snackBarMessage('nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
+                    }
+                  }
+                  break;
+                case StavJidla.objednanoVyprsenaPlatnost:
+                  {
+                    snackBarMessage('Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)');
+                  }
+                  break;
+                case StavJidla.objednanoNelzeOdebrat:
+                  {
+                    try {
+                      await canteen.doBurzy(jidlo!);
+                    } catch (e) {
+                      snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
+                    }
+                  }
+                  break;
+                case StavJidla.nedostupne:
+                  {
+                    if (getCanteenData().uzivatel.kredit < jidlo!.cena!) {
+                      snackBarMessage('Oběd nelze objednat - Nedostatečný kredit');
+                      break;
+                    }
+                    snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)');
+                  }
+                  break;
+                case StavJidla.objednano:
+                  {
+                    try {
+                      for (int i = 0; i < 20 && canteenData.jidelnicky[jidelnicek.den] == null; i++) {
+                        if (i >= 19) {
+                          throw Exception('nepovedlo načíst jídelníček, aktualizujte stránku');
+                        }
+                        await Future.delayed(const Duration(milliseconds: 100));
+                      }
+                      canteenData.jidelnicky[jidelnicek.den]!.jidla[index] = await canteen.objednat(jidlo!);
+                    } catch (e) {
+                      snackBarMessage('nastala chyba při rušení objednávky: $e');
+                    }
+                  }
+                  break;
+                case StavJidla.naBurze:
+                  {
+                    try {
+                      await canteen.doBurzy(jidlo!);
+                    } catch (e) {
+                      snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
+                    }
+                  }
+                  break;
+              }
+              widget.widget.widget.widget.refreshCanteenUser();
+              widget.widget.refreshButtons();
+              ordering.ordering = false;
+              if (context.mounted) {
+                setState(() {
+                  icon = null;
+                });
+              }
+            },
+            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                    child: Text(
+                      obedText,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+              icon == null ? const Icon(null) : icon!,
+            ]),
+          );
+        });
   }
 }

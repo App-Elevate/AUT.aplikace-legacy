@@ -75,7 +75,7 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.account_circle,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? const Color(0xffFFFFFF) : const Color(0xff323232),
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                   size: 80,
                 ),
               ),
