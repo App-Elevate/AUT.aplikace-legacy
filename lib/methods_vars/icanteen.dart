@@ -425,6 +425,7 @@ Future<String?> readData(String key) async {
 }
 
 void logout() {
+  analytics.logEvent(name: 'logout');
   saveDataToSecureStorage('username', '');
   saveDataToSecureStorage('password', '');
   saveData('loggedIn', '0');
