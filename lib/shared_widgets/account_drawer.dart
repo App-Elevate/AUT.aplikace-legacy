@@ -25,6 +25,7 @@ class MainAccountDrawer extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
+              //main account stuff
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -37,6 +38,7 @@ class MainAccountDrawer extends StatelessWidget {
                         size: 75,
                       ),
                     ),
+                    //switch account button
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
@@ -65,10 +67,12 @@ class MainAccountDrawer extends StatelessWidget {
                       ),
                     ),
                     IntrinsicHeight(
+                      //stats under switch account
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          //credit
                           SizedBox(
                             width: 100,
                             child: Row(
@@ -108,6 +112,7 @@ class MainAccountDrawer extends StatelessWidget {
                             ),
                           ),
                           const VerticalDivider(),
+                          //Nothing yet
                           const SizedBox(
                             width: 100,
                             //  child: Row(
@@ -153,6 +158,7 @@ class MainAccountDrawer extends StatelessWidget {
                 ),
               ),
               const Divider(),
+              //navigation buttons
               ListTile(
                 title: const Text(
                   'Profil',
@@ -168,6 +174,27 @@ class MainAccountDrawer extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfilePage(
+                        setHomeWidget: setHomeWidget,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text(
+                  'Nastavení',
+                  style: TextStyle(fontSize: 20),
+                ),
+                leading: Icon(
+                  Icons.settings,
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                  size: 30,
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingsPage(
                         setHomeWidget: setHomeWidget,
                       ),
                     ),
