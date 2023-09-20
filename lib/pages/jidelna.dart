@@ -638,7 +638,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             //jednoduché operace
             case StavJidla.objednano:
               buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-              obedText = 'zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              obedText = 'Zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
               break;
             case StavJidla.neobjednano:
               buttonColor = const Color.fromARGB(255, 252, 144, 98);
@@ -647,17 +647,17 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             //operace v minulosti
             case StavJidla.objednanoVyprsenaPlatnost:
               buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-              obedText = 'nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              obedText = 'Nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
               break;
             case StavJidla.nedostupne:
               cannotBeOrderedFix();
               buttonColor = const Color.fromARGB(255, 247, 75, 75);
-              obedText = 'nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              obedText = 'Nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
               break;
             //operace na burze
             case StavJidla.objednanoNelzeOdebrat:
               buttonColor = const Color.fromRGBO(17, 201, 11, 1);
-              obedText = 'vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              obedText = 'Vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
               break;
             case StavJidla.dostupneNaBurze:
               buttonColor = const Color.fromARGB(255, 180, 116, 6);
@@ -757,14 +757,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       for (int i = 0; i < 20 && canteenData.jidelnicky[jidelnicek.den] == null; i++) {
                         if (i >= 19) {
-                          throw Exception('nepovedl se načíst jídelníček, aktualizujte stránku');
+                          throw Exception('Nepovedl se načíst jídelníček, aktualizujte stránku');
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
                       canteenData.jidelnicky[jidelnicek.den]!.jidla[index] = await canteen.objednat(jidlo!);
                       pridatStatistiku(TypStatistiky.objednavka);
                     } catch (e) {
-                      snackBarMessage('nastala chyba při objednávání jídla: $e');
+                      snackBarMessage('Nastala chyba při objednávání jídla: $e');
                     }
                   }
                   break;
@@ -779,12 +779,12 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           await canteen.objednatZBurzy(jidloNaBurze);
                           pridatStatistiku(TypStatistiky.objednavka);
                         } catch (e) {
-                          snackBarMessage('nastala chyba při objednávání jídla z burzy: $e');
+                          snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
                         }
                       }
                     }
                     if (nalezenoJidloNaBurze == false) {
-                      snackBarMessage('nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
+                      snackBarMessage('Nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
                     }
                   }
                   break;
@@ -798,7 +798,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       await canteen.doBurzy(jidlo!);
                     } catch (e) {
-                      snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
+                      snackBarMessage('Nastala chyba při dávání jídla na burzu: $e');
                     }
                   }
                   break;
@@ -816,13 +816,13 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       for (int i = 0; i < 20 && canteenData.jidelnicky[jidelnicek.den] == null; i++) {
                         if (i >= 19) {
-                          throw Exception('nepovedlo načíst jídelníček, aktualizujte stránku');
+                          throw Exception('Nepovedlo načíst jídelníček, aktualizujte stránku');
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
                       canteenData.jidelnicky[jidelnicek.den]!.jidla[index] = await canteen.objednat(jidlo!);
                     } catch (e) {
-                      snackBarMessage('nastala chyba při rušení objednávky: $e');
+                      snackBarMessage('Nastala chyba při rušení objednávky: $e');
                     }
                   }
                   break;
@@ -831,7 +831,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       await canteen.doBurzy(jidlo!);
                     } catch (e) {
-                      snackBarMessage('nastala chyba při dávání jídla na burzu: $e');
+                      snackBarMessage('Nsastala chyba při dávání jídla na burzu: $e');
                     }
                   }
                   break;
