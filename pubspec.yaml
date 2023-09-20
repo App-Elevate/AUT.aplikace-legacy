@@ -52,6 +52,7 @@ dependencies:
   flutter_math_fork: ^0.7.1
   firebase_core: ^2.15.1
   firebase_analytics: ^10.4.5
+  firebase_crashlytics: ^3.3.5
 
 dev_dependencies:
   flutter_test:
