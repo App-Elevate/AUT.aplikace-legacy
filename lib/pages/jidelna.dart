@@ -458,7 +458,7 @@ class ListJidel extends StatelessWidget {
                   // and use it to show a SnackBar.
                   if (context.mounted && !snackbarshown.shown) {
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                        .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
                         .closed
                         .then((SnackBarClosedReason reason) {
                       snackbarshown.shown = false;
@@ -495,14 +495,14 @@ class ListJidel extends StatelessWidget {
                           decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
-                                    color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                                        ? const Color.fromARGB(20, 255, 255, 255)
-                                        : const Color.fromARGB(20, 0, 0, 0),
-                                    offset: const Offset(0, 0),
-                                    blurRadius: 4)
+                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                                      ? const Color.fromARGB(20, 255, 255, 255)
+                                      : const Color.fromARGB(20, 0, 0, 0),
+                                  offset: const Offset(0, 0),
+                                )
                               ],
                               border: Border.all(color: const Color.fromARGB(255, 122, 122, 122), width: 2),
-                              borderRadius: const BorderRadius.all(Radius.circular(20))),
+                              borderRadius: const BorderRadius.all(Radius.circular(16))),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -514,7 +514,7 @@ class ListJidel extends StatelessWidget {
                                   return HtmlWidget(
                                     jidlo,
                                     textStyle: const TextStyle(
-                                      fontSize: 30,
+                                      fontSize: 25,
                                     ),
                                   );
                                 }),
