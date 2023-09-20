@@ -1,8 +1,7 @@
 import 'package:autojidelna/every_import.dart';
 
 class JidloDetail extends StatelessWidget {
-  JidloDetail(
-  {
+  JidloDetail({
     super.key,
     required this.datumJidla,
     required this.indexDne,
@@ -10,86 +9,161 @@ class JidloDetail extends StatelessWidget {
   });
   final ListJidel widget;
   final DateTime datumJidla;
+
   /// index jídla v jídelníčku dne (0 - první jídlo dne datumJidla)
   final int indexDne;
   final CanteenData canteenData = getCanteenData();
 
   @override
   Widget build(BuildContext context) {
-
     Jidlo jidlo = canteenData.jidelnicky[datumJidla]!.jidla[indexDne];
     ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
     List<Widget> jidloWidgets = [];
-    if(jidloString.polevka != null){
+    //Soup
+    if (jidloString.polevka != null) {
       jidloWidgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: HtmlWidget(
-              jidloString.polevka!, textStyle: const TextStyle(
-              fontSize: 30,height: 1.5),),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Polévka',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: HtmlWidget(
+                  jidloString.polevka!,
+                  textStyle: const TextStyle(fontSize: 20, height: 1.5),
+                ),
+              ),
+            ],
           ),
         ),
       );
+      jidloWidgets.add(const Divider());
     }
-    if(jidloString.hlavniJidlo != null){
+    //Main Dish
+    if (jidloString.hlavniJidlo != null) {
       jidloWidgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: HtmlWidget(
-              jidloString.hlavniJidlo!, textStyle: const TextStyle(
-              fontSize: 30,height: 1.5),),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Hlavní chod',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: HtmlWidget(
+                  jidloString.hlavniJidlo!,
+                  textStyle: const TextStyle(fontSize: 20, height: 1.5),
+                ),
+              ),
+            ],
           ),
         ),
       );
+      jidloWidgets.add(const Divider());
     }
-    if(jidloString.piti != null){
+    //Drinks
+    if (jidloString.piti != null) {
       jidloWidgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: HtmlWidget(
-              jidloString.piti!, textStyle: const TextStyle(
-              fontSize: 30,height: 1.5),),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Pití',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: HtmlWidget(
+                  jidloString.piti!,
+                  textStyle: const TextStyle(fontSize: 20, height: 1.5),
+                ),
+              ),
+            ],
           ),
         ),
       );
+      jidloWidgets.add(const Divider());
     }
-    if(jidloString.salatovyBar != null){
+    //Side dish
+    if (jidloString.salatovyBar != null) {
       jidloWidgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: HtmlWidget(
-              jidloString.salatovyBar!, textStyle: const TextStyle(
-              fontSize: 30,height: 1.5),),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Přílohy',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: HtmlWidget(
+                  jidloString.salatovyBar!,
+                  textStyle: const TextStyle(fontSize: 20, height: 1.5),
+                ),
+              ),
+            ],
           ),
         ),
       );
+      jidloWidgets.add(const Divider());
     }
-    if(jidloString.alergeny != null){
+    //Alergies
+    if (jidloString.alergeny != null) {
       jidloWidgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(0,0,0,8.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: HtmlWidget(
-              'Alergeny: ${jidloString.alergeny!}', textStyle: const TextStyle(
-              fontSize: 30,height: 1.5),),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Alergeny',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: HtmlWidget(
+                  jidloString.alergeny!,
+                  textStyle: const TextStyle(fontSize: 20, height: 1.5),
+                ),
+              ),
+            ],
           ),
         ),
       );
+      jidloWidgets.add(const Divider());
     }
     jidloWidgets.add(
       Padding(
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
         child: ObjednatJidloTlacitko(widget: widget, index: indexDne, jidlaListener: widget.jidlaListener),
-      )
+      ),
     );
     return Scaffold(
       appBar: AppBar(
@@ -98,7 +172,7 @@ class JidloDetail extends StatelessWidget {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             children: jidloWidgets,
           ),
