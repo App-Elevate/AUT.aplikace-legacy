@@ -185,6 +185,8 @@ class MainAccountDrawer extends StatelessWidget {
                   size: 30,
                 ),
                 onTap: () async {
+                  if (!context.mounted) return;
+                  Navigator.of(context).pop();
                   var packageInfo = await PackageInfo.fromPlatform();
                   // why: it says this is the use case we should use in the docs
                   // ignore: use_build_context_synchronously
