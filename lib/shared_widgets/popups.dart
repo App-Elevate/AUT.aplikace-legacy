@@ -55,8 +55,8 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   Navigator.of(context).pop();
 
                   PackageInfo.fromPlatform().then((value) {
-                    if(analyticsEnabledGlobally){
-                      analytics.logEvent(name: 'updateButtonClicked', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+                    if(analyticsEnabledGlobally && analytics != null){
+                      analytics!.logEvent(name: 'updateButtonClicked', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
                     }
                   });
                   networkInstallApk(releaseInfo.downloadUrl!, context);

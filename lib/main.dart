@@ -6,7 +6,7 @@ import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
-late final FirebaseAnalytics analytics;
+FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = true;
 
 void main() async {

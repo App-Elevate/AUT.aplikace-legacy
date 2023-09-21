@@ -74,8 +74,8 @@ Future<Canteen> initCanteen(
       }
       await Future.delayed(const Duration(milliseconds: 100));
       if (!(canteenInstance.prihlasen)) {
-        if(analyticsEnabledGlobally){
-          analytics.logEvent(name: 'incorrectly_typed_credentials');
+        if(analyticsEnabledGlobally && analytics != null){
+          analytics!.logEvent(name: 'incorrectly_typed_credentials');
         }
         return Future.error('login failed');
       }
@@ -83,15 +83,15 @@ Future<Canteen> initCanteen(
   }
   catch(e){
     if(e.toString().contains('Failed host lookup')){
-      if(analyticsEnabledGlobally){
-        analytics.logEvent(name: 'incorrectly_typed_url', parameters: {'url': url});
+      if(analyticsEnabledGlobally && analytics != null){
+        analytics!.logEvent(name: 'incorrectly_typed_url', parameters: {'url': url});
       }
       return Future.error('bad url');
     }
     return Future.error('no internet');
   }
-  if(analyticsEnabledGlobally){
-    analytics.logLogin(loginMethod: savedCredetnials? 'saved credentials' : 'manual login');
+  if(analyticsEnabledGlobally && analytics != null){
+    analytics!.logLogin(loginMethod: savedCredetnials? 'saved credentials' : 'manual login');
   }
   //get today
   DateTime currentDate = DateTime.now();
@@ -127,8 +127,8 @@ void pridatStatistiku(TypStatistiky statistika)async {
       str ??= '0';
       int pocetStatistiky = int.parse(str);
       pocetStatistiky++;
-      if(analyticsEnabledGlobally){
-        analytics.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
+      if(analyticsEnabledGlobally && analytics != null){
+        analytics!.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
       }
       saveData('statistika:objednavka', '$pocetStatistiky');
       break;
@@ -421,8 +421,6 @@ Future<String?> getDataFromSecureStorage(String key) async {
 
 /// save data to shared preferences used for storing url and unsecure data
 void saveData(String key, String value) async {
-  print(key);
-  print(value);
   final prefs = await SharedPreferences.getInstance();
   prefs.setString(key, value);
 }
@@ -434,8 +432,8 @@ Future<String?> readData(String key) async {
 }
 
 void logout() {
-  if(analyticsEnabledGlobally){
-    analytics.logEvent(name: 'logout');
+  if(analyticsEnabledGlobally && analytics != null){
+    analytics!.logEvent(name: 'logout');
   }
   saveDataToSecureStorage('username', '');
   saveDataToSecureStorage('password', '');
