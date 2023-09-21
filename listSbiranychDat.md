@@ -3,6 +3,7 @@
 * Počet nesprávně zadaného url a url samotné
 ## statistiky
 * počet objednaných obědů
+* počet přihlášení
 * počet odhlášení
 * aktualizace aplikace
 * Země ve které nainstalujete aplikaci
