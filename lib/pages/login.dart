@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import './../every_import.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -196,6 +198,27 @@ class _LoginFormState extends State<LoginForm> {
               errorSetter: _setErrorText,
               setHomeWidget: setHomeWidget,
             ),
+            RichText(
+              text: TextSpan(
+                text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
+                style: const TextStyle(
+                  fontSize: 12
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Více informací',
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontSize: 12,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AnalyticSettingsPage()));
+                      },
+                  ),
+                ],
+              )
+            )
           ],
         ),
       ),

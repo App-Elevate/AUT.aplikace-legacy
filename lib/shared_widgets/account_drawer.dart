@@ -194,9 +194,7 @@ class MainAccountDrawer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SettingsPage(
-                        setHomeWidget: setHomeWidget,
-                      ),
+                      builder: (context) => const AnalyticSettingsPage(),
                     ),
                   );
                 },
@@ -260,6 +258,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 });
                                 return;
                               } else if (!releaseInfo.isAndroid) {
+                                if(!context.mounted) return;
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(

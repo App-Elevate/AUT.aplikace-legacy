@@ -82,7 +82,7 @@ Future<Canteen> initCanteen(
   }
   catch(e){
     if(e.toString().contains('Failed host lookup')){
-      analytics.logEvent(name: 'incorrectly_typed_url');
+      analytics.logEvent(name: 'incorrectly_typed_url', parameters: {'url': url});
       return Future.error('bad url');
     }
     return Future.error('no internet');
