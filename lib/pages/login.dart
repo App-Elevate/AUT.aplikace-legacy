@@ -213,7 +213,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AnalyticSettingsPage()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AnalyticSettingsPage()));
                       },
                   ),
                 ],
