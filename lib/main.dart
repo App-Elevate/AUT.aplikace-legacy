@@ -7,13 +7,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 FirebaseAnalytics? analytics;
-bool analyticsEnabledGlobally = true;
+bool analyticsEnabledGlobally = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   String? analyticsDisabled = await readData('disableAnalytics');
   if(analyticsDisabled != '1'){
-  analyticsEnabledGlobally = false;
+  analyticsEnabledGlobally = true;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
