@@ -31,3 +31,5 @@ export 'package:permission_handler/permission_handler.dart';
 export 'package:http/http.dart';
 export 'dart:io';
 export 'dart:convert';
+
+export 'package:sliding_up_panel/sliding_up_panel.dart';

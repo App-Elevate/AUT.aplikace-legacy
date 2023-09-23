@@ -45,7 +45,9 @@ class MainAccountDrawer extends StatelessWidget {
                         child: TextButton(
                           style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
                           //TODO: make this work (swich account)
-                          onPressed: () {},
+                          onPressed: () {
+                            SwitchAccountVisible().setVisible(true);
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,7 +260,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 });
                                 return;
                               } else if (!releaseInfo.isAndroid) {
-                                if(!context.mounted) return;
+                                if (!context.mounted) return;
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(

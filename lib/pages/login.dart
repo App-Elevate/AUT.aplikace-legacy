@@ -95,12 +95,12 @@ class _LoginFormState extends State<LoginForm> {
       _urlController.text = lastUrl;
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    try{
+    try {
       setHomeWidget = widget.setHomeWidget;
-    }
-    catch(e){
+    } catch (e) {
       //it just needs to be initialized...
     }
     setLastUrl();
@@ -128,7 +128,8 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
             ),
-            AutofillGroup(child: Column(
+            AutofillGroup(
+                child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -142,47 +143,47 @@ class _LoginFormState extends State<LoginForm> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své uživatelské jméno';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                controller: _passwordController,
-                autofillHints: const [AutofillHints.password],
-                obscureText: showPasswd,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: 'Heslo',
-                  border: const OutlineInputBorder(),
-                  errorText: passwordErrorText,
-                  suffixIcon: IconButton(
-                    padding: const EdgeInsets.only(right: 10),
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      setState(() {
-                        showPasswd = !showPasswd;
-                      });
+                      if (value == null || value.isEmpty) {
+                        return 'Zadejte prosím své uživatelské jméno';
+                      }
+                      return null;
                     },
-                    icon: Icon(
-                      showPasswd ? Icons.visibility_off : Icons.visibility,
-                      color: const Color(0xff7F7F7F),
-                    ),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své heslo';
-                  }
-                  return null;
-                },
-              ),
-            ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    autofillHints: const [AutofillHints.password],
+                    obscureText: showPasswd,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      labelText: 'Heslo',
+                      border: const OutlineInputBorder(),
+                      errorText: passwordErrorText,
+                      suffixIcon: IconButton(
+                        padding: const EdgeInsets.only(right: 10),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            showPasswd = !showPasswd;
+                          });
+                        },
+                        icon: Icon(
+                          showPasswd ? Icons.visibility_off : Icons.visibility,
+                          color: const Color(0xff7F7F7F),
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Zadejte prosím své heslo';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ],
             )),
             LoginSubmitButton(
@@ -196,9 +197,7 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: const TextStyle(
-                  fontSize: 12
-                ),
+                style: const TextStyle(fontSize: 12),
                 children: [
                   TextSpan(
                     text: 'Více informací',
@@ -212,8 +211,8 @@ class _LoginFormState extends State<LoginForm> {
                       },
                   ),
                 ],
-              )
-            )
+              ),
+            ),
           ],
         ),
       ),
