@@ -146,10 +146,10 @@ class LoadingLoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-        title: const Text('Autojídelna'),
+        title: const Center(child: Text('Autojídelna')),
       ),
       body: Center(
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const CircularProgressIndicator(),
           Padding(padding: const EdgeInsets.all(10), child: textWidget ?? const Text('')),
         ]),

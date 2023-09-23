@@ -46,47 +46,64 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            //TODO: make the account switch
-                            onTap: () {},
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(Icons.account_circle),
-                                    const SizedBox(width: 10),
-                                    Text(canteenData.username),
-                                  ],
+                    child: GestureDetector(
+                      //TODO: make the account switch
+                      onTap: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.account_circle, size: 30),
+                              const SizedBox(width: 10),
+                              Text(
+                                canteenData.username,
+                                style: const TextStyle(
+                                  fontSize: 18,
                                 ),
-                                if (currentAccount) const Icon(Icons.check),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.logout),
-                          onPressed: () {
-                            logout();
-                            /*logout();
-                                Navigator.of(context).pop(
-                                  setHomeWidget(
-                                    LoginScreen(
-                                      setHomeWidget: setHomeWidget,
-                                    ),
-                                  ),
-                                );*/
-                          },
-                        ),
-                      ],
+                          if (currentAccount) const Icon(Icons.check, size: 30),
+                        ],
+                      ),
                     ),
-                  )
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.logout, size: 30),
+                    onPressed: () {
+                      logout();
+                      /*logout();
+                                  Navigator.of(context).pop(
+                                    setHomeWidget(
+                                      LoginScreen(
+                                        setHomeWidget: setHomeWidget,
+                                      ),
+                                    ),
+                                  );*/
+                    },
+                  ),
                 ],
-              )
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(0),
+                  splashFactory: NoSplash.splashFactory,
+                  foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
+                ),
+                onPressed: () {},
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.add, size: 31),
+                    SizedBox(width: 10),
+                    Text(
+                      "Přidat účet",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
