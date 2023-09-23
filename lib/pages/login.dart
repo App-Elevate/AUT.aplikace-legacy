@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import './../every_import.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -93,24 +95,15 @@ class _LoginFormState extends State<LoginForm> {
       _urlController.text = lastUrl;
     }
   }
-
-  @override
-  void initState() {
-    super.initState();
-    setHomeWidget = widget.setHomeWidget;
-    setLastUrl();
-  }
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    _urlController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    try{
+      setHomeWidget = widget.setHomeWidget;
+    }
+    catch(e){
+      //it just needs to be initialized...
+    }
+    setLastUrl();
     return Form(
       key: _formKey,
       child: Padding(
@@ -135,18 +128,20 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                autofillHints: const [AutofillHints.username],
-                controller: _usernameController,
-                textInputAction: TextInputAction.next,
-                autocorrect: false,
-                decoration: const InputDecoration(
-                  labelText: 'Uživatelské jméno',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
+            AutofillGroup(child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    autofillHints: const [AutofillHints.username],
+                    controller: _usernameController,
+                    textInputAction: TextInputAction.next,
+                    autocorrect: false,
+                    decoration: const InputDecoration(
+                      labelText: 'Uživatelské jméno',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Zadejte prosím své uživatelské jméno';
                   }
@@ -188,6 +183,8 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
             ),
+              ],
+            )),
             LoginSubmitButton(
               formKey: _formKey,
               usernameController: _usernameController,
@@ -196,6 +193,27 @@ class _LoginFormState extends State<LoginForm> {
               errorSetter: _setErrorText,
               setHomeWidget: setHomeWidget,
             ),
+            RichText(
+              text: TextSpan(
+                text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
+                style: const TextStyle(
+                  fontSize: 12
+                ),
+                children: [
+                  TextSpan(
+                    text: 'Více informací',
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontSize: 12,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AnalyticSettingsPage()));
+                      },
+                  ),
+                ],
+              )
+            )
           ],
         ),
       ),
@@ -245,16 +263,12 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
           child: Builder(
             builder: (context) {
               if (loggingIn) {
-                return SizedBox(
-                  height: 50,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 140, vertical: 10),
-                    width: 50,
-                    height: 50,
-                    child: const CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 3.5,
-                    ),
+                return const SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 3.5,
                   ),
                 );
               } else {

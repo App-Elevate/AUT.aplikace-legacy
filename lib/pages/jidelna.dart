@@ -184,6 +184,7 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
                             });
                             return;
                           } else if (!releaseInfo.isAndroid) {
+                            if(!context.mounted)return;
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(

@@ -50,6 +50,8 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   }
   final value = await PackageInfo.fromPlatform();
 
-  analytics.logEvent(name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+  if(analyticsEnabledGlobally && analytics != null){
+    analytics!.logEvent(name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+  }
   await InstallPlugin.install(savePath);
 }
