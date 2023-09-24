@@ -62,69 +62,94 @@ class _MainAppScreenState extends State<MainAppScreen> {
       topRight: Radius.circular(16.0),
     );
 
-    return SlidingUpPanel(
-      backdropEnabled: true,
-      borderRadius: radius,
-      minHeight: 0,
-      maxHeight: 300,
-      controller: panelController,
-      defaultPanelState: PanelState.CLOSED,
-      panel: Builder(
-        builder: (context) {
-          return SwitchAccountPanel(
-            setHomeWidget: widget.setHomeWidget,
-          );
-        },
-      ),
-      body: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-          centerTitle: true,
-          title: const Text('Autojídelna'),
-          actions: [
-            IconButton(
-              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-              icon: const Icon(
-                Icons.refresh_rounded,
-                color: Colors.white,
-                size: 30,
-              ),
-              onPressed: () async {
-                // Existing code...
-              },
-            ),
-          ],
-        ),
-        body: Stack(
-          children: [
-            scaffoldBody,
-            if (loadingIndicator)
-              Container(
-                alignment: Alignment.center,
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-          ],
-        ),
-        drawer: Builder(
+    return Scaffold(
+      body: SlidingUpPanel(
+        backdropEnabled: true,
+        borderRadius: radius,
+        minHeight: 0,
+        maxHeight: 300,
+        controller: panelController,
+        defaultPanelState: PanelState.CLOSED,
+        panel: Builder(
           builder: (context) {
-            return WillPopScope(
-              onWillPop: () async {
-                //if the drawer is open close the drawer
-                if (Scaffold.of(context).isDrawerOpen) {
-                  Navigator.pop(context);
-                  return Future.value(false);
-                }
-                return Future.value(true);
-              },
-              child: MainAccountDrawer(
-                setHomeWidget: widget.setHomeWidget,
-                page: NavigationDrawerItem.jidelnicek,
-              ),
+            return SwitchAccountPanel(
+              setHomeWidget: widget.setHomeWidget,
             );
           },
+        ),
+        body: Scaffold(
+          appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 148, 18, 148),
+            centerTitle: true,
+            title: const Text('Autojídelna'),
+            actions: [
+              IconButton(
+                style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onPressed: () async {
+                  if (refreshing) return;
+                  loading(true);
+                  refreshing = true;
+                  try {
+                    await initCanteen(hasToBeNew: true);
+                  } catch (e) {
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    if (context.mounted && !snackbarshown.shown) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                          .closed
+                          .then((SnackBarClosedReason reason) {
+                        snackbarshown.shown = false;
+                      });
+                    }
+                  }
+                  loading(false);
+                  refreshing = false;
+                  setScaffoldBody(JidelnicekDenWidget(
+                    customCanteenData: getCanteenData(),
+                    setScaffoldBody: setScaffoldBody,
+                    setHomeWidget: widget.setHomeWidget,
+                  ));
+                },
+              ),
+            ],
+          ),
+          body: Stack(
+            children: [
+              scaffoldBody,
+              if (loadingIndicator)
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            ],
+          ),
+          drawer: Builder(
+            builder: (context) {
+              return WillPopScope(
+                onWillPop: () async {
+                  //if the drawer is open close the drawer
+                  if (Scaffold.of(context).isDrawerOpen) {
+                    Navigator.pop(context);
+                    return Future.value(false);
+                  }
+                  return Future.value(true);
+                },
+                child: MainAccountDrawer(
+                  setHomeWidget: widget.setHomeWidget,
+                  page: NavigationDrawerItem.jidelnicek,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

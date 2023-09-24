@@ -44,7 +44,6 @@ class MainAccountDrawer extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: TextButton(
                           style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                          //TODO: make this work (swich account)
                           onPressed: () {
                             SwitchAccountVisible().setVisible(true);
                           },

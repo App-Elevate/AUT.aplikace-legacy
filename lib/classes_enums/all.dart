@@ -159,6 +159,7 @@ enum TypStatistiky {
   burzaCatcher
 }
 
+//Dovoluje otevřít account switcher z account drawer
 class SwitchAccountVisible {
   bool visible = false;
   VoidCallback? visibilityCallback; // Callback to notify changes
