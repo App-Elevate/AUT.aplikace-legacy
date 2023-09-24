@@ -75,11 +75,11 @@ class _MainAppScreenState extends State<MainAppScreen> {
         },
         child: SlidingUpPanel(
           backdropEnabled: true,
+          border: Border.all(width: 0),
           borderRadius: radius,
           minHeight: 0,
           maxHeight: 300,
           controller: panelController,
-          defaultPanelState: PanelState.CLOSED,
           panel: Builder(
             builder: (context) {
               return SwitchAccountPanel(

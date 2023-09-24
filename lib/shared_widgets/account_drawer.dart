@@ -67,8 +67,8 @@ class MainAccountDrawer extends StatelessWidget {
                         ),
                       ),
                     ),
+                    //stats under switch account
                     IntrinsicHeight(
-                      //stats under switch account
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,6 +160,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               const Divider(),
               //navigation buttons
+              //profile
               ListTile(
                 title: const Text(
                   'Profil',
@@ -181,6 +182,7 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
+              //settings
               ListTile(
                 title: const Text(
                   'Nastavení',
@@ -200,6 +202,7 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
+              //about app
               ListTile(
                 title: const Text(
                   'O Aplikaci',
@@ -280,6 +283,7 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
+              //log out
               ListTile(
                 title: const Text(
                   'Odhlásit se',

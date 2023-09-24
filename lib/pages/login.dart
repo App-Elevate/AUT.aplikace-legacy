@@ -26,27 +26,30 @@ class LoginScreen extends StatelessWidget {
           foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 50.0),
-                height: 60,
-                //cool title
-                child: const Text(
-                  'Autojídelna',
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 50.0),
+                  height: 60,
+                  //cool title
+                  child: const Text(
+                    'Autojídelna',
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    ),
                   ),
                 ),
-              ),
-              LoginForm(
-                setHomeWidget: setHomeWidget,
-              ),
-            ],
+                LoginForm(
+                  setHomeWidget: setHomeWidget,
+                ),
+              ],
+            ),
           ),
         ),
       ),

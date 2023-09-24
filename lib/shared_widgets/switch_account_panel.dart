@@ -42,6 +42,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 ),
               ),
               const Divider(),
+              // one logged in account
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -69,22 +70,23 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                       ),
                     ),
                   ),
+                  //Logout button
                   IconButton(
                     icon: const Icon(Icons.logout, size: 30),
                     onPressed: () {
                       logout();
-                      /*logout();
-                                  Navigator.of(context).pop(
-                                    setHomeWidget(
-                                      LoginScreen(
-                                        setHomeWidget: setHomeWidget,
-                                      ),
-                                    ),
-                                  );*/
+                      Navigator.of(context).pop(
+                        widget.setHomeWidget(
+                          LoginScreen(
+                            setHomeWidget: widget.setHomeWidget,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ],
               ),
+              //Add account button
               TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(0),
