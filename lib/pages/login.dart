@@ -1,4 +1,5 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 
 import './../every_import.dart';
 
@@ -153,6 +154,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: TextFormField(
                 controller: _passwordController,
+                textInputAction: TextInputAction.done,
                 autofillHints: const [AutofillHints.password],
                 obscureText: showPasswd,
                 autocorrect: false,
@@ -310,6 +312,7 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text)
             .then((login) {
           if (login.prihlasen) {
+            TextInput.finishAutofillContext();
             saveDataToSecureStorage('username', widget.usernameController.text);
             saveDataToSecureStorage('password', widget.passwordController.text);
             saveData('url', url);
