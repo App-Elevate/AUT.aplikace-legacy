@@ -93,11 +93,11 @@ class ProfilePage extends StatelessWidget {
                             return Text(getCanteenData().uzivatel.uzivatelskeJmeno!);
                           } else {
                             return FutureBuilder(
-                              future: getDataFromSecureStorage('username'),
+                              future: getLoginDataFromSecureStorage(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
-                                    snapshot.data ?? '',
+                                    snapshot.data?.users[snapshot.data!.currentlyLoggedInId!].username ?? '',
                                     style: const TextStyle(
                                       fontSize: 25,
                                     ),

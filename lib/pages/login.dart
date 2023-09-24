@@ -311,22 +311,25 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         url = 'https://$url';
       }
       try {
-        await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text)
-            .then((login) {
-          if (login.prihlasen) {
-            TextInput.finishAutofillContext();
-            saveDataToSecureStorage('username', widget.usernameController.text);
-            saveDataToSecureStorage('password', widget.passwordController.text);
-            saveData('url', url);
-            saveData('loggedIn', '1');
-            setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
-          } else {
-            setState(() {
-              loggingIn = false;
-            });
-            widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
-          }
-        });
+        Canteen login = await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
+        if (login.prihlasen) {
+          TextInput.finishAutofillContext();
+
+          LoginData loginData = await getLoginDataFromSecureStorage();
+          loginData.currentlyLoggedIn = true;
+          loginData.currentlyLoggedInId = loginData.users.length;
+          loginData.users.add(LoggedInUser(username: widget.usernameController.text, password: widget.passwordController.text, url: url));
+          saveLoginToSecureStorage(loginData);
+
+          saveData('url', widget.urlController.text);
+
+          setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+        } else {
+          setState(() {
+            loggingIn = false;
+          });
+          widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+        }
       } catch (e) {
         if (e.toString().contains('bad url')) {
           widget.errorSetter!('Nesprávné url', LoginFormErrorField.url);

@@ -95,14 +95,14 @@ class LoggingInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: SharedPreferences.getInstance(),
+      future: getLoginDataFromSecureStorage(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          final prefs = snapshot.data as SharedPreferences;
-          final isLoggedIn = prefs.getString('loggedIn') == '1';
+          final loginData = snapshot.data as LoginData;
+          final isLoggedIn = loginData.currentlyLoggedIn;
           if (isLoggedIn) {
             return FutureBuilder(
-              future: initCanteen(),
+              future: initCanteen(hasToBeNew: true),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   if (snapshot.error == 'no internet') {
