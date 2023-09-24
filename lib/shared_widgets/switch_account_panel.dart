@@ -95,6 +95,8 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 LoginData loginData = await getLoginDataFromSecureStorage();
                 loginData.currentlyLoggedInId = id;
                 saveLoginToSecureStorage(loginData);
+                SwitchAccountVisible().setVisible(false);
+                await Future.delayed(const Duration(milliseconds: 500));
                 widget.setHomeWidget(
                   LoggingInWidget(setHomeWidget: widget.setHomeWidget)
                 );
@@ -127,19 +129,15 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         IconButton(
           icon: const Icon(Icons.logout, size: 30),
           onPressed: () async {
-            if(await logout(id: id)){
-              if(currentAccount){
-                widget.setHomeWidget(
-                  LoggingInWidget(setHomeWidget: widget.setHomeWidget)
-                );
-              }
-              SwitchAccountVisible().setVisible(true);
-            }
-            else{
+            await logout(id: id);
+            if(currentAccount){
+              SwitchAccountVisible().setVisible(false);
+              await Future.delayed(const Duration(milliseconds: 500));
               widget.setHomeWidget(
-                LoginScreen(setHomeWidget: widget.setHomeWidget)
+                LoggingInWidget(setHomeWidget: widget.setHomeWidget)
               );
             }
+              SwitchAccountVisible().setVisible(true);
 
           },
         ),

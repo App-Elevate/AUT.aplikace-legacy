@@ -383,7 +383,6 @@ void saveDataToSecureStorage(String key, String value) async {
 }
 
 void saveLoginToSecureStorage(LoginData loginData) async {
-  print(jsonEncode(loginData));
   saveDataToSecureStorage('loginData', jsonEncode(loginData));
 }
 
@@ -424,7 +423,7 @@ Future<String?> readData(String key) async {
   return prefs.getString(key);
 }
 
-Future<bool> logout({int? id}) async {
+Future<void> logout({int? id}) async {
   if(analyticsEnabledGlobally && analytics != null){
     analytics!.logEvent(name: 'logout');
   }
@@ -434,14 +433,14 @@ Future<bool> logout({int? id}) async {
     loginData.users.removeAt(loginData.currentlyLoggedInId!);
     loginData.currentlyLoggedInId = null;
     saveLoginToSecureStorage(loginData);
-    return false;
+    return;
   }
   else{
     LoginData loginData = await getLoginDataFromSecureStorage();
     if(id == loginData.currentlyLoggedInId){
-      loginData.currentlyLoggedInId = 0;
+      loginData.currentlyLoggedInId = loginData.users.length - 2;
     }
-    if(loginData.currentlyLoggedInId! > id){
+    else if(loginData.currentlyLoggedInId! > id){
       loginData.currentlyLoggedInId = loginData.currentlyLoggedInId! - 1;
     }
     loginData.users.removeAt(id);
@@ -450,7 +449,7 @@ Future<bool> logout({int? id}) async {
       loginData.currentlyLoggedInId = null;
     }
     saveLoginToSecureStorage(loginData);
-    return loginData.currentlyLoggedIn;
+    return;
   }
 }
 
