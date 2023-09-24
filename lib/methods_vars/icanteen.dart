@@ -25,7 +25,6 @@ String ziskatDenZData(int den) {
 late Canteen canteenInstance;
 late CanteenData canteenData;
 bool refreshing = false;
-bool loggedOut = true;
 Ordering ordering = Ordering();
 
 
@@ -114,7 +113,6 @@ Future<Canteen> initCanteen(
     jidelnicky: jidelnicky,
     pocetJidel: {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length},
   );
-  loggedOut = false;
   return canteenInstance;
 }
 
@@ -322,7 +320,7 @@ void smartPreIndexing(DateTime currentDate){
 Future<void> preIndexLunches(DateTime start, int howManyDays, bool toTheFuture) async {
   for (int i = 0; i < howManyDays; i++) {
     try {
-      if (refreshing || loggedOut) {
+      if (refreshing) {
         return;
       }
       if(toTheFuture){
@@ -438,5 +436,4 @@ void logout() {
   saveDataToSecureStorage('username', '');
   saveDataToSecureStorage('password', '');
   saveData('loggedIn', '0');
-  loggedOut = true;
 }
