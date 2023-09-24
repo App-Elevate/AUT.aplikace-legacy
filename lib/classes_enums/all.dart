@@ -3,6 +3,46 @@ import './../every_import.dart';
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }
 
+class LoggedInUser {
+  String username;
+  String password;
+  String url;
+  LoggedInUser({
+    required this.username,
+    required this.password,
+    required this.url,
+  });
+  LoggedInUser.fromJson(Map<String, dynamic> json)
+      : username = json['username'],
+        password = json['password'],
+        url = json['url'];
+  Map<String, dynamic> toJson() => {
+        'username': username,
+        'password': password,
+        'url': url,
+      };
+}
+class LoginData {
+  LoginData({
+    required this.currentlyLoggedIn,
+  });
+  bool currentlyLoggedIn;
+  int? currentlyLoggedInId;
+  List<LoggedInUser> users = [];
+
+  LoginData.fromJson(Map<String, dynamic> json)
+  : currentlyLoggedIn =  json['currentlyLoggedIn'],
+    currentlyLoggedInId = json['currentlyLoggedInId'],
+    users = json['users'].map<LoggedInUser>((e) => LoggedInUser.fromJson(e)).toList();
+
+  Map<String, dynamic> toJson() => 
+  {
+    'currentlyLoggedIn': currentlyLoggedIn,
+    'currentlyLoggedInId': currentlyLoggedInId,
+    'users': users.map((e) => e.toJson()).toList(),
+  };
+}
+
 class Ordering {
   bool ordering;
   Ordering({this.ordering = false});

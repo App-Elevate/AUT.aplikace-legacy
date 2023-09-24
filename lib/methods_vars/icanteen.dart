@@ -1,32 +1,12 @@
 import 'package:autojidelna/main.dart';
 import '../every_import.dart';
 
-String ziskatDenZData(int den) {
-  switch (den) {
-    case 1:
-      return 'Pondělí';
-    case 2:
-      return 'Úterý';
-    case 3:
-      return 'Středa';
-    case 4:
-      return 'Čtvrtek';
-    case 5:
-      return 'Pátek';
-    case 6:
-      return 'Sobota';
-    case 7:
-      return 'Neděle';
-    default:
-      throw Exception('Invalid day');
-  }
-}
 
 late Canteen canteenInstance;
 late CanteenData canteenData;
 bool refreshing = false;
-bool loggedOut = true;
 Ordering ordering = Ordering();
+
 
 
 /// Returns a [Canteen] instance with logged in user.
@@ -39,10 +19,10 @@ Future<Canteen> initCanteen(
     String? url,
     String? username,
     String? password}) async {
-  url ??= await readData('url');
-  if (!url!.contains('https://')) {
+  LoginData loginData = await getLoginDataFromSecureStorage();
+  url ??= loginData.users[loginData.currentlyLoggedInId!].url;
+  if (!url.contains('https://')) {
     url = 'https://$url';
-    saveData('url', url);
   }
   try {
     if (canteenInstance.prihlasen && !hasToBeNew) {
@@ -58,12 +38,8 @@ Future<Canteen> initCanteen(
     savedCredetnials = true;
     //getting it from secure storage
   }
-  username ??= await getDataFromSecureStorage('username');
-  password ??= await getDataFromSecureStorage('password');
-  if (username == null || password == null) {
-    return Future.error('No password found');
-  }
-
+  username ??= loginData.users[loginData.currentlyLoggedInId!].username;
+  password ??= loginData.users[loginData.currentlyLoggedInId!].password;
   try{
     await canteenInstance.login(username, password);
     await Future.delayed(const Duration(milliseconds: 100));
@@ -114,7 +90,6 @@ Future<Canteen> initCanteen(
     jidelnicky: jidelnicky,
     pocetJidel: {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length},
   );
-  loggedOut = false;
   return canteenInstance;
 }
 
@@ -322,7 +297,7 @@ void smartPreIndexing(DateTime currentDate){
 Future<void> preIndexLunches(DateTime start, int howManyDays, bool toTheFuture) async {
   for (int i = 0; i < howManyDays; i++) {
     try {
-      if (refreshing || loggedOut) {
+      if (refreshing) {
         return;
       }
       if(toTheFuture){
@@ -407,6 +382,23 @@ void saveDataToSecureStorage(String key, String value) async {
   await storage.write(key: key, value: value);
 }
 
+void saveLoginToSecureStorage(LoginData loginData) async {
+  saveDataToSecureStorage('loginData', jsonEncode(loginData));
+}
+
+Future<LoginData> getLoginDataFromSecureStorage() async {
+  try{
+    String? value = await getDataFromSecureStorage('loginData');
+    if(value == null || value == ''){
+      return LoginData(currentlyLoggedIn: false);
+    }
+    return LoginData.fromJson(jsonDecode(value));
+  }
+  catch(e){
+    return LoginData(currentlyLoggedIn: false);
+  }
+}
+
 /// get data from secure storage used for storing username and password
 Future<String?> getDataFromSecureStorage(String key) async {
   const storage = FlutterSecureStorage();
@@ -431,12 +423,53 @@ Future<String?> readData(String key) async {
   return prefs.getString(key);
 }
 
-void logout() {
+Future<void> logout({int? id}) async {
   if(analyticsEnabledGlobally && analytics != null){
     analytics!.logEvent(name: 'logout');
   }
-  saveDataToSecureStorage('username', '');
-  saveDataToSecureStorage('password', '');
-  saveData('loggedIn', '0');
-  loggedOut = true;
+  if(id == null){
+    LoginData loginData = await getLoginDataFromSecureStorage();
+    loginData.currentlyLoggedIn = false;
+    loginData.users.removeAt(loginData.currentlyLoggedInId!);
+    loginData.currentlyLoggedInId = null;
+    saveLoginToSecureStorage(loginData);
+    return;
+  }
+  else{
+    LoginData loginData = await getLoginDataFromSecureStorage();
+    if(id == loginData.currentlyLoggedInId){
+      loginData.currentlyLoggedInId = loginData.users.length - 2;
+    }
+    else if(loginData.currentlyLoggedInId! > id){
+      loginData.currentlyLoggedInId = loginData.currentlyLoggedInId! - 1;
+    }
+    loginData.users.removeAt(id);
+    if(loginData.users.isEmpty){
+      loginData.currentlyLoggedIn = false;
+      loginData.currentlyLoggedInId = null;
+    }
+    saveLoginToSecureStorage(loginData);
+    return;
+  }
+}
+
+String ziskatDenZData(int den) {
+  switch (den) {
+    case 1:
+      return 'Pondělí';
+    case 2:
+      return 'Úterý';
+    case 3:
+      return 'Středa';
+    case 4:
+      return 'Čtvrtek';
+    case 5:
+      return 'Pátek';
+    case 6:
+      return 'Sobota';
+    case 7:
+      return 'Neděle';
+    default:
+      throw Exception('Invalid day');
+  }
 }
