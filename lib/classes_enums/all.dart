@@ -53,7 +53,7 @@ class CanteenData {
     required this.jidelnicky,
     required this.jidlaNaBurze,
   });
-  CanteenData copyWith(){
+  CanteenData copyWith() {
     return CanteenData(
       pocetJidel: pocetJidel,
       username: username,
@@ -126,10 +126,13 @@ class ParsedFoodString {
   String? salatovyBar;
   String? piti;
   String? alergeny;
+
   /// typ původního stringu
   ParsedFoodStringType type;
+
   /// plný název jídla v html
   String plnyNazevJidla;
+
   /// zkrácený název jídla v html
   String zkracenyNazevJidla;
 }
@@ -137,8 +140,10 @@ class ParsedFoodString {
 enum ParsedFoodStringType {
   /// jídlo obsahovalo span a bylo parsnuto
   span,
+
   /// jídlo obsahovalo alergeny a bylo parsnuto
   alergeny,
+
   /// jídlo neobsahovalo span ani alergeny (alergeny vsak ve vysledku mozna jsou)
   bezAlergenu
 }
@@ -146,8 +151,41 @@ enum ParsedFoodStringType {
 enum TypStatistiky {
   ///normální objednávky
   objednavka,
+
   ///automatické objednávky
   auto,
+
   ///objednávky chycené burzaCatherem
   burzaCatcher
+}
+
+//Dovoluje otevřít account switcher z account drawer
+class SwitchAccountVisible {
+  bool visible = false;
+  VoidCallback? visibilityCallback; // Callback to notify changes
+
+  // Private constructor for singleton
+  SwitchAccountVisible._();
+
+  // Singleton instance
+  static final SwitchAccountVisible _instance = SwitchAccountVisible._();
+
+  // Factory constructor to provide the singleton instance
+  factory SwitchAccountVisible() => _instance;
+
+  void setVisible(bool value) {
+    visible = value;
+    if (visibilityCallback != null) {
+      visibilityCallback!(); // Notify changes using the callback
+    }
+  }
+
+  bool isVisible() {
+    return visible;
+  }
+
+  // Function to set the visibility callback
+  void setVisibilityCallback(VoidCallback callback) {
+    visibilityCallback = callback;
+  }
 }

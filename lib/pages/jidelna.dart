@@ -14,8 +14,11 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
+  PanelController panelController = PanelController();
   Widget scaffoldBody = const Placeholder();
   bool loadingIndicator = false;
+  bool isVisible = false; // Local variable to store visibility
+
   void setScaffoldBody(Widget widget) {
     setState(() {
       scaffoldBody = widget;
@@ -29,87 +32,138 @@ class _MainAppScreenState extends State<MainAppScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    // Set the visibility callback in File C
+    SwitchAccountVisible().setVisibilityCallback(() {
+      _onVisibilityChanged();
+    });
+  }
+
+  void _onVisibilityChanged() {
+    setState(() {
+      isVisible = SwitchAccountVisible().isVisible();
+    });
+
+    if (isVisible) {
+      panelController.open();
+    } else {
+      panelController.close();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     scaffoldBody = JidelnicekDenWidget(
       setScaffoldBody: setScaffoldBody,
       setHomeWidget: widget.setHomeWidget,
     );
+    BorderRadiusGeometry radius = const BorderRadius.only(
+      topLeft: Radius.circular(16.0),
+      topRight: Radius.circular(16.0),
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-        centerTitle: true,
-        title: const Text('Autojídelna'),
-        actions: [
-          IconButton(
-            style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-            icon: const Icon(
-              Icons.refresh_rounded,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () async {
-              if (refreshing) return;
-              loading(true);
-              refreshing = true;
-              try {
-                await initCanteen(hasToBeNew: true);
-              } catch (e) {
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                if (context.mounted && !snackbarshown.shown) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
-                }
-              }
-              loading(false);
-              refreshing = false;
-              setScaffoldBody(JidelnicekDenWidget(
-                customCanteenData: getCanteenData(),
-                setScaffoldBody: setScaffoldBody,
+      body: WillPopScope(
+        onWillPop: () async {
+          if (isVisible) {
+            SwitchAccountVisible().setVisible(false);
+            return false; // Prevents the default back button behavior
+          }
+          return true; // Allows the default back button behavior
+        },
+        child: SlidingUpPanel(
+          backdropEnabled: true,
+          border: Border.all(width: 0),
+          borderRadius: radius,
+          minHeight: 0,
+          maxHeight: 300,
+          controller: panelController,
+          panel: Builder(
+            builder: (context) {
+              return SwitchAccountPanel(
                 setHomeWidget: widget.setHomeWidget,
-              ));
+              );
             },
           ),
-          //PopupMenuButtonInAppbar(
-          //  widget: widget,
-          //  setScaffoldBody: setScaffoldBody,
-          //  loading: loading,
-          //),
-        ],
-      ),
-      body: Stack(
-        children: [
-          scaffoldBody,
-          if (loadingIndicator)
-            Container(
-              alignment: Alignment.center,
-              color: Colors.black.withOpacity(0.5),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+          body: Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color.fromARGB(255, 148, 18, 148),
+              centerTitle: true,
+              title: const Text('Autojídelna'),
+              actions: [
+                IconButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  icon: const Icon(
+                    Icons.refresh_rounded,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () async {
+                    if (refreshing) return;
+                    loading(true);
+                    refreshing = true;
+                    try {
+                      await initCanteen(hasToBeNew: true);
+                    } catch (e) {
+                      // Find the ScaffoldMessenger in the widget tree
+                      // and use it to show a SnackBar.
+                      if (context.mounted && !snackbarshown.shown) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                            .closed
+                            .then((SnackBarClosedReason reason) {
+                          snackbarshown.shown = false;
+                        });
+                      }
+                    }
+                    loading(false);
+                    refreshing = false;
+                    setScaffoldBody(JidelnicekDenWidget(
+                      customCanteenData: getCanteenData(),
+                      setScaffoldBody: setScaffoldBody,
+                      setHomeWidget: widget.setHomeWidget,
+                    ));
+                  },
+                ),
+              ],
             ),
-        ],
-      ),
-      drawer: Builder(builder: (context) {
-        return WillPopScope(
-          onWillPop: () async {
-            //if the drawer is open close the drawer
-            if (Scaffold.of(context).isDrawerOpen) {
-              Navigator.pop(context);
-              return Future.value(false);
-            }
-            return Future.value(true);
-          },
-          child: MainAccountDrawer(
-            setHomeWidget: widget.setHomeWidget,
-            page: NavigationDrawerItem.jidelnicek,
+            body: Stack(
+              children: [
+                scaffoldBody,
+                if (loadingIndicator)
+                  Container(
+                    alignment: Alignment.center,
+                    color: Colors.black.withOpacity(0.5),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+              ],
+            ),
+            drawer: Builder(
+              builder: (context) {
+                return WillPopScope(
+                  onWillPop: () async {
+                    //if the drawer is open close the drawer
+                    if (Scaffold.of(context).isDrawerOpen) {
+                      Navigator.pop(context);
+                      return Future.value(false);
+                    }
+                    return Future.value(true);
+                  },
+                  child: MainAccountDrawer(
+                    setHomeWidget: widget.setHomeWidget,
+                    page: NavigationDrawerItem.jidelnicek,
+                  ),
+                );
+              },
+            ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }
@@ -184,7 +238,7 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
                             });
                             return;
                           } else if (!releaseInfo.isAndroid) {
-                            if(!context.mounted)return;
+                            if (!context.mounted) return;
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(

@@ -44,8 +44,9 @@ class MainAccountDrawer extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: TextButton(
                           style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                          //TODO: make this work (swich account)
-                          onPressed: () {},
+                          onPressed: () {
+                            SwitchAccountVisible().setVisible(true);
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,8 +67,8 @@ class MainAccountDrawer extends StatelessWidget {
                         ),
                       ),
                     ),
+                    //stats under switch account
                     IntrinsicHeight(
-                      //stats under switch account
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,6 +160,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               const Divider(),
               //navigation buttons
+              //profile
               ListTile(
                 title: const Text(
                   'Profil',
@@ -180,6 +182,7 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
+              //settings
               ListTile(
                 title: const Text(
                   'Nastavení',
@@ -199,6 +202,7 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
+              //about app
               ListTile(
                 title: const Text(
                   'O Aplikaci',
@@ -258,7 +262,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 });
                                 return;
                               } else if (!releaseInfo.isAndroid) {
-                                if(!context.mounted) return;
+                                if (!context.mounted) return;
                                 Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(
@@ -279,6 +283,7 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
+              //log out
               ListTile(
                 title: const Text(
                   'Odhlásit se',

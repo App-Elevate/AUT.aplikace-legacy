@@ -27,27 +27,30 @@ class LoginScreen extends StatelessWidget {
           foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 50.0),
-                height: 60,
-                //cool title
-                child: const Text(
-                  'Autojídelna',
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 50.0),
+                  height: 65,
+                  //cool title
+                  child: const Text(
+                    'Autojídelna',
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto',
+                    ),
                   ),
                 ),
-              ),
-              LoginForm(
-                setHomeWidget: setHomeWidget,
-              ),
-            ],
+                LoginForm(
+                  setHomeWidget: setHomeWidget,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -96,12 +99,12 @@ class _LoginFormState extends State<LoginForm> {
       _urlController.text = lastUrl;
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    try{
+    try {
       setHomeWidget = widget.setHomeWidget;
-    }
-    catch(e){
+    } catch (e) {
       //it just needs to be initialized...
     }
     setLastUrl();
@@ -129,7 +132,8 @@ class _LoginFormState extends State<LoginForm> {
                 },
               ),
             ),
-            AutofillGroup(child: Column(
+            AutofillGroup(
+                child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -198,9 +202,7 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: const TextStyle(
-                  fontSize: 12
-                ),
+                style: const TextStyle(fontSize: 12),
                 children: [
                   TextSpan(
                     text: 'Více informací',
@@ -214,8 +216,8 @@ class _LoginFormState extends State<LoginForm> {
                       },
                   ),
                 ],
-              )
-            )
+              ),
+            ),
           ],
         ),
       ),
