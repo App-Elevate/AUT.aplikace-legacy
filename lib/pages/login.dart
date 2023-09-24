@@ -34,7 +34,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Container(
                   margin: const EdgeInsets.only(bottom: 50.0),
-                  height: 60,
+                  height: 65,
                   //cool title
                   child: const Text(
                     'Autojídelna',

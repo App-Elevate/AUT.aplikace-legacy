@@ -148,10 +148,9 @@ class LoadingLoginPage extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 148, 18, 148),
         title: const Center(child: Text('Autojídelna')),
       ),
-      body: Center(
+      body: const Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const CircularProgressIndicator(),
-          Padding(padding: const EdgeInsets.all(10), child: textWidget ?? const Text('')),
+          CircularProgressIndicator(),
         ]),
       ),
     );

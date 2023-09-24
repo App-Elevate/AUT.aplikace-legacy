@@ -94,7 +94,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
               title: const Text('Autojídelna'),
               actions: [
                 IconButton(
-                  style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   icon: const Icon(
                     Icons.refresh_rounded,
                     color: Colors.white,

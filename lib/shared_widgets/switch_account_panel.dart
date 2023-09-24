@@ -93,7 +93,16 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                   splashFactory: NoSplash.splashFactory,
                   foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(
+                        setHomeWidget: widget.setHomeWidget, // Access the function through the widget
+                      ),
+                    ),
+                  );
+                },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
