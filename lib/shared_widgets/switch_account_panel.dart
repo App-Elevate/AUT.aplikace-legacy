@@ -54,7 +54,9 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                       foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
                     ),
                     onPressed: () {
-                      widget.setHomeWidget(LoginScreen(setHomeWidget: widget.setHomeWidget));
+                      if(mounted){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
+                      }
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -72,10 +74,9 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: accounts
+              child: ListView.builder(
+                itemCount: accounts.length,
+                itemBuilder: (context, index) => accounts[index],
               ),
             );
           }

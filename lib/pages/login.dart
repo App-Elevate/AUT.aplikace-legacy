@@ -1,3 +1,4 @@
+import 'package:autojidelna/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 
@@ -322,8 +323,14 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
           saveLoginToSecureStorage(loginData);
 
           saveData('url', widget.urlController.text);
-
-          setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+          if(mounted && Navigator.canPop(context)){
+            Navigator.pop(context);
+            setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+            
+          }
+          else{
+            setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+          }
         } else {
           setState(() {
             loggingIn = false;
