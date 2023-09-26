@@ -1,21 +1,20 @@
 import 'package:autojidelna/every_import.dart';
 import 'package:autojidelna/main.dart';
 import 'package:markdown/markdown.dart' as md;
-void newUpdateDialog(BuildContext context, {int? tries}) {
 
-  if(tries != null && tries > 5){
+void newUpdateDialog(BuildContext context, {int? tries}) {
+  if (tries != null && tries > 5) {
     return;
   }
-  try{
-    if(releaseInfo.isAndroid == false){
+  try {
+    if (releaseInfo.isAndroid == false) {
       return;
     }
-    if(releaseInfo.currentlyLatestVersion!){
+    if (releaseInfo.currentlyLatestVersion!) {
       return;
     }
-  }
-  catch(e){
-    Future.delayed(const Duration(seconds: 1), () => newUpdateDialog(context, tries: tries == null?1:tries+1));
+  } catch (e) {
+    Future.delayed(const Duration(seconds: 1), () => newUpdateDialog(context, tries: tries == null ? 1 : tries + 1));
   }
   showDialog(
     context: context,
@@ -33,7 +32,9 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
               const Text('Nová aktualizace přináší:'),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: HtmlWidget(md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'), ),
+                child: HtmlWidget(
+                  md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'),
+                ),
               ),
             ],
           ),
@@ -48,17 +49,23 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
                   //color based on brightness
-                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color.fromARGB(20, 255, 255, 255):const Color.fromARGB(20, 0, 0, 0),
+                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? const Color.fromARGB(20, 255, 255, 255)
+                      : const Color.fromARGB(20, 0, 0, 0),
                 ),
                 child: const Text('Aktualizovat'),
                 onPressed: () {
                   Navigator.of(context).pop();
 
-                  PackageInfo.fromPlatform().then((value) {
-                    if(analyticsEnabledGlobally && analytics != null){
-                      analytics!.logEvent(name: 'updateButtonClicked', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
-                    }
-                  });
+                  PackageInfo.fromPlatform().then(
+                    (value) {
+                      if (analyticsEnabledGlobally && analytics != null) {
+                        analytics!.logEvent(
+                            name: 'updateButtonClicked',
+                            parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+                      }
+                    },
+                  );
                   networkInstallApk(releaseInfo.downloadUrl!, context);
                 },
               ),
@@ -66,10 +73,11 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
                   //color based on brightness
-                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color.fromARGB(20, 255, 255, 255):const Color.fromARGB(20, 0, 0, 0),
+                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? const Color.fromARGB(20, 255, 255, 255)
+                      : const Color.fromARGB(20, 0, 0, 0),
                 ),
-                onPressed: (() => launchUrl(
-                    Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
+                onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
                     mode: LaunchMode.externalApplication)),
                 child: const Text('Zobrazit na githubu'),
               ),
@@ -78,7 +86,9 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   //color based on brightness
-                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark?const Color.fromARGB(20, 255, 255, 255):const Color.fromARGB(20, 0, 0, 0),
+                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? const Color.fromARGB(20, 255, 255, 255)
+                      : const Color.fromARGB(20, 0, 0, 0),
                 ),
                 child: const Text('Teď ne'),
                 onPressed: () {
@@ -92,6 +102,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
     },
   );
 }
+
 void failedLoginDialog(BuildContext context, String message, Function setHomeWidget) async {
   showDialog(
     context: context,
@@ -103,18 +114,20 @@ void failedLoginDialog(BuildContext context, String message, Function setHomeWid
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: <Widget>[
-          TextButton(onPressed: () {
-            Navigator.of(context).pop();
-            setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
-          },
-          child: const Text('Zkusit znovu')
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+              },
+              child: const Text('Zkusit znovu')),
+          TextButton(
+            onPressed: () {
+              logout();
+              Navigator.of(context).pop();
+              setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
+            },
+            child: const Text('Odhlásit se'),
           ),
-          TextButton(onPressed: () {
-            logout();
-            Navigator.of(context).pop();
-            setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
-          },
-          child: const Text('Odhlásit se')),
         ],
       );
     },
@@ -132,16 +145,18 @@ void failedDownload(BuildContext context) async {
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: <Widget>[
-          TextButton(onPressed: () {
-            networkInstallApk(releaseInfo.downloadUrl!, context);
-            Navigator.of(context).pop();
-          },
-          child: const Text('Zkusit znovu')
+          TextButton(
+            onPressed: () {
+              networkInstallApk(releaseInfo.downloadUrl!, context);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Zkusit znovu'),
           ),
-          TextButton(onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Zrušit')
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Zrušit'),
           ),
         ],
       );

@@ -3,12 +3,19 @@ import 'package:flutter/services.dart';
 
 import './../every_import.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({
     super.key,
     required this.setHomeWidget,
   });
   final Function setHomeWidget;
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isVisible = LoginBackButtonVisible().isVisible();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +32,18 @@ class LoginScreen extends StatelessWidget {
           elevation: 0,
           //title color
           foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
+          leading: Visibility(
+            visible: isVisible,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                LoginBackButtonVisible().setVisible(false);
+                widget.setHomeWidget(
+                  MainAppScreen(setHomeWidget: widget.setHomeWidget),
+                );
+              },
+            ),
+          ),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -47,7 +66,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 LoginForm(
-                  setHomeWidget: setHomeWidget,
+                  setHomeWidget: widget.setHomeWidget,
                 ),
               ],
             ),
@@ -120,7 +139,7 @@ class _LoginFormState extends State<LoginForm> {
                 controller: _urlController,
                 autocorrect: false,
                 decoration: InputDecoration(
-                  labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
+                  labelText: 'Url stránky icanteen - např. jidelna.trebesin.cz',
                   border: const OutlineInputBorder(),
                   errorText: urlErrorText,
                 ),
@@ -147,48 +166,48 @@ class _LoginFormState extends State<LoginForm> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své uživatelské jméno';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                controller: _passwordController,
-                textInputAction: TextInputAction.done,
-                autofillHints: const [AutofillHints.password],
-                obscureText: showPasswd,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: 'Heslo',
-                  border: const OutlineInputBorder(),
-                  errorText: passwordErrorText,
-                  suffixIcon: IconButton(
-                    padding: const EdgeInsets.only(right: 10),
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      setState(() {
-                        showPasswd = !showPasswd;
-                      });
+                      if (value == null || value.isEmpty) {
+                        return 'Zadejte prosím své uživatelské jméno';
+                      }
+                      return null;
                     },
-                    icon: Icon(
-                      showPasswd ? Icons.visibility_off : Icons.visibility,
-                      color: const Color(0xff7F7F7F),
-                    ),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své heslo';
-                  }
-                  return null;
-                },
-              ),
-            ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    textInputAction: TextInputAction.done,
+                    autofillHints: const [AutofillHints.password],
+                    obscureText: showPasswd,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      labelText: 'Heslo',
+                      border: const OutlineInputBorder(),
+                      errorText: passwordErrorText,
+                      suffixIcon: IconButton(
+                        padding: const EdgeInsets.only(right: 10),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            showPasswd = !showPasswd;
+                          });
+                        },
+                        icon: Icon(
+                          showPasswd ? Icons.visibility_off : Icons.visibility,
+                          color: const Color(0xff7F7F7F),
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Zadejte prosím své heslo';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ],
             )),
             LoginSubmitButton(
@@ -311,7 +330,8 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         url = 'https://$url';
       }
       try {
-        Canteen login = await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
+        Canteen login =
+            await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
         if (login.prihlasen) {
           TextInput.finishAutofillContext();
 

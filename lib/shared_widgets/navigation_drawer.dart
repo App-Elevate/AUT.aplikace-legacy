@@ -52,8 +52,7 @@ class MainAppDrawer extends StatelessWidget {
                   },
                 ),
               ),
-              /*
-              ListTile(
+              /*ListTile(
                 title: const Text('Automatické objednávky'),
                 //icon that signilizes automatization
                 leading: const Icon(Icons.autorenew),
@@ -64,9 +63,11 @@ class MainAppDrawer extends StatelessWidget {
                   } else {
                     Navigator.pop(context);
                     await Future.delayed(const Duration(milliseconds: 200));
-                    setHomeWidget(AutoPage(
-                      setHomeWidget: setHomeWidget,
-                    ));
+                    setHomeWidget(
+                      AutoPage(
+                        setHomeWidget: setHomeWidget,
+                      ),
+                    );
                   }
                 },
               ),
@@ -77,12 +78,13 @@ class MainAppDrawer extends StatelessWidget {
                 selected: page == NavigationDrawerItem.burzaCatcher,
                 onTap: () {
                   Fluttertoast.showToast(
-                      msg: "Tato Feature není hotová",
-                      toastLength: Toast.LENGTH_SHORT,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: const Color.fromARGB(255, 48, 48, 48),
-                      textColor: Colors.white,
-                      fontSize: 16.0);
+                    msg: "Tato Feature není hotová",
+                    toastLength: Toast.LENGTH_SHORT,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color.fromARGB(255, 48, 48, 48),
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 },
               ),*/
             ],

@@ -40,45 +40,44 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
               ),
               const Divider(),
             ];
-            if(snapshot.connectionState == ConnectionState.done){
+            if (snapshot.connectionState == ConnectionState.done) {
               final loginData = snapshot.data as LoginData;
-              for(int i = 0;i<loginData.users.length;i++){
+              for (int i = 0; i < loginData.users.length; i++) {
                 LoggedInUser account = loginData.users[i];
                 accounts.add(accountRow(context, account.username, i == loginData.currentlyLoggedInId, i));
               }
               accounts.add(
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.all(0),
-                      splashFactory: NoSplash.splashFactory,
-                      foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
-                    ),
-                    onPressed: () {
-                      widget.setHomeWidget(LoginScreen(setHomeWidget: widget.setHomeWidget));
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.add, size: 31),
-                        SizedBox(width: 10),
-                        Text(
-                          "Přidat účet",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    splashFactory: NoSplash.splashFactory,
+                    foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
                   ),
+                  onPressed: () {
+                    widget.setHomeWidget(
+                      LoginScreen(setHomeWidget: widget.setHomeWidget),
+                    );
+                    LoginBackButtonVisible().setVisible(true);
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.add, size: 31),
+                      SizedBox(width: 10),
+                      Text(
+                        "Přidat účet",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
               );
             }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: accounts
-              ),
+              child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: accounts),
             );
-          }
+          },
         ),
       ),
     );
@@ -91,17 +90,14 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         Expanded(
           child: GestureDetector(
             onTap: () async {
-              if(!currentAccount){
+              if (!currentAccount) {
                 LoginData loginData = await getLoginDataFromSecureStorage();
                 loginData.currentlyLoggedInId = id;
                 saveLoginToSecureStorage(loginData);
                 SwitchAccountVisible().setVisible(false);
                 await Future.delayed(const Duration(milliseconds: 500));
-                widget.setHomeWidget(
-                  LoggingInWidget(setHomeWidget: widget.setHomeWidget)
-                );
-              }
-              else{
+                widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
+              } else {
                 SwitchAccountVisible().setVisible(false);
               }
             },
@@ -130,15 +126,12 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           icon: const Icon(Icons.logout, size: 30),
           onPressed: () async {
             await logout(id: id);
-            if(currentAccount){
+            if (currentAccount) {
               SwitchAccountVisible().setVisible(false);
               await Future.delayed(const Duration(milliseconds: 500));
-              widget.setHomeWidget(
-                LoggingInWidget(setHomeWidget: widget.setHomeWidget)
-              );
+              widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
             }
-              SwitchAccountVisible().setVisible(true);
-
+            SwitchAccountVisible().setVisible(true);
           },
         ),
       ],

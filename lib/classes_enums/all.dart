@@ -22,6 +22,7 @@ class LoggedInUser {
         'url': url,
       };
 }
+
 class LoginData {
   LoginData({
     required this.currentlyLoggedIn,
@@ -31,16 +32,15 @@ class LoginData {
   List<LoggedInUser> users = [];
 
   LoginData.fromJson(Map<String, dynamic> json)
-  : currentlyLoggedIn =  json['currentlyLoggedIn'],
-    currentlyLoggedInId = json['currentlyLoggedInId'],
-    users = json['users'].map<LoggedInUser>((e) => LoggedInUser.fromJson(e)).toList();
+      : currentlyLoggedIn = json['currentlyLoggedIn'],
+        currentlyLoggedInId = json['currentlyLoggedInId'],
+        users = json['users'].map<LoggedInUser>((e) => LoggedInUser.fromJson(e)).toList();
 
-  Map<String, dynamic> toJson() => 
-  {
-    'currentlyLoggedIn': currentlyLoggedIn,
-    'currentlyLoggedInId': currentlyLoggedInId,
-    'users': users.map((e) => e.toJson()).toList(),
-  };
+  Map<String, dynamic> toJson() => {
+        'currentlyLoggedIn': currentlyLoggedIn,
+        'currentlyLoggedInId': currentlyLoggedInId,
+        'users': users.map((e) => e.toJson()).toList(),
+      };
 }
 
 class Ordering {
@@ -212,6 +212,36 @@ class SwitchAccountVisible {
 
   // Factory constructor to provide the singleton instance
   factory SwitchAccountVisible() => _instance;
+
+  void setVisible(bool value) {
+    visible = value;
+    if (visibilityCallback != null) {
+      visibilityCallback!(); // Notify changes using the callback
+    }
+  }
+
+  bool isVisible() {
+    return visible;
+  }
+
+  // Function to set the visibility callback
+  void setVisibilityCallback(VoidCallback callback) {
+    visibilityCallback = callback;
+  }
+}
+
+class LoginBackButtonVisible {
+  bool visible = true;
+  VoidCallback? visibilityCallback; // Callback to notify changes
+
+  // Private constructor for singleton
+  LoginBackButtonVisible._();
+
+  // Singleton instance
+  static final LoginBackButtonVisible _instance = LoginBackButtonVisible._();
+
+  // Factory constructor to provide the singleton instance
+  factory LoginBackButtonVisible() => _instance;
 
   void setVisible(bool value) {
     visible = value;

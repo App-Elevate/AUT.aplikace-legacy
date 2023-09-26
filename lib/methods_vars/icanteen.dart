@@ -1,24 +1,17 @@
 import 'package:autojidelna/main.dart';
 import '../every_import.dart';
 
-
 late Canteen canteenInstance;
 late CanteenData canteenData;
 bool refreshing = false;
 Ordering ordering = Ordering();
-
-
 
 /// Returns a [Canteen] instance with logged in user.
 /// Has to be called before using [canteenInstance].
 /// If [hasToBeNew] is true, it will create a new instance of [Canteen] even if there is already one.
 /// If [url], [username] or [password] is null, it will try to get it from storage.
 /// Can throw errors if login is not successful or when bad connection.
-Future<Canteen> initCanteen(
-    {bool hasToBeNew = false,
-    String? url,
-    String? username,
-    String? password}) async {
+Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? username, String? password}) async {
   LoginData loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
   if (!url.contains('https://')) {
@@ -31,16 +24,16 @@ Future<Canteen> initCanteen(
       canteenInstance = Canteen(url);
     }
   } catch (e) {
-      canteenInstance = Canteen(url);
+    canteenInstance = Canteen(url);
   }
   bool savedCredetnials = false;
-  if(username == null || password == null){
+  if (username == null || password == null) {
     savedCredetnials = true;
     //getting it from secure storage
   }
   username ??= loginData.users[loginData.currentlyLoggedInId!].username;
   password ??= loginData.users[loginData.currentlyLoggedInId!].password;
-  try{
+  try {
     await canteenInstance.login(username, password);
     await Future.delayed(const Duration(milliseconds: 100));
     if (!canteenInstance.prihlasen) {
@@ -50,36 +43,31 @@ Future<Canteen> initCanteen(
       }
       await Future.delayed(const Duration(milliseconds: 100));
       if (!(canteenInstance.prihlasen)) {
-        if(analyticsEnabledGlobally && analytics != null){
+        if (analyticsEnabledGlobally && analytics != null) {
           analytics!.logEvent(name: 'incorrectly_typed_credentials');
         }
         return Future.error('login failed');
       }
     }
-  }
-  catch(e){
-    if(e.toString().contains('Failed host lookup')){
-      if(analyticsEnabledGlobally && analytics != null){
+  } catch (e) {
+    if (e.toString().contains('Failed host lookup')) {
+      if (analyticsEnabledGlobally && analytics != null) {
         analytics!.logEvent(name: 'incorrectly_typed_url', parameters: {'url': url});
       }
       return Future.error('bad url');
     }
     return Future.error('no internet');
   }
-  if(analyticsEnabledGlobally && analytics != null){
-    analytics!.logLogin(loginMethod: savedCredetnials? 'saved credentials' : 'manual login');
+  if (analyticsEnabledGlobally && analytics != null) {
+    analytics!.logLogin(loginMethod: savedCredetnials ? 'saved credentials' : 'manual login');
   }
   //get today
   DateTime currentDate = DateTime.now();
-  DateTime currentDateWithoutTime =
-      DateTime(currentDate.year, currentDate.month, currentDate.day);
+  DateTime currentDateWithoutTime = DateTime(currentDate.year, currentDate.month, currentDate.day);
   late Map<DateTime, Jidelnicek> jidelnicky;
-  try{
-    jidelnicky = {
-      currentDateWithoutTime: await ziskatJidelnicekDen(currentDateWithoutTime)
-    };
-  }
-  catch(e){
+  try {
+    jidelnicky = {currentDateWithoutTime: await ziskatJidelnicekDen(currentDateWithoutTime)};
+  } catch (e) {
     return Future.error('no internet');
   }
   canteenData = CanteenData(
@@ -94,15 +82,15 @@ Future<Canteen> initCanteen(
 }
 
 //přidá +1 pro counter statistiky
-void pridatStatistiku(TypStatistiky statistika)async {
-  switch(statistika){
+void pridatStatistiku(TypStatistiky statistika) async {
+  switch (statistika) {
     //default case
     case TypStatistiky.objednavka:
       String? str = await readData('statistika:objednavka');
       str ??= '0';
       int pocetStatistiky = int.parse(str);
       pocetStatistiky++;
-      if(analyticsEnabledGlobally && analytics != null){
+      if (analyticsEnabledGlobally && analytics != null) {
         analytics!.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
       }
       saveData('statistika:objednavka', '$pocetStatistiky');
@@ -128,7 +116,7 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
   late ParsedFoodStringType type;
   String zkracenyNazevJidla = '';
   String plnyNazevJidla = '';
-  if(alergeny == ''){
+  if (alergeny == '') {
     alergeny = null;
   }
   if (jidlo.contains('<span')) {
@@ -137,49 +125,44 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
     zkracenyNazevJidla = listJidel[0];
     listJidel.removeAt(0);
     alergeny = '<span${listJidel.join('<span')}';
-  }
-  else if(alergeny != null){
+  } else if (alergeny != null) {
     type = ParsedFoodStringType.alergeny;
     zkracenyNazevJidla = '$jidlo, alergeny: $alergeny';
-  }
-  else{
+  } else {
     zkracenyNazevJidla = jidlo;
     type = ParsedFoodStringType.bezAlergenu;
   }
   zkracenyNazevJidla = zkracenyNazevJidla.replaceAll(' *', '');
   zkracenyNazevJidla = zkracenyNazevJidla.replaceAll('*', '');
   List<String> cistyListJidel = zkracenyNazevJidla.split(',');
-  for(int i = 0;i<cistyListJidel.length;i++){
+  for (int i = 0; i < cistyListJidel.length; i++) {
     cistyListJidel[i] = cistyListJidel[i].trimLeft();
   }
   String polevka = '';
   String hlavniJidlo = '';
   String salatovyBar = '';
   String piti = '';
-  for(int i = 0;i < cistyListJidel.length;i++){
+  for (int i = 0; i < cistyListJidel.length; i++) {
     cistyListJidel[i] = cistyListJidel[i].trimLeft();
   }
-  for(int i = 0; i < cistyListJidel.length; i++){
-    if(cistyListJidel[i].contains('Polévka') || cistyListJidel[i].contains('fridátové nudle')){
-      if(polevka != ''){
+  for (int i = 0; i < cistyListJidel.length; i++) {
+    if (cistyListJidel[i].contains('Polévka') || cistyListJidel[i].contains('fridátové nudle')) {
+      if (polevka != '') {
         polevka += ', ';
       }
       polevka = '$polevka ${cistyListJidel[i]}';
-    }
-    else if(cistyListJidel[i].contains('salátový bar')){
-      if(salatovyBar != ''){
+    } else if (cistyListJidel[i].contains('salátový bar')) {
+      if (salatovyBar != '') {
         salatovyBar += ', ';
       }
       salatovyBar = '$salatovyBar ${cistyListJidel[i]}';
-    }
-    else if(cistyListJidel[i].contains('nápoj') || cistyListJidel[i].contains('čaj') || cistyListJidel[i].contains('káva')){
-      if(piti != ''){
+    } else if (cistyListJidel[i].contains('nápoj') || cistyListJidel[i].contains('čaj') || cistyListJidel[i].contains('káva')) {
+      if (piti != '') {
         piti += ', ';
       }
       piti = '$piti ${cistyListJidel[i]}';
-    }
-    else {
-      if(hlavniJidlo != ''){
+    } else {
+      if (hlavniJidlo != '') {
         hlavniJidlo += ', ';
       }
       hlavniJidlo = '$hlavniJidlo ${cistyListJidel[i]}';
@@ -191,56 +174,56 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
   polevka = polevka.trimLeft();
   piti = piti.trimLeft();
   salatovyBar = salatovyBar.trimLeft();
-  if(polevka != ''){
-    if(plnyNazevJidla != ''){
+  if (polevka != '') {
+    if (plnyNazevJidla != '') {
       plnyNazevJidla += '<br>';
     }
     //make first letter of polevka capital
     polevka = polevka.substring(0, 1).toUpperCase() + polevka.substring(1);
     plnyNazevJidla += polevka;
   }
-  if(hlavniJidlo != ''){
+  if (hlavniJidlo != '') {
     //make first letter of hlavniJidlo capital
     hlavniJidlo = hlavniJidlo.substring(0, 1).toUpperCase() + hlavniJidlo.substring(1);
-    if(zkracenyNazevJidla != ''){
+    if (zkracenyNazevJidla != '') {
       zkracenyNazevJidla += '<br>';
     }
-    if(plnyNazevJidla != '') {
+    if (plnyNazevJidla != '') {
       plnyNazevJidla += '<br>';
     }
     plnyNazevJidla += hlavniJidlo;
     zkracenyNazevJidla += hlavniJidlo;
   }
-  if(piti != ''){
+  if (piti != '') {
     //make first letter of piti capital
     piti = piti.substring(0, 1).toUpperCase() + piti.substring(1);
-    if(plnyNazevJidla != ''){
+    if (plnyNazevJidla != '') {
       plnyNazevJidla += '<br>';
     }
     plnyNazevJidla += piti;
   }
-  if(salatovyBar != '') {
+  if (salatovyBar != '') {
     //make first letter of salatovyBar capital
     salatovyBar = salatovyBar.substring(0, 1).toUpperCase() + salatovyBar.substring(1);
-    if(plnyNazevJidla != ''){
+    if (plnyNazevJidla != '') {
       plnyNazevJidla += '<br>';
     }
     plnyNazevJidla += salatovyBar;
   }
-  if(zkracenyNazevJidla.substring(0,3) == 'N. ') {
+  if (zkracenyNazevJidla.substring(0, 3) == 'N. ') {
     zkracenyNazevJidla = zkracenyNazevJidla.substring(3);
   }
-  if(plnyNazevJidla.substring(0,3) == 'N. ') {
+  if (plnyNazevJidla.substring(0, 3) == 'N. ') {
     plnyNazevJidla = plnyNazevJidla.substring(3);
   }
   //first regex match for '(' and last for ')' gets replaced with ''
-  if(alergeny != null){
-    if(alergeny.lastIndexOf(')') != -1){
+  if (alergeny != null) {
+    if (alergeny.lastIndexOf(')') != -1) {
       alergeny = alergeny.substring(0, alergeny.lastIndexOf(')')) + alergeny.substring(alergeny.lastIndexOf(')') + 1);
     }
   }
   alergeny = alergeny?.replaceFirst('(', '');
-  if(alergeny != null){
+  if (alergeny != null) {
     plnyNazevJidla = '$plnyNazevJidla<br>Alergeny: $alergeny';
   }
   return ParsedFoodString(
@@ -259,19 +242,18 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
   try {
     Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: den);
     //bad api check
-    if(jidelnicek.jidla.length < 3){
+    if (jidelnicek.jidla.length < 3) {
       Jidelnicek checkjidelnicek = await canteenInstance.jidelnicekDen(den: den);
-      return checkjidelnicek.jidla.length > jidelnicek.jidla.length? checkjidelnicek : jidelnicek;
+      return checkjidelnicek.jidla.length > jidelnicek.jidla.length ? checkjidelnicek : jidelnicek;
     }
     return jidelnicek;
   } catch (e) {
     if (e == 'Uživatel není přihlášen') {
-      try{
+      try {
         await initCanteen(hasToBeNew: true);
         await Future.delayed(const Duration(seconds: 1));
         return await ziskatJidelnicekDen(den);
-      }
-      catch(e){
+      } catch (e) {
         return Future.error('no internet');
       }
     } else {
@@ -280,15 +262,16 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     }
   }
 }
-void smartPreIndexing(DateTime currentDate){
-    preIndexLunches(currentDate, 1, true)
-    .then((_) => preIndexLunches(currentDate, 1, false))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, true))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, false))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, true))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, false))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, true))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, false));
+
+void smartPreIndexing(DateTime currentDate) {
+  preIndexLunches(currentDate, 1, true)
+      .then((_) => preIndexLunches(currentDate, 1, false))
+      .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, true))
+      .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, false))
+      .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, true))
+      .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, false))
+      .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, true))
+      .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, false));
 }
 
 /// [toTheFuture] is true if you want to get lunches for the next [howManyDays] days
@@ -300,13 +283,10 @@ Future<void> preIndexLunches(DateTime start, int howManyDays, bool toTheFuture) 
       if (refreshing) {
         return;
       }
-      if(toTheFuture){
-        canteenData.jidelnicky[start.add(Duration(days: i))] =
-            await getLunchesForDay(start.add(Duration(days: i)));
-      }
-      else{
-        canteenData.jidelnicky[start.subtract(Duration(days: i))] =
-            await getLunchesForDay(start.subtract(Duration(days: i)));
+      if (toTheFuture) {
+        canteenData.jidelnicky[start.add(Duration(days: i))] = await getLunchesForDay(start.add(Duration(days: i)));
+      } else {
+        canteenData.jidelnicky[start.subtract(Duration(days: i))] = await getLunchesForDay(start.subtract(Duration(days: i)));
       }
     } catch (e) {
       return;
@@ -314,33 +294,30 @@ Future<void> preIndexLunches(DateTime start, int howManyDays, bool toTheFuture) 
   }
 }
 
-Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
+Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
   late Jidelnicek jidelnicek;
   requireNew ??= false;
-  if (canteenData.jidelnicky
-      .containsKey(DateTime(date.year, date.month, date.day)) && !requireNew) {
-    jidelnicek =
-        canteenData.jidelnicky[DateTime(date.year, date.month, date.day)]!;
+  if (canteenData.jidelnicky.containsKey(DateTime(date.year, date.month, date.day)) && !requireNew) {
+    jidelnicek = canteenData.jidelnicky[DateTime(date.year, date.month, date.day)]!;
   } else {
-    if(canteenData.currentlyLoading.contains(date)){
+    if (canteenData.currentlyLoading.contains(date)) {
       await Future.delayed(const Duration(milliseconds: 100));
-      return getLunchesForDay(date,requireNew: requireNew);
+      return getLunchesForDay(date, requireNew: requireNew);
     }
-    try{
+    try {
       canteenData.currentlyLoading.add(date);
       jidelnicek = await ziskatJidelnicekDen(date);
       canteenData.currentlyLoading.remove(date);
-    }
-    catch(e){
+    } catch (e) {
       canteenData.currentlyLoading.remove(date);
       return Future.error('no internet');
     }
   }
-  if(canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] != null && canteenData.pocetJidel[DateTime(date.year, date.month, date.day)]! > jidelnicek.jidla.length ){
-    return getLunchesForDay(date,requireNew: requireNew);
+  if (canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] != null &&
+      canteenData.pocetJidel[DateTime(date.year, date.month, date.day)]! > jidelnicek.jidla.length) {
+    return getLunchesForDay(date, requireNew: requireNew);
   }
-  canteenData.jidelnicky[DateTime(date.year, date.month, date.day)] =
-      jidelnicek;
+  canteenData.jidelnicky[DateTime(date.year, date.month, date.day)] = jidelnicek;
   canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] = jidelnicek.jidla.length;
   return jidelnicek;
 }
@@ -348,13 +325,11 @@ Future<Jidelnicek> getLunchesForDay(DateTime date,{bool? requireNew}) async {
 Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
   canteenData.jidelnicky = {};
   smartPreIndexing(currentDate);
-  try{
-    return await getLunchesForDay(currentDate); 
-  }
-  catch(e){
+  try {
+    return await getLunchesForDay(currentDate);
+  } catch (e) {
     rethrow;
   }
-
 }
 
 CanteenData getCanteenData() {
@@ -387,14 +362,13 @@ void saveLoginToSecureStorage(LoginData loginData) async {
 }
 
 Future<LoginData> getLoginDataFromSecureStorage() async {
-  try{
+  try {
     String? value = await getDataFromSecureStorage('loginData');
-    if(value == null || value == ''){
+    if (value == null || value == '') {
       return LoginData(currentlyLoggedIn: false);
     }
     return LoginData.fromJson(jsonDecode(value));
-  }
-  catch(e){
+  } catch (e) {
     return LoginData(currentlyLoggedIn: false);
   }
 }
@@ -402,11 +376,10 @@ Future<LoginData> getLoginDataFromSecureStorage() async {
 /// get data from secure storage used for storing username and password
 Future<String?> getDataFromSecureStorage(String key) async {
   const storage = FlutterSecureStorage();
-  try{
+  try {
     String? value = await storage.read(key: key);
     return value;
-  }
-  catch(e){
+  } catch (e) {
     return null;
   }
 }
@@ -424,27 +397,25 @@ Future<String?> readData(String key) async {
 }
 
 Future<void> logout({int? id}) async {
-  if(analyticsEnabledGlobally && analytics != null){
+  if (analyticsEnabledGlobally && analytics != null) {
     analytics!.logEvent(name: 'logout');
   }
-  if(id == null){
+  if (id == null) {
     LoginData loginData = await getLoginDataFromSecureStorage();
     loginData.currentlyLoggedIn = false;
     loginData.users.removeAt(loginData.currentlyLoggedInId!);
     loginData.currentlyLoggedInId = null;
     saveLoginToSecureStorage(loginData);
     return;
-  }
-  else{
+  } else {
     LoginData loginData = await getLoginDataFromSecureStorage();
-    if(id == loginData.currentlyLoggedInId){
+    if (id == loginData.currentlyLoggedInId) {
       loginData.currentlyLoggedInId = loginData.users.length - 2;
-    }
-    else if(loginData.currentlyLoggedInId! > id){
+    } else if (loginData.currentlyLoggedInId! > id) {
       loginData.currentlyLoggedInId = loginData.currentlyLoggedInId! - 1;
     }
     loginData.users.removeAt(id);
-    if(loginData.users.isEmpty){
+    if (loginData.users.isEmpty) {
       loginData.currentlyLoggedIn = false;
       loginData.currentlyLoggedInId = null;
     }
