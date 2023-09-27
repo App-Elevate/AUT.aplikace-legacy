@@ -30,24 +30,15 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         child: FutureBuilder(
           future: getLoginDataFromSecureStorage(),
           builder: (context, snapshot) {
-            List<Widget> accounts = [
-              const Text(
-                "Účty",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color.fromARGB(255, 150, 150, 150),
-                ),
-              ),
-              const Divider(),
-            ];
+            List<Widget> accounts = [];
             if(snapshot.connectionState == ConnectionState.done){
               final loginData = snapshot.data as LoginData;
               for(int i = 0;i<loginData.users.length;i++){
                 LoggedInUser account = loginData.users[i];
                 accounts.add(accountRow(context, account.username, i == loginData.currentlyLoggedInId, i));
               }
-              accounts.add(
-                  TextButton(
+            }
+            Widget addAccountButton = TextButton(
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.all(0),
                       splashFactory: NoSplash.splashFactory,
@@ -69,14 +60,37 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                         ),
                       ],
                     ),
-                  ),
-              );
+                  );
+            if(accounts.length > 4){
+              accounts.insert(0, addAccountButton);
+            }
+            else{
+              accounts.add(addAccountButton);
             }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: ListView.builder(
-                itemCount: accounts.length,
-                itemBuilder: (context, index) => accounts[index],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Účty",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 150, 150, 150),
+                    ),
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    addRepaintBoundaries: false,
+                    reverse: accounts.length > 5? true : false,
+                    itemCount: accounts.length,
+                    itemBuilder: (context, index) => accounts[index],
+                    ),
+                  ),
+                ],
               ),
             );
           }
