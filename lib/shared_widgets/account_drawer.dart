@@ -284,27 +284,6 @@ class MainAccountDrawer extends StatelessWidget {
                 },
               ),
               //log out
-              ListTile(
-                title: const Text(
-                  'Odhlásit se',
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(
-                  Icons.logout,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                  size: 30,
-                ),
-                onTap: () {
-                  logout();
-                  Navigator.of(context).pop(
-                    setHomeWidget(
-                      LoginScreen(
-                        setHomeWidget: setHomeWidget,
-                      ),
-                    ),
-                  );
-                },
-              ),
             ],
           ),
         ),

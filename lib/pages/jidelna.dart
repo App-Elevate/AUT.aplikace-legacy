@@ -249,20 +249,6 @@ class PopupMenuButtonInAppbar extends StatelessWidget {
                     }),
                   ]);
             }),
-        PopupMenuItem(
-            value: 'logout',
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('Odhlásit se'), Icon(Icons.logout_rounded, color: Colors.black)],
-            ),
-            onTap: () {
-              logout();
-              widget.setHomeWidget(
-                LoginScreen(
-                  setHomeWidget: widget.setHomeWidget,
-                ),
-              );
-            }),
       ];
     });
   }

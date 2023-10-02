@@ -423,14 +423,17 @@ Future<String?> readData(String key) async {
   return prefs.getString(key);
 }
 
-Future<void> logout({int? id}) async {
+Future<void> logout({int? id, bool? currentAccount}) async {
+  if(currentAccount != null && currentAccount == true){
+    id = (await getLoginDataFromSecureStorage()).currentlyLoggedInId;
+  }
   if(analyticsEnabledGlobally && analytics != null){
     analytics!.logEvent(name: 'logout');
   }
   if(id == null){
     LoginData loginData = await getLoginDataFromSecureStorage();
     loginData.currentlyLoggedIn = false;
-    loginData.users.removeAt(loginData.currentlyLoggedInId!);
+    loginData.users.clear();
     loginData.currentlyLoggedInId = null;
     saveLoginToSecureStorage(loginData);
     return;

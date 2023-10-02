@@ -1,3 +1,5 @@
+import 'package:autojidelna/main.dart';
+
 import './../every_import.dart';
 
 /*zde se budou nacházet nastavení a možnost zakoupit pro a vidět statistiky profilu Icanteen. Zároveň zde bude systém pro měnění účtů */
@@ -43,22 +45,31 @@ class ProfilePage extends StatelessWidget {
   Padding _appBarLogoutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              logout();
-              Navigator.of(context).pop(
+      child: TextButton(
+        onPressed: () async {
+                logout(currentAccount: true);
+                Navigator.of(context).pop(
+                );
+                await Future.delayed(const Duration(milliseconds: 300));
                 setHomeWidget(
-                  LoginScreen(
-                    setHomeWidget: setHomeWidget,
-                  ),
+                  LoggingInWidget(setHomeWidget: setHomeWidget)
+                );
+              },
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                'Odhlásit se',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+            ),
+            Icon(Icons.logout, color:MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232)),
+          ],
+        ),
       ),
     );
   }

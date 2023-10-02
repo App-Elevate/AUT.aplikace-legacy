@@ -45,7 +45,7 @@ class LoginData {
 
 class LoggedAccountsInAccountPanel{
   List<String> usernames;
-  int loggedInID;
+  int? loggedInID;
   LoggedAccountsInAccountPanel({required this.usernames, required this.loggedInID});
 }
 
