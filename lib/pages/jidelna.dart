@@ -437,7 +437,7 @@ class JidelnicekWidget extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return ListJidel(widget: this, errorWidget: HtmlWidget(snapshot.error.toString()));
+              return ListJidel(widget: this, errorWidget: Text(snapshot.error.toString()));
             }
             Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
             return ListJidel(
@@ -501,7 +501,14 @@ class ListJidel extends StatelessWidget {
                 ));
                 
               },
-            child: errorWidget!);
+            child: SizedBox( 
+              height: double.infinity,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height / 2 - 100),
+                  child: errorWidget!,
+                ))));
           }
           if (jidelnicek!.jidla.isEmpty) {
             return Expanded(
