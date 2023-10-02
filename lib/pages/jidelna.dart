@@ -475,10 +475,74 @@ class ListJidel extends StatelessWidget {
       children: [
         Builder(builder: (_) {
           if (jidelnicek == null) {
-            return errorWidget!;
+            return RefreshIndicator(
+              onRefresh: () async {
+                if (refreshing) return;
+                refreshing = true;
+                try {
+                  await initCanteen(hasToBeNew: true);
+                } catch (e) {
+                  // Find the ScaffoldMessenger in the widget tree
+                  // and use it to show a SnackBar.
+                  if (context.mounted && !snackbarshown.shown) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                        .closed
+                        .then((SnackBarClosedReason reason) {
+                      snackbarshown.shown = false;
+                    });
+                  }
+                }
+                refreshing = false;
+                widget.widget.setScaffoldBody(JidelnicekDenWidget(
+                  customCanteenData: getCanteenData(),
+                  setScaffoldBody: widget.widget.setScaffoldBody,
+                  setHomeWidget: widget.widget.setHomeWidget,
+                ));
+                
+              },
+            child: errorWidget!);
           }
           if (jidelnicek!.jidla.isEmpty) {
-            return const Expanded(child: Center(child: Text('Žádná Jídla pro tento den')));
+            return Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  if (refreshing) return;
+                  refreshing = true;
+                  try {
+                    await initCanteen(hasToBeNew: true);
+                  } catch (e) {
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    if (context.mounted && !snackbarshown.shown) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu', context))
+                          .closed
+                          .then((SnackBarClosedReason reason) {
+                        snackbarshown.shown = false;
+                      });
+                    }
+                  }
+                  refreshing = false;
+                  widget.widget.setScaffoldBody(JidelnicekDenWidget(
+                    customCanteenData: getCanteenData(),
+                    setScaffoldBody: widget.widget.setScaffoldBody,
+                    setHomeWidget: widget.widget.setHomeWidget,
+                  ));
+                  
+                },
+                child: SizedBox(
+                  height: double.infinity,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Padding(
+                      //half of the screen height padding
+                      padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height / 2 - 100),
+
+                      child: const Text('Žádná Jídla pro tento den'),
+                    )),
+                )),
+            );
           }
           return Expanded(
             child: RefreshIndicator(

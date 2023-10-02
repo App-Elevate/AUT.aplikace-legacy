@@ -284,11 +284,11 @@ void smartPreIndexing(DateTime currentDate){
     preIndexLunches(currentDate, 1, true)
     .then((_) => preIndexLunches(currentDate, 1, false))
     .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, true))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 1, false))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, true))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 1)), 3, false))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, true))
-    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 3)), 7, false));
+    .then((_) => preIndexLunches(currentDate.subtract(const Duration(days: 1)), 1, false))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 2)), 3, true))
+    .then((_) => preIndexLunches(currentDate.subtract(const Duration(days: 2)), 3, false))
+    .then((_) => preIndexLunches(currentDate.add(const Duration(days: 5)), 7, true))
+    .then((_) => preIndexLunches(currentDate.subtract(const Duration(days: 5)), 7, false));
 }
 
 /// [toTheFuture] is true if you want to get lunches for the next [howManyDays] days
