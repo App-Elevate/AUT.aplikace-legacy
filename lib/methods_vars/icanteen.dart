@@ -377,13 +377,13 @@ void setCanteenData(CanteenData data) {
 }
 
 /// save data to secure storage used for storing username and password
-void saveDataToSecureStorage(String key, String value) async {
+Future<void> saveDataToSecureStorage(String key, String value) async {
   const storage = FlutterSecureStorage();
   await storage.write(key: key, value: value);
 }
 
-void saveLoginToSecureStorage(LoginData loginData) async {
-  saveDataToSecureStorage('loginData', jsonEncode(loginData));
+Future<void> saveLoginToSecureStorage(LoginData loginData) async {
+  await saveDataToSecureStorage('loginData', jsonEncode(loginData));
 }
 
 Future<LoginData> getLoginDataFromSecureStorage() async {
@@ -440,7 +440,7 @@ Future<void> logout({int? id}) async {
     if(id == loginData.currentlyLoggedInId){
       loginData.currentlyLoggedInId = loginData.users.length - 2;
     }
-    else if(loginData.currentlyLoggedInId! > id){
+    else if(loginData.currentlyLoggedInId != null && loginData.currentlyLoggedInId! > id){
       loginData.currentlyLoggedInId = loginData.currentlyLoggedInId! - 1;
     }
     loginData.users.removeAt(id);

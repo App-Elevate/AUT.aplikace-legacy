@@ -31,30 +31,23 @@ class _MainAppScreenState extends State<MainAppScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    // Set the visibility callback in File C
-    SwitchAccountVisible().setVisibilityCallback(() {
-      _onVisibilityChanged();
-    });
-  }
-
-  void _onVisibilityChanged() {
-    setState(() {
-      isVisible = SwitchAccountVisible().isVisible();
-    });
-
-    if (isVisible) {
+  void _onVisibilityChanged() async{
+    if(!mounted)return;
+    isVisible = SwitchAccountVisible().isVisible();
+    if (SwitchAccountVisible().isVisible()) {
       panelController.open();
-    } else {
+    }else{
       panelController.close();
     }
-  }
+    await Future.delayed(const Duration(milliseconds: 300));
+    if(!mounted)return;
+}
 
   @override
   Widget build(BuildContext context) {
+    SwitchAccountVisible().setVisibilityCallback(() {
+      _onVisibilityChanged();
+    });
     scaffoldBody = JidelnicekDenWidget(
       setScaffoldBody: setScaffoldBody,
       setHomeWidget: widget.setHomeWidget,

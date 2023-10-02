@@ -44,7 +44,10 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                       splashFactory: NoSplash.splashFactory,
                       foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      //close before going to the page
+                      SwitchAccountVisible().setVisible(false);
+                      await Future.delayed(const Duration(milliseconds: 300));
                       if(mounted){
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
                       }
@@ -107,11 +110,11 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           child: GestureDetector(
             onTap: () async {
               if(!currentAccount){
+                SwitchAccountVisible().setVisible(false);
+                await Future.delayed(const Duration(milliseconds: 500));
                 LoginData loginData = await getLoginDataFromSecureStorage();
                 loginData.currentlyLoggedInId = id;
                 saveLoginToSecureStorage(loginData);
-                SwitchAccountVisible().setVisible(false);
-                await Future.delayed(const Duration(milliseconds: 500));
                 widget.setHomeWidget(
                   LoggingInWidget(setHomeWidget: widget.setHomeWidget)
                 );
