@@ -10,13 +10,16 @@ class MainAppScreen extends StatefulWidget {
   final Function setHomeWidget;
 
   @override
-  State<MainAppScreen> createState() => _MainAppScreenState();
+  State<MainAppScreen> createState() => MainAppScreenState();
 }
 
-class _MainAppScreenState extends State<MainAppScreen> {
-  PanelController panelController = PanelController();
+class MainAppScreenState extends State<MainAppScreen> {
+  final PanelController panelController = PanelController();
+
+
   Widget scaffoldBody = const Placeholder();
   bool loadingIndicator = false;
+
   void setScaffoldBody(Widget widget) {
     setState(() {
       scaffoldBody = widget;
@@ -38,22 +41,19 @@ class _MainAppScreenState extends State<MainAppScreen> {
     }
     await Future.delayed(const Duration(milliseconds: 300));
     if(!mounted)return;
-}
+  }
 
   @override
   Widget build(BuildContext context) {
     SwitchAccountVisible().setVisibilityCallback(() {
       _onVisibilityChanged();
     });
-    scaffoldBody = JidelnicekDenWidget(
-      setScaffoldBody: setScaffoldBody,
-      setHomeWidget: widget.setHomeWidget,
-    );
+    scaffoldBody = jidelnicekDenWidget();
     BorderRadiusGeometry radius = const BorderRadius.only(
       topLeft: Radius.circular(16.0),
       topRight: Radius.circular(16.0),
     );
-return WillPopScope(
+    return WillPopScope(
         onWillPop: () async {
           if (SwitchAccountVisible().isVisible()) {
             SwitchAccountVisible().setVisible(false);
@@ -111,10 +111,8 @@ return WillPopScope(
                     }
                     loading(false);
                     refreshing = false;
-                    setScaffoldBody(JidelnicekDenWidget(
+                    setScaffoldBody(jidelnicekDenWidget(
                       customCanteenData: getCanteenData(),
-                      setScaffoldBody: setScaffoldBody,
-                      setHomeWidget: widget.setHomeWidget,
                     ));
                   },
                 ),
@@ -155,132 +153,6 @@ return WillPopScope(
         ),
       );
   }
-}
-
-class PopupMenuButtonInAppbar extends StatelessWidget {
-  const PopupMenuButtonInAppbar({
-    super.key,
-    required this.widget,
-    required this.setScaffoldBody,
-    required this.loading,
-  });
-  final Function setScaffoldBody;
-  final Function loading;
-  final MainAppScreen widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(itemBuilder: (context) {
-      return [
-        PopupMenuItem(
-            value: 'about',
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('O Aplikaci'),
-                //info icon
-                Icon(Icons.info_rounded, color: Colors.black)
-              ],
-            ),
-            onTap: () async {
-              var packageInfo = await PackageInfo.fromPlatform();
-              // why: it says this is the use case we should use in the docs
-              // ignore: use_build_context_synchronously
-              if (!context.mounted) return;
-              showAboutDialog(
-                  context: context,
-                  applicationName: "Autojidelna",
-                  applicationLegalese: "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
-                  applicationVersion: packageInfo.version,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                      child: ElevatedButton(
-                        onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna"), mode: LaunchMode.externalApplication)),
-                        child: const Text('Zdrojový kód'),
-                      ),
-                    ),
-                    Builder(builder: (context) {
-                      try {
-                        if (!releaseInfo.isAndroid) {
-                          return const SizedBox(
-                            height: 0,
-                            width: 0,
-                          );
-                        }
-                      } catch (e) {
-                        return const SizedBox(
-                          height: 0,
-                          width: 0,
-                        );
-                      }
-                      return ElevatedButton(
-                        onPressed: () async {
-                          await getLatestRelease();
-                          if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍', context))
-                                .closed
-                                .then((SnackBarClosedReason reason) {
-                              snackbarshown.shown = false;
-                            });
-                            return;
-                          } else if (!releaseInfo.isAndroid) {
-                            if (!context.mounted) return;
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(
-                                    snackbarFunction('nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...', context))
-                                .closed
-                                .then((SnackBarClosedReason reason) {
-                              snackbarshown.shown = false;
-                            });
-                            return;
-                          }
-                          Future.delayed(Duration.zero, () => newUpdateDialog(context));
-                        },
-                        child: const Text('Zkontrolovat aktualizace'),
-                      );
-                    }),
-                  ]);
-            }),
-      ];
-    });
-  }
-}
-
-class LogOutButton extends StatelessWidget {
-  const LogOutButton({
-    super.key,
-    required this.setHomeWidget,
-  });
-  final Function setHomeWidget;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () {
-          logout();
-          setHomeWidget(LoginScreen(
-            setHomeWidget: setHomeWidget,
-          ));
-        },
-        child: const Text('Log out'));
-  }
-}
-
-class JidelnicekDenWidget extends StatelessWidget {
-  //define key
-  JidelnicekDenWidget({
-    super.key,
-    this.customCanteenData,
-    required this.setScaffoldBody,
-    required this.setHomeWidget,
-  });
-  final Function setHomeWidget;
-  final Function setScaffoldBody;
-
   final DateTime currentDate = DateTime(2006, 5, 23).add(Duration(days: getJidelnicekPageNum().pageNumber));
   final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(DateTime(2006, 5, 23).add(Duration(days: getJidelnicekPageNum().pageNumber)));
   final ValueNotifier<CanteenData> canteenDataListener = ValueNotifier<CanteenData>(getCanteenData());
@@ -288,7 +160,7 @@ class JidelnicekDenWidget extends StatelessWidget {
   final PageController pageviewController = PageController(initialPage: getJidelnicekPageNum().pageNumber);
   final DateTime minimalDate = DateTime(2006, 5, 23);
   final CanteenData canteenData = getCanteenData();
-  final CanteenData? customCanteenData;
+  final CanteenData? customCanteenData = null;
 
   void refreshCanteenUser() async {
     try {
@@ -332,14 +204,12 @@ class JidelnicekDenWidget extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Padding jidelnicekDenWidget({CanteenData? customCanteenData}) {
     //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
     if (customCanteenData != null) {
-      canteenDataListener.value = customCanteenData!;
+      canteenDataListener.value = customCanteenData;
     }
-    return Scaffold(
-      body: Padding(
+    return Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
         child: Column(
           children: [
@@ -409,7 +279,6 @@ class JidelnicekDenWidget extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
@@ -418,7 +287,7 @@ class JidelnicekWidget extends StatelessWidget {
   const JidelnicekWidget({super.key, required this.minimalDate, required this.widget, required this.index});
 
   final DateTime minimalDate;
-  final JidelnicekDenWidget widget;
+  final MainAppScreenState widget;
   final int index;
   @override
   Widget build(BuildContext context) {
@@ -428,7 +297,7 @@ class JidelnicekWidget extends StatelessWidget {
           future: getLunchesForDay(minimalDate.add(Duration(days: index))),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
+              Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.widget.setHomeWidget));
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -490,10 +359,8 @@ class ListJidel extends StatelessWidget {
                   }
                 }
                 refreshing = false;
-                widget.widget.setScaffoldBody(JidelnicekDenWidget(
+                widget.widget.setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
                   customCanteenData: getCanteenData(),
-                  setScaffoldBody: widget.widget.setScaffoldBody,
-                  setHomeWidget: widget.widget.setHomeWidget,
                 ));
                 
               },
@@ -527,10 +394,8 @@ class ListJidel extends StatelessWidget {
                     }
                   }
                   refreshing = false;
-                  widget.widget.setScaffoldBody(JidelnicekDenWidget(
+                  widget.widget.setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
                     customCanteenData: getCanteenData(),
-                    setScaffoldBody: widget.widget.setScaffoldBody,
-                    setHomeWidget: widget.widget.setHomeWidget,
                   ));
                   
                 },
@@ -566,10 +431,8 @@ class ListJidel extends StatelessWidget {
                   }
                 }
                 refreshing = false;
-                widget.widget.setScaffoldBody(JidelnicekDenWidget(
+                widget.widget.setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
                   customCanteenData: getCanteenData(),
-                  setScaffoldBody: widget.widget.setScaffoldBody,
-                  setHomeWidget: widget.widget.setHomeWidget,
                 ));
               },
               child: ListView.builder(
