@@ -82,7 +82,9 @@ class MainAppScreenState extends State<MainAppScreen> {
               title: const Text('Autojídelna'),
               actions: [
                 //calendar button
-                IconButton(onPressed: (){}, icon: Icon(Icons.calendar_today_rounded, color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black)),
+                IconButton(onPressed: (){
+                  changeDate(newDate: DateTime.now(), animateToPage: true);
+                }, icon: Icon(Icons.calendar_today_rounded, color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black)),
                 IconButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -181,8 +183,18 @@ class MainAppScreenState extends State<MainAppScreen> {
     }
   }
 
-  void changeDate({DateTime? newDate, int? daysChange, int? index}) {
-    if (daysChange != null) {
+  void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
+    if(newDate != null && animateToPage != null && animateToPage){
+      smartPreIndexing(newDate);
+      dateListener.value = newDate;
+      getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
+      pageviewController.animateToPage(
+        newDate.difference(minimalDate).inDays,
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.linear,
+      );
+    }
+    else if (daysChange != null) {
       newDate = dateListener.value.add(Duration(days: daysChange));
       smartPreIndexing(newDate);
       pageviewController.animateToPage(
@@ -197,7 +209,6 @@ class MainAppScreenState extends State<MainAppScreen> {
       getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
     } else if (newDate != null) {
       smartPreIndexing(newDate);
-      dateListener.value = newDate;
       dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
       pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
