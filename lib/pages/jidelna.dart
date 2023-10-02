@@ -17,8 +17,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
   PanelController panelController = PanelController();
   Widget scaffoldBody = const Placeholder();
   bool loadingIndicator = false;
-  bool isVisible = false; // Local variable to store visibility
-
   void setScaffoldBody(Widget widget) {
     setState(() {
       scaffoldBody = widget;
@@ -33,7 +31,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   void _onVisibilityChanged() async{
     if(!mounted)return;
-    isVisible = SwitchAccountVisible().isVisible();
     if (SwitchAccountVisible().isVisible()) {
       panelController.open();
     }else{
@@ -56,11 +53,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
       topLeft: Radius.circular(16.0),
       topRight: Radius.circular(16.0),
     );
-
-    return Scaffold(
-      body: WillPopScope(
+return WillPopScope(
         onWillPop: () async {
-          if (isVisible) {
+          if (SwitchAccountVisible().isVisible()) {
             SwitchAccountVisible().setVisible(false);
             return false; // Prevents the default back button behavior
           }
@@ -156,8 +151,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -545,7 +539,6 @@ class ListJidel extends StatelessWidget {
                     child: Padding(
                       //half of the screen height padding
                       padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height / 2 - 100),
-
                       child: const Text('Žádná Jídla pro tento den'),
                     )),
                 )),
