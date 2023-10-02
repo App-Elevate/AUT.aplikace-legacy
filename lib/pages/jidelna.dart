@@ -81,6 +81,8 @@ return WillPopScope(
               centerTitle: true,
               title: const Text('Autojídelna'),
               actions: [
+                //calendar button
+                IconButton(onPressed: (){}, icon: Icon(Icons.calendar_today_rounded, color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black)),
                 IconButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
