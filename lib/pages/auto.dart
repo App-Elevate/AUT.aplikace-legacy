@@ -15,7 +15,8 @@ class AutoPage extends StatelessWidget {
       body: const Placeholder(),
       drawer: MainAppDrawer(
         setHomeWidget: setHomeWidget,
-        page: NavigationDrawerItem.automatickeObjednavky),
+        page: NavigationDrawerItem.automatickeObjednavky,
+      ),
     );
   }
 }

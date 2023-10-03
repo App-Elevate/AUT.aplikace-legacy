@@ -134,64 +134,65 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             AutofillGroup(
-                child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: TextFormField(
-                    autofillHints: const [AutofillHints.username],
-                    controller: _usernameController,
-                    textInputAction: TextInputAction.next,
-                    autocorrect: false,
-                    decoration: const InputDecoration(
-                      labelText: 'Uživatelské jméno',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své uživatelské jméno';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                controller: _passwordController,
-                textInputAction: TextInputAction.done,
-                autofillHints: const [AutofillHints.password],
-                obscureText: showPasswd,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: 'Heslo',
-                  border: const OutlineInputBorder(),
-                  errorText: passwordErrorText,
-                  suffixIcon: IconButton(
-                    padding: const EdgeInsets.only(right: 10),
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      setState(() {
-                        showPasswd = !showPasswd;
-                      });
-                    },
-                    icon: Icon(
-                      showPasswd ? Icons.visibility_off : Icons.visibility,
-                      color: const Color(0xff7F7F7F),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextFormField(
+                      autofillHints: const [AutofillHints.username],
+                      controller: _usernameController,
+                      textInputAction: TextInputAction.next,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                        labelText: 'Uživatelské jméno',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Zadejte prosím své uživatelské jméno';
+                        }
+                        return null;
+                      },
                     ),
                   ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své heslo';
-                  }
-                  return null;
-                },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      textInputAction: TextInputAction.done,
+                      autofillHints: const [AutofillHints.password],
+                      obscureText: showPasswd,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        labelText: 'Heslo',
+                        border: const OutlineInputBorder(),
+                        errorText: passwordErrorText,
+                        suffixIcon: IconButton(
+                          padding: const EdgeInsets.only(right: 10),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {
+                            setState(() {
+                              showPasswd = !showPasswd;
+                            });
+                          },
+                          icon: Icon(
+                            showPasswd ? Icons.visibility_off : Icons.visibility,
+                            color: const Color(0xff7F7F7F),
+                          ),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Zadejte prosím své heslo';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-              ],
-            )),
             LoginSubmitButton(
               formKey: _formKey,
               usernameController: _usernameController,
@@ -280,12 +281,13 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
                 return const SizedBox(
                   height: 60,
                   child: Center(
-                      child: Text(
-                    'Přihlásit se',
-                    style: TextStyle(
-                      fontSize: 16,
+                    child: Text(
+                      'Přihlásit se',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
-                  )),
+                  ),
                 );
               }
             },
@@ -312,7 +314,8 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         url = 'https://$url';
       }
       try {
-        Canteen login = await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
+        Canteen login =
+            await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
         if (login.prihlasen) {
           TextInput.finishAutofillContext();
 
@@ -323,12 +326,10 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
           saveLoginToSecureStorage(loginData);
 
           saveData('url', widget.urlController.text);
-          if(mounted && Navigator.canPop(context)){
+          if (mounted && Navigator.canPop(context)) {
             Navigator.pop(context);
             setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
-            
-          }
-          else{
+          } else {
             setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
           }
         } else {

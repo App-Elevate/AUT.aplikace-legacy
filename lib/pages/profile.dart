@@ -47,14 +47,11 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: TextButton(
         onPressed: () async {
-                logout(currentAccount: true);
-                Navigator.of(context).pop(
-                );
-                await Future.delayed(const Duration(milliseconds: 300));
-                setHomeWidget(
-                  LoggingInWidget(setHomeWidget: setHomeWidget)
-                );
-              },
+          logout(currentAccount: true);
+          Navigator.of(context).pop();
+          await Future.delayed(const Duration(milliseconds: 300));
+          setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+        },
         child: Row(
           children: [
             Padding(
@@ -67,7 +64,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.logout, color:MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232)),
+            Icon(Icons.logout, color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232)),
           ],
         ),
       ),
@@ -124,9 +121,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     Text(
                       'Kredit: ${getCanteenData().uzivatel.kredit.toInt()} kč',
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
@@ -148,9 +143,7 @@ class ProfilePage extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Osobní Údaje',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           Builder(
@@ -186,9 +179,7 @@ class ProfilePage extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Platební Údaje',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           Builder(
@@ -234,9 +225,7 @@ class ProfilePage extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Autojídelna',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           FutureBuilder(

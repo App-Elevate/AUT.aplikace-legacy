@@ -23,10 +23,14 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   while (status.isDenied) {
     if (context.mounted && !neededInstallPermissionPageShown) {
       neededInstallPermissionPageShown = true;
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        neededInstallPermissionPageContext = context;
-        return const NeededInstallPermissionPage();
-      }));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            neededInstallPermissionPageContext = context;
+            return const NeededInstallPermissionPage();
+          },
+        ),
+      );
     }
     await Future.delayed(const Duration(seconds: 1));
     status = await Permission.requestInstallPackages.status;
@@ -38,20 +42,30 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   var tempDownloadDir = await getTemporaryDirectory();
   String savePath = "${tempDownloadDir.path}/${fileUrl.substring(fileUrl.lastIndexOf("/") + 1)}";
   try {
-    await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
-      final value = count / total;
-      if (valueNotifier.value != value) {
-        valueNotifier.value = value;
-      }
-    });
+    await Dio().download(
+      fileUrl,
+      savePath,
+      onReceiveProgress: (count, total) {
+        final value = count / total;
+        if (valueNotifier.value != value) {
+          valueNotifier.value = value;
+        }
+      },
+    );
   } catch (e) {
     valueNotifier.value = -2;
     return;
   }
   final value = await PackageInfo.fromPlatform();
 
-  if(analyticsEnabledGlobally && analytics != null){
-    analytics!.logEvent(name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+  if (analyticsEnabledGlobally && analytics != null) {
+    analytics!.logEvent(
+      name: 'updateDownloaded',
+      parameters: {
+        'oldVersion': value.version,
+        'newVersion': releaseInfo.currentlyLatestVersion.toString(),
+      },
+    );
   }
   await InstallPlugin.install(savePath);
 }

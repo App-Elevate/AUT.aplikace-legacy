@@ -61,7 +61,7 @@ class MainAccountDrawer extends StatelessWidget {
                               Icon(
                                 Icons.expand_more,
                                 color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                              )
+                              ),
                             ],
                           ),
                         ),
