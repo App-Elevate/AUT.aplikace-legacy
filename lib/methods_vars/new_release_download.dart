@@ -10,15 +10,6 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   // Find the ScaffoldMessenger in the widget tree
   // and use it to show a SnackBar.
   ValueNotifier valueNotifier = ValueNotifier(-1);
-  if (context.mounted && !snackbarshown.shown) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(
-            dynamicSnackbarFunction('aktualizace', context, valueNotifier))
-        .closed
-        .then((SnackBarClosedReason reason) {
-      snackbarshown.shown = false;
-    });
-  }
   bool neededInstallPermissionPageShown = false;
   BuildContext? neededInstallPermissionPageContext;
   var status = await Permission.requestInstallPackages.status;
@@ -32,6 +23,15 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
     }
     await Future.delayed(const Duration(seconds: 1));
     status = await Permission.requestInstallPackages.status;
+  }
+  if (context.mounted && !snackbarshown.shown) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+            dynamicSnackbarFunction('aktualizace', context, valueNotifier))
+        .closed
+        .then((SnackBarClosedReason reason) {
+      snackbarshown.shown = false;
+    });
   }
   if (neededInstallPermissionPageShown &&
       neededInstallPermissionPageContext!.mounted) {
