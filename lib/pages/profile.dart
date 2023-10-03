@@ -107,8 +107,9 @@ class ProfilePage extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 5.0),
                       child: Builder(
                         builder: (context) {
-                          if (canteenData.uzivatel.uzivatelskeJmeno != null) {
-                            return Text(canteenData.uzivatel.uzivatelskeJmeno!);
+                          if (canteenData!.uzivatel.uzivatelskeJmeno != null) {
+                            return Text(
+                                canteenData!.uzivatel.uzivatelskeJmeno!);
                           } else {
                             return FutureBuilder(
                               future: getLoginDataFromSecureStorage(),
@@ -135,7 +136,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Kredit: ${canteenData.uzivatel.kredit.toInt()} kč',
+                      'Kredit: ${canteenData!.uzivatel.kredit.toInt()} kč',
                       style: const TextStyle(
                         fontSize: 20,
                       ),
@@ -167,10 +168,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData.uzivatel.jmeno != null ||
-                  canteenData.uzivatel.prijmeni != null) {
+              if (canteenData!.uzivatel.jmeno != null ||
+                  canteenData!.uzivatel.prijmeni != null) {
                 return Text(
-                    'Jméno: ${canteenData.uzivatel.jmeno ?? ''} ${canteenData.uzivatel.prijmeni}');
+                    'Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -178,8 +179,8 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData.uzivatel.kategorie != null) {
-                return Text('Kategorie: ${canteenData.uzivatel.kategorie!}');
+              if (canteenData!.uzivatel.kategorie != null) {
+                return Text('Kategorie: ${canteenData!.uzivatel.kategorie!}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -207,10 +208,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData.uzivatel.ucetProPlatby != null &&
-                  canteenData.uzivatel.ucetProPlatby != '') {
+              if (canteenData!.uzivatel.ucetProPlatby != null &&
+                  canteenData!.uzivatel.ucetProPlatby != '') {
                 return Text(
-                    'Číslo účtu pro platby: ${canteenData.uzivatel.ucetProPlatby}');
+                    'Číslo účtu pro platby: ${canteenData!.uzivatel.ucetProPlatby}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -218,10 +219,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData.uzivatel.specSymbol != null &&
-                  canteenData.uzivatel.specSymbol != '') {
+              if (canteenData!.uzivatel.specSymbol != null &&
+                  canteenData!.uzivatel.specSymbol != '') {
                 return Text(
-                    'Specifický Symbol: ${canteenData.uzivatel.specSymbol}');
+                    'Specifický Symbol: ${canteenData!.uzivatel.specSymbol}');
               } else {
                 //return nothing
                 return const SizedBox(width: 0, height: 0);
@@ -230,10 +231,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData.uzivatel.varSymbol != null &&
-                  canteenData.uzivatel.varSymbol != '') {
+              if (canteenData!.uzivatel.varSymbol != null &&
+                  canteenData!.uzivatel.varSymbol != '') {
                 return Text(
-                    'Variabilní Symbol: ${canteenData.uzivatel.varSymbol}');
+                    'Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }

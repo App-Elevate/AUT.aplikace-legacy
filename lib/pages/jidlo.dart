@@ -15,7 +15,7 @@ class JidloDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Jidlo jidlo = canteenData.jidelnicky[datumJidla]!.jidla[indexDne];
+    Jidlo jidlo = canteenData!.jidelnicky[datumJidla]!.jidla[indexDne];
     ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
     List<Widget> jidloWidgets = [];
     //Soup

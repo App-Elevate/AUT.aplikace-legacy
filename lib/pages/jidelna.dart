@@ -181,14 +181,14 @@ class MainAppScreenState extends State<MainAppScreen> {
   void refreshCanteenUser() async {
     try {
       final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
-      canteenData.uzivatel = uzivatel;
-      canteenDataListener.value = canteenData.copyWith();
+      canteenData!.uzivatel = uzivatel;
+      canteenDataListener.value = canteenData!.copyWith();
     } catch (e) {
       try {
         await Future.delayed(const Duration(milliseconds: 300));
         final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
-        canteenData.uzivatel = uzivatel;
-        canteenDataListener.value = canteenData.copyWith();
+        canteenData!.uzivatel = uzivatel;
+        canteenDataListener.value = canteenData!.copyWith();
       } catch (e) {
         //if it failed twice the server is either down or the user is spamming it so we don't want to spam it more
       }
@@ -803,7 +803,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       for (int i = 0;
                           i < 20 &&
-                              canteenData.jidelnicky[jidelnicek.den] == null;
+                              canteenData!.jidelnicky[jidelnicek.den] == null;
                           i++) {
                         if (i >= 19) {
                           throw Exception(
@@ -811,7 +811,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
-                      canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
+                      canteenData!.jidelnicky[jidelnicek.den]!.jidla[index] =
                           await canteen.objednat(jidlo!);
                       pridatStatistiku(TypStatistiky.objednavka);
                     } catch (e) {
@@ -825,7 +825,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     String varianta = jidlo!.varianta;
                     DateTime den = jidlo!.den;
                     bool nalezenoJidloNaBurze = false;
-                    for (var jidloNaBurze in canteenData.jidlaNaBurze) {
+                    for (var jidloNaBurze in canteenData!.jidlaNaBurze) {
                       if (jidloNaBurze.den == den &&
                           jidloNaBurze.varianta == varianta) {
                         try {
@@ -861,7 +861,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   break;
                 case StavJidla.nedostupne:
                   {
-                    if (canteenData.uzivatel.kredit < jidlo!.cena!) {
+                    if (canteenData!.uzivatel.kredit < jidlo!.cena!) {
                       snackBarMessage(
                           'Oběd nelze objednat - Nedostatečný kredit');
                       break;
@@ -875,7 +875,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       for (int i = 0;
                           i < 20 &&
-                              canteenData.jidelnicky[jidelnicek.den] == null;
+                              canteenData!.jidelnicky[jidelnicek.den] == null;
                           i++) {
                         if (i >= 19) {
                           throw Exception(
@@ -883,7 +883,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
-                      canteenData.jidelnicky[jidelnicek.den]!.jidla[index] =
+                      canteenData!.jidelnicky[jidelnicek.den]!.jidla[index] =
                           await canteen.objednat(jidlo!);
                     } catch (e) {
                       snackBarMessage(

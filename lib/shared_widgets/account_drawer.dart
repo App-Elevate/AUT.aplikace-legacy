@@ -11,7 +11,7 @@ class MainAccountDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String username = canteenData.username;
+    final String username = canteenData!.username;
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
@@ -107,7 +107,7 @@ class MainAccountDrawer extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${canteenData.uzivatel.kredit.toInt()}',
+                                        '${canteenData!.uzivatel.kredit.toInt()}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                         ),

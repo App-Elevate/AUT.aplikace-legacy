@@ -2,14 +2,14 @@ import 'package:autojidelna/main.dart';
 import '../every_import.dart';
 
 /// initCanteen has to be called before using this variable
-late Canteen canteenInstance;
+Canteen? canteenInstance;
 
 /// initCanteen has to be called before using this variable
-late CanteenData canteenData;
+CanteenData? canteenData;
 
 ///function to getCanteenData so that we can get it in ValueNotifier constructor
 CanteenData getCanteenData() {
-  return canteenData;
+  return canteenData!;
 }
 
 /// variable to stop caching lunches when refreshing
@@ -51,8 +51,8 @@ Future<Canteen> initCanteen(
     url = 'https://$url';
   }
 
-  if (canteenInstance.prihlasen && !hasToBeNew) {
-    return canteenInstance;
+  if (canteenInstance != null && canteenInstance!.prihlasen && !hasToBeNew) {
+    return canteenInstance!;
   } else {
     canteenInstance = Canteen(url);
   }
@@ -71,19 +71,19 @@ Future<Canteen> initCanteen(
   password ??= loginData.users[loginData.currentlyLoggedInId!].password;
 
   try {
-    await canteenInstance.login(username, password);
-    if (!canteenInstance.prihlasen) {
+    await canteenInstance!.login(username, password);
+    if (!canteenInstance!.prihlasen) {
       await Future.delayed(
           const Duration(seconds: 1)); //timeout to let the server live
-      if (!canteenInstance.prihlasen) {
-        await canteenInstance.login(username, password); //second attempt
+      if (!canteenInstance!.prihlasen) {
+        await canteenInstance!.login(username, password); //second attempt
       }
-      if (!canteenInstance.prihlasen &&
+      if (!canteenInstance!.prihlasen &&
           analyticsEnabledGlobally &&
           analytics != null) {
         analytics!.logEvent(name: 'incorrectly_typed_credentials');
       }
-      if (!canteenInstance.prihlasen) {
+      if (!canteenInstance!.prihlasen) {
         return Future.error('login failed');
       }
     }
@@ -121,15 +121,15 @@ Future<Canteen> initCanteen(
   canteenData = CanteenData(
     username: username,
     url: url,
-    uzivatel: await canteenInstance.ziskejUzivatele(),
-    jidlaNaBurze: await canteenInstance.ziskatBurzu(),
+    uzivatel: await canteenInstance!.ziskejUzivatele(),
+    jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
     jidelnicky: jidelnicky,
     pocetJidel: {
       currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length
     },
   );
 
-  return canteenInstance;
+  return canteenInstance!;
 }
 
 ///přidá +1 pro counter statistiky a pokud je zapnutý analytics tak ji pošle do firebase
@@ -304,7 +304,7 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
 ///může vyhodit chybu 'no internet'
 Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
   try {
-    Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: den);
+    Jidelnicek jidelnicek = await canteenInstance!.jidelnicekDen(den: den);
 
     /// fix for api sometimes giving us less lunches that it should
 
@@ -312,7 +312,7 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     const int numberOfMaxLunches = 3;
     if (jidelnicek.jidla.length < numberOfMaxLunches) {
       Jidelnicek checkjidelnicek =
-          await canteenInstance.jidelnicekDen(den: den);
+          await canteenInstance!.jidelnicekDen(den: den);
       return checkjidelnicek.jidla.length > jidelnicek.jidla.length
           ? checkjidelnicek
           : jidelnicek;
@@ -364,10 +364,10 @@ Future<void> preIndexLunches(
         return;
       }
       if (toTheFuture) {
-        canteenData.jidelnicky[start.add(Duration(days: i))] =
+        canteenData!.jidelnicky[start.add(Duration(days: i))] =
             await getLunchesForDay(start.add(Duration(days: i)));
       } else {
-        canteenData.jidelnicky[start.subtract(Duration(days: i))] =
+        canteenData!.jidelnicky[start.subtract(Duration(days: i))] =
             await getLunchesForDay(start.subtract(Duration(days: i)));
       }
     } catch (e) {
@@ -385,40 +385,40 @@ Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
   late Jidelnicek jidelnicek;
 
   //if we already have lunches for this day and we don't require new ones, return them
-  if (canteenData.jidelnicky
+  if (canteenData!.jidelnicky
           .containsKey(DateTime(date.year, date.month, date.day)) &&
       !requireNew) {
     jidelnicek =
-        canteenData.jidelnicky[DateTime(date.year, date.month, date.day)]!;
+        canteenData!.jidelnicky[DateTime(date.year, date.month, date.day)]!;
   } else {
     //making sure that we don't have multiple requests for the same day
-    while (canteenData.currentlyLoading.contains(date)) {
+    while (canteenData!.currentlyLoading.contains(date)) {
       await Future.delayed(const Duration(milliseconds: 100));
     }
     try {
       //doing the request
-      canteenData.currentlyLoading.add(date);
+      canteenData!.currentlyLoading.add(date);
       jidelnicek = await ziskatJidelnicekDen(date);
-      canteenData.currentlyLoading.remove(date);
+      canteenData!.currentlyLoading.remove(date);
     } catch (e) {
-      canteenData.currentlyLoading.remove(date);
+      canteenData!.currentlyLoading.remove(date);
       return Future.error('no internet');
     }
   }
 
   //addition to fix api sometimes giving us less lunches that it should. This is a second layer for the fix
-  if (canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] !=
+  if (canteenData!.pocetJidel[DateTime(date.year, date.month, date.day)] !=
           null &&
-      canteenData.pocetJidel[DateTime(date.year, date.month, date.day)]! >
+      canteenData!.pocetJidel[DateTime(date.year, date.month, date.day)]! >
           jidelnicek.jidla.length) {
     return getLunchesForDay(date, requireNew: requireNew);
   }
 
   //saving to cache
-  canteenData.jidelnicky[DateTime(date.year, date.month, date.day)] =
+  canteenData!.jidelnicky[DateTime(date.year, date.month, date.day)] =
       jidelnicek;
 
-  canteenData.pocetJidel[DateTime(date.year, date.month, date.day)] =
+  canteenData!.pocetJidel[DateTime(date.year, date.month, date.day)] =
       jidelnicek.jidla.length;
 
   return jidelnicek;
@@ -427,7 +427,7 @@ Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
 ///refreshes lunches for the [currentDate]
 ///doesn't get a new token hovewer gets the lunches with supporting the api check
 Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
-  canteenData.jidelnicky = {};
+  canteenData!.jidelnicky = {};
   smartPreIndexing(currentDate);
   try {
     return await getLunchesForDay(currentDate);
@@ -440,7 +440,7 @@ Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
 bool jeJidloNaBurze(Jidlo jidlo) {
   String varianta = jidlo.varianta;
   DateTime den = jidlo.den;
-  for (var jidloNaBurze in canteenData.jidlaNaBurze) {
+  for (var jidloNaBurze in canteenData!.jidlaNaBurze) {
     if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
       return true;
     }
