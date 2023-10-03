@@ -82,11 +82,14 @@ class MainAppScreenState extends State<MainAppScreen> {
             actions: [
               //calendar button
               IconButton(
-                  onPressed: () {
-                    changeDate(newDate: DateTime.now(), animateToPage: true);
-                  },
-                  icon: Icon(Icons.calendar_today_rounded,
-                      color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black)),
+                onPressed: () {
+                  changeDate(newDate: DateTime.now(), animateToPage: true);
+                },
+                icon: const Icon(
+                  Icons.calendar_today_rounded,
+                  color: Colors.white,
+                ),
+              ),
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -258,19 +261,22 @@ class MainAppScreenState extends State<MainAppScreen> {
                       },
                       child: SizedBox(
                         //relative to the width of the viewport
-                        width: MediaQuery.of(context).size.width * 0.4,
+                        width: MediaQuery.of(context).size.width * 0.45,
                         child: Center(
                           child: Text(
-                              style: const TextStyle(color: Colors.purple),
-                              "${currentDate.day}. ${currentDate.month}. ${currentDate.year} - $dayOfWeek"),
+                            style: const TextStyle(color: Colors.purple),
+                            "${currentDate.day}. ${currentDate.month}. ${currentDate.year} - $dayOfWeek",
+                          ),
                         ),
                       ),
                     ),
                     IconButton(
-                        onPressed: () {
-                          changeDate(daysChange: 1);
-                        },
-                        icon: const Icon(Icons.arrow_right))
+                      splashRadius: 0.1,
+                      onPressed: () {
+                        changeDate(daysChange: 1);
+                      },
+                      icon: const Icon(Icons.arrow_right),
+                    )
                   ],
                 ),
               );
