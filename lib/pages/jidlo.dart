@@ -6,14 +6,12 @@ class JidloDetail extends StatelessWidget {
     required this.datumJidla,
     required this.indexJidlaVeDni,
     required this.indexDne,
-    required this.minimalDate,
     required this.refreshButtons,
     required this.jidlaListener,
   });
   final DateTime datumJidla;
   final int indexDne;
-  final Function refreshButtons;
-  final DateTime minimalDate;
+  final Function(BuildContext context) refreshButtons;
   final ValueNotifier<dynamic> jidlaListener;
 
   /// index jídla v jídelníčku dne (0 - první jídlo dne datumJidla)
@@ -182,7 +180,6 @@ class JidloDetail extends StatelessWidget {
                     refreshButtons: refreshButtons,
                     indexJidlaVeDni: indexJidlaVeDni,
                     indexDne: indexDne,
-                    minimalDate: minimalDate,
                     jidlaListener: jidlaListener),
               ),
             );

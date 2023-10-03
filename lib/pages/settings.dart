@@ -1,15 +1,5 @@
-/*zde jsou nastavení:
-přeskočit víkendy při browsdání (při mačkání tlačítek)
-notifikace:
-dnešní jídlo (v kolik hodin zaslat)
-dochází kredit
-burzaCatcher notifikace
-nemáte objednáno na příští týden
-autoObjednávky případné zeptání se na objednání
- */
-
 //TODO: skip weekends while browsing
-//TODO: Notifications: todays food, credit is low, burzacatcher, didnt order for next week, autoBojednavky,
+//TODO: Notifications: todays food, credit is low, didnt order for next week
 
 import 'package:autojidelna/main.dart';
 import 'package:flutter/gestures.dart';

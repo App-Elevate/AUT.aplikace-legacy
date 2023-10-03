@@ -3,11 +3,20 @@ import 'package:flutter/cupertino.dart';
 import './../every_import.dart';
 
 class MainAppScreen extends StatefulWidget {
-  const MainAppScreen({
+  MainAppScreen({
     super.key,
     required this.setHomeWidget,
   });
   final Function setHomeWidget;
+
+  ///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
+  final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(
+      DateTime(2006, 5, 23)
+          .add(Duration(days: getJidelnicekPageNum().pageNumber)));
+
+  ///page controller for the PageView which tells which date is currently selected
+  final PageController pageviewController =
+      PageController(initialPage: getJidelnicekPageNum().pageNumber);
 
   @override
   State<MainAppScreen> createState() => MainAppScreenState();
@@ -21,16 +30,17 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   /// changes the scaffold body in the [MainAppScreenState]
   void setScaffoldBody(Widget widget) {
+    if (!mounted) return;
     setState(() {
       scaffoldBody = widget;
     });
   }
 
-  ///
-  Future<void> loading(bool loading) async {
+  ///reloads the page
+  Future<void> reload() async {
     if (refreshing) return;
     setState(() {
-      loadingIndicator = loading;
+      loadingIndicator = true;
     });
     refreshing = true;
     try {
@@ -50,12 +60,10 @@ class MainAppScreenState extends State<MainAppScreen> {
       }
     }
     setState(() {
-      loadingIndicator = loading;
+      loadingIndicator = false;
     });
     refreshing = false;
-    setScaffoldBody(jidelnicekDenWidget(
-      customCanteenData: canteenData,
-    ));
+    setScaffoldBody(jidelnicekWidget());
   }
 
   ///callback for SlidingUpPanel
@@ -75,7 +83,7 @@ class MainAppScreenState extends State<MainAppScreen> {
     SwitchAccountVisible().setVisibilityCallback(() {
       _onVisibilityChanged();
     });
-    scaffoldBody = jidelnicekDenWidget();
+    scaffoldBody = jidelnicekWidget();
     BorderRadiusGeometry radius = const BorderRadius.only(
       topLeft: Radius.circular(16.0),
       topRight: Radius.circular(16.0),
@@ -126,7 +134,9 @@ class MainAppScreenState extends State<MainAppScreen> {
                   color: Colors.white,
                   size: 30,
                 ),
-                onPressed: () async {},
+                onPressed: () {
+                  reload();
+                },
               ),
             ],
           ),
@@ -166,33 +176,27 @@ class MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
-  final DateTime currentDate = DateTime(2006, 5, 23)
-      .add(Duration(days: getJidelnicekPageNum().pageNumber));
-  final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(
-      DateTime(2006, 5, 23)
-          .add(Duration(days: getJidelnicekPageNum().pageNumber)));
-
-  final PageController pageviewController =
-      PageController(initialPage: getJidelnicekPageNum().pageNumber);
-  final DateTime minimalDate = DateTime(2006, 5, 23);
-  final CanteenData? customCanteenData = null;
-
+  ///changes the date of the Jidelnicek
+  ///newDate - just sets the new date
+  ///newDate and animateToPage - animates to the new page
+  ///daysChange - animates the change of date by the number of days
+  ///index - changes the date by the index of the page
   void changeDate(
       {DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
     if (newDate != null && animateToPage != null && animateToPage) {
       smartPreIndexing(newDate);
-      dateListener.value = newDate;
+      widget.dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
-      pageviewController.animateToPage(
+      widget.pageviewController.animateToPage(
         newDate.difference(minimalDate).inDays,
         duration: const Duration(milliseconds: 150),
         curve: Curves.linear,
       );
     } else if (daysChange != null) {
-      newDate = dateListener.value.add(Duration(days: daysChange));
+      newDate = widget.dateListener.value.add(Duration(days: daysChange));
       smartPreIndexing(newDate);
-      pageviewController.animateToPage(
+      widget.pageviewController.animateToPage(
         newDate.difference(minimalDate).inDays,
         duration: const Duration(milliseconds: 150),
         curve: Curves.linear,
@@ -200,26 +204,28 @@ class MainAppScreenState extends State<MainAppScreen> {
     } else if (index != null) {
       newDate = minimalDate.add(Duration(days: index));
       smartPreIndexing(newDate);
-      dateListener.value = newDate;
+      widget.dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
     } else if (newDate != null) {
       smartPreIndexing(newDate);
-      dateListener.value = newDate;
+      widget.dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
-      pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
+      widget.pageviewController
+          .jumpToPage(newDate.difference(minimalDate).inDays);
     }
   }
 
-  Padding jidelnicekDenWidget({CanteenData? customCanteenData}) {
+  ///widget for the Jidelnicek including the date picker with all the lunches
+  Padding jidelnicekWidget() {
     //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
       child: Column(
         children: [
           ValueListenableBuilder(
-              valueListenable: dateListener,
+              valueListenable: widget.dateListener,
               builder: (ctx, value, child) {
                 DateTime currentDate = value;
                 String dayOfWeek = ziskatDenZData(currentDate.weekday);
@@ -268,14 +274,14 @@ class MainAppScreenState extends State<MainAppScreen> {
               }),
           Expanded(
             child: PageView.builder(
-              controller: pageviewController,
+              controller: widget.pageviewController,
               onPageChanged: (value) {
                 changeDate(index: value);
                 getJidelnicekPageNum().pageNumber = value;
               },
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return jidelnicekWidget(
+                return jidelnicekDenWidget(
                   index,
                 );
               },
@@ -286,7 +292,8 @@ class MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
-  SizedBox jidelnicekWidget(int index) {
+  ///widget for the Jidelnicek for the day - mainly the getting lunches logic
+  SizedBox jidelnicekDenWidget(int index) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: FutureBuilder(
@@ -300,15 +307,11 @@ class MainAppScreenState extends State<MainAppScreen> {
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return ListJidel(
-                  minimalDate: minimalDate,
-                  indexDne: index,
-                  errorWidget: Text(snapshot.error.toString()));
             }
             Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
             return ListJidel(
-              minimalDate: minimalDate,
+              setHomeWidget: widget.setHomeWidget,
+              setScaffoldBody: setScaffoldBody,
               indexDne: index,
               jidelnicek: jidelnicek,
             );
@@ -318,98 +321,72 @@ class MainAppScreenState extends State<MainAppScreen> {
 }
 
 class ListJidel extends StatelessWidget {
-  final Jidelnicek? jidelnicek;
-  final Widget? errorWidget;
-  final DateTime minimalDate;
+  final Jidelnicek jidelnicek;
   final int indexDne;
-  final Function setScaffoldBody = MainAppScreenState().setScaffoldBody;
+  final Function setHomeWidget;
+  final Function(Widget widget) setScaffoldBody;
   final ValueNotifier<List<Jidlo>> jidlaListener =
       ValueNotifier<List<Jidlo>>([]);
-  ListJidel({
-    required this.indexDne,
-    this.jidelnicek,
-    super.key,
-    this.errorWidget,
-    required this.minimalDate,
-  });
-  void refreshButtons() async {
+  ListJidel(
+      {required this.indexDne,
+      required this.setHomeWidget,
+      required this.jidelnicek,
+      super.key,
+      required this.setScaffoldBody});
+  void refreshButtons(BuildContext context) async {
     DateTime currentDate = minimalDate.add(Duration(days: indexDne));
-    jidlaListener.value =
-        (await refreshLunches(currentDate)).jidla; //error handling please
+    try {
+      jidlaListener.value = (await refreshLunches(currentDate)).jidla;
+    } catch (e) {
+      Future.delayed(
+          Duration.zero,
+          () => failedLoginDialog(
+              context, 'Nelze Připojit k internetu', setHomeWidget));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (jidelnicek == null) {
-      return const Center(child: CircularProgressIndicator());
+    jidlaListener.value = jidelnicek.jidla;
+    if (jidlaListener.value.length < numberOfMaxLunches) {
+      ziskatJidelnicekDen(minimalDate.add(Duration(days: indexDne)))
+          .then((value) {
+        if (jidlaListener.value.length < numberOfMaxLunches) {
+          jidlaListener.value = value.jidla;
+        }
+      });
     }
-    jidlaListener.value = jidelnicek!.jidla;
     return Column(
       children: [
         Builder(builder: (_) {
-          if (jidelnicek == null) {
-            return RefreshIndicator(
-                onRefresh: () async {
-                  if (refreshing) return;
-                  refreshing = true;
-                  try {
-                    await initCanteen(hasToBeNew: true);
-                  } catch (e) {
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    if (context.mounted && !snackbarshown.shown) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(snackbarFunction(
-                              'Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',
-                              context))
-                          .closed
-                          .then((SnackBarClosedReason reason) {
-                        snackbarshown.shown = false;
-                      });
-                    }
-                  }
-                  refreshing = false;
-                  setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
-                    customCanteenData: canteenData,
-                  ));
-                },
-                child: SizedBox(
-                    height: double.infinity,
-                    child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical:
-                                  MediaQuery.of(context).size.height / 2 - 100),
-                          child: errorWidget!,
-                        ))));
+          Future<void> softRefresh() async {
+            if (refreshing) return;
+            refreshing = true;
+            try {
+              await initCanteen(hasToBeNew: true);
+            } catch (e) {
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              if (context.mounted && !snackbarshown.shown) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(snackbarFunction(
+                        'Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',
+                        context))
+                    .closed
+                    .then((SnackBarClosedReason reason) {
+                  snackbarshown.shown = false;
+                });
+              }
+            }
+            refreshing = false;
+            setScaffoldBody(MainAppScreenState().jidelnicekWidget());
           }
-          if (jidelnicek!.jidla.isEmpty) {
+
+          if (jidelnicek.jidla.isEmpty) {
             return Expanded(
               child: RefreshIndicator(
                   onRefresh: () async {
-                    if (refreshing) return;
-                    refreshing = true;
-                    try {
-                      await initCanteen(hasToBeNew: true);
-                    } catch (e) {
-                      // Find the ScaffoldMessenger in the widget tree
-                      // and use it to show a SnackBar.
-                      if (context.mounted && !snackbarshown.shown) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(snackbarFunction(
-                                'Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',
-                                context))
-                            .closed
-                            .then((SnackBarClosedReason reason) {
-                          snackbarshown.shown = false;
-                        });
-                      }
-                    }
-                    refreshing = false;
-                    setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
-                      customCanteenData: canteenData,
-                    ));
+                    softRefresh();
                   },
                   child: SizedBox(
                     height: double.infinity,
@@ -428,31 +405,10 @@ class ListJidel extends StatelessWidget {
           return Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                if (refreshing) return;
-                refreshing = true;
-                try {
-                  await initCanteen(hasToBeNew: true);
-                } catch (e) {
-                  // Find the ScaffoldMessenger in the widget tree
-                  // and use it to show a SnackBar.
-                  if (context.mounted && !snackbarshown.shown) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(snackbarFunction(
-                            'Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',
-                            context))
-                        .closed
-                        .then((SnackBarClosedReason reason) {
-                      snackbarshown.shown = false;
-                    });
-                  }
-                }
-                refreshing = false;
-                setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
-                  customCanteenData: canteenData,
-                ));
+                softRefresh();
               },
               child: ListView.builder(
-                itemCount: jidelnicek!.jidla.length,
+                itemCount: jidelnicek.jidla.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
@@ -461,7 +417,6 @@ class ListJidel extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => JidloDetail(
                             indexDne: indexDne,
-                            minimalDate: minimalDate,
                             refreshButtons: refreshButtons,
                             jidlaListener: jidlaListener,
                             datumJidla:
@@ -502,8 +457,8 @@ class ListJidel extends StatelessWidget {
                                         0.5, 4, 0.5, 0),
                                     child: Builder(builder: (_) {
                                       String jidlo = parseJidlo(
-                                              jidelnicek!.jidla[index].nazev,
-                                              alergeny: jidelnicek!
+                                              jidelnicek.jidla[index].nazev,
+                                              alergeny: jidelnicek
                                                   .jidla[index].alergeny
                                                   .join(', '))
                                           .zkracenyNazevJidla;
@@ -522,7 +477,6 @@ class ListJidel extends StatelessWidget {
                                       indexDne: indexDne,
                                       refreshButtons: refreshButtons,
                                       jidlaListener: jidlaListener,
-                                      minimalDate: minimalDate,
                                       indexJidlaVeDni: index,
                                     ),
                                   ),
@@ -543,18 +497,17 @@ class ListJidel extends StatelessWidget {
 }
 
 class ObjednatJidloTlacitko extends StatefulWidget {
-  const ObjednatJidloTlacitko(
-      {super.key,
-      required this.indexJidlaVeDni,
-      required this.jidlaListener,
-      required this.refreshButtons,
-      required this.indexDne,
-      required this.minimalDate});
+  const ObjednatJidloTlacitko({
+    super.key,
+    required this.indexJidlaVeDni,
+    required this.jidlaListener,
+    required this.refreshButtons,
+    required this.indexDne,
+  });
   final ValueNotifier jidlaListener;
-  final DateTime minimalDate;
   final int indexDne;
   final int indexJidlaVeDni;
-  final Function refreshButtons;
+  final Function(BuildContext context) refreshButtons;
 
   @override
   State<ObjednatJidloTlacitko> createState() => _ObjednatJidloTlacitkoState();
@@ -567,7 +520,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   void cannotBeOrderedFix() async {
     try {
       if ((await getLunchesForDay(
-                  widget.minimalDate.add(Duration(days: widget.indexDne)),
+                  minimalDate.add(Duration(days: widget.indexDne)),
                   requireNew: true))
               .jidla[widget.indexJidlaVeDni]
               .lzeObjednat !=
@@ -577,7 +530,8 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
       }
     } catch (e) {
       icon = null;
-      widget.refreshButtons();
+      if (!context.mounted) return;
+      widget.refreshButtons(context);
     }
   }
 
@@ -587,7 +541,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
     late StavJidla stavJidla;
     final int index = widget.indexJidlaVeDni;
     final DateTime datumJidla =
-        widget.minimalDate.add(Duration(days: widget.indexDne));
+        minimalDate.add(Duration(days: widget.indexDne));
     String obedText;
     return ValueListenableBuilder(
         valueListenable: widget.jidlaListener,
@@ -819,7 +773,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           i++) {
                         if (i >= 19) {
                           throw Exception(
-                              'Nepovedlo načíst jídelníček, aktualizujte stránku');
+                              'Nepovedlo se načíst jídelníček, aktualizujte stránku');
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
@@ -842,7 +796,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   }
                   break;
               }
-              widget.refreshButtons();
+              if (context.mounted) {
+                widget.refreshButtons(context);
+              }
               ordering.ordering = false;
               if (context.mounted) {
                 setState(() {

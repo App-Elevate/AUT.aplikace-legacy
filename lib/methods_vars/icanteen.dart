@@ -12,6 +12,9 @@ CanteenData getCanteenData() {
   return canteenData!;
 }
 
+///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
+const int numberOfMaxLunches = 3;
+
 /// variable to stop caching lunches when refreshing
 bool refreshing = false;
 
@@ -128,6 +131,7 @@ Future<Canteen> initCanteen(
       currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length
     },
   );
+  smartPreIndexing(currentDateWithoutTime);
 
   return canteenInstance!;
 }
@@ -309,14 +313,6 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     /// fix for api sometimes giving us less lunches that it should
 
     /// this variable is used as a maximum number of Lunches that it should check for this error. If you change it it only lowers/highers the effectiveness of this fix with a tradeoff in performance
-    const int numberOfMaxLunches = 3;
-    if (jidelnicek.jidla.length < numberOfMaxLunches) {
-      Jidelnicek checkjidelnicek =
-          await canteenInstance!.jidelnicekDen(den: den);
-      return checkjidelnicek.jidla.length > jidelnicek.jidla.length
-          ? checkjidelnicek
-          : jidelnicek;
-    }
     return jidelnicek;
   } catch (e) {
     if (e == 'Uživatel není přihlášen') {
@@ -432,7 +428,7 @@ Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
   try {
     return await getLunchesForDay(currentDate);
   } catch (e) {
-    rethrow;
+    return Future.error(e);
   }
 }
 

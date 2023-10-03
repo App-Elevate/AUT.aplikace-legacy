@@ -7,6 +7,7 @@ SnackBarShown snackbarshown = SnackBarShown(shown: false);
 final JidelnicekPageNum jidelnicekPageNum = JidelnicekPageNum(
   pageNumber: DateTime.now().difference(DateTime(2006, 5, 23)).inDays,
 );
+final DateTime minimalDate = DateTime(2006, 5, 23);
 
 // getter pro stránku jídelníčku
 JidelnicekPageNum getJidelnicekPageNum() {
