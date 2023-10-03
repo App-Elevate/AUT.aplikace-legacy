@@ -349,7 +349,8 @@ class ListJidel extends StatelessWidget {
   Widget build(BuildContext context) {
     jidlaListener.value = jidelnicek.jidla;
     if (jidlaListener.value.length < numberOfMaxLunches) {
-      ziskatJidelnicekDen(minimalDate.add(Duration(days: indexDne)))
+      getLunchesForDay(minimalDate.add(Duration(days: indexDne)),
+              requireNew: true)
           .then((value) {
         if (jidlaListener.value.length < numberOfMaxLunches) {
           jidlaListener.value = value.jidla;
@@ -504,7 +505,7 @@ class ObjednatJidloTlacitko extends StatefulWidget {
     required this.refreshButtons,
     required this.indexDne,
   });
-  final ValueNotifier jidlaListener;
+  final ValueNotifier<List<Jidlo>> jidlaListener;
   final int indexDne;
   final int indexJidlaVeDni;
   final Function(BuildContext context) refreshButtons;
@@ -519,19 +520,22 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   //fix for api returning garbage when switching orders
   void cannotBeOrderedFix() async {
     try {
-      if ((await getLunchesForDay(
-                  minimalDate.add(Duration(days: widget.indexDne)),
-                  requireNew: true))
-              .jidla[widget.indexJidlaVeDni]
-              .lzeObjednat !=
-          jidlo!.lzeObjednat) {
-        icon = null;
-        //refresh buttons
+      if (!minimalDate
+          .add(Duration(days: widget.indexDne))
+          .isBefore(DateTime.now())) {
+        Jidelnicek jidelnicekCheck = await getLunchesForDay(
+            minimalDate.add(Duration(days: widget.indexDne)),
+            requireNew: true);
+        for (int i = 0; i < jidelnicekCheck.jidla.length; i++) {
+          if (widget.jidlaListener.value[i].lzeObjednat !=
+              jidelnicekCheck.jidla[i].lzeObjednat) {
+            widget.jidlaListener.value = jidelnicekCheck.jidla;
+            return;
+          }
+        }
       }
     } catch (e) {
-      icon = null;
-      if (!context.mounted) return;
-      widget.refreshButtons(context);
+      //if get lunches for day failes we hope api gave us the right values
     }
   }
 
@@ -585,7 +589,31 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   'Nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
               break;
             case StavJidla.nedostupne:
-              cannotBeOrderedFix();
+              try {
+                bool jeVeDneDostupnyObed = false;
+                int prvniIndex = -1;
+                for (int i = 0;
+                    i < canteenData!.jidelnicky[datumJidla]!.jidla.length;
+                    i++) {
+                  if (canteenData!
+                          .jidelnicky[datumJidla]!.jidla[i].lzeObjednat ||
+                      canteenData!.jidelnicky[datumJidla]!.jidla[i].objednano ||
+                      jeJidloNaBurze(
+                          canteenData!.jidelnicky[datumJidla]!.jidla[i]) ||
+                      canteenData!.jidelnicky[datumJidla]!.jidla[i].burzaUrl !=
+                          null) {
+                    jeVeDneDostupnyObed = true;
+                    break;
+                  } else {
+                    prvniIndex = i;
+                  }
+                }
+                if (!jeVeDneDostupnyObed && prvniIndex == index) {
+                  cannotBeOrderedFix();
+                }
+              } catch (e) {
+                //hope it's not important
+              }
               buttonColor = const Color.fromARGB(255, 247, 75, 75);
               obedText =
                   'Nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';

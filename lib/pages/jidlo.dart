@@ -12,7 +12,7 @@ class JidloDetail extends StatelessWidget {
   final DateTime datumJidla;
   final int indexDne;
   final Function(BuildContext context) refreshButtons;
-  final ValueNotifier<dynamic> jidlaListener;
+  final ValueNotifier<List<Jidlo>> jidlaListener;
 
   /// index jídla v jídelníčku dne (0 - první jídlo dne datumJidla)
   final int indexJidlaVeDni;
