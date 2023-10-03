@@ -162,7 +162,10 @@ class JidloDetail extends StatelessWidget {
     jidloWidgets.add(
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-        child: ObjednatJidloTlacitko(widget: widget, index: indexDne, jidlaListener: widget.jidlaListener),
+        child: ObjednatJidloTlacitko(
+            widget: widget,
+            index: indexDne,
+            jidlaListener: widget.jidlaListener),
       ),
     );
     return Scaffold(

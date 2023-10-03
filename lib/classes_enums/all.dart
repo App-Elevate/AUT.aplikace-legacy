@@ -22,6 +22,7 @@ class LoggedInUser {
         'url': url,
       };
 }
+
 class LoginData {
   LoginData({
     required this.currentlyLoggedIn,
@@ -31,22 +32,24 @@ class LoginData {
   List<LoggedInUser> users = [];
 
   LoginData.fromJson(Map<String, dynamic> json)
-  : currentlyLoggedIn =  json['currentlyLoggedIn'],
-    currentlyLoggedInId = json['currentlyLoggedInId'],
-    users = json['users'].map<LoggedInUser>((e) => LoggedInUser.fromJson(e)).toList();
+      : currentlyLoggedIn = json['currentlyLoggedIn'],
+        currentlyLoggedInId = json['currentlyLoggedInId'],
+        users = json['users']
+            .map<LoggedInUser>((e) => LoggedInUser.fromJson(e))
+            .toList();
 
-  Map<String, dynamic> toJson() => 
-  {
-    'currentlyLoggedIn': currentlyLoggedIn,
-    'currentlyLoggedInId': currentlyLoggedInId,
-    'users': users.map((e) => e.toJson()).toList(),
-  };
+  Map<String, dynamic> toJson() => {
+        'currentlyLoggedIn': currentlyLoggedIn,
+        'currentlyLoggedInId': currentlyLoggedInId,
+        'users': users.map((e) => e.toJson()).toList(),
+      };
 }
 
-class LoggedAccountsInAccountPanel{
+class LoggedAccountsInAccountPanel {
   List<String> usernames;
   int? loggedInID;
-  LoggedAccountsInAccountPanel({required this.usernames, required this.loggedInID});
+  LoggedAccountsInAccountPanel(
+      {required this.usernames, required this.loggedInID});
 }
 
 class Ordering {

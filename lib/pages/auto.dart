@@ -14,8 +14,8 @@ class AutoPage extends StatelessWidget {
       //TODO: vytvořit stránku
       body: const Placeholder(),
       drawer: MainAppDrawer(
-        setHomeWidget: setHomeWidget,
-        page: NavigationDrawerItem.automatickeObjednavky),
+          setHomeWidget: setHomeWidget,
+          page: NavigationDrawerItem.automatickeObjednavky),
     );
   }
 }

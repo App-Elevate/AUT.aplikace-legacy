@@ -121,7 +121,8 @@ class _LoginFormState extends State<LoginForm> {
                 controller: _urlController,
                 autocorrect: false,
                 decoration: InputDecoration(
-                  labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
+                  labelText:
+                      'Url stránky icanteen  - např. jidelna.trebesin.cz',
                   border: const OutlineInputBorder(),
                   errorText: urlErrorText,
                 ),
@@ -148,48 +149,48 @@ class _LoginFormState extends State<LoginForm> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své uživatelské jméno';
-                  }
-                  return null;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                controller: _passwordController,
-                textInputAction: TextInputAction.done,
-                autofillHints: const [AutofillHints.password],
-                obscureText: showPasswd,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: 'Heslo',
-                  border: const OutlineInputBorder(),
-                  errorText: passwordErrorText,
-                  suffixIcon: IconButton(
-                    padding: const EdgeInsets.only(right: 10),
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      setState(() {
-                        showPasswd = !showPasswd;
-                      });
+                      if (value == null || value.isEmpty) {
+                        return 'Zadejte prosím své uživatelské jméno';
+                      }
+                      return null;
                     },
-                    icon: Icon(
-                      showPasswd ? Icons.visibility_off : Icons.visibility,
-                      color: const Color(0xff7F7F7F),
-                    ),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím své heslo';
-                  }
-                  return null;
-                },
-              ),
-            ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    textInputAction: TextInputAction.done,
+                    autofillHints: const [AutofillHints.password],
+                    obscureText: showPasswd,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      labelText: 'Heslo',
+                      border: const OutlineInputBorder(),
+                      errorText: passwordErrorText,
+                      suffixIcon: IconButton(
+                        padding: const EdgeInsets.only(right: 10),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            showPasswd = !showPasswd;
+                          });
+                        },
+                        icon: Icon(
+                          showPasswd ? Icons.visibility_off : Icons.visibility,
+                          color: const Color(0xff7F7F7F),
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Zadejte prosím své heslo';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
               ],
             )),
             LoginSubmitButton(
@@ -202,7 +203,8 @@ class _LoginFormState extends State<LoginForm> {
             ),
             RichText(
               text: TextSpan(
-                text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
+                text:
+                    'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
                 style: const TextStyle(fontSize: 12),
                 children: [
                   TextSpan(
@@ -213,7 +215,8 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AnalyticSettingsPage()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AnalyticSettingsPage()));
                       },
                   ),
                 ],
@@ -312,38 +315,46 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         url = 'https://$url';
       }
       try {
-        Canteen login = await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
+        Canteen login = await initCanteen(
+            hasToBeNew: true,
+            url: url,
+            username: widget.usernameController.text,
+            password: widget.passwordController.text);
         if (login.prihlasen) {
           TextInput.finishAutofillContext();
 
           LoginData loginData = await getLoginDataFromSecureStorage();
           loginData.currentlyLoggedIn = true;
           loginData.currentlyLoggedInId = loginData.users.length;
-          loginData.users.add(LoggedInUser(username: widget.usernameController.text, password: widget.passwordController.text, url: url));
+          loginData.users.add(LoggedInUser(
+              username: widget.usernameController.text,
+              password: widget.passwordController.text,
+              url: url));
           saveLoginToSecureStorage(loginData);
 
           saveData('url', widget.urlController.text);
-          if(mounted && Navigator.canPop(context)){
+          if (mounted && Navigator.canPop(context)) {
             Navigator.pop(context);
             setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
-            
-          }
-          else{
+          } else {
             setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
           }
         } else {
           setState(() {
             loggingIn = false;
           });
-          widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+          widget.errorSetter!('Špatné heslo nebo uživatelské jméno',
+              LoginFormErrorField.password);
         }
       } catch (e) {
         if (e.toString().contains('bad url')) {
           widget.errorSetter!('Nesprávné url', LoginFormErrorField.url);
         } else if (e.toString().contains('login failed')) {
-          widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+          widget.errorSetter!('Špatné heslo nebo uživatelské jméno',
+              LoginFormErrorField.password);
         } else {
-          widget.errorSetter!('Připojení k serveru selhalo', LoginFormErrorField.url);
+          widget.errorSetter!(
+              'Připojení k serveru selhalo', LoginFormErrorField.url);
         }
         setState(() {
           loggingIn = false;

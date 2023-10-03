@@ -11,7 +11,8 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   ValueNotifier valueNotifier = ValueNotifier(-1);
   if (context.mounted && !snackbarshown.shown) {
     ScaffoldMessenger.of(context)
-        .showSnackBar(dynamicSnackbarFunction('aktualizace', context, valueNotifier))
+        .showSnackBar(
+            dynamicSnackbarFunction('aktualizace', context, valueNotifier))
         .closed
         .then((SnackBarClosedReason reason) {
       snackbarshown.shown = false;
@@ -31,12 +32,14 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
     await Future.delayed(const Duration(seconds: 1));
     status = await Permission.requestInstallPackages.status;
   }
-  if (neededInstallPermissionPageShown && neededInstallPermissionPageContext!.mounted) {
+  if (neededInstallPermissionPageShown &&
+      neededInstallPermissionPageContext!.mounted) {
     // ignore: use_build_context_synchronously
     Navigator.of(neededInstallPermissionPageContext!).pop();
   }
   var tempDownloadDir = await getTemporaryDirectory();
-  String savePath = "${tempDownloadDir.path}/${fileUrl.substring(fileUrl.lastIndexOf("/") + 1)}";
+  String savePath =
+      "${tempDownloadDir.path}/${fileUrl.substring(fileUrl.lastIndexOf("/") + 1)}";
   try {
     await Dio().download(fileUrl, savePath, onReceiveProgress: (count, total) {
       final value = count / total;
@@ -50,8 +53,11 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   }
   final value = await PackageInfo.fromPlatform();
 
-  if(analyticsEnabledGlobally && analytics != null){
-    analytics!.logEvent(name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+  if (analyticsEnabledGlobally && analytics != null) {
+    analytics!.logEvent(name: 'updateDownloaded', parameters: {
+      'oldVersion': value.version,
+      'newVersion': releaseInfo.currentlyLatestVersion.toString()
+    });
   }
   await InstallPlugin.install(savePath);
 }

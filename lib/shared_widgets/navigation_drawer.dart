@@ -33,7 +33,10 @@ class MainAppDrawer extends StatelessWidget {
                   ),
                   leading: Icon(
                     Icons.restaurant,
-                    color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark
+                        ? Colors.white
+                        : const Color(0xff323232),
                     size: 30,
                   ),
                   selected: page == NavigationDrawerItem.jidelnicek,
