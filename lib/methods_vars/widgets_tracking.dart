@@ -11,10 +11,3 @@ final JidelnicekPageNum jidelnicekPageNum = JidelnicekPageNum(
 JidelnicekPageNum getJidelnicekPageNum() {
   return jidelnicekPageNum;
 }
-
-class NavigatorArrayClass {
-  NavigatorArrayClass({required this.navigatorArray});
-  List<MaterialPage> navigatorArray;
-}
-
-late NavigatorArrayClass navigatorArrayClass;

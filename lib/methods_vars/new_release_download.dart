@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:install_plugin/install_plugin.dart';
 import 'package:autojidelna/every_import.dart';
 
+/// Stáhne novou verzi aplikace a nainstaluje ji
 void networkInstallApk(String fileUrl, BuildContext context) async {
   // Find the ScaffoldMessenger in the widget tree
   // and use it to show a SnackBar.
