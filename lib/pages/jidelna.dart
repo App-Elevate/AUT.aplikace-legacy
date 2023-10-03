@@ -171,30 +171,11 @@ class MainAppScreenState extends State<MainAppScreen> {
   final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(
       DateTime(2006, 5, 23)
           .add(Duration(days: getJidelnicekPageNum().pageNumber)));
-  final ValueNotifier<CanteenData> canteenDataListener =
-      ValueNotifier<CanteenData>(getCanteenData());
 
   final PageController pageviewController =
       PageController(initialPage: getJidelnicekPageNum().pageNumber);
   final DateTime minimalDate = DateTime(2006, 5, 23);
   final CanteenData? customCanteenData = null;
-
-  void refreshCanteenUser() async {
-    try {
-      final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
-      canteenData!.uzivatel = uzivatel;
-      canteenDataListener.value = canteenData!.copyWith();
-    } catch (e) {
-      try {
-        await Future.delayed(const Duration(milliseconds: 300));
-        final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
-        canteenData!.uzivatel = uzivatel;
-        canteenDataListener.value = canteenData!.copyWith();
-      } catch (e) {
-        //if it failed twice the server is either down or the user is spamming it so we don't want to spam it more
-      }
-    }
-  }
 
   void changeDate(
       {DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
@@ -233,9 +214,6 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   Padding jidelnicekDenWidget({CanteenData? customCanteenData}) {
     //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
-    if (customCanteenData != null) {
-      canteenDataListener.value = customCanteenData;
-    }
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
       child: Column(
@@ -297,10 +275,8 @@ class MainAppScreenState extends State<MainAppScreen> {
               },
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return JidelnicekWidget(
-                  minimalDate: minimalDate,
-                  widget: this,
-                  index: index,
+                return jidelnicekWidget(
+                  index,
                 );
               },
             ),
@@ -309,20 +285,8 @@ class MainAppScreenState extends State<MainAppScreen> {
       ),
     );
   }
-}
 
-class JidelnicekWidget extends StatelessWidget {
-  const JidelnicekWidget(
-      {super.key,
-      required this.minimalDate,
-      required this.widget,
-      required this.index});
-
-  final DateTime minimalDate;
-  final MainAppScreenState widget;
-  final int index;
-  @override
-  Widget build(BuildContext context) {
+  SizedBox jidelnicekWidget(int index) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: FutureBuilder(
@@ -332,18 +296,21 @@ class JidelnicekWidget extends StatelessWidget {
               Future.delayed(
                   Duration.zero,
                   () => failedLoginDialog(context, 'Nelze Připojit k internetu',
-                      widget.widget.setHomeWidget));
+                      widget.setHomeWidget));
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return ListJidel(
-                  widget: this, errorWidget: Text(snapshot.error.toString()));
+                  minimalDate: minimalDate,
+                  indexDne: index,
+                  errorWidget: Text(snapshot.error.toString()));
             }
             Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
             return ListJidel(
+              minimalDate: minimalDate,
+              indexDne: index,
               jidelnicek: jidelnicek,
-              widget: this,
             );
           }),
     );
@@ -352,18 +319,21 @@ class JidelnicekWidget extends StatelessWidget {
 
 class ListJidel extends StatelessWidget {
   final Jidelnicek? jidelnicek;
-  final JidelnicekWidget widget;
   final Widget? errorWidget;
+  final DateTime minimalDate;
+  final int indexDne;
+  final Function setScaffoldBody = MainAppScreenState().setScaffoldBody;
   final ValueNotifier<List<Jidlo>> jidlaListener =
       ValueNotifier<List<Jidlo>>([]);
   ListJidel({
+    required this.indexDne,
     this.jidelnicek,
     super.key,
-    required this.widget,
     this.errorWidget,
+    required this.minimalDate,
   });
   void refreshButtons() async {
-    DateTime currentDate = widget.minimalDate.add(Duration(days: widget.index));
+    DateTime currentDate = minimalDate.add(Duration(days: indexDne));
     jidlaListener.value =
         (await refreshLunches(currentDate)).jidla; //error handling please
   }
@@ -399,8 +369,7 @@ class ListJidel extends StatelessWidget {
                     }
                   }
                   refreshing = false;
-                  widget.widget
-                      .setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
+                  setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
                     customCanteenData: canteenData,
                   ));
                 },
@@ -438,8 +407,7 @@ class ListJidel extends StatelessWidget {
                       }
                     }
                     refreshing = false;
-                    widget.widget.setScaffoldBody(
-                        MainAppScreenState().jidelnicekDenWidget(
+                    setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
                       customCanteenData: canteenData,
                     ));
                   },
@@ -479,8 +447,7 @@ class ListJidel extends StatelessWidget {
                   }
                 }
                 refreshing = false;
-                widget.widget
-                    .setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
+                setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
                   customCanteenData: canteenData,
                 ));
               },
@@ -493,10 +460,13 @@ class ListJidel extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) => JidloDetail(
-                            datumJidla: widget.widget.minimalDate
-                                .add(Duration(days: widget.index)),
-                            indexDne: index,
-                            widget: this,
+                            indexDne: indexDne,
+                            minimalDate: minimalDate,
+                            refreshButtons: refreshButtons,
+                            jidlaListener: jidlaListener,
+                            datumJidla:
+                                minimalDate.add(Duration(days: indexDne)),
+                            indexJidlaVeDni: index,
                           ),
                         ),
                       );
@@ -549,9 +519,11 @@ class ListJidel extends StatelessWidget {
                                     padding: const EdgeInsets.fromLTRB(
                                         0, 16.0, 0, 0),
                                     child: ObjednatJidloTlacitko(
-                                      widget: this,
+                                      indexDne: indexDne,
+                                      refreshButtons: refreshButtons,
                                       jidlaListener: jidlaListener,
-                                      index: index,
+                                      minimalDate: minimalDate,
+                                      indexJidlaVeDni: index,
                                     ),
                                   ),
                                 ]),
@@ -573,12 +545,16 @@ class ListJidel extends StatelessWidget {
 class ObjednatJidloTlacitko extends StatefulWidget {
   const ObjednatJidloTlacitko(
       {super.key,
-      required this.widget,
-      required this.index,
-      required this.jidlaListener});
+      required this.indexJidlaVeDni,
+      required this.jidlaListener,
+      required this.refreshButtons,
+      required this.indexDne,
+      required this.minimalDate});
   final ValueNotifier jidlaListener;
-  final ListJidel widget;
-  final int index;
+  final DateTime minimalDate;
+  final int indexDne;
+  final int indexJidlaVeDni;
+  final Function refreshButtons;
 
   @override
   State<ObjednatJidloTlacitko> createState() => _ObjednatJidloTlacitkoState();
@@ -591,67 +567,32 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   void cannotBeOrderedFix() async {
     try {
       if ((await getLunchesForDay(
-                  widget.widget.widget.minimalDate
-                      .add(Duration(days: widget.widget.widget.index)),
+                  widget.minimalDate.add(Duration(days: widget.indexDne)),
                   requireNew: true))
-              .jidla[widget.index]
+              .jidla[widget.indexJidlaVeDni]
               .lzeObjednat !=
           jidlo!.lzeObjednat) {
         icon = null;
-        widget.widget.refreshButtons();
+        //refresh buttons
       }
     } catch (e) {
       icon = null;
-      widget.widget.refreshButtons();
+      widget.refreshButtons();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     Color? buttonColor;
-    late Jidelnicek jidelnicek;
     late StavJidla stavJidla;
-    final int index = widget.index;
+    final int index = widget.indexJidlaVeDni;
+    final DateTime datumJidla =
+        widget.minimalDate.add(Duration(days: widget.indexDne));
     String obedText;
     return ValueListenableBuilder(
         valueListenable: widget.jidlaListener,
         builder: (context, value, child) {
-          jidelnicek = widget.widget
-              .jidelnicek!; //this is a permanent referrence that doesn't need to change in the button scope (if refreshed it changes higher in the highearchy)
-          try {
-            jidlo = value[
-                index]; //only set this so that we don't overwrite it after the button has been clicked
-          }
-          //if we went out of bounds that means that api returned not enough lunches so we need to try again (refresh). This doesn't fix the problem of api returning garbage
-          catch (e) {
-            widget.widget.refreshButtons();
-            //giving a placeholder until the button refreshes
-            return ElevatedButton(
-              //rounding the button
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(buttonColor),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-              ),
-              onPressed: () {},
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      color: Color.fromARGB(255, 34, 150, 243),
-                      strokeWidth: 3.5,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
+          jidlo = value[index];
           if (jidlo!.naBurze) {
             //pokud je od nás vloženo na burze, tak není potřeba kontrolovat nic jiného
             stavJidla = StavJidla.naBurze;
@@ -803,8 +744,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   {
                     try {
                       for (int i = 0;
-                          i < 20 &&
-                              canteenData!.jidelnicky[jidelnicek.den] == null;
+                          i < 20 && canteenData!.jidelnicky[datumJidla] == null;
                           i++) {
                         if (i >= 19) {
                           throw Exception(
@@ -812,7 +752,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
-                      canteenData!.jidelnicky[jidelnicek.den]!.jidla[index] =
+                      canteenData!.jidelnicky[datumJidla]!.jidla[index] =
                           await canteen.objednat(jidlo!);
                       pridatStatistiku(TypStatistiky.objednavka);
                     } catch (e) {
@@ -875,8 +815,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   {
                     try {
                       for (int i = 0;
-                          i < 20 &&
-                              canteenData!.jidelnicky[jidelnicek.den] == null;
+                          i < 20 && canteenData!.jidelnicky[datumJidla] == null;
                           i++) {
                         if (i >= 19) {
                           throw Exception(
@@ -884,7 +823,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                         }
                         await Future.delayed(const Duration(milliseconds: 100));
                       }
-                      canteenData!.jidelnicky[jidelnicek.den]!.jidla[index] =
+                      canteenData!.jidelnicky[datumJidla]!.jidla[index] =
                           await canteen.objednat(jidlo!);
                     } catch (e) {
                       snackBarMessage(
@@ -903,8 +842,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   }
                   break;
               }
-              widget.widget.widget.widget.refreshCanteenUser();
-              widget.widget.refreshButtons();
+              widget.refreshButtons();
               ordering.ordering = false;
               if (context.mounted) {
                 setState(() {
