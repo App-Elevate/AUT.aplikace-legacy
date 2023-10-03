@@ -17,6 +17,7 @@ class MainAppScreenState extends State<MainAppScreen> {
   bool loadingIndicator = false;
 
   Widget scaffoldBody = const SizedBox();
+  PanelController panelController = PanelController();
 
   /// changes the scaffold body in the [MainAppScreenState]
   void setScaffoldBody(Widget widget) {
@@ -61,9 +62,9 @@ class MainAppScreenState extends State<MainAppScreen> {
   void _onVisibilityChanged() async {
     if (!mounted) return;
     if (SwitchAccountVisible().isVisible()) {
-      PanelController().open();
+      panelController.open();
     } else {
-      PanelController().close();
+      panelController.close();
     }
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
@@ -93,7 +94,7 @@ class MainAppScreenState extends State<MainAppScreen> {
         borderRadius: radius,
         minHeight: 0,
         maxHeight: 300,
-        controller: PanelController(),
+        controller: panelController,
         panel: Builder(
           builder: (context) {
             return SwitchAccountPanel(
