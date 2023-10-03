@@ -95,24 +95,21 @@ class LoggingInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getLoginDataFromSecureStorage(),
+      future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          final loginData = snapshot.data as LoginData;
-          final isLoggedIn = loginData.currentlyLoggedIn;
+          final prefs = snapshot.data as SharedPreferences;
+          final isLoggedIn = prefs.getString('loggedIn') == '1';
           if (isLoggedIn) {
             return FutureBuilder(
-              future: initCanteen(hasToBeNew: true),
+              future: initCanteen(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   if (snapshot.error == 'no internet') {
                     Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
                   } else if (snapshot.error == 'login failed') {
                     Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Přihlášení selhalo', setHomeWidget));
-                  }else if (snapshot.error == 'bad url') {
-                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-                  }
-                   else {
+                  } else {
                     return LoginScreen(setHomeWidget: setHomeWidget);
                   }
                   return const LoadingLoginPage(textWidget: Text('Přihlašování...'));
