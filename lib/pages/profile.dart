@@ -47,7 +47,7 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: TextButton(
         onPressed: () async {
-          logout(currentAccount: true);
+          logout();
           Navigator.of(context).pop();
           await Future.delayed(const Duration(milliseconds: 300));
           setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
@@ -107,10 +107,8 @@ class ProfilePage extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 5.0),
                       child: Builder(
                         builder: (context) {
-                          if (getCanteenData().uzivatel.uzivatelskeJmeno !=
-                              null) {
-                            return Text(
-                                getCanteenData().uzivatel.uzivatelskeJmeno!);
+                          if (canteenData.uzivatel.uzivatelskeJmeno != null) {
+                            return Text(canteenData.uzivatel.uzivatelskeJmeno!);
                           } else {
                             return FutureBuilder(
                               future: getLoginDataFromSecureStorage(),
@@ -137,7 +135,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Kredit: ${getCanteenData().uzivatel.kredit.toInt()} kč',
+                      'Kredit: ${canteenData.uzivatel.kredit.toInt()} kč',
                       style: const TextStyle(
                         fontSize: 20,
                       ),
@@ -169,10 +167,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (getCanteenData().uzivatel.jmeno != null ||
-                  getCanteenData().uzivatel.prijmeni != null) {
+              if (canteenData.uzivatel.jmeno != null ||
+                  canteenData.uzivatel.prijmeni != null) {
                 return Text(
-                    'Jméno: ${getCanteenData().uzivatel.jmeno ?? ''} ${getCanteenData().uzivatel.prijmeni}');
+                    'Jméno: ${canteenData.uzivatel.jmeno ?? ''} ${canteenData.uzivatel.prijmeni}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -180,9 +178,8 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (getCanteenData().uzivatel.kategorie != null) {
-                return Text(
-                    'Kategorie: ${getCanteenData().uzivatel.kategorie!}');
+              if (canteenData.uzivatel.kategorie != null) {
+                return Text('Kategorie: ${canteenData.uzivatel.kategorie!}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -210,10 +207,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (getCanteenData().uzivatel.ucetProPlatby != null &&
-                  getCanteenData().uzivatel.ucetProPlatby != '') {
+              if (canteenData.uzivatel.ucetProPlatby != null &&
+                  canteenData.uzivatel.ucetProPlatby != '') {
                 return Text(
-                    'Číslo účtu pro platby: ${getCanteenData().uzivatel.ucetProPlatby}');
+                    'Číslo účtu pro platby: ${canteenData.uzivatel.ucetProPlatby}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -221,10 +218,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (getCanteenData().uzivatel.specSymbol != null &&
-                  getCanteenData().uzivatel.specSymbol != '') {
+              if (canteenData.uzivatel.specSymbol != null &&
+                  canteenData.uzivatel.specSymbol != '') {
                 return Text(
-                    'Specifický Symbol: ${getCanteenData().uzivatel.specSymbol}');
+                    'Specifický Symbol: ${canteenData.uzivatel.specSymbol}');
               } else {
                 //return nothing
                 return const SizedBox(width: 0, height: 0);
@@ -233,10 +230,10 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (getCanteenData().uzivatel.varSymbol != null &&
-                  getCanteenData().uzivatel.varSymbol != '') {
+              if (canteenData.uzivatel.varSymbol != null &&
+                  canteenData.uzivatel.varSymbol != '') {
                 return Text(
-                    'Variabilní Symbol: ${getCanteenData().uzivatel.varSymbol}');
+                    'Variabilní Symbol: ${canteenData.uzivatel.varSymbol}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }

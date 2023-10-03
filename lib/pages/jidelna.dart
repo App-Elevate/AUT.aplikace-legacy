@@ -14,29 +14,56 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class MainAppScreenState extends State<MainAppScreen> {
-  final PanelController panelController = PanelController();
-
-  Widget scaffoldBody = const Placeholder();
   bool loadingIndicator = false;
 
+  Widget scaffoldBody = const SizedBox();
+
+  /// changes the scaffold body in the [MainAppScreenState]
   void setScaffoldBody(Widget widget) {
     setState(() {
       scaffoldBody = widget;
     });
   }
 
-  void loading(bool loading) {
+  ///
+  Future<void> loading(bool loading) async {
+    if (refreshing) return;
     setState(() {
       loadingIndicator = loading;
     });
+    refreshing = true;
+    try {
+      await initCanteen(hasToBeNew: true);
+    } catch (e) {
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      if (context.mounted && !snackbarshown.shown) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbarFunction(
+                'nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',
+                context))
+            .closed
+            .then((SnackBarClosedReason reason) {
+          snackbarshown.shown = false;
+        });
+      }
+    }
+    setState(() {
+      loadingIndicator = loading;
+    });
+    refreshing = false;
+    setScaffoldBody(jidelnicekDenWidget(
+      customCanteenData: canteenData,
+    ));
   }
 
+  ///callback for SlidingUpPanel
   void _onVisibilityChanged() async {
     if (!mounted) return;
     if (SwitchAccountVisible().isVisible()) {
-      panelController.open();
+      PanelController().open();
     } else {
-      panelController.close();
+      PanelController().close();
     }
     await Future.delayed(const Duration(milliseconds: 300));
     if (!mounted) return;
@@ -66,7 +93,7 @@ class MainAppScreenState extends State<MainAppScreen> {
         borderRadius: radius,
         minHeight: 0,
         maxHeight: 300,
-        controller: panelController,
+        controller: PanelController(),
         panel: Builder(
           builder: (context) {
             return SwitchAccountPanel(
@@ -98,32 +125,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                   color: Colors.white,
                   size: 30,
                 ),
-                onPressed: () async {
-                  if (refreshing) return;
-                  loading(true);
-                  refreshing = true;
-                  try {
-                    await initCanteen(hasToBeNew: true);
-                  } catch (e) {
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    if (context.mounted && !snackbarshown.shown) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(snackbarFunction(
-                              'nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu',
-                              context))
-                          .closed
-                          .then((SnackBarClosedReason reason) {
-                        snackbarshown.shown = false;
-                      });
-                    }
-                  }
-                  loading(false);
-                  refreshing = false;
-                  setScaffoldBody(jidelnicekDenWidget(
-                    customCanteenData: getCanteenData(),
-                  ));
-                },
+                onPressed: () async {},
               ),
             ],
           ),
@@ -174,21 +176,18 @@ class MainAppScreenState extends State<MainAppScreen> {
   final PageController pageviewController =
       PageController(initialPage: getJidelnicekPageNum().pageNumber);
   final DateTime minimalDate = DateTime(2006, 5, 23);
-  final CanteenData canteenData = getCanteenData();
   final CanteenData? customCanteenData = null;
 
   void refreshCanteenUser() async {
     try {
       final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
       canteenData.uzivatel = uzivatel;
-      setCanteenData(canteenData);
       canteenDataListener.value = canteenData.copyWith();
     } catch (e) {
       try {
         await Future.delayed(const Duration(milliseconds: 300));
         final Uzivatel uzivatel = await (await initCanteen()).ziskejUzivatele();
         canteenData.uzivatel = uzivatel;
-        setCanteenData(canteenData);
         canteenDataListener.value = canteenData.copyWith();
       } catch (e) {
         //if it failed twice the server is either down or the user is spamming it so we don't want to spam it more
@@ -401,7 +400,7 @@ class ListJidel extends StatelessWidget {
                   refreshing = false;
                   widget.widget
                       .setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
-                    customCanteenData: getCanteenData(),
+                    customCanteenData: canteenData,
                   ));
                 },
                 child: SizedBox(
@@ -440,7 +439,7 @@ class ListJidel extends StatelessWidget {
                     refreshing = false;
                     widget.widget.setScaffoldBody(
                         MainAppScreenState().jidelnicekDenWidget(
-                      customCanteenData: getCanteenData(),
+                      customCanteenData: canteenData,
                     ));
                   },
                   child: SizedBox(
@@ -481,7 +480,7 @@ class ListJidel extends StatelessWidget {
                 refreshing = false;
                 widget.widget
                     .setScaffoldBody(MainAppScreenState().jidelnicekDenWidget(
-                  customCanteenData: getCanteenData(),
+                  customCanteenData: canteenData,
                 ));
               },
               child: ListView.builder(
@@ -862,7 +861,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   break;
                 case StavJidla.nedostupne:
                   {
-                    if (getCanteenData().uzivatel.kredit < jidlo!.cena!) {
+                    if (canteenData.uzivatel.kredit < jidlo!.cena!) {
                       snackBarMessage(
                           'Oběd nelze objednat - Nedostatečný kredit');
                       break;

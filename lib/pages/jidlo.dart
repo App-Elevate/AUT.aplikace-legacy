@@ -1,7 +1,7 @@
 import 'package:autojidelna/every_import.dart';
 
 class JidloDetail extends StatelessWidget {
-  JidloDetail({
+  const JidloDetail({
     super.key,
     required this.datumJidla,
     required this.indexDne,
@@ -12,7 +12,6 @@ class JidloDetail extends StatelessWidget {
 
   /// index jídla v jídelníčku dne (0 - první jídlo dne datumJidla)
   final int indexDne;
-  final CanteenData canteenData = getCanteenData();
 
   @override
   Widget build(BuildContext context) {
