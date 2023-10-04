@@ -52,19 +52,19 @@ class ProfilePage extends StatelessWidget {
           await Future.delayed(const Duration(milliseconds: 300));
           setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
         },
-        child: Row(
+        child: const Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 'Odhlásit se',
                 style: TextStyle(
                   fontSize: 20,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                  color: Colors.white,
                 ),
               ),
             ),
-            Icon(Icons.logout, color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232)),
+            Icon(Icons.logout, color: Colors.white),
           ],
         ),
       ),

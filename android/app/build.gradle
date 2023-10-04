@@ -57,7 +57,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 32
         versionCode 156
-        versionName '1.2.0'
+        versionName '1.1.0'
     }
     signingConfigs {
        release {

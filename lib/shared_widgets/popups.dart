@@ -30,20 +30,23 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
           child: Scrollbar(
             trackVisibility: true,
             radius: const Radius.circular(20),
-            child: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text('Nová aktualizace přináší:'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
-                    child: HtmlWidget(
-                      md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'),
+            child: ScrollConfiguration(
+              behavior: const MaterialScrollBehavior().copyWith(overscroll: false),
+              child: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Text('Nová aktualizace přináší:'),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
+                      child: HtmlWidget(
+                        md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -101,7 +101,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -115,18 +115,21 @@ class AnalyticSettingsPage extends StatelessWidget {
                           ),
                         ),
                         const Divider(),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: settings.length,
-                          itemBuilder: (context, index) {
-                            final setting = settings[index];
+                        ScrollConfiguration(
+                          behavior: const MaterialScrollBehavior().copyWith(overscroll: false),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: settings.length,
+                            itemBuilder: (context, index) {
+                              final setting = settings[index];
 
-                            return generateSettingButtons(
-                              title: setting.title,
-                              valueListenable: setting.valueListenable,
-                              onChanged: setting.onChanged,
-                            );
-                          },
+                              return generateSettingButtons(
+                                title: setting.title,
+                                valueListenable: setting.valueListenable,
+                                onChanged: setting.onChanged,
+                              );
+                            },
+                          ),
                         )
                       ],
                     ),
@@ -179,6 +182,9 @@ class AnalyticSettingsPage extends StatelessWidget {
                           text: TextSpan(
                             text:
                                 'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto... Více informací naleznete ve ',
+                            style: TextStyle(
+                              color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
+                            ),
                             children: [
                               TextSpan(
                                   text: 'Zdrojovém kódu',

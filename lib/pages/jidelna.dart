@@ -110,8 +110,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                   onPressed: () {
                     changeDate(newDate: DateTime.now(), animateToPage: true);
                   },
-                  icon: Icon(Icons.calendar_today_rounded,
-                      color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black)),
+                  icon: const Icon(Icons.calendar_today_rounded, color: Colors.white)),
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -253,18 +252,21 @@ class MainAppScreenState extends State<MainAppScreen> {
                 );
               }),
           Expanded(
-            child: PageView.builder(
-              controller: pageviewController,
-              onPageChanged: (value) {
-                changeDate(index: value);
-                getJidelnicekPageNum().pageNumber = value;
-              },
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return jidelnicekDenWidget(
-                  index,
-                );
-              },
+            child: ScrollConfiguration(
+              behavior: const MaterialScrollBehavior().copyWith(overscroll: false),
+              child: PageView.builder(
+                controller: pageviewController,
+                onPageChanged: (value) {
+                  changeDate(index: value);
+                  getJidelnicekPageNum().pageNumber = value;
+                },
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return jidelnicekDenWidget(
+                    index,
+                  );
+                },
+              ),
             ),
           ),
         ],
