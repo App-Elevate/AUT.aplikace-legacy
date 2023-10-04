@@ -54,7 +54,8 @@ class DefaultFirebaseOptions {
     appId: '1:108088693003:android:a876fdaf042a909d96d20e',
     messagingSenderId: '108088693003',
     projectId: 'autojidelna',
-    databaseURL: 'https://autojidelna-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://autojidelna-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'autojidelna.appspot.com',
   );
 
@@ -63,7 +64,8 @@ class DefaultFirebaseOptions {
     appId: '1:108088693003:ios:0e167fe7b0414f8196d20e',
     messagingSenderId: '108088693003',
     projectId: 'autojidelna',
-    databaseURL: 'https://autojidelna-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://autojidelna-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'autojidelna.appspot.com',
     iosBundleId: 'com.tomprotiva.autojidelna',
   );

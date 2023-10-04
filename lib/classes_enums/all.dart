@@ -5,6 +5,9 @@ import './../every_import.dart';
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }
 
+//classy pro přihlašování
+
+///samotný uživatel
 class LoggedInUser {
   String username;
   String password;
@@ -25,6 +28,7 @@ class LoggedInUser {
       };
 }
 
+///všichni přihlášení uživatelé
 class LoginData {
   LoginData({
     required this.currentlyLoggedIn,
@@ -45,17 +49,22 @@ class LoginData {
       };
 }
 
+///omezená data pro zobrazení ve výběru účtů
 class LoggedAccountsInAccountPanel {
   List<String> usernames;
   int? loggedInID;
   LoggedAccountsInAccountPanel({required this.usernames, required this.loggedInID});
 }
 
+///toggle, jestli se jídla můžou objednávat
+///true - nesmí se objednávat, false - smí se objednávat
+///je to proto, aby se neobjednávaly dva najednou, nebo když se načítá stránka
 class Ordering {
   bool ordering;
   Ordering({this.ordering = false});
 }
 
+///informace o nejnovější verzi aplikace (podpora jen pro android)
 class ReleaseInfo {
   ReleaseInfo({
     required this.isAndroid,

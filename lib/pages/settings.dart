@@ -1,15 +1,5 @@
-/*zde jsou nastavení:
-přeskočit víkendy při browsdání (při mačkání tlačítek)
-notifikace:
-dnešní jídlo (v kolik hodin zaslat)
-dochází kredit
-burzaCatcher notifikace
-nemáte objednáno na příští týden
-autoObjednávky případné zeptání se na objednání
- */
-
 //TODO: skip weekends while browsing
-//TODO: Notifications: todays food, credit is low, burzacatcher, didnt order for next week, autoOjednavky,
+//TODO: Notifications: todays food, credit is low, didnt order for next week
 
 import 'package:autojidelna/main.dart';
 import 'package:flutter/foundation.dart';
@@ -191,21 +181,20 @@ class AnalyticSettingsPage extends StatelessWidget {
                                 'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto... Více informací naleznete ve ',
                             children: [
                               TextSpan(
-                                text: 'Zdrojovém kódu',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    //get version of the app
+                                  text: 'Zdrojovém kódu',
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      //get version of the app
 
-                                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-                                    String appVersion = packageInfo.version;
-                                    launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'),
-                                        mode: LaunchMode.externalApplication);
-                                  },
-                              ),
+                                      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                                      String appVersion = packageInfo.version;
+                                      launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'),
+                                          mode: LaunchMode.externalApplication);
+                                    }),
                               const TextSpan(
                                 text: ' nebo na ',
                               ),

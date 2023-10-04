@@ -1,7 +1,7 @@
 import './../every_import.dart';
 
 class MainAccountDrawer extends StatelessWidget {
-  MainAccountDrawer({
+  const MainAccountDrawer({
     super.key,
     required this.setHomeWidget,
     required this.page,
@@ -9,11 +9,9 @@ class MainAccountDrawer extends StatelessWidget {
   final Function setHomeWidget;
   final NavigationDrawerItem page;
 
-  final CanteenData canteenData = getCanteenData();
-
   @override
   Widget build(BuildContext context) {
-    final String username = getCanteenData().username;
+    final String username = canteenData!.username;
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
@@ -61,7 +59,7 @@ class MainAccountDrawer extends StatelessWidget {
                               Icon(
                                 Icons.expand_more,
                                 color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                              ),
+                              )
                             ],
                           ),
                         ),
@@ -92,7 +90,7 @@ class MainAccountDrawer extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${canteenData.uzivatel.kredit.toInt()}',
+                                        '${canteenData!.uzivatel.kredit.toInt()}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                         ),

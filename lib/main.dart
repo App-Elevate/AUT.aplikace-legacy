@@ -109,6 +109,8 @@ class LoggingInWidget extends StatelessWidget {
                     Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
                   } else if (snapshot.error == 'login failed') {
                     Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Přihlášení selhalo', setHomeWidget));
+                  } else if (snapshot.error == 'bad url') {
+                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
                   } else {
                     return LoginScreen(setHomeWidget: setHomeWidget);
                   }
