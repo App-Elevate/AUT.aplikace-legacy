@@ -3,20 +3,11 @@ import 'package:flutter/cupertino.dart';
 import './../every_import.dart';
 
 class MainAppScreen extends StatefulWidget {
-  MainAppScreen({
+  const MainAppScreen({
     super.key,
     required this.setHomeWidget,
   });
   final Function setHomeWidget;
-
-  ///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
-  final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(
-      DateTime(2006, 5, 23)
-          .add(Duration(days: getJidelnicekPageNum().pageNumber)));
-
-  ///page controller for the PageView which tells which date is currently selected
-  final PageController pageviewController =
-      PageController(initialPage: getJidelnicekPageNum().pageNumber);
 
   @override
   State<MainAppScreen> createState() => MainAppScreenState();
@@ -185,18 +176,18 @@ class MainAppScreenState extends State<MainAppScreen> {
       {DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
     if (newDate != null && animateToPage != null && animateToPage) {
       smartPreIndexing(newDate);
-      widget.dateListener.value = newDate;
+      dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
-      widget.pageviewController.animateToPage(
+      pageviewController.animateToPage(
         newDate.difference(minimalDate).inDays,
         duration: const Duration(milliseconds: 150),
         curve: Curves.linear,
       );
     } else if (daysChange != null) {
-      newDate = widget.dateListener.value.add(Duration(days: daysChange));
+      newDate = dateListener.value.add(Duration(days: daysChange));
       smartPreIndexing(newDate);
-      widget.pageviewController.animateToPage(
+      pageviewController.animateToPage(
         newDate.difference(minimalDate).inDays,
         duration: const Duration(milliseconds: 150),
         curve: Curves.linear,
@@ -204,16 +195,15 @@ class MainAppScreenState extends State<MainAppScreen> {
     } else if (index != null) {
       newDate = minimalDate.add(Duration(days: index));
       smartPreIndexing(newDate);
-      widget.dateListener.value = newDate;
+      dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
     } else if (newDate != null) {
       smartPreIndexing(newDate);
-      widget.dateListener.value = newDate;
+      dateListener.value = newDate;
       getJidelnicekPageNum().pageNumber =
           newDate.difference(minimalDate).inDays;
-      widget.pageviewController
-          .jumpToPage(newDate.difference(minimalDate).inDays);
+      pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
     }
   }
 
@@ -225,7 +215,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       child: Column(
         children: [
           ValueListenableBuilder(
-              valueListenable: widget.dateListener,
+              valueListenable: dateListener,
               builder: (ctx, value, child) {
                 DateTime currentDate = value;
                 String dayOfWeek = ziskatDenZData(currentDate.weekday);
@@ -274,7 +264,7 @@ class MainAppScreenState extends State<MainAppScreen> {
               }),
           Expanded(
             child: PageView.builder(
-              controller: widget.pageviewController,
+              controller: pageviewController,
               onPageChanged: (value) {
                 changeDate(index: value);
                 getJidelnicekPageNum().pageNumber = value;
@@ -387,7 +377,7 @@ class ListJidel extends StatelessWidget {
             return Expanded(
               child: RefreshIndicator(
                   onRefresh: () async {
-                    softRefresh();
+                    await softRefresh();
                   },
                   child: SizedBox(
                     height: double.infinity,
@@ -406,7 +396,7 @@ class ListJidel extends StatelessWidget {
           return Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                softRefresh();
+                await softRefresh();
               },
               child: ListView.builder(
                 itemCount: jidelnicek.jidla.length,
@@ -615,8 +605,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 //hope it's not important
               }
               buttonColor = const Color.fromARGB(255, 247, 75, 75);
-              obedText =
-                  'Nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              if (canteenData!.uzivatel.kredit < jidlo!.cena! &&
+                  !datumJidla.isBefore(DateTime.now())) {
+                obedText =
+                    'Nedostatek kreditu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              } else {
+                obedText =
+                    'Nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              }
               break;
             //operace na burze
             case StavJidla.objednanoNelzeOdebrat:
@@ -784,6 +780,11 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   break;
                 case StavJidla.nedostupne:
                   {
+                    if (datumJidla.isBefore(DateTime.now())) {
+                      snackBarMessage(
+                          'Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti)');
+                      break;
+                    }
                     if (canteenData!.uzivatel.kredit < jidlo!.cena!) {
                       snackBarMessage(
                           'Oběd nelze objednat - Nedostatečný kredit');
