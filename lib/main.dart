@@ -66,8 +66,20 @@ class _MyAppState extends State<MyApp> {
     getLatestRelease();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 148, 18, 148),
+          surfaceTintColor: Colors.white,
+          actionsIconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 148, 18, 148),
+          surfaceTintColor: Colors.white,
+          actionsIconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
       themeMode: ThemeMode.system,
       home: WillPopScope(
         onWillPop: () => _backPressed(_myAppKey),

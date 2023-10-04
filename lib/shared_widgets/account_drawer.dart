@@ -15,7 +15,6 @@ class MainAccountDrawer extends StatelessWidget {
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
           title: const Text('Autojídelna'),
           centerTitle: true,
         ),
@@ -225,11 +224,22 @@ class MainAccountDrawer extends StatelessWidget {
                     applicationVersion: packageInfo.version,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-                        child: ElevatedButton(
+                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            fixedSize: const Size.fromWidth(500),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            backgroundColor: Colors.blue,
+                          ),
                           onPressed: (() =>
                               launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna"), mode: LaunchMode.externalApplication)),
-                          child: const Text('Zdrojový kód'),
+                          child: const Text(
+                            'Zdrojový kód',
+                            style: TextStyle(
+                              fontSize: 17.5,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                       Builder(
@@ -247,7 +257,12 @@ class MainAccountDrawer extends StatelessWidget {
                               width: 0,
                             );
                           }
-                          return ElevatedButton(
+                          return TextButton(
+                            style: TextButton.styleFrom(
+                              fixedSize: const Size.fromWidth(500),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              backgroundColor: Colors.blue,
+                            ),
                             onPressed: () async {
                               await getLatestRelease();
                               if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
@@ -273,7 +288,13 @@ class MainAccountDrawer extends StatelessWidget {
                               }
                               Future.delayed(Duration.zero, () => newUpdateDialog(context));
                             },
-                            child: const Text('Zkontrolovat aktualizace'),
+                            child: const Text(
+                              'Zkontrolovat aktualizace',
+                              style: TextStyle(
+                                fontSize: 17.5,
+                                color: Colors.white,
+                              ),
+                            ),
                           );
                         },
                       ),

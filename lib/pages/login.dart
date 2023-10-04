@@ -203,7 +203,10 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: const TextStyle(fontSize: 12),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
+                ),
                 children: [
                   TextSpan(
                     text: 'Více informací',

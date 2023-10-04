@@ -101,24 +101,23 @@ class MainAppScreenState extends State<MainAppScreen> {
         ),
         body: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-            centerTitle: true,
             title: const Text('Autojídelna'),
+            centerTitle: true,
             actions: [
               //calendar button
               IconButton(
-                  onPressed: () {
-                    changeDate(newDate: DateTime.now(), animateToPage: true);
-                  },
-                  icon: const Icon(Icons.calendar_today_rounded, color: Colors.white)),
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  changeDate(newDate: DateTime.now(), animateToPage: true);
+                },
+                icon: const Icon(Icons.calendar_today_rounded),
+              ),
+              //refresh button
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                icon: const Icon(
-                  Icons.refresh_rounded,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                icon: const Icon(Icons.refresh_rounded, size: 30),
                 onPressed: () {
                   reload();
                 },

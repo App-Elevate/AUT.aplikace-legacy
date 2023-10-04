@@ -14,7 +14,6 @@ class MainAppDrawer extends StatelessWidget {
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
           title: const Text('Autojídelna'),
           centerTitle: true,
         ),
@@ -33,10 +32,7 @@ class MainAppDrawer extends StatelessWidget {
                   ),
                   leading: Icon(
                     Icons.restaurant,
-                    color: MediaQuery.of(context).platformBrightness ==
-                            Brightness.dark
-                        ? Colors.white
-                        : const Color(0xff323232),
+                    color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                     size: 30,
                   ),
                   selected: page == NavigationDrawerItem.jidelnicek,
