@@ -40,8 +40,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
                     child: HtmlWidget(
-                      md.markdownToHtml(releaseInfo.changelog ??
-                          'Changelog není k dispozici'),
+                      md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'),
                     ),
                   ),
                 ],
@@ -78,11 +77,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                         if (analyticsEnabledGlobally && analytics != null) {
                           analytics!.logEvent(
                             name: 'updateButtonClicked',
-                            parameters: {
-                              'oldVersion': value.version,
-                              'newVersion':
-                                  releaseInfo.currentlyLatestVersion.toString()
-                            },
+                            parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
                           );
                         }
                       },
@@ -95,15 +90,11 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                     fixedSize: const Size.fromWidth(500),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     //color based on brightness
-                    backgroundColor:
-                        MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? const Color.fromARGB(20, 255, 255, 255)
-                            : const Color.fromARGB(20, 0, 0, 0),
+                    backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+                        ? const Color.fromARGB(20, 255, 255, 255)
+                        : const Color.fromARGB(20, 0, 0, 0),
                   ),
-                  onPressed: (() => launchUrl(
-                      Uri.parse(
-                          "https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
+                  onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
                       mode: LaunchMode.externalApplication)),
                   child: const Text(
                     'Zobrazit na githubu',
@@ -116,11 +107,9 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                     fixedSize: const Size.fromWidth(500),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     //color based on brightness
-                    backgroundColor:
-                        MediaQuery.of(context).platformBrightness ==
-                                Brightness.dark
-                            ? const Color.fromARGB(20, 255, 255, 255)
-                            : const Color.fromARGB(20, 0, 0, 0),
+                    backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+                        ? const Color.fromARGB(20, 255, 255, 255)
+                        : const Color.fromARGB(20, 0, 0, 0),
                   ),
                   child: const Text(
                     'Teď ne',
@@ -139,8 +128,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
   );
 }
 
-void failedLoginDialog(
-    BuildContext context, String message, Function setHomeWidget) async {
+void failedLoginDialog(BuildContext context, String message, Function setHomeWidget) async {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -179,8 +167,7 @@ void failedDownload(BuildContext context) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Aktualizace aplikace selhala'),
-        content: const Text(
-            'Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu...'),
+        content: const Text('Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu...'),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: <Widget>[

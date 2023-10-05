@@ -60,18 +60,11 @@ class ProfilePage extends StatelessWidget {
                 'Odhlásit se',
                 style: TextStyle(
                   fontSize: 20,
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.dark
-                      ? Colors.white
-                      : const Color(0xff323232),
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                 ),
               ),
             ),
-            Icon(Icons.logout,
-                color:
-                    MediaQuery.of(context).platformBrightness == Brightness.dark
-                        ? Colors.white
-                        : const Color(0xff323232)),
+            Icon(Icons.logout, color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232)),
           ],
         ),
       ),
@@ -90,10 +83,7 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.account_circle,
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.dark
-                      ? Colors.white
-                      : const Color(0xff323232),
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                   size: 80,
                 ),
               ),
@@ -108,20 +98,14 @@ class ProfilePage extends StatelessWidget {
                       child: Builder(
                         builder: (context) {
                           if (canteenData!.uzivatel.uzivatelskeJmeno != null) {
-                            return Text(
-                                canteenData!.uzivatel.uzivatelskeJmeno!);
+                            return Text(canteenData!.uzivatel.uzivatelskeJmeno!);
                           } else {
                             return FutureBuilder(
                               future: getLoginDataFromSecureStorage(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
-                                    snapshot
-                                            .data
-                                            ?.users[snapshot
-                                                .data!.currentlyLoggedInId!]
-                                            .username ??
-                                        '',
+                                    snapshot.data?.users[snapshot.data!.currentlyLoggedInId!].username ?? '',
                                     style: const TextStyle(
                                       fontSize: 25,
                                     ),
@@ -168,10 +152,8 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData!.uzivatel.jmeno != null ||
-                  canteenData!.uzivatel.prijmeni != null) {
-                return Text(
-                    'Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}');
+              if (canteenData!.uzivatel.jmeno != null || canteenData!.uzivatel.prijmeni != null) {
+                return Text('Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -208,10 +190,8 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData!.uzivatel.ucetProPlatby != null &&
-                  canteenData!.uzivatel.ucetProPlatby != '') {
-                return Text(
-                    'Číslo účtu pro platby: ${canteenData!.uzivatel.ucetProPlatby}');
+              if (canteenData!.uzivatel.ucetProPlatby != null && canteenData!.uzivatel.ucetProPlatby != '') {
+                return Text('Číslo účtu pro platby: ${canteenData!.uzivatel.ucetProPlatby}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -219,10 +199,8 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData!.uzivatel.specSymbol != null &&
-                  canteenData!.uzivatel.specSymbol != '') {
-                return Text(
-                    'Specifický Symbol: ${canteenData!.uzivatel.specSymbol}');
+              if (canteenData!.uzivatel.specSymbol != null && canteenData!.uzivatel.specSymbol != '') {
+                return Text('Specifický Symbol: ${canteenData!.uzivatel.specSymbol}');
               } else {
                 //return nothing
                 return const SizedBox(width: 0, height: 0);
@@ -231,10 +209,8 @@ class ProfilePage extends StatelessWidget {
           ),
           Builder(
             builder: (context) {
-              if (canteenData!.uzivatel.varSymbol != null &&
-                  canteenData!.uzivatel.varSymbol != '') {
-                return Text(
-                    'Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}');
+              if (canteenData!.uzivatel.varSymbol != null && canteenData!.uzivatel.varSymbol != '') {
+                return Text('Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}');
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -264,12 +240,9 @@ class ProfilePage extends StatelessWidget {
             future: readData('statistika:objednavka'),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return const Text(
-                    'Počet objednávek s autojídelnou: chyba při načítání dat');
-              } else if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                return Text(
-                    'Počet objednávek s autojídelnou: ${snapshot.data}');
+                return const Text('Počet objednávek s autojídelnou: chyba při načítání dat');
+              } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                return Text('Počet objednávek s autojídelnou: ${snapshot.data}');
               } else {
                 return const Text('Počet objednávek s autojídelnou: 0');
               }

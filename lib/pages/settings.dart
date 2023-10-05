@@ -48,8 +48,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                             child: ListTile(
-                              visualDensity: const VisualDensity(
-                                  horizontal: -4, vertical: -4),
+                              visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
                               title: const Text(
                                 'Zastavit sledování analytických služeb',
                                 style: TextStyle(fontSize: 20),
@@ -69,8 +68,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                                         }
                                       },
                                       splashRadius: 0,
-                                      activeColor: const Color.fromARGB(
-                                          255, 148, 18, 148),
+                                      activeColor: const Color.fromARGB(255, 148, 18, 148),
                                     );
                                   }),
                             ),
@@ -90,14 +88,10 @@ class AnalyticSettingsPage extends StatelessWidget {
                                       ..onTap = () async {
                                         //get version of the app
 
-                                        PackageInfo packageInfo =
-                                            await PackageInfo.fromPlatform();
+                                        PackageInfo packageInfo = await PackageInfo.fromPlatform();
                                         String appVersion = packageInfo.version;
-                                        launchUrl(
-                                            Uri.parse(
-                                                'https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'),
-                                            mode:
-                                                LaunchMode.externalApplication);
+                                        launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'),
+                                            mode: LaunchMode.externalApplication);
                                       }),
                                 const TextSpan(
                                   text: ' nebo na ',
@@ -112,14 +106,10 @@ class AnalyticSettingsPage extends StatelessWidget {
                                       ..onTap = () async {
                                         //get version of the app
 
-                                        PackageInfo packageInfo =
-                                            await PackageInfo.fromPlatform();
+                                        PackageInfo packageInfo = await PackageInfo.fromPlatform();
                                         String appVersion = packageInfo.version;
-                                        launchUrl(
-                                            Uri.parse(
-                                                'https://github.com/tpkowastaken/autojidelna/blob/v$appVersion/listSbiranychDat.md'),
-                                            mode:
-                                                LaunchMode.externalApplication);
+                                        launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion/listSbiranychDat.md'),
+                                            mode: LaunchMode.externalApplication);
                                       })
                               ],
                             ),

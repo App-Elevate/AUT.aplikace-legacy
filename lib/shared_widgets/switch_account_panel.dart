@@ -14,8 +14,7 @@ class SwitchAccountPanel extends StatefulWidget {
 
 class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
   final ValueNotifier<LoggedAccountsInAccountPanel> loggedAccounts =
-      ValueNotifier<LoggedAccountsInAccountPanel>(
-          LoggedAccountsInAccountPanel(usernames: [], loggedInID: null));
+      ValueNotifier<LoggedAccountsInAccountPanel>(LoggedAccountsInAccountPanel(usernames: [], loggedInID: null));
   BorderRadiusGeometry radius = const BorderRadius.only(
     topLeft: Radius.circular(16.0),
     topRight: Radius.circular(16.0),
@@ -25,9 +24,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
     for (int i = 0; i < loginData.users.length; i++) {
       loggedAccounts.value.usernames.add(loginData.users[i].username);
     }
-    loggedAccounts.value = LoggedAccountsInAccountPanel(
-        usernames: loggedAccounts.value.usernames,
-        loggedInID: loginData.currentlyLoggedInId);
+    loggedAccounts.value = LoggedAccountsInAccountPanel(usernames: loggedAccounts.value.usernames, loggedInID: loginData.currentlyLoggedInId);
   }
 
   @override
@@ -37,9 +34,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
       body: Container(
         decoration: BoxDecoration(
           borderRadius: radius,
-          color: MediaQuery.of(context).platformBrightness == Brightness.dark
-              ? const Color(0xff323232)
-              : Colors.white,
+          color: MediaQuery.of(context).platformBrightness == Brightness.dark ? const Color(0xff323232) : Colors.white,
         ),
         child: FutureBuilder(
             future: getLoginDataFromSecureStorage(),
@@ -52,28 +47,20 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                     builder: (ctx, value, child) {
                       List<Widget> accounts = [];
                       for (int i = 0; i < value.usernames.length; i++) {
-                        accounts.add(accountRow(context, value.usernames[i],
-                            i == value.loggedInID, i));
+                        accounts.add(accountRow(context, value.usernames[i], i == value.loggedInID, i));
                       }
                       Widget addAccountButton = TextButton(
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.all(0),
                           splashFactory: NoSplash.splashFactory,
-                          foregroundColor:
-                              MediaQuery.of(context).platformBrightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black,
+                          foregroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
                         ),
                         onPressed: () async {
                           //close before going to the page
                           SwitchAccountVisible().setVisible(false);
-                          await Future.delayed(
-                              const Duration(milliseconds: 300));
+                          await Future.delayed(const Duration(milliseconds: 300));
                           if (mounted) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => LoginScreen(
-                                    setHomeWidget: widget.setHomeWidget)));
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
                           }
                         },
                         child: const Row(
@@ -94,8 +81,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                         accounts.add(addAccountButton);
                       }
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -114,8 +100,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                                 addRepaintBoundaries: false,
                                 reverse: accounts.length > 5 ? true : false,
                                 itemCount: accounts.length,
-                                itemBuilder: (context, index) =>
-                                    accounts[index],
+                                itemBuilder: (context, index) => accounts[index],
                               ),
                             ),
                           ],
@@ -133,8 +118,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
     );
   }
 
-  Row accountRow(
-      BuildContext context, String username, bool currentAccount, int id) {
+  Row accountRow(BuildContext context, String username, bool currentAccount, int id) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -147,8 +131,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 LoginData loginData = await getLoginDataFromSecureStorage();
                 loginData.currentlyLoggedInId = id;
                 saveLoginToSecureStorage(loginData);
-                widget.setHomeWidget(
-                    LoggingInWidget(setHomeWidget: widget.setHomeWidget));
+                widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
               } else {
                 SwitchAccountVisible().setVisible(false);
               }
@@ -181,8 +164,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             if (currentAccount) {
               SwitchAccountVisible().setVisible(false);
               await Future.delayed(const Duration(milliseconds: 500));
-              widget.setHomeWidget(
-                  LoggingInWidget(setHomeWidget: widget.setHomeWidget));
+              widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
             }
             updateAccountPanel(await getLoginDataFromSecureStorage());
           },

@@ -38,9 +38,7 @@ class LoginData {
   LoginData.fromJson(Map<String, dynamic> json)
       : currentlyLoggedIn = json['currentlyLoggedIn'],
         currentlyLoggedInId = json['currentlyLoggedInId'],
-        users = json['users']
-            .map<LoggedInUser>((e) => LoggedInUser.fromJson(e))
-            .toList();
+        users = json['users'].map<LoggedInUser>((e) => LoggedInUser.fromJson(e)).toList();
 
   Map<String, dynamic> toJson() => {
         'currentlyLoggedIn': currentlyLoggedIn,
@@ -53,8 +51,7 @@ class LoginData {
 class LoggedAccountsInAccountPanel {
   List<String> usernames;
   int? loggedInID;
-  LoggedAccountsInAccountPanel(
-      {required this.usernames, required this.loggedInID});
+  LoggedAccountsInAccountPanel({required this.usernames, required this.loggedInID});
 }
 
 ///toggle, jestli se jídla můžou objednávat

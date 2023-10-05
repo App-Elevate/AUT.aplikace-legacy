@@ -22,8 +22,7 @@ class JidloDetail extends StatelessWidget {
     return FutureBuilder(
         future: getLunchesForDay(datumJidla),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
             Jidlo jidlo = snapshot.data!.jidla[indexJidlaVeDni];
             ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
             List<Widget> jidloWidgets = [];
@@ -31,8 +30,7 @@ class JidloDetail extends StatelessWidget {
             if (jidloString.polevka != null) {
               jidloWidgets.add(
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -60,8 +58,7 @@ class JidloDetail extends StatelessWidget {
             if (jidloString.hlavniJidlo != null) {
               jidloWidgets.add(
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -89,8 +86,7 @@ class JidloDetail extends StatelessWidget {
             if (jidloString.piti != null) {
               jidloWidgets.add(
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -118,8 +114,7 @@ class JidloDetail extends StatelessWidget {
             if (jidloString.salatovyBar != null) {
               jidloWidgets.add(
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -147,8 +142,7 @@ class JidloDetail extends StatelessWidget {
             if (jidloString.alergeny != null) {
               jidloWidgets.add(
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -174,13 +168,9 @@ class JidloDetail extends StatelessWidget {
             }
             jidloWidgets.add(
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
                 child: ObjednatJidloTlacitko(
-                    refreshButtons: refreshButtons,
-                    indexJidlaVeDni: indexJidlaVeDni,
-                    indexDne: indexDne,
-                    jidlaListener: jidlaListener),
+                    refreshButtons: refreshButtons, indexJidlaVeDni: indexJidlaVeDni, indexDne: indexDne, jidlaListener: jidlaListener),
               ),
             );
             return Scaffold(

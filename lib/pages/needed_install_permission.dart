@@ -30,12 +30,8 @@ class NeededInstallPermissionPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: Row(
                 children: [
-                  Expanded(
-                      child:
-                          Image.asset('assets/images/install_permission.jpg')),
-                  Expanded(
-                      child: Image.asset(
-                          'assets/images/install_permission_danger.jpg')),
+                  Expanded(child: Image.asset('assets/images/install_permission.jpg')),
+                  Expanded(child: Image.asset('assets/images/install_permission_danger.jpg')),
                 ],
               ),
             ),
@@ -79,20 +75,16 @@ class NeededInstallPermissionPage extends StatelessWidget {
                         fixedSize: const Size.fromWidth(550),
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         //color based on brightness
-                        backgroundColor:
-                            MediaQuery.of(context).platformBrightness ==
-                                    Brightness.dark
-                                ? const Color.fromARGB(20, 255, 255, 255)
-                                : const Color.fromARGB(20, 0, 0, 0),
+                        backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+                            ? const Color.fromARGB(20, 255, 255, 255)
+                            : const Color.fromARGB(20, 0, 0, 0),
                       ),
                       child: const Text(
                         'Zobrazit na githubu',
                         style: TextStyle(fontSize: 17.5),
                       ),
                       onPressed: () {
-                        launchUrl(
-                            Uri.parse(
-                                "https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
+                        launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
                             mode: LaunchMode.externalApplication);
                         Navigator.of(context).pop();
                       },
