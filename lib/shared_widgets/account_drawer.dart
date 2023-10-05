@@ -1,4 +1,5 @@
 import './../every_import.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MainAccountDrawer extends StatelessWidget {
   const MainAccountDrawer({
@@ -282,6 +283,28 @@ class MainAccountDrawer extends StatelessWidget {
                 },
               ),
               //log out
+              ListTile(
+                title: const Text(
+                  'Sdílet Aplikaci',
+                  style: TextStyle(fontSize: 20),
+                ),
+                leading: Icon(
+                  //share icon
+                  Icons.share,
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                  size: 30,
+                ),
+                onTap: () async {
+                  final RenderBox? box = context.findRenderObject() as RenderBox?;
+                  String text = 'https://autojidelna.tomprotiva.com';
+                  String subject = 'Autojídelna (aplikace na objednávání jídla)';
+                  await Share.share(
+                    text,
+                    subject: subject,
+                    sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                  );
+                },
+              ),
             ],
           ),
         ),
