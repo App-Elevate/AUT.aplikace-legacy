@@ -46,9 +46,20 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
   LoginData loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
 
-  if (!url.contains('https://')) {
-    url = 'https://$url';
+  if (url.contains('https://')) {
+    url = url.replaceAll('https://', '');
   }
+  if (url.contains('http://')) {
+    url = url.replaceAll('http://', '');
+    //I will not support sending passwords over http...
+  }
+  if (url.contains('/')) {
+    url = url.substring(0, url.indexOf('/'));
+  }
+  if (url.contains('@')) {
+    url = url.substring(url.indexOf('@') + 1);
+  }
+  url = 'https://$url';
 
   if (canteenInstance != null && canteenInstance!.prihlasen && !hasToBeNew) {
     return canteenInstance!;

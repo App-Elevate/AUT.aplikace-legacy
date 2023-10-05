@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import './../every_import.dart';
 
 ///enum pro výběr stránky v navigačním menu
@@ -245,16 +243,4 @@ class SwitchAccountVisible {
   void setVisibilityCallback(VoidCallback callback) {
     visibilityCallback = callback;
   }
-}
-
-class Setting {
-  final String title;
-  final ValueListenable<bool> valueListenable;
-  final ValueChanged<bool> onChanged;
-
-  Setting({
-    required this.title,
-    required this.valueListenable,
-    required this.onChanged,
-  });
 }

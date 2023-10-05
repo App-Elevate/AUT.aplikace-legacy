@@ -102,13 +102,14 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    try {
-      setHomeWidget = widget.setHomeWidget;
-    } catch (e) {
-      //it just needs to be initialized...
-    }
+  void initState() {
+    super.initState();
+    setHomeWidget = widget.setHomeWidget;
     setLastUrl();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Padding(
@@ -203,10 +204,7 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
-                ),
+                style: const TextStyle(fontSize: 12),
                 children: [
                   TextSpan(
                     text: 'Více informací',
@@ -283,13 +281,12 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
                 return const SizedBox(
                   height: 60,
                   child: Center(
-                    child: Text(
-                      'Přihlásit se',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                      child: Text(
+                    'Přihlásit se',
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
-                  ),
+                  )),
                 );
               }
             },
@@ -310,11 +307,6 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
       // Reset the form fields.
       //login code
       String url = widget.urlController.text;
-      if (url.contains('http://') || url.contains('https://')) {
-        url = url;
-      } else {
-        url = 'https://$url';
-      }
       try {
         Canteen login =
             await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);

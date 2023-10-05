@@ -101,23 +101,25 @@ class MainAppScreenState extends State<MainAppScreen> {
         ),
         body: Scaffold(
           appBar: AppBar(
-            title: const Text('Autojídelna'),
+            backgroundColor: const Color.fromARGB(255, 148, 18, 148),
             centerTitle: true,
+            title: const Text('Autojídelna'),
             actions: [
               //calendar button
               IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () {
-                  changeDate(newDate: DateTime.now(), animateToPage: true);
-                },
-                icon: const Icon(Icons.calendar_today_rounded),
-              ),
-              //refresh button
+                  onPressed: () {
+                    changeDate(newDate: DateTime.now(), animateToPage: true);
+                  },
+                  icon: Icon(Icons.calendar_today_rounded,
+                      color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black)),
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                icon: const Icon(Icons.refresh_rounded, size: 30),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                  color: Colors.white,
+                  size: 30,
+                ),
                 onPressed: () {
                   reload();
                 },
@@ -251,21 +253,18 @@ class MainAppScreenState extends State<MainAppScreen> {
                 );
               }),
           Expanded(
-            child: ScrollConfiguration(
-              behavior: const MaterialScrollBehavior().copyWith(overscroll: false),
-              child: PageView.builder(
-                controller: pageviewController,
-                onPageChanged: (value) {
-                  changeDate(index: value);
-                  getJidelnicekPageNum().pageNumber = value;
-                },
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return jidelnicekDenWidget(
-                    index,
-                  );
-                },
-              ),
+            child: PageView.builder(
+              controller: pageviewController,
+              onPageChanged: (value) {
+                changeDate(index: value);
+                getJidelnicekPageNum().pageNumber = value;
+              },
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return jidelnicekDenWidget(
+                  index,
+                );
+              },
             ),
           ),
         ],
@@ -629,11 +628,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 // snackbarshown je aby se snackbar nezobrazil vícekrát
                 if (context.mounted && snackbarshown.shown == false) {
                   snackbarshown.shown = true;
-                  ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(message, context)).closed.then(
-                    (SnackBarClosedReason reason) {
-                      snackbarshown.shown = false;
-                    },
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(message, context)).closed.then((SnackBarClosedReason reason) {
+                    snackbarshown.shown = false;
+                  });
                 }
               }
 

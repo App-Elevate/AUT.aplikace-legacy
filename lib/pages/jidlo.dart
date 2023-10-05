@@ -176,6 +176,7 @@ class JidloDetail extends StatelessWidget {
             return Scaffold(
               appBar: AppBar(
                 title: Text(jidlo.varianta),
+                centerTitle: true,
               ),
               body: Center(
                 child: Padding(

@@ -95,15 +95,12 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                             ),
                             const Divider(),
                             Expanded(
-                              child: ScrollConfiguration(
-                                behavior: const MaterialScrollBehavior().copyWith(overscroll: false),
-                                child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  addRepaintBoundaries: false,
-                                  reverse: accounts.length > 5 ? true : false,
-                                  itemCount: accounts.length,
-                                  itemBuilder: (context, index) => accounts[index],
-                                ),
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                addRepaintBoundaries: false,
+                                reverse: accounts.length > 5 ? true : false,
+                                itemCount: accounts.length,
+                                itemBuilder: (context, index) => accounts[index],
                               ),
                             ),
                           ],

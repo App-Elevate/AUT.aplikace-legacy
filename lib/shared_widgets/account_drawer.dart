@@ -1,4 +1,5 @@
 import './../every_import.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MainAccountDrawer extends StatelessWidget {
   const MainAccountDrawer({
@@ -15,6 +16,7 @@ class MainAccountDrawer extends StatelessWidget {
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
           title: const Text('Autojídelna'),
           centerTitle: true,
         ),
@@ -224,22 +226,11 @@ class MainAccountDrawer extends StatelessWidget {
                     applicationVersion: packageInfo.version,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            fixedSize: const Size.fromWidth(500),
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            backgroundColor: Colors.blue,
-                          ),
+                        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                        child: ElevatedButton(
                           onPressed: (() =>
                               launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna"), mode: LaunchMode.externalApplication)),
-                          child: const Text(
-                            'Zdrojový kód',
-                            style: TextStyle(
-                              fontSize: 17.5,
-                              color: Colors.white,
-                            ),
-                          ),
+                          child: const Text('Zdrojový kód'),
                         ),
                       ),
                       Builder(
@@ -257,12 +248,7 @@ class MainAccountDrawer extends StatelessWidget {
                               width: 0,
                             );
                           }
-                          return TextButton(
-                            style: TextButton.styleFrom(
-                              fixedSize: const Size.fromWidth(500),
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              backgroundColor: Colors.blue,
-                            ),
+                          return ElevatedButton(
                             onPressed: () async {
                               await getLatestRelease();
                               if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
@@ -288,13 +274,7 @@ class MainAccountDrawer extends StatelessWidget {
                               }
                               Future.delayed(Duration.zero, () => newUpdateDialog(context));
                             },
-                            child: const Text(
-                              'Zkontrolovat aktualizace',
-                              style: TextStyle(
-                                fontSize: 17.5,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: const Text('Zkontrolovat aktualizace'),
                           );
                         },
                       ),
@@ -303,6 +283,28 @@ class MainAccountDrawer extends StatelessWidget {
                 },
               ),
               //log out
+              ListTile(
+                title: const Text(
+                  'Sdílet Aplikaci',
+                  style: TextStyle(fontSize: 20),
+                ),
+                leading: Icon(
+                  //share icon
+                  Icons.share,
+                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
+                  size: 30,
+                ),
+                onTap: () async {
+                  final RenderBox? box = context.findRenderObject() as RenderBox?;
+                  String text = 'https://autojidelna.tomprotiva.com';
+                  String subject = 'Autojídelna (aplikace na objednávání jídla)';
+                  await Share.share(
+                    text,
+                    subject: subject,
+                    sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                  );
+                },
+              ),
             ],
           ),
         ),

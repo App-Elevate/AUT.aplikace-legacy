@@ -66,20 +66,8 @@ class _MyAppState extends State<MyApp> {
     getLatestRelease();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 148, 18, 148),
-          surfaceTintColor: Colors.white,
-          actionsIconTheme: IconThemeData(color: Colors.white),
-        ),
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 148, 18, 148),
-          surfaceTintColor: Colors.white,
-          actionsIconTheme: IconThemeData(color: Colors.white),
-        ),
-      ),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
       home: WillPopScope(
         onWillPop: () => _backPressed(_myAppKey),
@@ -107,14 +95,14 @@ class LoggingInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: SharedPreferences.getInstance(),
+      future: getLoginDataFromSecureStorage(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          final prefs = snapshot.data as SharedPreferences;
-          final isLoggedIn = prefs.getString('loggedIn') == '1';
+          final loginData = snapshot.data as LoginData;
+          final isLoggedIn = loginData.currentlyLoggedIn;
           if (isLoggedIn) {
             return FutureBuilder(
-              future: initCanteen(),
+              future: initCanteen(hasToBeNew: true),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   if (snapshot.error == 'no internet') {
