@@ -5,6 +5,9 @@ export './methods_vars/all.dart';
 export './shared_widgets/all.dart';
 export './pages/all.dart';
 
+//Themes
+export 'app_themes.dart';
+
 //icanteenlib
 export 'package:canteenlib/canteenlib.dart';
 

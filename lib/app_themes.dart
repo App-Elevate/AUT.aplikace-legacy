@@ -58,9 +58,7 @@ class Themes {
       textColor: Colors.black,
       titleTextStyle: TextStyle(fontSize: 20),
     ),
-
     iconTheme: const IconThemeData(color: Color.fromARGB(230, 0, 0, 0), size: 30),
-
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: Colors.black),
       displayMedium: TextStyle(color: Colors.black, fontSize: 17, height: 1.5),
@@ -78,6 +76,7 @@ class Themes {
       labelMedium: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
       labelSmall: TextStyle(color: Color.fromARGB(255, 100, 100, 100), fontSize: 15),
     ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.white),
   );
 
   //dark mode
@@ -137,9 +136,7 @@ class Themes {
       textColor: Colors.white,
       titleTextStyle: TextStyle(fontSize: 20),
     ),
-
     iconTheme: const IconThemeData(color: Colors.white, size: 30),
-
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: Colors.white),
       displayMedium: TextStyle(color: Colors.white, fontSize: 17, height: 1.5),
@@ -157,5 +154,6 @@ class Themes {
       labelMedium: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
       labelSmall: TextStyle(color: Color.fromARGB(150, 255, 255, 255), fontSize: 15),
     ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.white),
   );
 }

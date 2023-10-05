@@ -135,64 +135,62 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             AutofillGroup(
-                child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: TextFormField(
-                    autofillHints: const [AutofillHints.username],
-                    controller: _usernameController,
-                    textInputAction: TextInputAction.next,
-                    autocorrect: false,
-                    decoration: const InputDecoration(
-                      labelText: 'Uživatelské jméno',
-                      border: OutlineInputBorder(),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextFormField(
+                      autofillHints: const [AutofillHints.username],
+                      controller: _usernameController,
+                      textInputAction: TextInputAction.next,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                        labelText: 'Uživatelské jméno',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Zadejte prosím své uživatelské jméno';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Zadejte prosím své uživatelské jméno';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    textInputAction: TextInputAction.done,
-                    autofillHints: const [AutofillHints.password],
-                    obscureText: showPasswd,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      labelText: 'Heslo',
-                      border: const OutlineInputBorder(),
-                      errorText: passwordErrorText,
-                      suffixIcon: IconButton(
-                        padding: const EdgeInsets.only(right: 10),
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onPressed: () {
-                          setState(() {
-                            showPasswd = !showPasswd;
-                          });
-                        },
-                        icon: Icon(
-                          showPasswd ? Icons.visibility_off : Icons.visibility,
-                          color: const Color(0xff7F7F7F),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      textInputAction: TextInputAction.done,
+                      autofillHints: const [AutofillHints.password],
+                      obscureText: showPasswd,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        labelText: 'Heslo',
+                        border: const OutlineInputBorder(),
+                        errorText: passwordErrorText,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPasswd = !showPasswd;
+                            });
+                          },
+                          icon: Icon(
+                            showPasswd ? Icons.visibility_off : Icons.visibility,
+                            color: const Color(0xff7F7F7F),
+                          ),
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Zadejte prosím své heslo';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Zadejte prosím své heslo';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-              ],
-            )),
+                ],
+              ),
+            ),
             LoginSubmitButton(
               formKey: _formKey,
               usernameController: _usernameController,
@@ -204,17 +202,18 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: const TextStyle(fontSize: 12),
+                style: Theme.of(context).textTheme.displaySmall,
                 children: [
                   TextSpan(
                     text: 'Více informací',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontSize: 12,
-                    ),
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => AnalyticSettingsPage()));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AnalyticSettingsPage(),
+                          ),
+                        );
                       },
                   ),
                 ],
@@ -265,6 +264,7 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         height: 60,
         width: 400,
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
           onPressed: loginFieldCheck,
           child: Builder(
             builder: (context) {
@@ -272,21 +272,14 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
                 return const SizedBox(
                   height: 30,
                   width: 30,
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 3.5,
-                  ),
+                  child: CircularProgressIndicator(strokeWidth: 3.5),
                 );
               } else {
                 return const SizedBox(
                   height: 60,
                   child: Center(
-                      child: Text(
-                    'Přihlásit se',
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  )),
+                    child: Text('Přihlásit se'),
+                  ),
                 );
               }
             },
