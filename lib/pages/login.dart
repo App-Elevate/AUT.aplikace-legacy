@@ -102,13 +102,14 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    try {
-      setHomeWidget = widget.setHomeWidget;
-    } catch (e) {
-      //it just needs to be initialized...
-    }
+  void initState() {
+    super.initState();
+    setHomeWidget = widget.setHomeWidget;
     setLastUrl();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Padding(
@@ -306,11 +307,6 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
       // Reset the form fields.
       //login code
       String url = widget.urlController.text;
-      if (url.contains('http://') || url.contains('https://')) {
-        url = url;
-      } else {
-        url = 'https://$url';
-      }
       try {
         Canteen login =
             await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
