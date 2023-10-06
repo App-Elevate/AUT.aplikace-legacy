@@ -26,13 +26,13 @@ class ProfilePage extends StatelessWidget {
                 _userMainInfo(context),
                 const Divider(),
                 //Jméno a příjmení
-                _userPersonalinfo(),
+                _userPersonalinfo(context),
                 const Divider(),
                 // Platební údaje
-                _userBillingInfo(),
+                _userBillingInfo(context),
                 const Divider(),
                 //Autojídelna
-                _autojidelna(),
+                _autojidelna(context),
                 const Divider()
               ],
             ),
@@ -79,13 +79,9 @@ class ProfilePage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.account_circle,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                  size: 80,
-                ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.account_circle, size: 80),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -106,9 +102,7 @@ class ProfilePage extends StatelessWidget {
                                 if (snapshot.hasData) {
                                   return Text(
                                     snapshot.data?.users[snapshot.data!.currentlyLoggedInId!].username ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 25,
-                                    ),
+                                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.normal),
                                   );
                                 } else {
                                   return const Text('Načítání...');
@@ -121,9 +115,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     Text(
                       'Kredit: ${canteenData!.uzivatel.kredit.toInt()} kč',
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                   ],
                 ),
@@ -135,25 +127,26 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Padding _userPersonalinfo() {
+  Padding _userPersonalinfo(context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Osobní Údaje',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           Builder(
             builder: (context) {
               if (canteenData!.uzivatel.jmeno != null || canteenData!.uzivatel.prijmeni != null) {
-                return Text('Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}');
+                return Text(
+                  'Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}',
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -162,7 +155,10 @@ class ProfilePage extends StatelessWidget {
           Builder(
             builder: (context) {
               if (canteenData!.uzivatel.kategorie != null) {
-                return Text('Kategorie: ${canteenData!.uzivatel.kategorie!}');
+                return Text(
+                  'Kategorie: ${canteenData!.uzivatel.kategorie!}',
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -173,25 +169,26 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Padding _userBillingInfo() {
+  Padding _userBillingInfo(context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Platební Údaje',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           Builder(
             builder: (context) {
               if (canteenData!.uzivatel.ucetProPlatby != null && canteenData!.uzivatel.ucetProPlatby != '') {
-                return Text('Číslo účtu pro platby: ${canteenData!.uzivatel.ucetProPlatby}');
+                return Text(
+                  'Číslo účtu pro platby: ${canteenData!.uzivatel.ucetProPlatby}',
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -200,7 +197,10 @@ class ProfilePage extends StatelessWidget {
           Builder(
             builder: (context) {
               if (canteenData!.uzivatel.specSymbol != null && canteenData!.uzivatel.specSymbol != '') {
-                return Text('Specifický Symbol: ${canteenData!.uzivatel.specSymbol}');
+                return Text(
+                  'Specifický Symbol: ${canteenData!.uzivatel.specSymbol}',
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               } else {
                 //return nothing
                 return const SizedBox(width: 0, height: 0);
@@ -210,7 +210,10 @@ class ProfilePage extends StatelessWidget {
           Builder(
             builder: (context) {
               if (canteenData!.uzivatel.varSymbol != null && canteenData!.uzivatel.varSymbol != '') {
-                return Text('Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}');
+                return Text(
+                  'Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}',
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               } else {
                 return const SizedBox(width: 0, height: 0);
               }
@@ -221,19 +224,17 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Padding _autojidelna() {
+  Padding _autojidelna(context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               'Autojídelna',
-              style: TextStyle(
-                fontSize: 20,
-              ),
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           FutureBuilder(
@@ -242,7 +243,10 @@ class ProfilePage extends StatelessWidget {
               if (snapshot.hasError) {
                 return const Text('Počet objednávek s autojídelnou: chyba při načítání dat');
               } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                return Text('Počet objednávek s autojídelnou: ${snapshot.data}');
+                return Text(
+                  'Počet objednávek s autojídelnou: ${snapshot.data}',
+                  style: Theme.of(context).textTheme.displayMedium,
+                );
               } else {
                 return const Text('Počet objednávek s autojídelnou: 0');
               }

@@ -1,4 +1,5 @@
 import 'package:autojidelna/every_import.dart';
+import 'package:flutter/cupertino.dart';
 
 class Themes {
   //light mode
@@ -59,6 +60,8 @@ class Themes {
       titleTextStyle: TextStyle(fontSize: 20),
     ),
     iconTheme: const IconThemeData(color: Color.fromARGB(230, 0, 0, 0), size: 30),
+
+    primaryTextTheme: const TextTheme(headlineSmall: TextStyle(), bodySmall: TextStyle()),
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: Colors.black),
       displayMedium: TextStyle(color: Colors.black, fontSize: 17, height: 1.5),
@@ -89,7 +92,7 @@ class Themes {
       onSecondary: Colors.white, // Text color on secondary background
       error: Colors.red, // Error color (you can change this to your preference)
       onError: Colors.white, // Text color on error background
-      background: Colors.white, // Background color
+      background: Colors.black, // Background color
       onBackground: Colors.white, // Text color on background
       surface: Colors.deepPurpleAccent, // Surface color
       onSurface: Colors.white, // Text color on surface
