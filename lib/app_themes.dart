@@ -159,4 +159,102 @@ class Themes {
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.white),
   );
+
+  ThemeData raw = ThemeData(
+    applyElevationOverlayColor: true,
+    cupertinoOverrideTheme: NoDefaultCupertinoThemeData(),
+    inputDecorationTheme: InputDecorationTheme(),
+    materialTapTargetSize: MaterialTapTargetSize.padded,
+    pageTransitionsTheme: PageTransitionsTheme(),
+    platform: TargetPlatform.android,
+    scrollbarTheme: ScrollbarThemeData(),
+    splashFactory: NoSplash.splashFactory,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    brightness: Brightness.dark,
+    canvasColor: Colors.amber,
+    cardColor: Colors.amberAccent,
+    colorScheme: ColorScheme(
+        brightness: Brightness.dark,
+        primary: Colors.purple,
+        onPrimary: Colors.white,
+        secondary: Colors.deepPurple,
+        onSecondary: Colors.white,
+        error: Colors.red,
+        onError: Colors.white,
+        background: Colors.black54,
+        onBackground: Colors.white,
+        surface: Colors.grey,
+        onSurface: Colors.white),
+    dialogBackgroundColor: Colors.black12,
+    disabledColor: Colors.black26,
+    dividerColor: Colors.black38,
+    focusColor: Colors.black45,
+    highlightColor: Colors.black54,
+    hintColor: Colors.green,
+    hoverColor: Colors.black87,
+    indicatorColor: Colors.blue,
+    /*primaryColor:Colors.blueAccent,
+    primaryColorDark:Colors.blueGrey,
+    primaryColorLight:Colors.purple,
+    MaterialColor primarySwatch,*/
+    scaffoldBackgroundColor: Colors.black,
+    //Color secondaryHeaderColor,
+    shadowColor: Colors.black,
+    splashColor: Colors.transparent,
+    /* Color unselectedWidgetColor,
+    String fontFamily,
+    List<String> fontFamilyFallback,
+    String package,*/
+    iconTheme: IconThemeData(),
+    //primaryIconTheme:IconThemeData(),
+    //TextTheme primaryTextTheme,
+    textTheme: TextTheme(),
+    typography: Typography(),
+    actionIconTheme: ActionIconThemeData(),
+    appBarTheme: AppBarTheme(),
+    /*badgeTheme:BadgeThemeData(),*/
+    /*MaterialBannerThemeData bannerTheme, */
+    /*BottomAppBarTheme bottomAppBarTheme,*/
+    /*BottomNavigationBarThemeData bottomNavigationBarTheme,*/
+    /* BottomSheetThemeData bottomSheetTheme,*/
+    /* ButtonBarThemeData buttonBarTheme,*/
+    buttonTheme: ButtonThemeData(),
+    /* CardTheme cardTheme,*/
+    /* CheckboxThemeData checkboxTheme,*/
+    /* ChipThemeData chipTheme, */
+    /*DataTableThemeData dataTableTheme,*/
+    datePickerTheme: DatePickerThemeData(),
+    dialogTheme: DialogTheme(),
+    dividerTheme: DividerThemeData(),
+    drawerTheme: DrawerThemeData(),
+    /* DropdownMenuThemeData dropdownMenuTheme,*/
+    elevatedButtonTheme: ElevatedButtonThemeData(),
+    expansionTileTheme: ExpansionTileThemeData(),
+    filledButtonTheme: FilledButtonThemeData(),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(),
+    iconButtonTheme: IconButtonThemeData(),
+    listTileTheme: ListTileThemeData(),
+    /* MenuBarThemeData menuBarTheme,*/
+    /* MenuButtonThemeData menuButtonTheme,*/
+    /* MenuThemeData menuTheme,*/
+    /* NavigationBarThemeData navigationBarTheme,*/
+    navigationDrawerTheme: NavigationDrawerThemeData(),
+    navigationRailTheme: NavigationRailThemeData(),
+    outlinedButtonTheme: OutlinedButtonThemeData(),
+    popupMenuTheme: PopupMenuThemeData(),
+    progressIndicatorTheme: ProgressIndicatorThemeData(),
+    radioTheme: RadioThemeData(),
+    searchBarTheme: SearchBarThemeData(),
+    searchViewTheme: SearchViewThemeData(),
+    segmentedButtonTheme: SegmentedButtonThemeData(),
+    sliderTheme: SliderThemeData(),
+    snackBarTheme: SnackBarThemeData(),
+    switchTheme: SwitchThemeData(),
+    tabBarTheme: TabBarTheme(),
+    textButtonTheme: TextButtonThemeData(),
+    textSelectionTheme: TextSelectionThemeData(),
+    timePickerTheme: TimePickerThemeData(),
+    toggleButtonsTheme: ToggleButtonsThemeData(),
+    tooltipTheme: TooltipThemeData(),
+  );
 }
