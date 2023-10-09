@@ -7,10 +7,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
     return;
   }
   try {
-    if (releaseInfo.isAndroid == false) {
-      return;
-    }
-    if (releaseInfo.currentlyLatestVersion!) {
+    if (releaseInfo.currentlyLatestVersion) {
       return;
     }
   } catch (e) {
@@ -55,36 +52,37 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    fixedSize: const Size.fromWidth(500),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: const Text(
-                    'Aktualizovat',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17.5,
+                if (releaseInfo.isAndroid)
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      fixedSize: const Size.fromWidth(500),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      backgroundColor: Colors.blue,
                     ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
+                    child: const Text(
+                      'Aktualizovat',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17.5,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
 
-                    PackageInfo.fromPlatform().then(
-                      (value) {
-                        if (analyticsEnabledGlobally && analytics != null) {
-                          analytics!.logEvent(
-                            name: 'updateButtonClicked',
-                            parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
-                          );
-                        }
-                      },
-                    );
-                    networkInstallApk(releaseInfo.downloadUrl!, context);
-                  },
-                ),
+                      PackageInfo.fromPlatform().then(
+                        (value) {
+                          if (analyticsEnabledGlobally && analytics != null) {
+                            analytics!.logEvent(
+                              name: 'updateButtonClicked',
+                              parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
+                            );
+                          }
+                        },
+                      );
+                      networkInstallApk(releaseInfo.downloadUrl!, context);
+                    },
+                  ),
                 TextButton(
                   style: TextButton.styleFrom(
                     fixedSize: const Size.fromWidth(500),

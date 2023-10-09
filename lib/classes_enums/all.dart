@@ -69,12 +69,12 @@ class ReleaseInfo {
     this.latestVersion,
     this.downloadUrl,
     this.changelog,
-    this.currentlyLatestVersion,
+    required this.currentlyLatestVersion,
   });
   String? latestVersion;
   String? downloadUrl;
   String? changelog;
-  bool? currentlyLatestVersion;
+  bool currentlyLatestVersion;
   bool isAndroid;
 }
 
