@@ -7,11 +7,10 @@ late ReleaseInfo releaseInfo;
 ///it does so only on android
 Future<ReleaseInfo> getLatestRelease() async {
   try {
-    if (!Platform.isAndroid) {
-      releaseInfo = ReleaseInfo(isAndroid: false);
-      return releaseInfo;
+    bool isAndroid = false;
+    if (Platform.isAndroid) {
+      isAndroid = true;
     }
-
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     Uri url = Uri.parse('https://api.github.com/repos/tpkowastaken/autojidelna/releases/latest');
@@ -45,11 +44,15 @@ Future<ReleaseInfo> getLatestRelease() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appVersion = packageInfo.version;
     releaseInfo = ReleaseInfo(
-        isAndroid: true, latestVersion: version, downloadUrl: downloadUrl, changelog: patchNotes, currentlyLatestVersion: version == appVersion);
+        isAndroid: isAndroid, latestVersion: version, downloadUrl: downloadUrl, changelog: patchNotes, currentlyLatestVersion: version == appVersion);
     return releaseInfo;
   } catch (e) {
     //having the last version isn't so important so we can just ignore it if it goes wrong
-    releaseInfo = ReleaseInfo(isAndroid: false);
+    bool isAndroid = false;
+    if (Platform.isAndroid) {
+      isAndroid = true;
+    }
+    releaseInfo = ReleaseInfo(isAndroid: isAndroid, currentlyLatestVersion: true);
     return releaseInfo;
   }
 }

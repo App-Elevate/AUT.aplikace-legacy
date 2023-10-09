@@ -312,6 +312,7 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         } else if (e.toString().contains('login failed')) {
           widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         } else {
+          //TODO: check internet connection according to device
           widget.errorSetter!('Připojení k serveru selhalo', LoginFormErrorField.url);
         }
         setState(() {

@@ -7,10 +7,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
     return;
   }
   try {
-    if (releaseInfo.isAndroid == false) {
-      return;
-    }
-    if (releaseInfo.currentlyLatestVersion!) {
+    if (releaseInfo.currentlyLatestVersion) {
       return;
     }
   } catch (e) {

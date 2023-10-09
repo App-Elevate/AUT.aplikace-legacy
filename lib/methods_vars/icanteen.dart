@@ -51,7 +51,6 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
   }
   if (url.contains('http://')) {
     url = url.replaceAll('http://', '');
-    //I will not support sending passwords over http...
   }
   if (url.contains('/')) {
     url = url.substring(0, url.indexOf('/'));
@@ -99,9 +98,44 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
       if (analyticsEnabledGlobally && analytics != null) {
         analytics!.logEvent(name: 'incorrectly_typed_url', parameters: {'url': url});
       }
+      try {
+        url = url.replaceAll('https://', 'http://');
+        await canteenInstance!.login(username, password);
+        if (!canteenInstance!.prihlasen) {
+          await Future.delayed(const Duration(seconds: 1)); //timeout to let the server live
+          if (!canteenInstance!.prihlasen) {
+            await canteenInstance!.login(username, password); //second attempt
+          }
+          if (!canteenInstance!.prihlasen && analyticsEnabledGlobally && analytics != null) {
+            analytics!.logEvent(name: 'incorrectly_typed_credentials');
+          }
+          if (!canteenInstance!.prihlasen) {
+            return Future.error('login failed');
+          }
+        }
+      } catch (e) {
+        return Future.error('bad url');
+      }
       return Future.error('bad url'); //sometimes this can also be just bad connection
     }
-    return Future.error('no internet');
+    try {
+      url = url.replaceAll('https://', 'http://');
+      await canteenInstance!.login(username, password);
+      if (!canteenInstance!.prihlasen) {
+        await Future.delayed(const Duration(seconds: 1)); //timeout to let the server live
+        if (!canteenInstance!.prihlasen) {
+          await canteenInstance!.login(username, password); //second attempt
+        }
+        if (!canteenInstance!.prihlasen && analyticsEnabledGlobally && analytics != null) {
+          analytics!.logEvent(name: 'incorrectly_typed_credentials');
+        }
+        if (!canteenInstance!.prihlasen) {
+          return Future.error('login failed');
+        }
+      }
+    } catch (e) {
+      return Future.error('no internet');
+    }
   }
   if (analyticsEnabledGlobally && analytics != null) {
     analytics!.logLogin(loginMethod: savedCredetnials ? 'saved credentials' : 'manual login');

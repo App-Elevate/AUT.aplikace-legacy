@@ -175,31 +175,15 @@ class MainAccountDrawer extends StatelessWidget {
                       ),
                       Builder(
                         builder: (context) {
-                          try {} catch (e) {
-                            return const SizedBox(
-                              height: 0,
-                              width: 0,
-                            );
-                          }
                           return Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: ElevatedButton(
                               onPressed: () async {
                                 await getLatestRelease();
-                                if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
+                                if (releaseInfo.currentlyLatestVersion && context.mounted) {
                                   Navigator.of(context).pop();
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍'))
-                                      .closed
-                                      .then((SnackBarClosedReason reason) {
-                                    snackbarshown.shown = false;
-                                  });
-                                  return;
-                                } else if (!releaseInfo.isAndroid) {
-                                  if (!context.mounted) return;
-                                  Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackbarFunction('Nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu.'))
                                       .closed
                                       .then((SnackBarClosedReason reason) {
                                     snackbarshown.shown = false;
