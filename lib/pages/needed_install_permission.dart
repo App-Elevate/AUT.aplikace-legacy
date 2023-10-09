@@ -7,7 +7,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Potřebné oprávnění pro Instalaci'),
+        title: const Text('Potřebné oprávnění'),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 60),
@@ -15,16 +15,10 @@ class NeededInstallPermissionPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Pro automatickou instalaci aktualizace je potřeba povolit oprávnění pro instalaci aplikací z neznámých zdrojů.',
-              style: TextStyle(fontSize: 17.5),
-            ),
+            const Text('Pro automatickou instalaci aktualizace je potřeba povolit oprávnění pro instalaci aplikací z neznámých zdrojů.'),
             const Padding(
               padding: EdgeInsets.only(top: 10),
-              child: Text(
-                "Ta může vypadat takto:",
-                style: TextStyle(fontSize: 17.5),
-              ),
+              child: Text("Ta může vypadat takto:"),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
@@ -36,9 +30,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
               ),
             ),
             const Text(
-              'Toto oprávnění používáme pouze k aktualizaci aplikace. Pokud si nepřejete oprávnění povolit můžete stále stáhnout apk z githubu.',
-              style: TextStyle(fontSize: 17.5),
-            ),
+                'Toto oprávnění používáme pouze k aktualizaci aplikace. Pokud si nepřejete oprávnění povolit můžete stále stáhnout apk z githubu.'),
             Padding(
               padding: const EdgeInsets.only(top: 40.0),
               child: Column(
@@ -47,20 +39,8 @@ class NeededInstallPermissionPage extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
                     child: SizedBox(
                       width: 550,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          fixedSize: const Size.fromWidth(500),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          backgroundColor: Colors.blue,
-                        ),
-                        child: const Text(
-                          'Udělit Opravnění',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17.5,
-                          ),
-                        ),
+                      child: ElevatedButton(
+                        child: const Text('Udělit Opravnění'),
                         onPressed: () {
                           Navigator.of(context).pop();
                           Permission.requestInstallPackages.request();
@@ -70,29 +50,21 @@ class NeededInstallPermissionPage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        fixedSize: const Size.fromWidth(550),
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        //color based on brightness
-                        backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
-                            ? const Color.fromARGB(20, 255, 255, 255)
-                            : const Color.fromARGB(20, 0, 0, 0),
+                    child: SizedBox(
+                      width: 550,
+                      child: ElevatedButton(
+                        child: const Text('Zobrazit na githubu'),
+                        onPressed: () {
+                          launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
+                              mode: LaunchMode.externalApplication);
+                          Navigator.of(context).pop();
+                        },
                       ),
-                      child: const Text(
-                        'Zobrazit na githubu',
-                        style: TextStyle(fontSize: 17.5),
-                      ),
-                      onPressed: () {
-                        launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
-                            mode: LaunchMode.externalApplication);
-                        Navigator.of(context).pop();
-                      },
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

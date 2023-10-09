@@ -66,8 +66,8 @@ class _MyAppState extends State<MyApp> {
     getLatestRelease();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Themes().raw,
-      darkTheme: Themes().raw,
+      theme: Themes().darkTheme,
+      darkTheme: Themes().darkTheme,
       themeMode: ThemeMode.system,
       home: WillPopScope(
         onWillPop: () => _backPressed(_myAppKey),
@@ -147,13 +147,11 @@ class LoadingLoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 148, 18, 148),
-        title: const Center(child: Text('Autojídelna')),
+        title: const Text('Autojídelna'),
+        centerTitle: true,
       ),
       body: const Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          CircularProgressIndicator(),
-        ]),
+        child: CircularProgressIndicator(),
       ),
     );
   }

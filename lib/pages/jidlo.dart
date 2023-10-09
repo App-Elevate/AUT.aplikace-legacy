@@ -34,19 +34,10 @@ class JidloDetail extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Polévka',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text('Polévka'),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: HtmlWidget(
-                          jidloString.polevka!,
-                          textStyle: const TextStyle(fontSize: 20, height: 1.5),
-                        ),
+                        child: HtmlWidget(jidloString.polevka!),
                       ),
                     ],
                   ),
@@ -62,19 +53,10 @@ class JidloDetail extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Hlavní chod',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text('Hlavní chod'),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: HtmlWidget(
-                          jidloString.hlavniJidlo!,
-                          textStyle: const TextStyle(fontSize: 20, height: 1.5),
-                        ),
+                        child: HtmlWidget(jidloString.hlavniJidlo!),
                       ),
                     ],
                   ),
@@ -90,19 +72,10 @@ class JidloDetail extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Pití',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text('Pití'),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: HtmlWidget(
-                          jidloString.piti!,
-                          textStyle: const TextStyle(fontSize: 20, height: 1.5),
-                        ),
+                        child: HtmlWidget(jidloString.piti!),
                       ),
                     ],
                   ),
@@ -118,19 +91,10 @@ class JidloDetail extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Přílohy',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text('Přílohy'),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: HtmlWidget(
-                          jidloString.salatovyBar!,
-                          textStyle: const TextStyle(fontSize: 20, height: 1.5),
-                        ),
+                        child: HtmlWidget(jidloString.salatovyBar!),
                       ),
                     ],
                   ),
@@ -146,19 +110,10 @@ class JidloDetail extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Alergeny',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      const Text('Alergeny'),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: HtmlWidget(
-                          jidloString.alergeny!,
-                          textStyle: const TextStyle(fontSize: 20, height: 1.5),
-                        ),
+                        child: HtmlWidget(jidloString.alergeny!),
                       ),
                     ],
                   ),

@@ -54,70 +54,55 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextButton(
-                  style: TextButton.styleFrom(
-                    fixedSize: const Size.fromWidth(500),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    backgroundColor: Colors.blue,
+                SizedBox(
+                  width: 500,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    child: const Text('Aktualizovat'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+
+                      PackageInfo.fromPlatform().then(
+                        (value) {
+                          if (analyticsEnabledGlobally && analytics != null) {
+                            analytics!.logEvent(
+                              name: 'updateButtonClicked',
+                              parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
+                            );
+                          }
+                        },
+                      );
+                      networkInstallApk(releaseInfo.downloadUrl!, context);
+                    },
                   ),
-                  child: const Text(
-                    'Aktualizovat',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17.5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: SizedBox(
+                    width: 500,
+                    child: ElevatedButton(
+                      onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
+                          mode: LaunchMode.externalApplication)),
+                      child: const Text('Zobrazit na githubu'),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-
-                    PackageInfo.fromPlatform().then(
-                      (value) {
-                        if (analyticsEnabledGlobally && analytics != null) {
-                          analytics!.logEvent(
-                            name: 'updateButtonClicked',
-                            parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
-                          );
-                        }
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: SizedBox(
+                    width: 500,
+                    child: ElevatedButton(
+                      child: const Text('Teď ne'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
-                    );
-                    networkInstallApk(releaseInfo.downloadUrl!, context);
-                  },
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    fixedSize: const Size.fromWidth(500),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    //color based on brightness
-                    backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
-                        ? const Color.fromARGB(20, 255, 255, 255)
-                        : const Color.fromARGB(20, 0, 0, 0),
+                    ),
                   ),
-                  onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
-                      mode: LaunchMode.externalApplication)),
-                  child: const Text(
-                    'Zobrazit na githubu',
-                    style: TextStyle(fontSize: 17.5),
-                  ),
-                ),
-                TextButton(
-                  //make smaller space after the text
-                  style: TextButton.styleFrom(
-                    fixedSize: const Size.fromWidth(500),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    //color based on brightness
-                    backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
-                        ? const Color.fromARGB(20, 255, 255, 255)
-                        : const Color.fromARGB(20, 0, 0, 0),
-                  ),
-                  child: const Text(
-                    'Teď ne',
-                    style: TextStyle(fontSize: 17.5),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
                 ),
               ],
             ),

@@ -16,7 +16,6 @@ class MainAccountDrawer extends StatelessWidget {
     return Drawer(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 148, 18, 148),
           title: const Text('Autojídelna'),
           centerTitle: true,
         ),
@@ -29,11 +28,10 @@ class MainAccountDrawer extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       child: Icon(
                         Icons.account_circle,
-                        color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
                         size: 75,
                       ),
                     ),
@@ -42,26 +40,22 @@ class MainAccountDrawer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: TextButton(
-                          style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
+                          style: Theme.of(context).textButtonTheme.style?.copyWith(
+                                textStyle: const MaterialStatePropertyAll(
+                                  TextStyle(
+                                    inherit: true,
+                                    fontSize: 20,
+                                    letterSpacing: 0.1,
+                                  ),
+                                ),
+                              ),
                           onPressed: () {
                             SwitchAccountVisible().setVisible(true);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                username,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : Colors.black,
-                                ),
-                              ),
-                              Icon(
-                                Icons.expand_more,
-                                color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                              )
-                            ],
+                            children: [Text(username), const Icon(Icons.expand_more)],
                           ),
                         ),
                       ),
@@ -79,32 +73,15 @@ class MainAccountDrawer extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.account_balance_wallet,
-                                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                                  size: 35,
-                                ),
+                                const Icon(Icons.account_balance_wallet),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        '${canteenData!.uzivatel.kredit.toInt()}',
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Kč',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                                              ? const Color.fromARGB(175, 255, 255, 255)
-                                              : const Color(0xff323232),
-                                        ),
-                                      ),
+                                      Text('${canteenData!.uzivatel.kredit.toInt()}'),
+                                      const Text('Kč'),
                                     ],
                                   ),
                                 )
@@ -120,9 +97,7 @@ class MainAccountDrawer extends StatelessWidget {
                             //    crossAxisAlignment: CrossAxisAlignment.center,
                             //    children: [
                             //      Icon(
-                            //        Icons.hub,
-                            //        color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                            //        size: 35,
+                            //        Icons.hub
                             //      ),
                             //      Padding(
                             //        padding: const EdgeInsets.only(left: 10.0),
@@ -131,19 +106,10 @@ class MainAccountDrawer extends StatelessWidget {
                             //          crossAxisAlignment: CrossAxisAlignment.start,
                             //          children: [
                             //            const Text(
-                            //              '0',
-                            //              style: TextStyle(
-                            //                fontSize: 20,
-                            //              ),
+                            //              '0'
                             //            ),
                             //            Text(
-                            //              'Bodů',
-                            //              style: TextStyle(
-                            //                fontSize: 15,
-                            //                color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                            //                    ? const Color.fromARGB(175, 255, 255, 255)
-                            //                    : const Color(0xff323232),
-                            //              ),
+                            //              'Bodů'
                             //            ),
                             //          ],
                             //        ),
@@ -161,15 +127,8 @@ class MainAccountDrawer extends StatelessWidget {
               //navigation buttons
               //profile
               ListTile(
-                title: const Text(
-                  'Profil',
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(
-                  Icons.account_circle,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                  size: 30,
-                ),
+                title: const Text('Profil'),
+                leading: const Icon(Icons.account_circle),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -183,15 +142,8 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //settings
               ListTile(
-                title: const Text(
-                  'Nastavení',
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(
-                  Icons.settings,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                  size: 30,
-                ),
+                title: const Text('Nastavení'),
+                leading: const Icon(Icons.settings),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -203,15 +155,8 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //about app
               ListTile(
-                title: const Text(
-                  'O Aplikaci',
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(
-                  Icons.info_rounded,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                  size: 30,
-                ),
+                title: const Text('O Aplikaci'),
+                leading: const Icon(Icons.info_rounded),
                 onTap: () async {
                   if (!context.mounted) return;
                   Navigator.of(context).pop();
@@ -235,46 +180,42 @@ class MainAccountDrawer extends StatelessWidget {
                       ),
                       Builder(
                         builder: (context) {
-                          try {
-                            if (!releaseInfo.isAndroid) {
-                              return const SizedBox(
-                                height: 0,
-                                width: 0,
-                              );
-                            }
-                          } catch (e) {
+                          try {} catch (e) {
                             return const SizedBox(
                               height: 0,
                               width: 0,
                             );
                           }
-                          return ElevatedButton(
-                            onPressed: () async {
-                              await getLatestRelease();
-                              if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍', context))
-                                    .closed
-                                    .then((SnackBarClosedReason reason) {
-                                  snackbarshown.shown = false;
-                                });
-                                return;
-                              } else if (!releaseInfo.isAndroid) {
-                                if (!context.mounted) return;
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(
-                                        snackbarFunction('nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...', context))
-                                    .closed
-                                    .then((SnackBarClosedReason reason) {
-                                  snackbarshown.shown = false;
-                                });
-                                return;
-                              }
-                              Future.delayed(Duration.zero, () => newUpdateDialog(context));
-                            },
-                            child: const Text('Zkontrolovat aktualizace'),
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await getLatestRelease();
+                                if (releaseInfo.isAndroid && releaseInfo.currentlyLatestVersion! && context.mounted) {
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍'))
+                                      .closed
+                                      .then((SnackBarClosedReason reason) {
+                                    snackbarshown.shown = false;
+                                  });
+                                  return;
+                                } else if (!releaseInfo.isAndroid) {
+                                  if (!context.mounted) return;
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                          snackbarFunction('Nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...'))
+                                      .closed
+                                      .then((SnackBarClosedReason reason) {
+                                    snackbarshown.shown = false;
+                                  });
+                                  return;
+                                }
+                                Future.delayed(Duration.zero, () => newUpdateDialog(context));
+                              },
+                              child: const Text('Zkontrolovat aktualizace'),
+                            ),
                           );
                         },
                       ),
@@ -284,16 +225,10 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //log out
               ListTile(
-                title: const Text(
-                  'Sdílet Aplikaci',
-                  style: TextStyle(fontSize: 20),
-                ),
-                leading: Icon(
-                  //share icon
-                  Icons.share,
-                  color: MediaQuery.of(context).platformBrightness == Brightness.dark ? Colors.white : const Color(0xff323232),
-                  size: 30,
-                ),
+                title: const Text('Sdílet Aplikaci'),
+                leading: const Icon(
+                    //share icon
+                    Icons.share),
                 onTap: () async {
                   final RenderBox? box = context.findRenderObject() as RenderBox?;
                   String text = 'https://autojidelna.tomprotiva.com';

@@ -27,32 +27,21 @@ class LoginScreen extends StatelessWidget {
           //title color
           foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
         ),
-        body: Center(
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 50.0),
-                  height: 65,
-                  //cool title
-                  child: const Text(
-                    'Autojídelna',
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto',
-                    ),
-                  ),
-                ),
-                LoginForm(
-                  setHomeWidget: setHomeWidget,
-                ),
-              ],
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 75,
+              child: Text(
+                'Autojídelna',
+                style: TextStyle(fontSize: 60),
+              ),
             ),
-          ),
+            LoginForm(
+              setHomeWidget: setHomeWidget,
+            ),
+          ],
         ),
       ),
     );
@@ -174,10 +163,7 @@ class _LoginFormState extends State<LoginForm> {
                               showPasswd = !showPasswd;
                             });
                           },
-                          icon: Icon(
-                            showPasswd ? Icons.visibility_off : Icons.visibility,
-                            color: const Color(0xff7F7F7F),
-                          ),
+                          icon: Icon(showPasswd ? Icons.visibility_off : Icons.visibility),
                         ),
                       ),
                       validator: (value) {
@@ -202,11 +188,13 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: Theme.of(context).textTheme.displaySmall,
                 children: [
                   TextSpan(
                     text: 'Více informací',
-                    style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Colors.blue),
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
+                    ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.of(context).push(
@@ -264,8 +252,8 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
         height: 60,
         width: 400,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-          onPressed: loginFieldCheck,
+          onPressed: loggingIn ? null : loginFieldCheck,
+          style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
           child: Builder(
             builder: (context) {
               if (loggingIn) {
