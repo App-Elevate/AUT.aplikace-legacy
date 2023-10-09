@@ -90,7 +90,7 @@ class ProfilePage extends StatelessWidget {
                                     style: Theme.of(context).textTheme.headlineLarge,
                                   );
                                 } else {
-                                  return const Text('Načítání...');
+                                  return const Text('Načítání');
                                 }
                               },
                             );
@@ -133,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                     if (canteenData!.uzivatel.jmeno != null || canteenData!.uzivatel.prijmeni != null) {
                       return Text(
                         'Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
                       return const SizedBox(width: 0, height: 0);
@@ -145,7 +145,7 @@ class ProfilePage extends StatelessWidget {
                     if (canteenData!.uzivatel.kategorie != null) {
                       return Text(
                         'Kategorie: ${canteenData!.uzivatel.kategorie!}',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
                       return const SizedBox(width: 0, height: 0);
@@ -181,7 +181,7 @@ class ProfilePage extends StatelessWidget {
                     if (canteenData!.uzivatel.ucetProPlatby != null && canteenData!.uzivatel.ucetProPlatby != '') {
                       return Text(
                         'Číslo účtu: ${canteenData!.uzivatel.ucetProPlatby}',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
                       return const SizedBox(width: 0, height: 0);
@@ -193,7 +193,7 @@ class ProfilePage extends StatelessWidget {
                     if (canteenData!.uzivatel.specSymbol != null && canteenData!.uzivatel.specSymbol != '') {
                       return Text(
                         'Specifický Symbol: ${canteenData!.uzivatel.specSymbol}',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
                       //return nothing
@@ -206,7 +206,7 @@ class ProfilePage extends StatelessWidget {
                     if (canteenData!.uzivatel.varSymbol != null && canteenData!.uzivatel.varSymbol != '') {
                       return Text(
                         'Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}',
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
                       return const SizedBox(width: 0, height: 0);
@@ -241,17 +241,17 @@ class ProfilePage extends StatelessWidget {
                 if (snapshot.hasError) {
                   return Text(
                     'Objednávky s autojídelnou: chyba při načítání dat',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                   return Text(
                     'Objednávky s autojídelnou: ${snapshot.data}',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 } else {
                   return Text(
                     'Objednávky s autojídelnou: 0',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 }
               },

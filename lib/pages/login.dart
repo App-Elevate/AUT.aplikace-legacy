@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 75,
+              height: 85,
               child: Text(
                 'Autojídelna',
                 style: TextStyle(fontSize: 60),

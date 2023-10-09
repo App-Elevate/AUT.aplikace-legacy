@@ -64,7 +64,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                               RichText(
                                 text: TextSpan(
                                   text:
-                                      'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto... Více informací naleznete ve ',
+                                      'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve ',
                                   children: [
                                     TextSpan(
                                       text: 'Zdrojovém kódu',

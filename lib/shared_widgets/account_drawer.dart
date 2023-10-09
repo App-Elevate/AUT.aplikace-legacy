@@ -199,8 +199,7 @@ class MainAccountDrawer extends StatelessWidget {
                                   if (!context.mounted) return;
                                   Navigator.of(context).pop();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                          snackbarFunction('Nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu...'))
+                                      .showSnackBar(snackbarFunction('Nepovedlo se připojit k serverům githubu. Ověřte připojení a zkuste to znovu.'))
                                       .closed
                                       .then((SnackBarClosedReason reason) {
                                     snackbarshown.shown = false;

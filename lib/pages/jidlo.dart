@@ -43,7 +43,7 @@ class JidloDetail extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
                         jidloString.polevka!,
-                        textStyle: Theme.of(context).textTheme.titleLarge,
+                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -68,7 +68,7 @@ class JidloDetail extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
                         jidloString.hlavniJidlo!,
-                        textStyle: Theme.of(context).textTheme.titleLarge,
+                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -93,7 +93,7 @@ class JidloDetail extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
                         jidloString.piti!,
-                        textStyle: Theme.of(context).textTheme.titleLarge,
+                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -118,7 +118,7 @@ class JidloDetail extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
                         jidloString.salatovyBar!,
-                        textStyle: Theme.of(context).textTheme.titleLarge,
+                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -143,7 +143,7 @@ class JidloDetail extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
                         jidloString.alergeny!,
-                        textStyle: Theme.of(context).textTheme.titleLarge,
+                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],

@@ -152,7 +152,7 @@ void failedDownload(BuildContext context) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Aktualizace aplikace selhala'),
-        content: const Text('Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu...'),
+        content: const Text('Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.'),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: <Widget>[

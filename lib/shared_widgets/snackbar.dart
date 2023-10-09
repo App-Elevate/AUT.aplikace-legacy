@@ -17,7 +17,7 @@ SnackBar dynamicSnackbarFunction(String snackBarText, BuildContext context, Valu
       valueListenable: valueListenable,
       builder: (ctx, value, child) {
         if (value == -1) {
-          return const Text('Aktualizace - Čeká se na oprávnění...');
+          return const Text('Aktualizace - Čeká se na oprávnění');
         }
         if (value == -2) {
           Future.delayed(const Duration(seconds: 4), () {
@@ -32,7 +32,7 @@ SnackBar dynamicSnackbarFunction(String snackBarText, BuildContext context, Valu
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   //light or dark theme
-                  child: Text('Došlo k chybě při stahování... Ověřte připojení a zkuste to znovu'),
+                  child: Text('Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu'),
                 ),
               ),
               Flexible(
@@ -75,7 +75,7 @@ SnackBar dynamicSnackbarFunction(String snackBarText, BuildContext context, Valu
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   //light or dark theme
-                  child: Text('Aktualizace byla stažena, instalování...'),
+                  child: Text('Aktualizace byla stažena, instalování'),
                 ),
               ),
               Builder(

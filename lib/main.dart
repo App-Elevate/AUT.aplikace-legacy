@@ -66,8 +66,8 @@ class _MyAppState extends State<MyApp> {
     getLatestRelease();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Themes().darkTheme,
-      darkTheme: Themes().darkTheme,
+      theme: Themes.getTheme(ColorSchemes().light, context),
+      darkTheme: Themes.getTheme(ColorSchemes().dark, context),
       themeMode: ThemeMode.system,
       home: WillPopScope(
         onWillPop: () => _backPressed(_myAppKey),
@@ -114,12 +114,12 @@ class LoggingInWidget extends StatelessWidget {
                   } else {
                     return LoginScreen(setHomeWidget: setHomeWidget);
                   }
-                  return const LoadingLoginPage(textWidget: Text('Přihlašování...'));
+                  return const LoadingLoginPage(textWidget: Text('Přihlašování'));
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   Future.delayed(Duration.zero, () => newUpdateDialog(context));
                   return MainAppScreen(setHomeWidget: setHomeWidget);
                 } else {
-                  return const LoadingLoginPage(textWidget: Text('Přihlašování...'));
+                  return const LoadingLoginPage(textWidget: Text('Přihlašování'));
                 }
               },
             );
