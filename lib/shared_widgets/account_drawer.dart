@@ -14,13 +14,9 @@ class MainAccountDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final String username = canteenData!.username;
     return Drawer(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Autojídelna'),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
           child: Column(
             children: [
               //main account stuff
@@ -80,7 +76,10 @@ class MainAccountDrawer extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text('${canteenData!.uzivatel.kredit.toInt()}'),
+                                      Text(
+                                        '${canteenData!.uzivatel.kredit.toInt()}',
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
                                       const Text('Kč'),
                                     ],
                                   ),
@@ -96,21 +95,17 @@ class MainAccountDrawer extends StatelessWidget {
                             //    mainAxisAlignment: MainAxisAlignment.center,
                             //    crossAxisAlignment: CrossAxisAlignment.center,
                             //    children: [
-                            //      Icon(
-                            //        Icons.hub
-                            //      ),
+                            //      Icon(),
                             //      Padding(
                             //        padding: const EdgeInsets.only(left: 10.0),
                             //        child: Column(
                             //          mainAxisAlignment: MainAxisAlignment.center,
                             //          crossAxisAlignment: CrossAxisAlignment.start,
                             //          children: [
-                            //            const Text(
-                            //              '0'
-                            //            ),
+                            //            const Text(""),
                             //            Text(
-                            //              'Bodů'
-                            //            ),
+                            //              "",
+                            //              style: TextStyle(fontSize: 20)),
                             //          ],
                             //        ),
                             //      ),
@@ -223,12 +218,10 @@ class MainAccountDrawer extends StatelessWidget {
                   );
                 },
               ),
-              //log out
+              // share app
               ListTile(
                 title: const Text('Sdílet Aplikaci'),
-                leading: const Icon(
-                    //share icon
-                    Icons.share),
+                leading: const Icon(Icons.share),
                 onTap: () async {
                   final RenderBox? box = context.findRenderObject() as RenderBox?;
                   String text = 'https://autojidelna.tomprotiva.com';

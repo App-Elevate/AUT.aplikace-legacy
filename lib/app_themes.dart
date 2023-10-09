@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 class Themes {
   //darkmode
-  ThemeData darkTheme = ThemeData(
+  final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     applyElevationOverlayColor: true,
     cupertinoOverrideTheme: const NoDefaultCupertinoThemeData(),
@@ -23,97 +23,79 @@ class Themes {
     splashFactory: NoSplash.splashFactory,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     brightness: Brightness.dark,
-    canvasColor: Colors.black,
-    colorScheme: const ColorScheme(
-      brightness: Brightness.dark,
-      primary: Color(0xffbb86fc),
-      onPrimary: Colors.black,
-      secondary: Color(0xff018786),
-      onSecondary: Colors.black,
-      error: Color(0xFFCF6679),
-      onError: Colors.white,
-      background: Color(0xff121212),
-      onBackground: Colors.white,
-      surface: Color(0xff121212),
-      onSurface: Colors.white,
-      surfaceTint: Colors.white,
-    ),
-    dialogBackgroundColor: const Color(0xFF3C3C3C),
-    disabledColor: Colors.black26,
-    focusColor: Colors.black45,
-    highlightColor: Colors.black54,
-    //MaterialColor primarySwatch,
-    scaffoldBackgroundColor: const Color(0xff121212),
-    //Color secondaryHeaderColor,
+    canvasColor: ColorSchemes().darkColorScheme.background,
+    colorScheme: ColorSchemes().darkColorScheme,
+    disabledColor: ColorSchemes().darkColorScheme.surfaceVariant,
+    scaffoldBackgroundColor: ColorSchemes().darkColorScheme.background,
     shadowColor: Colors.transparent,
     splashColor: Colors.transparent,
     /* Color unselectedWidgetColor,
     String fontFamily,
     List<String> fontFamilyFallback,
     String package,*/
-    iconTheme: const IconThemeData(
+    iconTheme: IconThemeData(
       size: 30,
-      color: Colors.white,
+      color: ColorSchemes().darkColorScheme.onBackground,
     ),
-    //primaryIconTheme:IconThemeData(),
-    //TextTheme primaryTextTheme,
-    textTheme: const TextTheme(),
-    typography: Typography(),
-    actionIconTheme: const ActionIconThemeData(),
-    appBarTheme: const AppBarTheme(
+    // primaryIconTheme:IconThemeData(),
+    // TextTheme primaryTextTheme,
+    // textTheme: const TextTheme(),
+    typography: Typography.material2021(),
+    // actionIconTheme: const ActionIconThemeData(),
+    appBarTheme: AppBarTheme(
       elevation: 2,
-      backgroundColor: Color(0xff121212),
+      backgroundColor: ColorSchemes().darkColorScheme.background,
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: ColorSchemes().darkColorScheme.onBackground,
       ),
       actionsIconTheme: IconThemeData(
-        color: Colors.white,
+        color: ColorSchemes().darkColorScheme.onBackground,
       ),
     ),
-    /*badgeTheme:BadgeThemeData(),*/
-    /*MaterialBannerThemeData bannerTheme, */
-    /*BottomAppBarTheme bottomAppBarTheme,*/
-    /*BottomNavigationBarThemeData bottomNavigationBarTheme,*/
-    /* BottomSheetThemeData bottomSheetTheme,*/
-    /* ButtonBarThemeData buttonBarTheme,*/
-    buttonTheme: const ButtonThemeData(),
+    // badgeTheme:BadgeThemeData(),
+    // MaterialBannerThemeData bannerTheme,
+    // BottomAppBarTheme bottomAppBarTheme,
+    // BottomNavigationBarThemeData bottomNavigationBarTheme,
+    // BottomSheetThemeData bottomSheetTheme,
+    // ButtonBarThemeData buttonBarTheme,
+    // buttonTheme: const ButtonThemeData(),
     cardTheme: const CardTheme(elevation: 2),
-    /* CheckboxThemeData checkboxTheme,*/
-    /* ChipThemeData chipTheme, */
-    /*DataTableThemeData dataTableTheme,*/
+    // CheckboxThemeData checkboxTheme,
+    // ChipThemeData chipTheme,
+    // DataTableThemeData dataTableTheme,
     datePickerTheme: DatePickerThemeData(
-      backgroundColor: const Color(0xff121212),
-      headerBackgroundColor: Colors.white.withOpacity(0.1),
-      headerForegroundColor: Colors.white,
+      backgroundColor: ColorSchemes().darkColorScheme.background,
+      headerBackgroundColor: ColorSchemes().darkColorScheme.onBackground.withOpacity(0.1),
+      headerForegroundColor: ColorSchemes().darkColorScheme.onBackground,
       dividerColor: Colors.transparent,
       elevation: 0,
     ),
-    dialogTheme: const DialogTheme(
-      backgroundColor: Color(0xff121212),
-      elevation: 4,
-      surfaceTintColor: Colors.black54,
+    dialogTheme: DialogTheme(
+      backgroundColor: ColorSchemes().darkColorScheme.background,
+      elevation: 1,
+      surfaceTintColor: ColorSchemes().darkColorScheme.surfaceTint,
       alignment: Alignment.center,
-      iconColor: Colors.white,
+      iconColor: ColorSchemes().darkColorScheme.onBackground,
       titleTextStyle: TextStyle(
-        color: Colors.white,
+        color: ColorSchemes().darkColorScheme.onBackground,
         backgroundColor: Colors.transparent,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
-      contentTextStyle: TextStyle(
+      contentTextStyle: const TextStyle(
         fontSize: 15,
       ),
-      actionsPadding: EdgeInsets.fromLTRB(0, 0, 20, 7),
+      actionsPadding: const EdgeInsets.fromLTRB(0, 0, 20, 7),
     ),
-    dividerTheme: const DividerThemeData(color: Colors.white12),
-    drawerTheme: const DrawerThemeData(
-      surfaceTintColor: Colors.transparent,
-      backgroundColor: Color(0xff121212),
-      scrimColor: Colors.black54, //this darkens the rest of app when drawer is open
+    dividerTheme: DividerThemeData(color: ColorSchemes().darkColorScheme.surfaceVariant),
+    drawerTheme: DrawerThemeData(
+      surfaceTintColor: ColorSchemes().darkColorScheme.surfaceTint,
+      backgroundColor: ColorSchemes().darkColorScheme.background,
+      scrimColor: ColorSchemes().darkColorScheme.scrim, //this darkens the rest of app when drawer is open
       elevation: 2,
-      width: 300,
+      width: 275,
     ),
-    /* DropdownMenuThemeData dropdownMenuTheme,*/
+    // DropdownMenuThemeData dropdownMenuTheme,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         textStyle: const MaterialStatePropertyAll(
@@ -125,15 +107,15 @@ class Themes {
         ),
         backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
           if (states.contains(MaterialState.disabled)) {
-            return Colors.white12; // Disabled color
+            return ColorSchemes().darkColorScheme.surfaceVariant; // Disabled color
           }
-          return Themes().darkTheme.colorScheme.background; // Regular color
+          return ColorSchemes().darkColorScheme.background; // Regular color
         }),
         foregroundColor: MaterialStateProperty.resolveWith((states) {
           if (states.contains(MaterialState.disabled)) {
-            return Colors.white38;
+            return ColorSchemes().darkColorScheme.onSurfaceVariant;
           }
-          return Themes().darkTheme.colorScheme.onBackground;
+          return ColorSchemes().darkColorScheme.onBackground;
         }),
         fixedSize: const MaterialStatePropertyAll(Size.fromHeight(50)),
         splashFactory: InkRipple.splashFactory,
@@ -142,9 +124,9 @@ class Themes {
         elevation: const MaterialStatePropertyAll(4),
       ),
     ),
-    expansionTileTheme: const ExpansionTileThemeData(
-      collapsedTextColor: Color(0xffbb86fc),
-      textColor: Colors.white,
+    expansionTileTheme: ExpansionTileThemeData(
+      collapsedTextColor: ColorSchemes().darkColorScheme.primary,
+      textColor: ColorSchemes().darkColorScheme.onSurface,
     ),
     // filledButtonTheme: const FilledButtonThemeData(),
     // floatingActionButtonTheme: const FloatingActionButtonThemeData(),
@@ -153,26 +135,25 @@ class Themes {
         splashFactory: NoSplash.splashFactory,
       ),
     ),
-    listTileTheme: const ListTileThemeData(
+    listTileTheme: ListTileThemeData(
       dense: false,
-      selectedColor: Colors.purple,
-      iconColor: Colors.white,
-      textColor: Colors.white,
-      titleTextStyle: TextStyle(
+      selectedColor: ColorSchemes().darkColorScheme.primary,
+      iconColor: ColorSchemes().darkColorScheme.onBackground,
+      textColor: ColorSchemes().darkColorScheme.onBackground,
+      titleTextStyle: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w400,
       ),
-      subtitleTextStyle: TextStyle(
+      subtitleTextStyle: const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.normal,
       ),
-      leadingAndTrailingTextStyle: TextStyle(),
       visualDensity: VisualDensity.comfortable,
     ),
-    /* MenuBarThemeData menuBarTheme,*/
-    /* MenuButtonThemeData menuButtonTheme,*/
-    /* MenuThemeData menuTheme,*/
-    /* NavigationBarThemeData navigationBarTheme,*/
+    // MenuBarThemeData menuBarTheme,
+    // MenuButtonThemeData menuButtonTheme,
+    // MenuThemeData menuTheme,
+    // NavigationBarThemeData navigationBarTheme,
     // navigationDrawerTheme: const NavigationDrawerThemeData(),
     // navigationRailTheme: const NavigationRailThemeData(),
     // outlinedButtonTheme: const OutlinedButtonThemeData(),
@@ -183,22 +164,26 @@ class Themes {
     // searchViewTheme: const SearchViewThemeData(),
     // segmentedButtonTheme: const SegmentedButtonThemeData(),
     // sliderTheme: const SliderThemeData(),
-    snackBarTheme: const SnackBarThemeData(
-      backgroundColor: Color(0xff121212),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: ColorSchemes().darkColorScheme.inverseSurface,
       elevation: 2,
-      contentTextStyle: TextStyle(color: Colors.white),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+      contentTextStyle: TextStyle(color: ColorSchemes().darkColorScheme.onInverseSurface),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(16),
+        ),
+      ),
       behavior: SnackBarBehavior.floating,
-      insetPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      insetPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       showCloseIcon: true,
-      closeIconColor: Colors.white,
+      closeIconColor: ColorSchemes().darkColorScheme.onInverseSurface,
     ),
     switchTheme: const SwitchThemeData(splashRadius: 0),
     // tabBarTheme: const TabBarTheme(),
-    textButtonTheme: const TextButtonThemeData(
+    textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: MaterialStatePropertyAll(Colors.white),
-        textStyle: MaterialStatePropertyAll(
+        foregroundColor: MaterialStatePropertyAll(ColorSchemes().darkColorScheme.onSurface),
+        textStyle: const MaterialStatePropertyAll(
           TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -208,9 +193,31 @@ class Themes {
         splashFactory: NoSplash.splashFactory,
       ),
     ),
-    textSelectionTheme: const TextSelectionThemeData(),
-    timePickerTheme: const TimePickerThemeData(),
-    toggleButtonsTheme: const ToggleButtonsThemeData(),
-    tooltipTheme: const TooltipThemeData(),
+    // textSelectionTheme: const TextSelectionThemeData(),
+    // timePickerTheme: const TimePickerThemeData(),
+    // toggleButtonsTheme: const ToggleButtonsThemeData(),
+    // tooltipTheme: const TooltipThemeData(),
+  );
+}
+
+class ColorSchemes {
+  final ColorScheme darkColorScheme = const ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color(0xffbb86fc),
+    onPrimary: Colors.black,
+    secondary: Color(0xff018786),
+    onSecondary: Colors.black,
+    error: Color(0xFFCF6679),
+    onError: Colors.white,
+    background: Color(0xff121212),
+    onBackground: Colors.white,
+    surface: Color(0xff121212),
+    onSurface: Colors.white,
+    surfaceVariant: Colors.white12,
+    onSurfaceVariant: Colors.white54,
+    scrim: Colors.black54,
+    surfaceTint: Colors.white,
+    inverseSurface: Color(0xFFdddddd),
+    onInverseSurface: Colors.black,
   );
 }

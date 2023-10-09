@@ -25,84 +25,86 @@ class AnalyticSettingsPage extends StatelessWidget {
             appBar: AppBar(
               title: const Text("Nastavení"),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text('Shromažďování údajů'),
-                        ),
-                        const Divider(),
-                        ExpansionTile(
-                          title: const Text("Zastavit sledování analytických služeb"),
-                          trailing: ValueListenableBuilder(
-                            valueListenable: collectData,
-                            builder: (context, value, child) {
-                              return Switch.adaptive(
-                                value: value,
-                                onChanged: (value) async {
-                                  collectData.value = value;
-                                  analyticsEnabledGlobally = !value;
-                                  if (value) {
-                                    saveData('disableAnalytics', '1');
-                                  } else {
-                                    saveData('disableAnalytics', '');
-                                  }
-                                },
-                              );
-                            },
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text('Shromažďování údajů'),
                           ),
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text:
-                                    'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto... Více informací naleznete ve ',
-                                children: [
-                                  TextSpan(
-                                    text: 'Zdrojovém kódu',
-                                    style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        //get version of the app
-
-                                        PackageInfo packageInfo = await PackageInfo.fromPlatform();
-                                        String appVersion = packageInfo.version;
-                                        launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'),
-                                            mode: LaunchMode.externalApplication);
-                                      },
-                                  ),
-                                  const TextSpan(
-                                    text: ' nebo na ',
-                                  ),
-                                  TextSpan(
-                                    text: 'seznamu sbíraných dat',
-                                    style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        //get version of the app
-
-                                        PackageInfo packageInfo = await PackageInfo.fromPlatform();
-                                        String appVersion = packageInfo.version;
-                                        launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion/listSbiranychDat.md'),
-                                            mode: LaunchMode.externalApplication);
-                                      },
-                                  ),
-                                ],
-                              ),
+                          const Divider(),
+                          ExpansionTile(
+                            title: const Text("Zastavit sledování analytických služeb"),
+                            trailing: ValueListenableBuilder(
+                              valueListenable: collectData,
+                              builder: (context, value, child) {
+                                return Switch.adaptive(
+                                  value: value,
+                                  onChanged: (value) async {
+                                    collectData.value = value;
+                                    analyticsEnabledGlobally = !value;
+                                    if (value) {
+                                      saveData('disableAnalytics', '1');
+                                    } else {
+                                      saveData('disableAnalytics', '');
+                                    }
+                                  },
+                                );
+                              },
                             ),
-                          ],
-                        ),
-                      ],
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text:
+                                      'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto... Více informací naleznete ve ',
+                                  children: [
+                                    TextSpan(
+                                      text: 'Zdrojovém kódu',
+                                      style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          //get version of the app
+
+                                          PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                                          String appVersion = packageInfo.version;
+                                          launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'),
+                                              mode: LaunchMode.externalApplication);
+                                        },
+                                    ),
+                                    const TextSpan(
+                                      text: ' nebo na ',
+                                    ),
+                                    TextSpan(
+                                      text: 'seznamu sbíraných dat',
+                                      style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          //get version of the app
+
+                                          PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                                          String appVersion = packageInfo.version;
+                                          launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion/listSbiranychDat.md'),
+                                              mode: LaunchMode.externalApplication);
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

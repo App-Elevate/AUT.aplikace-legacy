@@ -20,131 +20,168 @@ class JidloDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getLunchesForDay(datumJidla),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-            Jidlo jidlo = snapshot.data!.jidla[indexJidlaVeDni];
-            ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
-            List<Widget> jidloWidgets = [];
-            //Soup
-            if (jidloString.polevka != null) {
-              jidloWidgets.add(
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Polévka'),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: HtmlWidget(jidloString.polevka!),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              jidloWidgets.add(const Divider());
-            }
-            //Main Dish
-            if (jidloString.hlavniJidlo != null) {
-              jidloWidgets.add(
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Hlavní chod'),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: HtmlWidget(jidloString.hlavniJidlo!),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              jidloWidgets.add(const Divider());
-            }
-            //Drinks
-            if (jidloString.piti != null) {
-              jidloWidgets.add(
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Pití'),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: HtmlWidget(jidloString.piti!),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              jidloWidgets.add(const Divider());
-            }
-            //Side dish
-            if (jidloString.salatovyBar != null) {
-              jidloWidgets.add(
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Přílohy'),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: HtmlWidget(jidloString.salatovyBar!),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              jidloWidgets.add(const Divider());
-            }
-            //Alergies
-            if (jidloString.alergeny != null) {
-              jidloWidgets.add(
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Alergeny'),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: HtmlWidget(jidloString.alergeny!),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              jidloWidgets.add(const Divider());
-            }
+      future: getLunchesForDay(datumJidla),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+          Jidlo jidlo = snapshot.data!.jidla[indexJidlaVeDni];
+          ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
+          List<Widget> jidloWidgets = [];
+          //Soup
+          if (jidloString.polevka != null) {
             jidloWidgets.add(
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
-                child: ObjednatJidloTlacitko(
-                    refreshButtons: refreshButtons, indexJidlaVeDni: indexJidlaVeDni, indexDne: indexDne, jidlaListener: jidlaListener),
-              ),
-            );
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(jidlo.varianta),
-                centerTitle: true,
-              ),
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: jidloWidgets,
-                  ),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('Polévka'),
+                    ),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: HtmlWidget(
+                        jidloString.polevka!,
+                        textStyle: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
-          } else {
-            return const SizedBox();
           }
-        });
+          //Main Dish
+          if (jidloString.hlavniJidlo != null) {
+            jidloWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('Hlavní chod'),
+                    ),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: HtmlWidget(
+                        jidloString.hlavniJidlo!,
+                        textStyle: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          //Drinks
+          if (jidloString.piti != null) {
+            jidloWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('Pití'),
+                    ),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: HtmlWidget(
+                        jidloString.piti!,
+                        textStyle: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          //Side dish
+          if (jidloString.salatovyBar != null) {
+            jidloWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('Přílohy'),
+                    ),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: HtmlWidget(
+                        jidloString.salatovyBar!,
+                        textStyle: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          //Alergies
+          if (jidloString.alergeny != null) {
+            jidloWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text('Alergeny'),
+                    ),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: HtmlWidget(
+                        jidloString.alergeny!,
+                        textStyle: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+            jidloWidgets.add(const SizedBox(
+              height: 30,
+            ));
+          }
+          jidloWidgets.add(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+              child: ObjednatJidloTlacitko(
+                refreshButtons: refreshButtons,
+                indexJidlaVeDni: indexJidlaVeDni,
+                indexDne: indexDne,
+                jidlaListener: jidlaListener,
+              ),
+            ),
+          );
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(jidlo.varianta),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: jidloWidgets,
+                ),
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 }

@@ -29,79 +29,83 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Material(
-        elevation: 4,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: FutureBuilder(
-              future: getLoginDataFromSecureStorage(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  final loginData = snapshot.data as LoginData;
-                  updateAccountPanel(loginData);
-                  return ValueListenableBuilder(
-                      valueListenable: loggedAccounts,
-                      builder: (ctx, value, child) {
-                        List<Widget> accounts = [];
-                        for (int i = 0; i < value.usernames.length; i++) {
-                          accounts.add(accountRow(context, value.usernames[i], i == value.loggedInID, i));
-                        }
-                        Widget addAccountButton = TextButton(
-                          onPressed: () async {
-                            //close before going to the page
-                            SwitchAccountVisible().setVisible(false);
-                            await Future.delayed(const Duration(milliseconds: 300));
-                            if (mounted) {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
-                            }
-                          },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.add, size: 31),
-                              SizedBox(width: 10),
-                              Text("Přidat účet"),
-                            ],
-                          ),
-                        );
-                        if (accounts.length > 4) {
-                          accounts.insert(0, addAccountButton);
-                        } else {
-                          accounts.add(addAccountButton);
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text("Účty"),
-                              const Divider(),
-                              Expanded(
-                                child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  addRepaintBoundaries: false,
-                                  reverse: accounts.length > 5 ? true : false,
-                                  itemCount: accounts.length,
-                                  itemBuilder: (context, index) => accounts[index],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      });
-                } else {
-                  return const SizedBox(
-                    height: 0,
-                    width: 0,
-                  );
-                }
-              }),
+    return Material(
+      elevation: 4,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: radius,
+          color: Theme.of(context).colorScheme.surface,
         ),
+        child: FutureBuilder(
+            future: getLoginDataFromSecureStorage(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                final loginData = snapshot.data as LoginData;
+                updateAccountPanel(loginData);
+                return ValueListenableBuilder(
+                    valueListenable: loggedAccounts,
+                    builder: (ctx, value, child) {
+                      List<Widget> accounts = [];
+                      for (int i = 0; i < value.usernames.length; i++) {
+                        accounts.add(accountRow(context, value.usernames[i], i == value.loggedInID, i));
+                      }
+                      Widget addAccountButton = TextButton(
+                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                        onPressed: () async {
+                          //close before going to the page
+                          SwitchAccountVisible().setVisible(false);
+                          await Future.delayed(const Duration(milliseconds: 300));
+                          if (mounted) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(Icons.add),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Text(
+                                "Přidat účet",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (accounts.length > 4) {
+                        accounts.insert(0, addAccountButton);
+                      } else {
+                        accounts.add(addAccountButton);
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Text("Účty"),
+                            const Divider(),
+                            Expanded(
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                addRepaintBoundaries: false,
+                                reverse: accounts.length > 5 ? true : false,
+                                itemCount: accounts.length,
+                                itemBuilder: (context, index) => accounts[index],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+              } else {
+                return const SizedBox(
+                  height: 0,
+                  width: 0,
+                );
+              }
+            }),
       ),
     );
   }
@@ -130,8 +134,13 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 Row(
                   children: [
                     const Icon(Icons.account_circle),
-                    const SizedBox(width: 10),
-                    Text(username),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        username,
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 19),
+                      ),
+                    ),
                   ],
                 ),
                 if (currentAccount) const Icon(Icons.check),

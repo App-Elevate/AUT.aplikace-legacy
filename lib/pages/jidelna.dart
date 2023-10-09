@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import './../every_import.dart';
 
 class MainAppScreen extends StatefulWidget {
@@ -214,15 +212,19 @@ class MainAppScreenState extends State<MainAppScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                        onPressed: () {
-                          changeDate(daysChange: -1);
-                        },
-                        icon: const Icon(Icons.arrow_left)),
-                    CupertinoButton(
+                      onPressed: () {
+                        changeDate(daysChange: -1);
+                      },
+                      icon: const Icon(Icons.arrow_left),
+                    ),
+                    TextButton(
+                      style: const ButtonStyle(
+                        overlayColor: MaterialStatePropertyAll(Colors.transparent),
+                      ),
                       onPressed: () async {
                         var datePicked = await showDatePicker(
                           context: context,
-                          helpText: 'Vyberte datum Jídelníčku',
+                          helpText: 'Vyberte datum',
                           initialDate: currentDate,
                           currentDate: DateTime.now(),
                           firstDate: minimalDate,
@@ -399,7 +401,10 @@ class ListJidel extends StatelessWidget {
                                 Builder(builder: (_) {
                                   String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', '))
                                       .zkracenyNazevJidla;
-                                  return HtmlWidget(jidlo);
+                                  return HtmlWidget(
+                                    jidlo,
+                                    textStyle: Theme.of(context).textTheme.titleLarge,
+                                  );
                                 }),
                                 const SizedBox(height: 16),
                                 ObjednatJidloTlacitko(

@@ -145,14 +145,8 @@ class LoadingLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Autojídelna'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: CircularProgressIndicator(),
-      ),
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

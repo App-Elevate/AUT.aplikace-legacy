@@ -19,14 +19,7 @@ class LoginScreen extends StatelessWidget {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
-        appBar: AppBar(
-          //backgroundColor of the rest of the app:
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          //remove shadow
-          elevation: 0,
-          //title color
-          foregroundColor: Theme.of(context).textTheme.bodyLarge!.color,
-        ),
+        appBar: AppBar(elevation: 0),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
