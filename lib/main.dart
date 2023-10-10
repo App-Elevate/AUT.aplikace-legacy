@@ -1,5 +1,5 @@
 //other imports from current project
-import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -12,7 +12,9 @@ bool analyticsEnabledGlobally = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   String? analyticsDisabled = await readData('disableAnalytics');
-  if (analyticsDisabled != '1') {
+  // know if this release is debug
+
+  if (analyticsDisabled != '1' || kDebugMode) {
     analyticsEnabledGlobally = true;
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
