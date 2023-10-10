@@ -213,7 +213,7 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
     alergeny = '<span${listJidel.join('<span')}';
   } else if (alergeny != null) {
     type = ParsedFoodStringType.alergeny;
-    zkracenyNazevJidla = '$jidlo, alergeny: $alergeny';
+    zkracenyNazevJidla = jidlo;
   } else {
     zkracenyNazevJidla = jidlo;
     type = ParsedFoodStringType.bezAlergenu;
@@ -277,6 +277,9 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
     if (plnyNazevJidla != '') {
       plnyNazevJidla += '<br>';
     }
+    if (hlavniJidlo.length > 3 && hlavniJidlo.substring(0, 3) == 'N. ') {
+      hlavniJidlo = hlavniJidlo.substring(3);
+    }
     plnyNazevJidla += hlavniJidlo;
     zkracenyNazevJidla += hlavniJidlo;
   }
@@ -295,12 +298,6 @@ ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
       plnyNazevJidla += '<br>';
     }
     plnyNazevJidla += salatovyBar;
-  }
-  if (zkracenyNazevJidla.substring(0, 3) == 'N. ') {
-    zkracenyNazevJidla = zkracenyNazevJidla.substring(3);
-  }
-  if (plnyNazevJidla.substring(0, 3) == 'N. ') {
-    plnyNazevJidla = plnyNazevJidla.substring(3);
   }
   //first regex match for '(' and last for ')' gets replaced with ''
   if (alergeny != null) {

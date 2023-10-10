@@ -27,7 +27,7 @@ class JidloDetail extends StatelessWidget {
           ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
           List<Widget> jidloWidgets = [];
           //Soup
-          if (jidloString.polevka != null) {
+          if (jidloString.polevka != null && jidloString.polevka!.trim() != '') {
             jidloWidgets.add(
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -52,10 +52,10 @@ class JidloDetail extends StatelessWidget {
                 ),
               ),
             );
+            jidloWidgets.add(const Divider());
           }
-          jidloWidgets.add(const Divider());
           //Main Dish
-          if (jidloString.hlavniJidlo != null) {
+          if (jidloString.hlavniJidlo != null && jidloString.hlavniJidlo!.trim() != '') {
             jidloWidgets.add(
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -80,11 +80,10 @@ class JidloDetail extends StatelessWidget {
                 ),
               ),
             );
+            jidloWidgets.add(const Divider());
           }
-
-          jidloWidgets.add(const Divider());
           //Drinks
-          if (jidloString.piti != null) {
+          if (jidloString.piti != null && jidloString.piti!.trim() != '') {
             jidloWidgets.add(
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -109,11 +108,10 @@ class JidloDetail extends StatelessWidget {
                 ),
               ),
             );
+            jidloWidgets.add(const Divider());
           }
-
-          jidloWidgets.add(const Divider());
           //Side dish
-          if (jidloString.salatovyBar != null) {
+          if (jidloString.salatovyBar != null && jidloString.salatovyBar!.trim() != '') {
             jidloWidgets.add(
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -138,10 +136,10 @@ class JidloDetail extends StatelessWidget {
                 ),
               ),
             );
+            jidloWidgets.add(const Divider());
           }
-          jidloWidgets.add(const Divider());
           //Alergies
-          if (jidloString.alergeny != null) {
+          if (jidloString.alergeny != null && jidloString.alergeny!.trim() != '') {
             jidloWidgets.add(
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -166,11 +164,7 @@ class JidloDetail extends StatelessWidget {
                 ),
               ),
             );
-
             jidloWidgets.add(const Divider());
-            jidloWidgets.add(const SizedBox(
-              height: 30,
-            ));
           }
           jidloWidgets.add(
             Padding(
