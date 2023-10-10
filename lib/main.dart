@@ -13,8 +13,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   String? analyticsDisabled = await readData('disableAnalytics');
   // know if this release is debug
+  if (kDebugMode) {
+    analyticsDisabled = '1';
+  }
 
-  if (analyticsDisabled != '1' || kDebugMode) {
+  if (analyticsDisabled != '1') {
     analyticsEnabledGlobally = true;
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,

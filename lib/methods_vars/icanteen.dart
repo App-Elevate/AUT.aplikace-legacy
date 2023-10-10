@@ -153,14 +153,18 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
     return Future.error('no internet');
   }
 
-  canteenData = CanteenData(
-    username: username,
-    url: url,
-    uzivatel: await canteenInstance!.ziskejUzivatele(),
-    jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
-    jidelnicky: jidelnicky,
-    pocetJidel: {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length},
-  );
+  try {
+    canteenData = CanteenData(
+      username: username,
+      url: url,
+      uzivatel: await canteenInstance!.ziskejUzivatele(),
+      jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
+      jidelnicky: jidelnicky,
+      pocetJidel: {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length},
+    );
+  } catch (e) {
+    return Future.error('no internet');
+  }
   smartPreIndexing(currentDateWithoutTime);
 
   return canteenInstance!;

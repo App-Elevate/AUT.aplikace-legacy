@@ -630,7 +630,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       ),
                     );
                   });
-                  Canteen canteen = await initCanteen();
+                  late Canteen canteen;
+                  try {
+                    canteen = await initCanteen();
+                  } catch (e) {
+                    snackBarMessage('Nastala chyba při objednávání jídla: $e');
+                    return;
+                  }
+
                   switch (stavJidla) {
                     case StavJidla.neobjednano:
                       {
