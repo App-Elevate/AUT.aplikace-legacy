@@ -30,13 +30,17 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
             child: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text('Nová aktualizace přináší:'),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Text(
+                      'Nová aktualizace přináší:',
+                      style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
                     child: HtmlWidget(
+                      textStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                       md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'),
                     ),
                   ),
@@ -53,31 +57,32 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: 500,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    child: const Text('Aktualizovat'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
+                if (releaseInfo.isAndroid)
+                  SizedBox(
+                    width: 500,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      child: const Text('Aktualizovat'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
 
-                      PackageInfo.fromPlatform().then(
-                        (value) {
-                          if (analyticsEnabledGlobally && analytics != null) {
-                            analytics!.logEvent(
-                              name: 'updateButtonClicked',
-                              parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
-                            );
-                          }
-                        },
-                      );
-                      networkInstallApk(releaseInfo.downloadUrl!, context);
-                    },
+                        PackageInfo.fromPlatform().then(
+                          (value) {
+                            if (analyticsEnabledGlobally && analytics != null) {
+                              analytics!.logEvent(
+                                name: 'updateButtonClicked',
+                                parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
+                              );
+                            }
+                          },
+                        );
+                        networkInstallApk(releaseInfo.downloadUrl!, context);
+                      },
+                    ),
                   ),
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: SizedBox(

@@ -145,8 +145,11 @@ class LoadingLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return Container(
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

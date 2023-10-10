@@ -34,11 +34,13 @@ class JidloDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Polévka'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Polévka',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const Divider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
@@ -51,6 +53,7 @@ class JidloDetail extends StatelessWidget {
               ),
             );
           }
+          jidloWidgets.add(const Divider());
           //Main Dish
           if (jidloString.hlavniJidlo != null) {
             jidloWidgets.add(
@@ -59,11 +62,13 @@ class JidloDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Hlavní chod'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Hlavní chod',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const Divider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
@@ -76,6 +81,8 @@ class JidloDetail extends StatelessWidget {
               ),
             );
           }
+
+          jidloWidgets.add(const Divider());
           //Drinks
           if (jidloString.piti != null) {
             jidloWidgets.add(
@@ -84,11 +91,13 @@ class JidloDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Pití'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Pití',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const Divider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
@@ -101,6 +110,8 @@ class JidloDetail extends StatelessWidget {
               ),
             );
           }
+
+          jidloWidgets.add(const Divider());
           //Side dish
           if (jidloString.salatovyBar != null) {
             jidloWidgets.add(
@@ -109,11 +120,13 @@ class JidloDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Přílohy'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Přílohy',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const Divider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
@@ -126,6 +139,7 @@ class JidloDetail extends StatelessWidget {
               ),
             );
           }
+          jidloWidgets.add(const Divider());
           //Alergies
           if (jidloString.alergeny != null) {
             jidloWidgets.add(
@@ -134,11 +148,13 @@ class JidloDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text('Alergeny'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Alergeny',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    const Divider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
@@ -150,6 +166,8 @@ class JidloDetail extends StatelessWidget {
                 ),
               ),
             );
+
+            jidloWidgets.add(const Divider());
             jidloWidgets.add(const SizedBox(
               height: 30,
             ));

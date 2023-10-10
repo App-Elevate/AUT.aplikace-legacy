@@ -19,7 +19,11 @@ class LoginScreen extends StatelessWidget {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
-        appBar: AppBar(elevation: 0),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).colorScheme.background,
+          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onBackground),
+        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -181,6 +185,7 @@ class _LoginFormState extends State<LoginForm> {
             RichText(
               text: TextSpan(
                 text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
+                style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                 children: [
                   TextSpan(
                     text: 'Více informací',
@@ -256,10 +261,13 @@ class _LoginSubmitButtonState extends State<LoginSubmitButton> {
                   child: CircularProgressIndicator(strokeWidth: 3.5),
                 );
               } else {
-                return const SizedBox(
+                return SizedBox(
                   height: 60,
                   child: Center(
-                    child: Text('Přihlásit se'),
+                    child: Text(
+                      'Přihlásit se',
+                      style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                    ),
                   ),
                 );
               }

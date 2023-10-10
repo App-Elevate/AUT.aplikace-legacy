@@ -65,6 +65,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                                 text: TextSpan(
                                   text:
                                       'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve ',
+                                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                                   children: [
                                     TextSpan(
                                       text: 'Zdrojovém kódu',

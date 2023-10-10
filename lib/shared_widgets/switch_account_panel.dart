@@ -150,7 +150,11 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         ),
         //Logout button
         IconButton(
-          icon: const Icon(Icons.logout, size: 30),
+          icon: Icon(
+            Icons.logout,
+            size: 30,
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
           onPressed: () async {
             await logout(id: id);
             if (currentAccount) {

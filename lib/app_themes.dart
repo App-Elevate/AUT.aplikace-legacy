@@ -4,6 +4,10 @@ import 'package:flutter/cupertino.dart';
 class Themes {
   //theme
   static ThemeData getTheme(ColorScheme colorScheme, context) {
+    bool dark = false;
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      dark = true;
+    }
     return ThemeData(
       useMaterial3: true,
       applyElevationOverlayColor: true,
@@ -35,19 +39,20 @@ class Themes {
       typography: Typography.material2021(),
       appBarTheme: AppBarTheme(
         elevation: 2,
-        backgroundColor: colorScheme.background,
+        backgroundColor: dark ? colorScheme.background : colorScheme.primary,
+        foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         iconTheme: IconThemeData(
-          color: colorScheme.onBackground,
+          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
         actionsIconTheme: IconThemeData(
-          color: colorScheme.onBackground,
+          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
       ),
       cardTheme: const CardTheme(elevation: 2),
       datePickerTheme: DatePickerThemeData(
         backgroundColor: colorScheme.background,
-        headerBackgroundColor: colorScheme.onBackground.withOpacity(0.1),
-        headerForegroundColor: colorScheme.onBackground,
+        headerBackgroundColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
+        headerForegroundColor: dark ? colorScheme.onBackground : colorScheme.onSecondary,
         dividerColor: Colors.transparent,
         elevation: 0,
       ),
@@ -59,7 +64,6 @@ class Themes {
         iconColor: colorScheme.onBackground,
         titleTextStyle: TextStyle(
           color: colorScheme.onBackground,
-          backgroundColor: Colors.transparent,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
@@ -107,6 +111,7 @@ class Themes {
       expansionTileTheme: ExpansionTileThemeData(
         collapsedTextColor: colorScheme.primary,
         textColor: colorScheme.onSurface,
+        childrenPadding: const EdgeInsets.only(bottom: 8),
       ),
       iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(
@@ -163,9 +168,9 @@ class Themes {
 class ColorSchemes {
   final ColorScheme light = const ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.purple,
+    primary: Colors.purpleAccent,
     onPrimary: Colors.white,
-    secondary: Colors.teal,
+    secondary: Color(0x7B009687),
     onSecondary: Colors.white,
     error: Colors.red,
     onError: Colors.black,
@@ -173,7 +178,7 @@ class ColorSchemes {
     onBackground: Colors.black,
     surface: Colors.white,
     onSurface: Colors.black,
-    surfaceVariant: Colors.white12,
+    surfaceVariant: Colors.black12,
     onSurfaceVariant: Colors.black54,
     scrim: Colors.black54,
     surfaceTint: Colors.black,
@@ -184,9 +189,9 @@ class ColorSchemes {
   final ColorScheme dark = const ColorScheme(
     brightness: Brightness.dark,
     primary: Color(0xffbb86fc),
-    onPrimary: Colors.black,
+    onPrimary: Colors.white,
     secondary: Color(0xff018786),
-    onSecondary: Colors.black,
+    onSecondary: Colors.white,
     error: Color(0xFFCF6679),
     onError: Colors.white,
     background: Color(0xff121212),

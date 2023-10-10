@@ -470,6 +470,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   @override
   Widget build(BuildContext context) {
     bool isButtonDisabled = true;
+    Color? textColor;
     Color? buttonColor;
     late StavJidla stavJidla;
     final int index = widget.indexJidlaVeDni;
@@ -499,10 +500,12 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
         switch (stavJidla) {
           //jednoduché operace
           case StavJidla.objednano:
+            textColor = Theme.of(context).colorScheme.onPrimary;
             buttonColor = Theme.of(context).colorScheme.primary;
             obedText = 'Zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             break;
           case StavJidla.neobjednano:
+            textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
             obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             break;
@@ -541,14 +544,17 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             break;
           //operace na burze
           case StavJidla.objednanoNelzeOdebrat:
+            textColor = Theme.of(context).colorScheme.onPrimary;
             buttonColor = Theme.of(context).colorScheme.primary;
             obedText = 'Vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             break;
           case StavJidla.dostupneNaBurze:
+            textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
             obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             break;
           case StavJidla.naBurze:
+            textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
             obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             break;
@@ -589,7 +595,10 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
         }
 
         return ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(buttonColor)),
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(buttonColor),
+            foregroundColor: MaterialStatePropertyAll(textColor),
+          ),
           onPressed: isButtonDisabled
               ? null
               : () async {

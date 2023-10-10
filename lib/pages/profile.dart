@@ -44,25 +44,28 @@ class ProfilePage extends StatelessWidget {
   Padding _appBarLogoutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: TextButton(
+      child: IconButton(
         onPressed: () async {
           logout();
           Navigator.of(context).pop();
           await Future.delayed(const Duration(milliseconds: 300));
           setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
         },
-        child: const Icon(Icons.logout),
+        icon: const Icon(Icons.logout),
       ),
     );
   }
 
-  Row _userMainInfo(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+  Container _userMainInfo(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -107,14 +110,14 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Padding _userPersonalinfo(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.only(top: 16, bottom: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
