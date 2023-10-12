@@ -71,8 +71,8 @@ class _MyAppState extends State<MyApp> {
     getLatestRelease();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: Themes.getTheme(ColorSchemes().light, context),
-      darkTheme: Themes.getTheme(ColorSchemes().dark, context),
+      theme: Themes.getTheme(ColorSchemes.light, context),
+      darkTheme: Themes.getTheme(ColorSchemes.dark, context),
       themeMode: ThemeMode.system,
       home: WillPopScope(
         onWillPop: () => _backPressed(_myAppKey),
