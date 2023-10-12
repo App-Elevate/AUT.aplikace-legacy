@@ -11,8 +11,6 @@ Future<ReleaseInfo> getLatestRelease() async {
     if (Platform.isAndroid) {
       isAndroid = true;
     }
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     Uri url = Uri.parse('https://api.github.com/repos/tpkowastaken/autojidelna/releases/latest');
     const Map<String, String> headers = {
       'Accept': 'application/vnd.github+json',
@@ -21,8 +19,16 @@ Future<ReleaseInfo> getLatestRelease() async {
     final response = await http.get(url, headers: headers);
     var json = jsonDecode(response.body);
     String version = json['tag_name'].replaceAll('v', '');
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appVersion = packageInfo.version;
+    if (!isAndroid) {
+      releaseInfo = ReleaseInfo(isAndroid: isAndroid, currentlyLatestVersion: version == appVersion);
+      return releaseInfo;
+    }
     String? patchNotes;
     String? downloadUrl;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     for (int i = 0; i < json['assets'].length; i++) {
       String apkname = json['assets'][i]['browser_download_url'].split('/').last;
       if (apkname.contains('.apk')) {
@@ -41,8 +47,6 @@ Future<ReleaseInfo> getLatestRelease() async {
       }
     }
     //get current app version
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String appVersion = packageInfo.version;
     releaseInfo = ReleaseInfo(
         isAndroid: isAndroid, latestVersion: version, downloadUrl: downloadUrl, changelog: patchNotes, currentlyLatestVersion: version == appVersion);
     return releaseInfo;
