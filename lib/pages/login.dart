@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import './../every_import.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({
+  LoginScreen({
     super.key,
     required this.setHomeWidget,
   });
@@ -35,47 +35,30 @@ class LoginScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 60),
               ),
             ),
-            LoginForm(
-              setHomeWidget: setHomeWidget,
-            ),
+            loginForm(),
           ],
         ),
       ),
     );
   }
-}
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key, required this.setHomeWidget}) : super(key: key);
-  final Function setHomeWidget;
-
-  @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _urlController = TextEditingController();
-  late final Function setHomeWidget;
-  String? passwordErrorText;
-  String? urlErrorText;
-  bool showPasswd = true;
+  final ValueNotifier<String?> passwordErrorText = ValueNotifier(null);
+  final ValueNotifier<String?> urlErrorText = ValueNotifier(null);
+  final ValueNotifier<bool> showPasswd = ValueNotifier(false);
 
   void _setErrorText(String text, LoginFormErrorField field) {
     switch (field) {
       case LoginFormErrorField.password:
-        setState(() {
-          passwordErrorText = text;
-          urlErrorText = null;
-        });
+        passwordErrorText.value = text;
+        urlErrorText.value = null;
         break;
       case LoginFormErrorField.url:
-        setState(() {
-          urlErrorText = text;
-          passwordErrorText = null;
-        });
+        urlErrorText.value = text;
+        passwordErrorText.value = null;
         break;
     }
   }
@@ -87,39 +70,36 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    setHomeWidget = widget.setHomeWidget;
+  Form loginForm() {
     setLastUrl();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 34),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                controller: _urlController,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
-                  border: const OutlineInputBorder(),
-                  errorText: urlErrorText,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
-                  }
-                  return null;
-                },
-              ),
-            ),
+            ValueListenableBuilder(
+                valueListenable: urlErrorText,
+                builder: (ctx, value, child) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextFormField(
+                      controller: _urlController,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
+                        border: const OutlineInputBorder(),
+                        errorText: value,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
+                        }
+                        return null;
+                      },
+                    ),
+                  );
+                }),
             AutofillGroup(
               child: Column(
                 children: [
