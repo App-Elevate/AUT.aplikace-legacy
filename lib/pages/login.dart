@@ -10,14 +10,24 @@ class LoginScreen extends StatelessWidget {
     required this.setHomeWidget,
   });
   final Function setHomeWidget;
+  //static is fix for keyboard disapearing when this screen is pushed
+  static final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  //static so it doesn't flicker when keyboard is opened
+  static final _urlController = TextEditingController();
+  // first value is error text, second is if it the password is visible
+  final ValueNotifier<List<dynamic>> passwordNotifier = ValueNotifier([null, false]);
+  final ValueNotifier<String?> urlErrorText = ValueNotifier(null);
+
   @override
   Widget build(BuildContext context) {
-    if (_urlController.text.isEmpty) {
+    if (_urlController.text == '') {
       return FutureBuilder(
           future: readData('url'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data != null && snapshot.data != '') {
                 _urlController.text = snapshot.data as String;
               }
             }
@@ -51,14 +61,6 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-
-  static final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  static final _urlController = TextEditingController();
-  // first value is error text, second is if it the password is visible
-  final ValueNotifier<List<dynamic>> passwordNotifier = ValueNotifier([null, false]);
-  final ValueNotifier<String?> urlErrorText = ValueNotifier(null);
 
   void _setErrorText(String text, LoginFormErrorField field) {
     switch (field) {
