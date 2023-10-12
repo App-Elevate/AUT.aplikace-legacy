@@ -1,17 +1,16 @@
 import 'package:autojidelna/every_import.dart';
-import 'package:flutter/cupertino.dart';
 
 class Themes {
   //theme
-  static ThemeData getTheme(ColorScheme colorScheme, context) {
-    bool dark = false;
-    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      dark = true;
+  static ThemeData getTheme(ColorScheme colorScheme) {
+    // ignore: no_leading_underscores_for_local_identifiers
+    bool _dark = false;
+    if (colorScheme.brightness == Brightness.dark) {
+      _dark = true;
     }
     return ThemeData(
       useMaterial3: true,
       applyElevationOverlayColor: true,
-      cupertinoOverrideTheme: const NoDefaultCupertinoThemeData(),
       inputDecorationTheme: const InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
@@ -39,20 +38,20 @@ class Themes {
       typography: Typography.material2021(),
       appBarTheme: AppBarTheme(
         elevation: 2,
-        backgroundColor: dark ? colorScheme.background : colorScheme.primary,
-        foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
+        backgroundColor: _dark ? colorScheme.background : colorScheme.primary,
+        foregroundColor: _dark ? colorScheme.onBackground : colorScheme.onPrimary,
         iconTheme: IconThemeData(
-          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
+          color: _dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
         actionsIconTheme: IconThemeData(
-          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
+          color: _dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
       ),
       cardTheme: const CardTheme(elevation: 2),
       datePickerTheme: DatePickerThemeData(
         backgroundColor: colorScheme.background,
-        headerBackgroundColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
-        headerForegroundColor: dark ? colorScheme.onBackground : colorScheme.onSecondary,
+        headerBackgroundColor: _dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
+        headerForegroundColor: _dark ? colorScheme.onBackground : colorScheme.onSecondary,
         dividerColor: Colors.transparent,
         elevation: 0,
       ),
@@ -159,6 +158,18 @@ class Themes {
             ),
           ),
           splashFactory: NoSplash.splashFactory,
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return colorScheme.primary;
+              }
+              return Colors.transparent;
+            },
+          ),
         ),
       ),
     );
