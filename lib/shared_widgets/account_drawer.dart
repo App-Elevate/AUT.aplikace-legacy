@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import './../every_import.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -163,7 +165,7 @@ class MainAccountDrawer extends StatelessWidget {
                     context: context,
                     applicationName: "Autojidelna",
                     applicationLegalese: "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
-                    applicationVersion: packageInfo.version,
+                    applicationVersion: '${packageInfo.version} - ${kDebugMode ? "Debug" : "Release"}',
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
