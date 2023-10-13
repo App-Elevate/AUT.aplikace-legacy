@@ -19,3 +19,5 @@ final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(DateTime(20
 
 ///page controller for the PageView which tells which date is currently selected
 final PageController pageviewController = PageController(initialPage: getJidelnicekPageNum().pageNumber);
+
+bool loginScreenVisible = false;

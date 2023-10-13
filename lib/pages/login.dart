@@ -1,6 +1,7 @@
 import 'package:autojidelna/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import './../every_import.dart';
 
@@ -10,11 +11,11 @@ class LoginScreen extends StatelessWidget {
     required this.setHomeWidget,
   });
   final Function(Widget widget) setHomeWidget;
-  //static is fix for keyboard disapearing when this screen is pushed
+  //static is fix for keyboard disapearing when this screen is pushed (problem with rebuilding the widget)
   static final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  //static so it doesn't flicker when keyboard is opened
+  //without static the text in the textfields would be deleted for the same reasons.
+  static final _usernameController = TextEditingController();
+  static final _passwordController = TextEditingController();
   static final _urlController = TextEditingController();
   // first value is error text, second is if it the password is visible
   final ValueNotifier<List<dynamic>> passwordNotifier = ValueNotifier([null, false]);
@@ -22,20 +23,13 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (_urlController.text == '') {
-      return FutureBuilder(
-          future: readData('url'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data != null && snapshot.data != '') {
-                _urlController.text = snapshot.data as String;
-              }
-            }
-            return formScaffold(context);
-          });
-    } else {
-      return formScaffold(context);
+    if (!loginScreenVisible) {
+      setLastUrl();
+      _usernameController.text = '';
+      _passwordController.text = '';
+      loginScreenVisible = true;
     }
+    return formScaffold(context);
   }
 
   Scaffold formScaffold(BuildContext context) {
@@ -263,20 +257,22 @@ class LoginScreen extends StatelessWidget {
             setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
           }
         } else {
-          loggingIn.value = false;
           _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         }
       } catch (e) {
-        if (e.toString().contains('bad url')) {
+        bool connected = await InternetConnectionChecker().hasConnection;
+        if (!connected) {
+          _setErrorText('Nejste připojeni k internetu', LoginFormErrorField.url);
+        } else if (e.toString().contains('bad url')) {
           _setErrorText('Nesprávné url', LoginFormErrorField.url);
         } else if (e.toString().contains('login failed')) {
           _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         } else {
-          //TODO: check internet connection according to device
-          _setErrorText('Připojení k serveru selhalo', LoginFormErrorField.url);
+          _setErrorText('Připojení k serveru selhalo.', LoginFormErrorField.url);
         }
-        loggingIn.value = false;
       }
     }
+    loggingIn.value = false;
+    loginScreenVisible = false;
   }
 }
