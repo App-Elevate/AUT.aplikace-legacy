@@ -96,7 +96,7 @@ class LoggingInWidget extends StatelessWidget {
     required this.setHomeWidget,
   });
 
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
     super.key,
     required this.setHomeWidget,
   });
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
   //static is fix for keyboard disapearing when this screen is pushed
   static final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();

@@ -6,7 +6,7 @@ class SwitchAccountPanel extends StatefulWidget {
     super.key,
     required this.setHomeWidget,
   });
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
 
   @override
   State<SwitchAccountPanel> createState() => _SwitchAccountPanelState();
