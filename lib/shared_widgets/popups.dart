@@ -115,7 +115,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
   );
 }
 
-void failedLoginDialog(BuildContext context, String message, Function setHomeWidget) async {
+void failedLoginDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
   showDialog(
     context: context,
     barrierDismissible: false,
