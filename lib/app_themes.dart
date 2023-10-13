@@ -177,7 +177,7 @@ class Themes {
 }
 
 class ColorSchemes {
-  final ColorScheme light = const ColorScheme(
+  static ColorScheme light = const ColorScheme(
     brightness: Brightness.light,
     primary: Colors.purpleAccent,
     onPrimary: Colors.white,
@@ -190,14 +190,14 @@ class ColorSchemes {
     surface: Colors.white,
     onSurface: Colors.black,
     surfaceVariant: Colors.black12,
-    onSurfaceVariant: Colors.black54,
+    //onSurfaceVariant: Colors.black54, //maybe #14?
     scrim: Colors.black54,
     surfaceTint: Colors.black,
     inverseSurface: Color(0xFF121212),
     onInverseSurface: Colors.white,
   );
 
-  final ColorScheme dark = const ColorScheme(
+  static ColorScheme dark = const ColorScheme(
     brightness: Brightness.dark,
     primary: Color(0xffbb86fc),
     onPrimary: Colors.white,
@@ -210,7 +210,7 @@ class ColorSchemes {
     surface: Color(0xff121212),
     onSurface: Colors.white,
     surfaceVariant: Colors.white12,
-    onSurfaceVariant: Colors.white54,
+    //onSurfaceVariant: Colors.white54, //maybe #14?
     scrim: Colors.black54,
     surfaceTint: Colors.white,
     inverseSurface: Color(0xFFdddddd),

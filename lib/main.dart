@@ -99,8 +99,8 @@ class _MyAppState extends State<MyApp> {
           builder: (context, themeMode, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              theme: Themes.getTheme(ColorSchemes().light),
-              darkTheme: Themes.getTheme(ColorSchemes().dark),
+              theme: Themes.getTheme(ColorSchemes.light),
+              darkTheme: Themes.getTheme(ColorSchemes.dark),
               themeMode: themeMode,
               home: child,
             );

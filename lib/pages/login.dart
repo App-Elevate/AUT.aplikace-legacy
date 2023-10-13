@@ -5,77 +5,72 @@ import 'package:flutter/services.dart';
 import './../every_import.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({
+  LoginScreen({
     super.key,
     required this.setHomeWidget,
   });
   final Function setHomeWidget;
+  //static is fix for keyboard disapearing when this screen is pushed
+  static final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  //static so it doesn't flicker when keyboard is opened
+  static final _urlController = TextEditingController();
+  // first value is error text, second is if it the password is visible
+  final ValueNotifier<List<dynamic>> passwordNotifier = ValueNotifier([null, false]);
+  final ValueNotifier<String?> urlErrorText = ValueNotifier(null);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onBackground),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 85,
-              child: Text(
-                'Autojídelna',
-                style: TextStyle(fontSize: 60),
-              ),
+    if (_urlController.text == '') {
+      return FutureBuilder(
+          future: readData('url'),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData && snapshot.data != null && snapshot.data != '') {
+                _urlController.text = snapshot.data as String;
+              }
+            }
+            return formScaffold(context);
+          });
+    } else {
+      return formScaffold(context);
+    }
+  }
+
+  Scaffold formScaffold(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onBackground),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 85,
+            child: Text(
+              'Autojídelna',
+              style: TextStyle(fontSize: 60),
             ),
-            LoginForm(
-              setHomeWidget: setHomeWidget,
-            ),
-          ],
-        ),
+          ),
+          loginForm(),
+        ],
       ),
     );
   }
-}
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key, required this.setHomeWidget}) : super(key: key);
-  final Function setHomeWidget;
-
-  @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _urlController = TextEditingController();
-  late final Function setHomeWidget;
-  String? passwordErrorText;
-  String? urlErrorText;
-  bool showPasswd = true;
 
   void _setErrorText(String text, LoginFormErrorField field) {
     switch (field) {
       case LoginFormErrorField.password:
-        setState(() {
-          passwordErrorText = text;
-          urlErrorText = null;
-        });
+        passwordNotifier.value = [text, passwordNotifier.value[1]];
+        urlErrorText.value = null;
         break;
       case LoginFormErrorField.url:
-        setState(() {
-          urlErrorText = text;
-          passwordErrorText = null;
-        });
+        urlErrorText.value = text;
+        passwordNotifier.value = [null, passwordNotifier.value[1]];
         break;
     }
   }
@@ -87,15 +82,7 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    setHomeWidget = widget.setHomeWidget;
-    setLastUrl();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Form loginForm() {
     return Form(
       key: _formKey,
       child: Padding(
@@ -104,21 +91,25 @@ class _LoginFormState extends State<LoginForm> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
-              child: TextFormField(
-                controller: _urlController,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
-                  border: const OutlineInputBorder(),
-                  errorText: urlErrorText,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
-                  }
-                  return null;
-                },
-              ),
+              child: ValueListenableBuilder(
+                  valueListenable: urlErrorText,
+                  builder: (ctx, value, child) {
+                    return TextFormField(
+                      controller: _urlController,
+                      autocorrect: false,
+                      decoration: InputDecoration(
+                        labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
+                        border: const OutlineInputBorder(),
+                        errorText: value,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
+                        }
+                        return null;
+                      },
+                    );
+                  }),
             ),
             AutofillGroup(
               child: Column(
@@ -144,188 +135,147 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: TextFormField(
-                      controller: _passwordController,
-                      textInputAction: TextInputAction.done,
-                      autofillHints: const [AutofillHints.password],
-                      obscureText: showPasswd,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        labelText: 'Heslo',
-                        border: const OutlineInputBorder(),
-                        errorText: passwordErrorText,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              showPasswd = !showPasswd;
-                            });
-                          },
-                          icon: Icon(showPasswd ? Icons.visibility_off : Icons.visibility),
-                        ),
+                    child: ValueListenableBuilder(
+                        valueListenable: passwordNotifier,
+                        builder: (context, value, child) {
+                          return TextFormField(
+                            controller: _passwordController,
+                            textInputAction: TextInputAction.done,
+                            autofillHints: const [AutofillHints.password],
+                            obscureText: value[1] ? false : true,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              labelText: 'Heslo',
+                              border: const OutlineInputBorder(),
+                              errorText: value[0],
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  passwordNotifier.value = [passwordNotifier.value[0], !passwordNotifier.value[1]];
+                                },
+                                icon: Icon(value[1] ? Icons.visibility_off : Icons.visibility),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Zadejte prosím své heslo';
+                              }
+                              return null;
+                            },
+                          );
+                        }),
+                  ),
+                ],
+              ),
+            ),
+            loginSubmitButton(),
+            Builder(builder: (context) {
+              return RichText(
+                text: TextSpan(
+                  text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
+                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                  children: [
+                    TextSpan(
+                      text: 'Více informací',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Zadejte prosím své heslo';
-                        }
-                        return null;
-                      },
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AnalyticSettingsPage(),
+                            ),
+                          );
+                        },
                     ),
-                  ),
-                ],
-              ),
-            ),
-            LoginSubmitButton(
-              formKey: _formKey,
-              usernameController: _usernameController,
-              passwordController: _passwordController,
-              urlController: _urlController,
-              errorSetter: _setErrorText,
-              setHomeWidget: setHomeWidget,
-            ),
-            RichText(
-              text: TextSpan(
-                text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
-                style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                children: [
-                  TextSpan(
-                    text: 'Více informací',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => AnalyticSettingsPage(),
-                          ),
-                        );
-                      },
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                ),
+              );
+            }),
           ],
         ),
       ),
     );
   }
-}
 
-class LoginSubmitButton extends StatefulWidget {
-  const LoginSubmitButton({
-    super.key,
-    required this.formKey,
-    required this.usernameController,
-    required this.passwordController,
-    required this.urlController,
-    required this.errorSetter,
-    required this.setHomeWidget,
-  });
-  final GlobalKey<FormState> formKey;
-  final TextEditingController usernameController;
-  final TextEditingController passwordController;
-  final TextEditingController urlController;
-  final Function(String, LoginFormErrorField)? errorSetter;
-  final Function setHomeWidget;
-
-  @override
-  State<LoginSubmitButton> createState() => _LoginSubmitButtonState();
-}
-
-class _LoginSubmitButtonState extends State<LoginSubmitButton> {
-  bool loggingIn = false;
-  late final Function setHomeWidget;
-  @override
-  void initState() {
-    setHomeWidget = widget.setHomeWidget;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: SizedBox(
-        height: 60,
-        width: 400,
-        child: ElevatedButton(
-          onPressed: loggingIn ? null : loginFieldCheck,
-          style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-          child: Builder(
-            builder: (context) {
-              if (loggingIn) {
-                return const SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: CircularProgressIndicator(strokeWidth: 3.5),
-                );
-              } else {
-                return SizedBox(
-                  height: 60,
-                  child: Center(
-                    child: Text(
-                      'Přihlásit se',
-                      style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+  final ValueNotifier<bool> loggingIn = ValueNotifier(false);
+  Builder loginSubmitButton() {
+    return Builder(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: SizedBox(
+          height: 60,
+          width: 400,
+          child: ElevatedButton(
+            onPressed: loggingIn.value ? null : () => loginFieldCheck(context),
+            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+            child: ValueListenableBuilder(
+              valueListenable: loggingIn,
+              builder: (context, value, child) {
+                if (value) {
+                  return const SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: CircularProgressIndicator(strokeWidth: 3.5),
+                  );
+                } else {
+                  return SizedBox(
+                    height: 60,
+                    child: Center(
+                      child: Text(
+                        'Přihlásit se',
+                        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
+                  );
+                }
+              },
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  void loginFieldCheck() async {
-    if (widget.formKey.currentState!.validate()) {
+  void loginFieldCheck(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
       // If the form is valid, save the form fields.
-      widget.formKey.currentState!.save();
-      setState(() {
-        loggingIn = true;
-      });
-      // Do something with the form fields.
-      // Reset the form fields.
-      //login code
-      String url = widget.urlController.text;
+      _formKey.currentState!.save();
+      loggingIn.value = true;
+      String url = _urlController.text;
       try {
-        Canteen login =
-            await initCanteen(hasToBeNew: true, url: url, username: widget.usernameController.text, password: widget.passwordController.text);
+        Canteen login = await initCanteen(hasToBeNew: true, url: url, username: _usernameController.text, password: _passwordController.text);
         if (login.prihlasen) {
           TextInput.finishAutofillContext();
 
           LoginData loginData = await getLoginDataFromSecureStorage();
           loginData.currentlyLoggedIn = true;
           loginData.currentlyLoggedInId = loginData.users.length;
-          loginData.users.add(LoggedInUser(username: widget.usernameController.text, password: widget.passwordController.text, url: url));
+          loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));
           saveLoginToSecureStorage(loginData);
 
-          saveData('url', widget.urlController.text);
-          if (mounted && Navigator.canPop(context)) {
+          saveData('url', _urlController.text);
+          if (context.mounted && Navigator.canPop(context)) {
             Navigator.pop(context);
             setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
           } else {
             setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
           }
         } else {
-          setState(() {
-            loggingIn = false;
-          });
-          widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+          loggingIn.value = false;
+          _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         }
       } catch (e) {
         if (e.toString().contains('bad url')) {
-          widget.errorSetter!('Nesprávné url', LoginFormErrorField.url);
+          _setErrorText('Nesprávné url', LoginFormErrorField.url);
         } else if (e.toString().contains('login failed')) {
-          widget.errorSetter!('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+          _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         } else {
           //TODO: check internet connection according to device
-          widget.errorSetter!('Připojení k serveru selhalo', LoginFormErrorField.url);
+          _setErrorText('Připojení k serveru selhalo', LoginFormErrorField.url);
         }
-        setState(() {
-          loggingIn = false;
-        });
+        loggingIn.value = false;
       }
     }
   }
