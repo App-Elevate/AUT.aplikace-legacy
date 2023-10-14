@@ -9,7 +9,7 @@ class MainAccountDrawer extends StatelessWidget {
     required this.setHomeWidget,
     required this.page,
   });
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
 
   @override

@@ -5,7 +5,7 @@ import './../every_import.dart';
 /*zde se budou nacházet nastavení a možnost zakoupit pro a vidět statistiky profilu Icanteen. Zároveň zde bude systém pro měnění účtů */
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key, required this.setHomeWidget});
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
 
   @override
   Widget build(BuildContext context) {

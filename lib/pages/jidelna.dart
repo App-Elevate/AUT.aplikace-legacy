@@ -5,7 +5,7 @@ class MainAppScreen extends StatefulWidget {
     super.key,
     required this.setHomeWidget,
   });
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
 
   @override
   State<MainAppScreen> createState() => MainAppScreenState();
@@ -299,7 +299,7 @@ class MainAppScreenState extends State<MainAppScreen> {
 class ListJidel extends StatelessWidget {
   final Jidelnicek jidelnicek;
   final int indexDne;
-  final Function setHomeWidget;
+  final Function(Widget widget) setHomeWidget;
   final Function(Widget widget) setScaffoldBody;
   final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
   ListJidel({required this.indexDne, required this.setHomeWidget, required this.jidelnicek, super.key, required this.setScaffoldBody});

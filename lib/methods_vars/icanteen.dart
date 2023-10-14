@@ -160,7 +160,7 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
       uzivatel: await canteenInstance!.ziskejUzivatele(),
       jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
       jidelnicky: jidelnicky,
-      pocetJidel: {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length},
+      pocetJidel: canteenData == null ? {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length} : canteenData!.pocetJidel,
     );
   } catch (e) {
     return Future.error('no internet');
