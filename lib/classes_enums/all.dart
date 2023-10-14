@@ -255,7 +255,7 @@ class NotifyTheme {
     return _instance;
   }
 
-  ValueNotifier<ThemeMode> themeNotifier = ValueNotifier<ThemeMode>(ThemeMode.light);
+  ValueNotifier<ThemeMode> themeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
 
   // Method to update the theme mode and notify listeners.
   void setTheme(ThemeMode mode) {

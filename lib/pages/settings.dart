@@ -143,7 +143,7 @@ class _GraphicsState extends State<_Graphics> {
           FutureBuilder(
             future: readData("ThemeMode"),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                 selectedMode = snapshot.data!;
               } else {
                 selectedMode = "system";

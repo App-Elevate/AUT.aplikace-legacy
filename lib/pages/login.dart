@@ -49,9 +49,10 @@ class LoginScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(
+          Container(
+            alignment: Alignment.topCenter,
             height: 85,
-            child: Text(
+            child: const Text(
               'Autojídelna',
               style: TextStyle(fontSize: 60),
             ),
@@ -214,10 +215,13 @@ class LoginScreen extends StatelessWidget {
               valueListenable: loggingIn,
               builder: (context, value, child) {
                 if (value) {
-                  return const SizedBox(
+                  return SizedBox(
                     height: 30,
                     width: 30,
-                    child: CircularProgressIndicator(strokeWidth: 3.5),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3.5,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   );
                 } else {
                   return SizedBox(

@@ -3,55 +3,72 @@ import 'package:autojidelna/every_import.dart';
 class Themes {
   //theme
   static ThemeData getTheme(ColorScheme colorScheme) {
-    // ignore: no_leading_underscores_for_local_identifiers
-    bool _dark = false;
+    bool dark = false;
     if (colorScheme.brightness == Brightness.dark) {
-      _dark = true;
+      dark = true;
     }
     return ThemeData(
+      //misc
       useMaterial3: true,
       applyElevationOverlayColor: true,
-      inputDecorationTheme: const InputDecorationTheme(
-        alignLabelWithHint: true,
-        isDense: true,
-        isCollapsed: true,
-        errorMaxLines: 1,
-        labelStyle: TextStyle(),
-        floatingLabelAlignment: FloatingLabelAlignment.start,
-        hintStyle: TextStyle(),
-        helperStyle: TextStyle(),
-      ),
       materialTapTargetSize: MaterialTapTargetSize.padded,
-      scrollbarTheme: const ScrollbarThemeData(),
-      splashFactory: NoSplash.splashFactory,
       visualDensity: VisualDensity.adaptivePlatformDensity,
-      canvasColor: colorScheme.background,
+
+      //colors
       colorScheme: colorScheme,
+      canvasColor: colorScheme.background,
       disabledColor: colorScheme.surfaceVariant,
       scaffoldBackgroundColor: colorScheme.background,
       shadowColor: Colors.transparent,
       splashColor: Colors.transparent,
+      splashFactory: NoSplash.splashFactory,
       iconTheme: IconThemeData(
         size: 30,
         color: colorScheme.onBackground,
       ),
       typography: Typography.material2021(),
+
+      //main
       appBarTheme: AppBarTheme(
         elevation: 2,
-        backgroundColor: _dark ? colorScheme.background : colorScheme.primary,
-        foregroundColor: _dark ? colorScheme.onBackground : colorScheme.onPrimary,
+        backgroundColor: dark ? colorScheme.background : colorScheme.primary,
+        foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         iconTheme: IconThemeData(
-          color: _dark ? colorScheme.onBackground : colorScheme.onPrimary,
+          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
         actionsIconTheme: IconThemeData(
-          color: _dark ? colorScheme.onBackground : colorScheme.onPrimary,
+          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
       ),
       cardTheme: const CardTheme(elevation: 2),
+      dividerTheme: DividerThemeData(color: colorScheme.surfaceVariant),
+      drawerTheme: DrawerThemeData(
+        surfaceTintColor: colorScheme.surfaceTint,
+        backgroundColor: colorScheme.background,
+        scrimColor: colorScheme.scrim,
+        elevation: 2,
+        width: 275,
+      ),
+
+      //popups
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: colorScheme.inverseSurface,
+        elevation: 2,
+        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
+          ),
+        ),
+        behavior: SnackBarBehavior.floating,
+        insetPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        showCloseIcon: true,
+        closeIconColor: colorScheme.onInverseSurface,
+      ),
       datePickerTheme: DatePickerThemeData(
         backgroundColor: colorScheme.background,
-        headerBackgroundColor: _dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
-        headerForegroundColor: _dark ? colorScheme.onBackground : colorScheme.onSecondary,
+        headerBackgroundColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
+        headerForegroundColor: dark ? colorScheme.onBackground : colorScheme.onSecondary,
         dividerColor: Colors.transparent,
         elevation: 0,
       ),
@@ -71,14 +88,43 @@ class Themes {
         ),
         actionsPadding: const EdgeInsets.fromLTRB(0, 0, 20, 7),
       ),
-      dividerTheme: DividerThemeData(color: colorScheme.surfaceVariant),
-      drawerTheme: DrawerThemeData(
-        surfaceTintColor: colorScheme.surfaceTint,
-        backgroundColor: colorScheme.background,
-        scrimColor: colorScheme.scrim,
-        elevation: 2,
-        width: 275,
+
+      //inputs
+      inputDecorationTheme: const InputDecorationTheme(
+        alignLabelWithHint: true,
+        isDense: true,
+        isCollapsed: true,
+        errorMaxLines: 1,
+        labelStyle: TextStyle(),
+        floatingLabelAlignment: FloatingLabelAlignment.start,
+        hintStyle: TextStyle(),
+        helperStyle: TextStyle(),
       ),
+
+      // list tiles
+      listTileTheme: ListTileThemeData(
+        dense: false,
+        selectedColor: colorScheme.primary,
+        iconColor: colorScheme.onBackground,
+        textColor: colorScheme.onBackground,
+        titleTextStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+        ),
+        subtitleTextStyle: const TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.normal,
+        ),
+        visualDensity: VisualDensity.comfortable,
+      ),
+      expansionTileTheme: ExpansionTileThemeData(
+        collapsedTextColor: colorScheme.primary,
+        textColor: colorScheme.onSurface,
+        childrenPadding: const EdgeInsets.only(bottom: 8),
+      ),
+
+      //buttons
+      switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           textStyle: const MaterialStatePropertyAll(
@@ -107,46 +153,11 @@ class Themes {
           elevation: const MaterialStatePropertyAll(4),
         ),
       ),
-      expansionTileTheme: ExpansionTileThemeData(
-        collapsedTextColor: colorScheme.primary,
-        textColor: colorScheme.onSurface,
-        childrenPadding: const EdgeInsets.only(bottom: 8),
-      ),
       iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(
           splashFactory: NoSplash.splashFactory,
         ),
       ),
-      listTileTheme: ListTileThemeData(
-        dense: false,
-        selectedColor: colorScheme.primary,
-        iconColor: colorScheme.onBackground,
-        textColor: colorScheme.onBackground,
-        titleTextStyle: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w400,
-        ),
-        subtitleTextStyle: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.normal,
-        ),
-        visualDensity: VisualDensity.comfortable,
-      ),
-      snackBarTheme: SnackBarThemeData(
-        backgroundColor: colorScheme.inverseSurface,
-        elevation: 2,
-        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(16),
-          ),
-        ),
-        behavior: SnackBarBehavior.floating,
-        insetPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        showCloseIcon: true,
-        closeIconColor: colorScheme.onInverseSurface,
-      ),
-      switchTheme: const SwitchThemeData(splashRadius: 0),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           foregroundColor: MaterialStatePropertyAll(colorScheme.onSurface),
