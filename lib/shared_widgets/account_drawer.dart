@@ -181,8 +181,8 @@ class MainAccountDrawer extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 10),
                             child: ElevatedButton(
                               onPressed: () async {
-                                await getLatestRelease();
-                                if (releaseInfo.currentlyLatestVersion && context.mounted) {
+                                ReleaseInfo localReleaseInfo = releaseInfo ?? await getLatestRelease();
+                                if (localReleaseInfo.currentlyLatestVersion && context.mounted) {
                                   Navigator.of(context).pop();
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍'))

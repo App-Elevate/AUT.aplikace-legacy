@@ -39,7 +39,7 @@ SnackBar dynamicSnackbarFunction(String snackBarText, BuildContext context, Valu
                 child: Builder(builder: (context) {
                   return ElevatedButton(
                     onPressed: () {
-                      networkInstallApk(releaseInfo.downloadUrl!, context);
+                      networkInstallApk(releaseInfo!.downloadUrl!, context);
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     },
                     child: const Text('Zkusit znovu'),

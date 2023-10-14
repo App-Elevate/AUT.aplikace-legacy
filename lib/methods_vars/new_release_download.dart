@@ -51,9 +51,13 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   }
   final value = await PackageInfo.fromPlatform();
 
-  if (analyticsEnabledGlobally && analytics != null) {
-    analytics!
-        .logEvent(name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()});
+  try {
+    if (analyticsEnabledGlobally && analytics != null) {
+      analytics!.logEvent(
+          name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo!.currentlyLatestVersion.toString()});
+    }
+  } catch (e) {
+    //this shouldn't crash but we'll just ignore it if it does. Analytics isn't that important
   }
   await InstallPlugin.install(savePath);
 }

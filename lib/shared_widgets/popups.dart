@@ -7,21 +7,23 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
     return;
   }
   try {
-    if (releaseInfo.currentlyLatestVersion) {
+    if (releaseInfo!.currentlyLatestVersion) {
       return;
     }
   } catch (e) {
+    getLatestRelease();
     Future.delayed(
       const Duration(seconds: 1),
       () => newUpdateDialog(context, tries: tries == null ? 1 : tries + 1),
     );
+    return;
   }
   showDialog(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Nová verze aplikace - ${releaseInfo.latestVersion}'),
+        title: Text('Nová verze aplikace - ${releaseInfo!.latestVersion}'),
         content: SizedBox(
           height: 200,
           child: Scrollbar(
@@ -41,7 +43,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                     padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
                     child: HtmlWidget(
                       textStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                      md.markdownToHtml(releaseInfo.changelog ?? 'Changelog není k dispozici'),
+                      md.markdownToHtml(releaseInfo!.changelog ?? 'Changelog není k dispozici'),
                     ),
                   ),
                 ],
@@ -57,7 +59,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (releaseInfo.isAndroid)
+                if (releaseInfo!.isAndroid)
                   SizedBox(
                     width: 500,
                     child: ElevatedButton(
@@ -74,12 +76,12 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                             if (analyticsEnabledGlobally && analytics != null) {
                               analytics!.logEvent(
                                 name: 'updateButtonClicked',
-                                parameters: {'oldVersion': value.version, 'newVersion': releaseInfo.currentlyLatestVersion.toString()},
+                                parameters: {'oldVersion': value.version, 'newVersion': releaseInfo!.currentlyLatestVersion.toString()},
                               );
                             }
                           },
                         );
-                        networkInstallApk(releaseInfo.downloadUrl!, context);
+                        networkInstallApk(releaseInfo!.downloadUrl!, context);
                       },
                     ),
                   ),
@@ -88,7 +90,8 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   child: SizedBox(
                     width: 500,
                     child: ElevatedButton(
-                      onPressed: (() => launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
+                      onPressed: (() => launchUrl(
+                          Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo!.latestVersion}"),
                           mode: LaunchMode.externalApplication)),
                       child: const Text('Zobrazit na githubu'),
                     ),
@@ -147,7 +150,22 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
   );
 }
 
-void failedDownload(BuildContext context) async {
+void failedDownload(BuildContext context, {int? tries}) async {
+  if (tries != null && tries > 5) {
+    return;
+  }
+  try {
+    if (releaseInfo!.currentlyLatestVersion) {
+      return;
+    }
+  } catch (e) {
+    getLatestRelease();
+    Future.delayed(
+      const Duration(seconds: 1),
+      () => newUpdateDialog(context, tries: tries == null ? 1 : tries + 1),
+    );
+    return;
+  }
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -160,7 +178,7 @@ void failedDownload(BuildContext context) async {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              networkInstallApk(releaseInfo.downloadUrl!, context);
+              networkInstallApk(releaseInfo!.downloadUrl!, context);
               Navigator.of(context).pop();
             },
             child: const Text('Zkusit znovu'),

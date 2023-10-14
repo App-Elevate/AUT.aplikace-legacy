@@ -63,10 +63,12 @@ class NeededInstallPermissionPage extends StatelessWidget {
                         width: 550,
                         child: ElevatedButton(
                           child: const Text('Zobrazit na githubu'),
-                          onPressed: () {
-                            launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo.latestVersion}"),
-                                mode: LaunchMode.externalApplication);
+                          onPressed: () async {
                             Navigator.of(context).pop();
+                            ReleaseInfo? localReleaseInfo = releaseInfo;
+                            localReleaseInfo ??= await getLatestRelease();
+                            launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${localReleaseInfo.latestVersion}"),
+                                mode: LaunchMode.externalApplication);
                           },
                         ),
                       ),
