@@ -516,7 +516,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           case StavJidla.nedostupne:
             try {
               bool jeVeDneDostupnyObed = false;
-              isButtonDisabled = true;
               int prvniIndex = -1;
               for (int i = 0; i < canteenData!.jidelnicky[datumJidla]!.jidla.length; i++) {
                 if (canteenData!.jidelnicky[datumJidla]!.jidla[i].lzeObjednat ||
@@ -524,7 +523,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     jeJidloNaBurze(canteenData!.jidelnicky[datumJidla]!.jidla[i]) ||
                     canteenData!.jidelnicky[datumJidla]!.jidla[i].burzaUrl != null) {
                   jeVeDneDostupnyObed = true;
-                  isButtonDisabled = false;
                   break;
                 } else {
                   prvniIndex = i;
@@ -572,11 +570,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             //operace v minulosti
             case StavJidla.objednanoVyprsenaPlatnost:
               icon = const Icon(Icons.block);
-              isButtonDisabled = true;
               break;
             case StavJidla.nedostupne:
               icon = const Icon(Icons.block);
-              isButtonDisabled = true;
               break;
             //operace na burze
             case StavJidla.objednanoNelzeOdebrat:
@@ -622,11 +618,12 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   }
                   ordering.ordering = true;
                   setState(() {
-                    icon = const SizedBox(
+                    icon = SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
                         strokeWidth: 3.5,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     );
                   });

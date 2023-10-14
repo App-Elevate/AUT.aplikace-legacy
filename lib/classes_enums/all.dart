@@ -244,3 +244,21 @@ class SwitchAccountVisible {
     visibilityCallback = callback;
   }
 }
+
+class NotifyTheme {
+  // Private constructor to prevent external instantiation
+  NotifyTheme._();
+
+  static final NotifyTheme _instance = NotifyTheme._();
+
+  factory NotifyTheme() {
+    return _instance;
+  }
+
+  ValueNotifier<ThemeMode> themeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
+
+  // Method to update the theme mode and notify listeners.
+  void setTheme(ThemeMode mode) {
+    themeNotifier.value = mode;
+  }
+}

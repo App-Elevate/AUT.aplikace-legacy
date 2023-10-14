@@ -69,23 +69,45 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     getLatestRelease();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: Themes.getTheme(ColorSchemes.light, context),
-      darkTheme: Themes.getTheme(ColorSchemes.dark, context),
-      themeMode: ThemeMode.system,
-      home: WillPopScope(
-        onWillPop: () => _backPressed(_myAppKey),
-        child: Navigator(
-          key: _myAppKey,
-          pages: [
-            MaterialPage(child: homeWidget),
-          ],
-          onPopPage: (route, result) {
-            return route.didPop(result);
-          },
-        ),
+    var pop = WillPopScope(
+      onWillPop: () => _backPressed(_myAppKey),
+      child: Navigator(
+        key: _myAppKey,
+        pages: [
+          MaterialPage(child: homeWidget),
+        ],
+        onPopPage: (route, result) {
+          return route.didPop(result);
+        },
       ),
+    );
+    return FutureBuilder(
+      future: readData("ThemeMode"),
+      initialData: ThemeMode.system,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == "2") {
+            NotifyTheme().setTheme(ThemeMode.dark);
+          } else if (snapshot.data == "1") {
+            NotifyTheme().setTheme(ThemeMode.light);
+          } else {
+            NotifyTheme().setTheme(ThemeMode.system);
+          }
+        }
+        return ValueListenableBuilder(
+          valueListenable: NotifyTheme().themeNotifier,
+          builder: (context, themeMode, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: Themes.getTheme(ColorSchemes.light),
+              darkTheme: Themes.getTheme(ColorSchemes.dark),
+              themeMode: themeMode,
+              home: child,
+            );
+          },
+          child: pop,
+        );
+      },
     );
   }
 }
