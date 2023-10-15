@@ -1,4 +1,5 @@
 import 'package:autojidelna/main.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import '../every_import.dart';
 
 /// initCanteen has to be called before using this variable
@@ -328,6 +329,8 @@ Future<void> logout({int? id}) async {
     analytics!.logEvent(name: 'logout');
   }
   LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+  AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+  AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
   //removing just the one item from the array
 
   //ensuring correct loginData.currentlyloggedInId
