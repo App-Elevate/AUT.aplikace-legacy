@@ -37,6 +37,14 @@ class MainAppScreenState extends State<MainAppScreen> {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 10,
+      channelKey: 'basic_channel',
+      actionType: ActionType.Default,
+      title: 'Hello World!',
+      body: 'This is my first notification!',
+    ));
   }
 
   ///reloads the page
@@ -612,14 +620,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           onPressed: isButtonDisabled
               ? null
               : () async {
-                  AwesomeNotifications().createNotification(
-                      content: NotificationContent(
-                    id: 10,
-                    channelKey: 'basic_channel',
-                    actionType: ActionType.Default,
-                    title: 'Hello World!',
-                    body: 'This is my first notification!',
-                  ));
                   void snackBarMessage(String message) {
                     // Find the ScaffoldMessenger in the widget tree
                     // and use it to show a SnackBar.

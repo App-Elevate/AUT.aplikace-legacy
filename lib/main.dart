@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AwesomeNotifications().initialize(
     // set the icon to null if you want to use the default app icon
-    null,
+    'resource://notifications/ic_launcher.png',
     [
       NotificationChannel(
           channelGroupKey: 'basic_channel_group',
