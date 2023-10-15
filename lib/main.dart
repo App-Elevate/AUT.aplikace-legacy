@@ -1,4 +1,5 @@
 //other imports from current project
+
 import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
@@ -7,6 +8,7 @@ import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
@@ -84,28 +86,8 @@ void callbackDispatcher() {
   });
 }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  Workmanager().initialize(callbackDispatcher, // The top level function, aka callbackDispatcher
-      isInDebugMode: kDebugMode // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-      );
-
-  if (Platform.isIOS) {
-    Workmanager().registerOneOffTask("task-identifier", "kredit-checker-je-jidlo-objednano-checker",
-        initialDelay: const Duration(days: 7), //duration before showing the notification
-        constraints: Constraints(
-          networkType: NetworkType.connected,
-        ));
-  } else if (Platform.isAndroid) {
-    // Periodic task registration
-    Workmanager().registerPeriodicTask(
-      "periodic-task-identifier",
-      "kredit-checker-je-jidlo-objednano-checker",
-      // When no frequency is provided the default 15 minutes is set.
-      // Minimum frequency is 15 min. Android will automatically change your frequency to 15 min if you have configured a lower frequency.
-      frequency: const Duration(minutes: 16),
-    );
-  }
+@pragma('vm:entry-point')
+void doVerification() async {
   AwesomeNotifications().initialize(
     // set the icon to null if you want to use the default app icon
     null,
@@ -126,8 +108,94 @@ void main() async {
           ledColor: Colors.white),
     ],
     // Channel groups are only visual and are not required
-    channelGroups: [NotificationChannelGroup(channelGroupKey: 'basic_channel_group', channelGroupName: 'Basic group')],
-    debug: true,
+    debug: kDebugMode,
+  );
+  try {
+    LoginData loginData = await getLoginDataFromSecureStorage();
+    for (int i = 0; i < loginData.users.length; i++) {
+      Canteen canteenInstance = await initCanteen(
+          hasToBeNew: true,
+          username: loginData.users[i].username,
+          password: loginData.users[i].password,
+          url: loginData.users[i].url,
+          doIndexing: false);
+      Uzivatel uzivatel = await canteenInstance.ziskejUzivatele();
+      //7 is limit for how many lunches we are gonna search for
+      int objednano = 0;
+      int cena = 0;
+      for (int denIndex = 0; denIndex < 10; denIndex++) {
+        Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
+        //pokud nalezneme jídlo s cenou
+        if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
+          cena += jidelnicek.jidla[0].cena!.toInt();
+        }
+        if (jidelnicek.jidla.isEmpty) {
+          objednano++;
+          continue;
+        }
+        for (int jidloIndex = 0; jidloIndex < jidelnicek.jidla.length; jidloIndex++) {
+          if (jidelnicek.jidla[jidloIndex].objednano) {
+            objednano++;
+          }
+        }
+      }
+      if (cena != 0 && uzivatel.kredit < cena) {
+        AwesomeNotifications().createNotification(
+            content: NotificationContent(
+          id: 10,
+          channelKey: 'kredit_channel',
+          actionType: ActionType.Default,
+          title: 'Dochází vám kredit!',
+          body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
+        ));
+      }
+      //pokud chybí aspoň 3 obědy z příštích 10 dní
+      if (objednano <= 7) {
+        AwesomeNotifications().createNotification(
+            content: NotificationContent(
+          id: 10,
+          channelKey: 'objednano_channel',
+          actionType: ActionType.Default,
+          title: 'Objednejte si na příští týden',
+          body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
+        ));
+      }
+    }
+  } catch (e) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 10,
+      channelKey: 'kredit_channel',
+      actionType: ActionType.Default,
+      title: 'Nastala Chyba',
+      body: e.toString(),
+    ));
+  }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+    null,
+    [
+      NotificationChannel(
+          channelGroupKey: 'kredit_channel_group',
+          channelKey: 'kredit_channel',
+          channelName: 'Kredit',
+          channelDescription: 'Notifikace označující docházející kredit',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white),
+      NotificationChannel(
+          channelGroupKey: 'objednano_channel_group',
+          channelKey: 'objednano_channel',
+          channelName: 'Objednáno?',
+          channelDescription: 'Notifikace upozorňující na to, abyste si objednal jídlo na příští týden',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white),
+    ],
+    // Channel groups are only visual and are not required
+    debug: kDebugMode,
   );
   String? analyticsDisabled = await readData('disableAnalytics');
   // know if this release is debug
@@ -148,6 +216,22 @@ void main() async {
     analytics = FirebaseAnalytics.instance;
   }
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
+  const int helloAlarmID = 0;
+  if (Platform.isAndroid) {
+    // TODO: implement background_fetch - https://pub.dev/packages/background_fetch package instead
+    await AndroidAlarmManager.initialize();
+    await AndroidAlarmManager.periodic(const Duration(days: 1), helloAlarmID, doVerification);
+  } else if (Platform.isIOS) {
+    Workmanager().initialize(callbackDispatcher, // The top level function, aka callbackDispatcher
+        isInDebugMode: kDebugMode // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+        );
+
+    Workmanager().registerOneOffTask("task-identifier", "kredit-checker-je-jidlo-objednano-checker",
+        initialDelay: const Duration(days: 7), //duration before showing the notification
+        constraints: Constraints(
+          networkType: NetworkType.connected,
+        ));
+  }
 }
 
 class MyApp extends StatefulWidget {

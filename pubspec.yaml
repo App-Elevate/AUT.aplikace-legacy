@@ -55,6 +55,7 @@ dependencies:
   firebase_analytics: ^10.4.5
   firebase_crashlytics: ^3.3.5
   share_plus: ^4.5.3
+  android_alarm_manager_plus: ^3.0.3
   awesome_notifications: ^0.8.2
   workmanager: ^0.5.2
 
