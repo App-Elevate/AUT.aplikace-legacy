@@ -33,18 +33,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                   children: [
                     _Graphics(),
                     _dataUsage(context),
-                    const Divider(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            AwesomeNotifications().showNotificationConfigPage();
-                          },
-                          child: const Text('Zobrazit nastavení oznámení'),
-                        ),
-                      ),
-                    ),
+                    _notifications(),
                   ],
                 ),
               ),
@@ -54,6 +43,30 @@ class AnalyticSettingsPage extends StatelessWidget {
           return const SizedBox();
         }
       },
+    );
+  }
+
+  Padding _notifications() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text('Oznámení'),
+          ),
+          const Divider(),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () {
+                AwesomeNotifications().showNotificationConfigPage();
+              },
+              child: const Text('Zobrazit nastavení oznámení'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

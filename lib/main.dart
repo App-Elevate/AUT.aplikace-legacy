@@ -38,8 +38,8 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: '${i}channel_group_${user.username}',
         channelKey: '${i}objednano_channel_${user.username}',
-        channelName: 'Objednano? - ${user.username}',
-        channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden',
+        channelName: 'Objednáno? - ${user.username}',
+        channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednaly jídlo na příští týden',
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -48,14 +48,14 @@ Future<bool> initAwesome() async {
   notificationChannelGroups.add(
     NotificationChannelGroup(
       channelGroupKey: 'channel_group_else',
-      channelGroupName: 'ostatní',
+      channelGroupName: 'Ostatní',
     ),
   );
   notificationChannels.add(
     NotificationChannel(
       channelKey: 'else_channel',
-      channelName: 'ostatní',
-      channelDescription: 'ostatní notifikace, např. chybové hlášky...',
+      channelName: 'Ostatní',
+      channelDescription: 'Ostatní notifikace, např. chybové hlášky...',
       defaultColor: const Color(0xFF9D50DD),
       ledColor: Colors.red,
     ),
