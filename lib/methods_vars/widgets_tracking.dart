@@ -3,21 +3,45 @@ import './../every_import.dart';
 // snackbar je ze začátku skrytý
 SnackBarShown snackbarshown = SnackBarShown(shown: false);
 
-// aktuální stránka jídelníčku - dnešní den
-final JidelnicekPageNum jidelnicekPageNum = JidelnicekPageNum(
-  pageNumber: DateTime.now().difference(DateTime(2006, 5, 23)).inDays,
-);
 final DateTime minimalDate = DateTime(2006, 5, 23);
 
-// getter pro stránku jídelníčku
-JidelnicekPageNum getJidelnicekPageNum() {
-  return jidelnicekPageNum;
-}
-
 ///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
-final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(DateTime(2006, 5, 23).add(Duration(days: getJidelnicekPageNum().pageNumber)));
+final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(DateTime.now());
 
 ///page controller for the PageView which tells which date is currently selected
-final PageController pageviewController = PageController(initialPage: getJidelnicekPageNum().pageNumber);
+final PageController pageviewController = PageController(initialPage: DateTime.now().difference(minimalDate).inDays);
 
 bool loginScreenVisible = false;
+
+///changes the date of the Jidelnicek
+///newDate - just sets the new date
+///newDate and animateToPage - animates to the new page
+///daysChange - animates the change of date by the number of days
+///index - changes the date by the index of the page
+void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
+  if (newDate != null && animateToPage != null && animateToPage) {
+    smartPreIndexing(newDate);
+    dateListener.value = newDate;
+    pageviewController.animateToPage(
+      newDate.difference(minimalDate).inDays,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.linear,
+    );
+  } else if (daysChange != null) {
+    newDate = dateListener.value.add(Duration(days: daysChange));
+    smartPreIndexing(newDate);
+    pageviewController.animateToPage(
+      newDate.difference(minimalDate).inDays,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.linear,
+    );
+  } else if (index != null) {
+    newDate = minimalDate.add(Duration(days: index));
+    smartPreIndexing(newDate);
+    dateListener.value = newDate;
+  } else if (newDate != null) {
+    smartPreIndexing(newDate);
+    dateListener.value = newDate;
+    pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
+  }
+}

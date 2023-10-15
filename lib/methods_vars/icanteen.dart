@@ -46,21 +46,6 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
   LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
   doIndexing ??= true;
-
-  if (url.contains('https://')) {
-    url = url.replaceAll('https://', '');
-  }
-  if (url.contains('http://')) {
-    url = url.replaceAll('http://', '');
-  }
-  if (url.contains('/')) {
-    url = url.substring(0, url.indexOf('/'));
-  }
-  if (url.contains('@')) {
-    url = url.substring(url.indexOf('@') + 1);
-  }
-  url = 'https://$url';
-
   if (canteenInstance != null && canteenInstance!.prihlasen && !hasToBeNew) {
     return canteenInstance!;
   } else {
@@ -82,74 +67,28 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
 
   try {
     await canteenInstance!.login(username, password);
-    if (!canteenInstance!.prihlasen) {
-      await Future.delayed(const Duration(seconds: 1)); //timeout to let the server live
-      if (!canteenInstance!.prihlasen) {
-        await canteenInstance!.login(username, password); //second attempt
-      }
-      if (!canteenInstance!.prihlasen && analyticsEnabledGlobally && analytics != null) {
-        analytics!.logEvent(name: 'incorrectly_typed_credentials');
-      }
-      if (!canteenInstance!.prihlasen) {
-        return Future.error('login failed');
-      }
-    }
   } catch (e) {
-    if (e.toString().contains('Failed host lookup')) {
-      if (analyticsEnabledGlobally && analytics != null) {
-        analytics!.logEvent(name: 'incorrectly_typed_url', parameters: {'url': url});
-      }
-      try {
-        url = url.replaceAll('https://', 'http://');
-        await canteenInstance!.login(username, password);
-        if (!canteenInstance!.prihlasen) {
-          await Future.delayed(const Duration(seconds: 1)); //timeout to let the server live
-          if (!canteenInstance!.prihlasen) {
-            await canteenInstance!.login(username, password); //second attempt
-          }
-          if (!canteenInstance!.prihlasen && analyticsEnabledGlobally && analytics != null) {
-            analytics!.logEvent(name: 'incorrectly_typed_credentials');
-          }
-          if (!canteenInstance!.prihlasen) {
-            return Future.error('login failed');
-          }
-        }
-      } catch (e) {
-        return Future.error('bad url');
-      }
-      return Future.error('bad url'); //sometimes this can also be just bad connection
-    }
     try {
-      url = url.replaceAll('https://', 'http://');
       await canteenInstance!.login(username, password);
-      if (!canteenInstance!.prihlasen) {
-        await Future.delayed(const Duration(seconds: 1)); //timeout to let the server live
-        if (!canteenInstance!.prihlasen) {
-          await canteenInstance!.login(username, password); //second attempt
-        }
-        if (!canteenInstance!.prihlasen && analyticsEnabledGlobally && analytics != null) {
-          analytics!.logEvent(name: 'incorrectly_typed_credentials');
-        }
-        if (!canteenInstance!.prihlasen) {
-          return Future.error('login failed');
-        }
-      }
     } catch (e) {
-      return Future.error('no internet');
+      return Future.error('bad url');
     }
   }
+  if (!canteenInstance!.prihlasen) {
+    return Future.error('login failed');
+  }
+
   if (analyticsEnabledGlobally && analytics != null) {
     analytics!.logLogin(loginMethod: savedCredetnials ? 'saved credentials' : 'manual login');
   }
 
   ///get today and strip it from time
   DateTime currentDate = DateTime.now();
-  DateTime currentDateWithoutTime = DateTime(currentDate.year, currentDate.month, currentDate.day);
 
   ///get jidelnicek for today
   late Map<DateTime, Jidelnicek> jidelnicky;
   try {
-    jidelnicky = {currentDateWithoutTime: await ziskatJidelnicekDen(currentDateWithoutTime)};
+    jidelnicky = {currentDate: await ziskatJidelnicekDen(currentDate)};
   } catch (e) {
     return Future.error('no internet');
   }
@@ -161,12 +100,12 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
         uzivatel: await canteenInstance!.ziskejUzivatele(),
         jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
         jidelnicky: jidelnicky,
-        pocetJidel: canteenData == null ? {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length} : canteenData!.pocetJidel,
+        pocetJidel: canteenData == null ? {currentDate: jidelnicky[currentDate]!.jidla.length} : canteenData!.pocetJidel,
       );
     } catch (e) {
       return Future.error('no internet');
     }
-    smartPreIndexing(currentDateWithoutTime);
+    smartPreIndexing(currentDate);
   }
   return canteenInstance!;
 }
@@ -200,130 +139,6 @@ void pridatStatistiku(TypStatistiky statistika) async {
       saveData('statistika:burzaCatcher', '$pocetStatistiky');
       break;
   }
-}
-
-///zpracuje jídlo a rozdělí ho na kategorie (hlavní jídlo, polévka, salátový bar, pití...)
-ParsedFoodString parseJidlo(String jidlo, {String? alergeny}) {
-  late ParsedFoodStringType type;
-  String zkracenyNazevJidla = '';
-  String plnyNazevJidla = '';
-  if (alergeny == '') {
-    alergeny = null;
-  }
-  if (jidlo.contains('<span')) {
-    type = ParsedFoodStringType.span;
-    List<String> listJidel = jidlo.split('<span');
-    zkracenyNazevJidla = listJidel[0];
-    listJidel.removeAt(0);
-    alergeny = '<span${listJidel.join('<span')}';
-  } else if (alergeny != null) {
-    type = ParsedFoodStringType.alergeny;
-    zkracenyNazevJidla = jidlo;
-  } else {
-    zkracenyNazevJidla = jidlo;
-    type = ParsedFoodStringType.bezAlergenu;
-  }
-  zkracenyNazevJidla = zkracenyNazevJidla.replaceAll(' *', '');
-  zkracenyNazevJidla = zkracenyNazevJidla.replaceAll('*', '');
-  List<String> cistyListJidel = zkracenyNazevJidla.split(',');
-  for (int i = 0; i < cistyListJidel.length; i++) {
-    cistyListJidel[i] = cistyListJidel[i].trimLeft();
-  }
-  String polevka = '';
-  String hlavniJidlo = '';
-  String salatovyBar = '';
-  String piti = '';
-  for (int i = 0; i < cistyListJidel.length; i++) {
-    cistyListJidel[i] = cistyListJidel[i].trimLeft();
-  }
-  for (int i = 0; i < cistyListJidel.length; i++) {
-    if (cistyListJidel[i].contains('Polévka') || cistyListJidel[i].contains('fridátové nudle')) {
-      if (polevka != '') {
-        polevka += ', ';
-      }
-      polevka = '$polevka ${cistyListJidel[i]}';
-    } else if (cistyListJidel[i].contains('salátový bar')) {
-      if (salatovyBar != '') {
-        salatovyBar += ', ';
-      }
-      salatovyBar = '$salatovyBar ${cistyListJidel[i]}';
-    } else if (cistyListJidel[i].contains('nápoj') || cistyListJidel[i].contains('čaj') || cistyListJidel[i].contains('káva')) {
-      if (piti != '') {
-        piti += ', ';
-      }
-      piti = '$piti ${cistyListJidel[i]}';
-    } else {
-      if (hlavniJidlo != '') {
-        hlavniJidlo += ', ';
-      }
-      hlavniJidlo = '$hlavniJidlo ${cistyListJidel[i]}';
-    }
-  }
-  zkracenyNazevJidla = '';
-  plnyNazevJidla = '';
-  hlavniJidlo = hlavniJidlo.trimLeft();
-  polevka = polevka.trimLeft();
-  piti = piti.trimLeft();
-  salatovyBar = salatovyBar.trimLeft();
-  if (polevka != '') {
-    if (plnyNazevJidla != '') {
-      plnyNazevJidla += '<br>';
-    }
-    //make first letter of polevka capital
-    polevka = polevka.substring(0, 1).toUpperCase() + polevka.substring(1);
-    plnyNazevJidla += polevka;
-  }
-  if (hlavniJidlo != '') {
-    //make first letter of hlavniJidlo capital
-    hlavniJidlo = hlavniJidlo.substring(0, 1).toUpperCase() + hlavniJidlo.substring(1);
-    if (zkracenyNazevJidla != '') {
-      zkracenyNazevJidla += '<br>';
-    }
-    if (plnyNazevJidla != '') {
-      plnyNazevJidla += '<br>';
-    }
-    if (hlavniJidlo.length > 3 && hlavniJidlo.substring(0, 3) == 'N. ') {
-      hlavniJidlo = hlavniJidlo.substring(3);
-    }
-    plnyNazevJidla += hlavniJidlo;
-    zkracenyNazevJidla += hlavniJidlo;
-  }
-  if (piti != '') {
-    //make first letter of piti capital
-    piti = piti.substring(0, 1).toUpperCase() + piti.substring(1);
-    if (plnyNazevJidla != '') {
-      plnyNazevJidla += '<br>';
-    }
-    plnyNazevJidla += piti;
-  }
-  if (salatovyBar != '') {
-    //make first letter of salatovyBar capital
-    salatovyBar = salatovyBar.substring(0, 1).toUpperCase() + salatovyBar.substring(1);
-    if (plnyNazevJidla != '') {
-      plnyNazevJidla += '<br>';
-    }
-    plnyNazevJidla += salatovyBar;
-  }
-  //first regex match for '(' and last for ')' gets replaced with ''
-  if (alergeny != null) {
-    if (alergeny.lastIndexOf(')') != -1) {
-      alergeny = alergeny.substring(0, alergeny.lastIndexOf(')')) + alergeny.substring(alergeny.lastIndexOf(')') + 1);
-    }
-  }
-  alergeny = alergeny?.replaceFirst('(', '');
-  if (alergeny != null) {
-    plnyNazevJidla = '$plnyNazevJidla<br>Alergeny: $alergeny';
-  }
-  return ParsedFoodString(
-    polevka: polevka,
-    hlavniJidlo: hlavniJidlo,
-    salatovyBar: salatovyBar,
-    piti: piti,
-    alergeny: alergeny,
-    type: type,
-    plnyNazevJidla: plnyNazevJidla,
-    zkracenyNazevJidla: zkracenyNazevJidla,
-  );
 }
 
 ///získá Jídelníček pro den [den]

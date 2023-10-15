@@ -93,10 +93,10 @@ packages:
     dependency: "direct main"
     description:
       name: canteenlib
-      sha256: f415b4f71f65b85c0766fc095a16c9b7ef1fd6c912a23e66963b5fdb1a7a6467
+      sha256: fd239309c0eae12a9b43f58ff7db64f6b5b6d8a8c39095d167f6ad033dcb9b76
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4"
+    version: "3.0.0"
   characters:
     dependency: transitive
     description:
@@ -508,10 +508,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:

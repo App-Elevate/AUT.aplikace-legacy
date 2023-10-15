@@ -24,7 +24,23 @@ class JidloDetail extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
           Jidlo jidlo = snapshot.data!.jidla[indexJidlaVeDni];
-          ParsedFoodString jidloString = parseJidlo(jidlo.nazev);
+          String alergeny = '';
+          for (Alergen alergen in jidlo.alergeny) {
+            alergeny += '${alergen.nazev}, ';
+          }
+          alergeny = alergeny.substring(0, alergeny.length - 2);
+          if (jidlo.kategorizovano == null) {
+            return Column(
+              children: [
+                Text(jidlo.nazev),
+                const Divider(),
+                Text(alergeny),
+                const Text(
+                    'používáte záložní rozhraní, které je pouze v nouzi. Pokud tento text vidíte prosím kontaktujte vývojáře - github v "O Aplikaci" - díky!')
+              ],
+            );
+          }
+          JidloKategorizovano jidloString = jidlo.kategorizovano!;
           List<Widget> jidloWidgets = [];
           //Soup
           if (jidloString.polevka != null && jidloString.polevka!.trim() != '') {
@@ -138,8 +154,36 @@ class JidloDetail extends StatelessWidget {
             );
             jidloWidgets.add(const Divider());
           }
+          //ostatni
+          if (jidloString.ostatni != null && jidloString.ostatni!.trim() != '') {
+            jidloWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Ostatní',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: HtmlWidget(
+                        jidloString.ostatni!,
+                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+            jidloWidgets.add(const Divider());
+          }
           //Alergies
-          if (jidloString.alergeny != null && jidloString.alergeny!.trim() != '') {
+          if (alergeny.trim() != '') {
             jidloWidgets.add(
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -156,7 +200,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: HtmlWidget(
-                        jidloString.alergeny!,
+                        alergeny,
                         textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),

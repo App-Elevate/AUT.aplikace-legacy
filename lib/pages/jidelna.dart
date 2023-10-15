@@ -172,42 +172,6 @@ class MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
-  ///changes the date of the Jidelnicek
-  ///newDate - just sets the new date
-  ///newDate and animateToPage - animates to the new page
-  ///daysChange - animates the change of date by the number of days
-  ///index - changes the date by the index of the page
-  void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
-    if (newDate != null && animateToPage != null && animateToPage) {
-      smartPreIndexing(newDate);
-      dateListener.value = newDate;
-      getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
-      pageviewController.animateToPage(
-        newDate.difference(minimalDate).inDays,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.linear,
-      );
-    } else if (daysChange != null) {
-      newDate = dateListener.value.add(Duration(days: daysChange));
-      smartPreIndexing(newDate);
-      pageviewController.animateToPage(
-        newDate.difference(minimalDate).inDays,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.linear,
-      );
-    } else if (index != null) {
-      newDate = minimalDate.add(Duration(days: index));
-      smartPreIndexing(newDate);
-      dateListener.value = newDate;
-      getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
-    } else if (newDate != null) {
-      smartPreIndexing(newDate);
-      dateListener.value = newDate;
-      getJidelnicekPageNum().pageNumber = newDate.difference(minimalDate).inDays;
-      pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
-    }
-  }
-
   ///widget for the Jidelnicek including the date picker with all the lunches
   Padding jidelnicekWidget() {
     //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
@@ -269,7 +233,6 @@ class MainAppScreenState extends State<MainAppScreen> {
               controller: pageviewController,
               onPageChanged: (value) {
                 changeDate(index: value);
-                getJidelnicekPageNum().pageNumber = value;
               },
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
@@ -293,6 +256,7 @@ class MainAppScreenState extends State<MainAppScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -413,8 +377,9 @@ class ListJidel extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Builder(builder: (_) {
-                                  String jidlo = parseJidlo(jidelnicek.jidla[index].nazev, alergeny: jidelnicek.jidla[index].alergeny.join(', '))
-                                      .zkracenyNazevJidla;
+                                  String jidlo = (jidelnicek.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicek.jidla[index].nazev) == ''
+                                      ? jidelnicek.jidla[index].nazev
+                                      : (jidelnicek.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicek.jidla[index].nazev);
                                   return HtmlWidget(
                                     jidlo,
                                     textStyle: Theme.of(context).textTheme.titleLarge,

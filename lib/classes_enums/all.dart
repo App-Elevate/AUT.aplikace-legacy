@@ -166,44 +166,6 @@ enum LoginFormErrorField {
   url,
 }
 
-class ParsedFoodString {
-  ParsedFoodString({
-    this.polevka,
-    this.hlavniJidlo,
-    this.salatovyBar,
-    this.piti,
-    this.alergeny,
-    required this.type,
-    required this.plnyNazevJidla,
-    required this.zkracenyNazevJidla,
-  });
-  String? polevka;
-  String? hlavniJidlo;
-  String? salatovyBar;
-  String? piti;
-  String? alergeny;
-
-  /// typ původního stringu
-  ParsedFoodStringType type;
-
-  /// plný název jídla v html
-  String plnyNazevJidla;
-
-  /// zkrácený název jídla v html
-  String zkracenyNazevJidla;
-}
-
-enum ParsedFoodStringType {
-  /// jídlo obsahovalo span a bylo parsnuto
-  span,
-
-  /// jídlo obsahovalo alergeny a bylo parsnuto
-  alergeny,
-
-  /// jídlo neobsahovalo span ani alergeny (alergeny vsak ve vysledku mozna jsou)
-  bezAlergenu
-}
-
 enum TypStatistiky {
   ///normální objednávky
   objednavka,
