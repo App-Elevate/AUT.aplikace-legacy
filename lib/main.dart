@@ -17,7 +17,7 @@ Future<bool> initAwesome() async {
   List<NotificationChannelGroup> notificationChannelGroups = [];
   List<NotificationChannel> notificationChannels = [];
   for (int i = 0; i < loginData.users.length; i++) {
-    LoggedInUser user = loginData.users[0];
+    LoggedInUser user = loginData.users[i];
     notificationChannelGroups.add(
       NotificationChannelGroup(
         channelGroupKey: '${i}channel_group_${user.username}',
