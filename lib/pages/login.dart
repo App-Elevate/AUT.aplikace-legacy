@@ -252,7 +252,8 @@ class LoginScreen extends StatelessWidget {
           loginData.currentlyLoggedInId = loginData.users.length;
           loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));
           try {
-            canteenData!.pocetJidel = {};
+            canteenData = null;
+            canteenInstance = null;
             changeDate(newDate: DateTime.now());
           } catch (e) {
             //this needs to be done only if we are loggin in the second time
@@ -264,7 +265,7 @@ class LoginScreen extends StatelessWidget {
             Navigator.pop(context);
             setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
           } else {
-            setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+            setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
           }
         } else {
           _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
