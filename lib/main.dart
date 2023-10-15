@@ -12,68 +12,130 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
+Future<bool> initAwesome() async {
+  LoginData loginData = await getLoginDataFromSecureStorage();
+  List<NotificationChannelGroup> notificationChannelGroups = [];
+  List<NotificationChannel> notificationChannels = [];
+  for (int i = 0; i < loginData.users.length; i++) {
+    LoggedInUser user = loginData.users[0];
+    notificationChannelGroups.add(
+      NotificationChannelGroup(
+        channelGroupKey: '${i}channel_group_${user.username}',
+        channelGroupName: 'Notifikace pro ${user.username}',
+      ),
+    );
+    notificationChannels.add(
+      NotificationChannel(
+        channelGroupKey: '${i}channel_group_${user.username}',
+        channelKey: '${i}kredit_channel_${user.username}',
+        channelName: 'Docházející kredit - ${user.username}',
+        channelDescription: 'Notifikace o tom, zda vám dochází kredit týden dopředu',
+        defaultColor: const Color(0xFF9D50DD),
+        ledColor: Colors.white,
+      ),
+    );
+    notificationChannels.add(
+      NotificationChannel(
+        channelGroupKey: '${i}channel_group_${user.username}',
+        channelKey: '${i}objednano_channel_${user.username}',
+        channelName: 'Objednano? - ${user.username}',
+        channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden',
+        defaultColor: const Color(0xFF9D50DD),
+        ledColor: Colors.white,
+      ),
+    );
+  }
+  notificationChannelGroups.add(
+    NotificationChannelGroup(
+      channelGroupKey: 'channel_group_else',
+      channelGroupName: 'ostatní',
+    ),
+  );
+  notificationChannels.add(
+    NotificationChannel(
+      channelKey: 'else_channel',
+      channelName: 'ostatní',
+      channelDescription: 'ostatní notifikace, např. chybové hlášky...',
+      defaultColor: const Color(0xFF9D50DD),
+      ledColor: Colors.red,
+    ),
+  );
+  return await AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+    null,
+    notificationChannels,
+    channelGroups: notificationChannelGroups,
+    // Channel groups are only visual and are not required
+    debug: kDebugMode,
+  );
+}
+
+Future<void> doNotifications() async {
+  LoginData loginData = await getLoginDataFromSecureStorage();
+  for (int i = 0; i < loginData.users.length; i++) {
+    Canteen canteenInstance = await initCanteen(
+        hasToBeNew: true,
+        username: loginData.users[i].username,
+        password: loginData.users[i].password,
+        url: loginData.users[i].url,
+        doIndexing: false);
+    Uzivatel uzivatel = await canteenInstance.ziskejUzivatele();
+    //7 is limit for how many lunches we are gonna search for
+    int objednano = 0;
+    int cena = 0;
+    for (int denIndex = 0; denIndex < 10; denIndex++) {
+      Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
+      //pokud nalezneme jídlo s cenou
+      if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
+        cena += jidelnicek.jidla[0].cena!.toInt();
+      }
+      if (jidelnicek.jidla.isEmpty) {
+        objednano++;
+        continue;
+      }
+      for (int jidloIndex = 0; jidloIndex < jidelnicek.jidla.length; jidloIndex++) {
+        if (jidelnicek.jidla[jidloIndex].objednano) {
+          objednano++;
+        }
+      }
+    }
+    if (cena != 0 && uzivatel.kredit < cena) {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+        id: 255 - i,
+        channelKey: '${i}kredit_channel_${loginData.users[i].username}',
+        actionType: ActionType.Default,
+        title: 'Dochází vám kredit!',
+        body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
+      ));
+    }
+    //pokud chybí aspoň 3 obědy z příštích 10 dní
+    if (objednano <= 7) {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+        id: i,
+        channelKey: '${i}objednano_channel_${loginData.users[i].username}',
+        actionType: ActionType.Default,
+        title: 'Objednejte si na příští týden',
+        body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
+      ));
+    }
+  }
+}
+
 @pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
       case "kredit-checker-je-jidlo-objednano-checker":
         try {
-          LoginData loginData = await getLoginDataFromSecureStorage();
-          for (int i = 0; i < loginData.users.length; i++) {
-            Canteen canteenInstance = await initCanteen(
-                hasToBeNew: true,
-                username: loginData.users[i].username,
-                password: loginData.users[i].password,
-                url: loginData.users[i].url,
-                doIndexing: false);
-            Uzivatel uzivatel = await canteenInstance.ziskejUzivatele();
-            //7 is limit for how many lunches we are gonna search for
-            int objednano = 0;
-            int cena = 0;
-            for (int denIndex = 0; denIndex < 10; denIndex++) {
-              Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
-              //pokud nalezneme jídlo s cenou
-              if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
-                cena += jidelnicek.jidla[0].cena!.toInt();
-              }
-              if (jidelnicek.jidla.isEmpty) {
-                objednano++;
-                continue;
-              }
-              for (int jidloIndex = 0; jidloIndex < jidelnicek.jidla.length; jidloIndex++) {
-                if (jidelnicek.jidla[jidloIndex].objednano) {
-                  objednano++;
-                }
-              }
-            }
-            if (cena != 0 && uzivatel.kredit < cena) {
-              AwesomeNotifications().createNotification(
-                  content: NotificationContent(
-                id: 10,
-                channelKey: 'kredit_channel',
-                actionType: ActionType.Default,
-                title: 'Dochází vám kredit!',
-                body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
-              ));
-            }
-            //pokud chybí aspoň 3 obědy z příštích 10 dní
-            if (objednano <= 7) {
-              AwesomeNotifications().createNotification(
-                  content: NotificationContent(
-                id: 10,
-                channelKey: 'objednano_channel',
-                actionType: ActionType.Default,
-                title: 'Objednejte si na příští týden',
-                body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
-              ));
-            }
-          }
+          await doNotifications();
           return Future.value(true);
         } catch (e) {
           AwesomeNotifications().createNotification(
               content: NotificationContent(
             id: 10,
-            channelKey: 'kredit_channel',
+            channelKey: 'else_channel',
             actionType: ActionType.Default,
             title: 'Nastala Chyba',
             body: e.toString(),
@@ -88,84 +150,13 @@ void callbackDispatcher() {
 
 @pragma('vm:entry-point')
 void doVerification() async {
-  AwesomeNotifications().initialize(
-    // set the icon to null if you want to use the default app icon
-    null,
-    [
-      NotificationChannel(
-          channelGroupKey: 'kredit_channel_group',
-          channelKey: 'kredit_channel',
-          channelName: 'Kredit',
-          channelDescription: 'Notifikace označující docházející kredit',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white),
-      NotificationChannel(
-          channelGroupKey: 'objednano_channel_group',
-          channelKey: 'objednano_channel',
-          channelName: 'Objednáno?',
-          channelDescription: 'Notifikace upozorňující na to, abyste si objednal jídlo na příští týden',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white),
-    ],
-    // Channel groups are only visual and are not required
-    debug: kDebugMode,
-  );
   try {
-    LoginData loginData = await getLoginDataFromSecureStorage();
-    for (int i = 0; i < loginData.users.length; i++) {
-      Canteen canteenInstance = await initCanteen(
-          hasToBeNew: true,
-          username: loginData.users[i].username,
-          password: loginData.users[i].password,
-          url: loginData.users[i].url,
-          doIndexing: false);
-      Uzivatel uzivatel = await canteenInstance.ziskejUzivatele();
-      //7 is limit for how many lunches we are gonna search for
-      int objednano = 0;
-      int cena = 0;
-      for (int denIndex = 0; denIndex < 10; denIndex++) {
-        Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
-        //pokud nalezneme jídlo s cenou
-        if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
-          cena += jidelnicek.jidla[0].cena!.toInt();
-        }
-        if (jidelnicek.jidla.isEmpty) {
-          objednano++;
-          continue;
-        }
-        for (int jidloIndex = 0; jidloIndex < jidelnicek.jidla.length; jidloIndex++) {
-          if (jidelnicek.jidla[jidloIndex].objednano) {
-            objednano++;
-          }
-        }
-      }
-      if (cena != 0 && uzivatel.kredit < cena) {
-        AwesomeNotifications().createNotification(
-            content: NotificationContent(
-          id: 10,
-          channelKey: 'kredit_channel',
-          actionType: ActionType.Default,
-          title: 'Dochází vám kredit!',
-          body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
-        ));
-      }
-      //pokud chybí aspoň 3 obědy z příštích 10 dní
-      if (objednano <= 7) {
-        AwesomeNotifications().createNotification(
-            content: NotificationContent(
-          id: 10,
-          channelKey: 'objednano_channel',
-          actionType: ActionType.Default,
-          title: 'Objednejte si na příští týden',
-          body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
-        ));
-      }
-    }
+    doNotifications();
   } catch (e) {
     AwesomeNotifications().createNotification(
         content: NotificationContent(
       id: 10,
-      channelKey: 'kredit_channel',
+      channelKey: 'else_channel',
       actionType: ActionType.Default,
       title: 'Nastala Chyba',
       body: e.toString(),
@@ -175,28 +166,7 @@ void doVerification() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AwesomeNotifications().initialize(
-    // set the icon to null if you want to use the default app icon
-    null,
-    [
-      NotificationChannel(
-          channelGroupKey: 'kredit_channel_group',
-          channelKey: 'kredit_channel',
-          channelName: 'Kredit',
-          channelDescription: 'Notifikace označující docházející kredit',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white),
-      NotificationChannel(
-          channelGroupKey: 'objednano_channel_group',
-          channelKey: 'objednano_channel',
-          channelName: 'Objednáno?',
-          channelDescription: 'Notifikace upozorňující na to, abyste si objednal jídlo na příští týden',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white),
-    ],
-    // Channel groups are only visual and are not required
-    debug: kDebugMode,
-  );
+  initAwesome();
   String? analyticsDisabled = await readData('disableAnalytics');
   // know if this release is debug
   if (kDebugMode) {
@@ -220,12 +190,13 @@ void main() async {
   if (Platform.isAndroid) {
     // TODO: implement background_fetch - https://pub.dev/packages/background_fetch package instead
     await AndroidAlarmManager.initialize();
+    AndroidAlarmManager.cancel(helloAlarmID);
     await AndroidAlarmManager.periodic(const Duration(days: 1), helloAlarmID, doVerification);
   } else if (Platform.isIOS) {
     Workmanager().initialize(callbackDispatcher, // The top level function, aka callbackDispatcher
         isInDebugMode: kDebugMode // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
-
+    Workmanager().cancelAll();
     Workmanager().registerOneOffTask("task-identifier", "kredit-checker-je-jidlo-objednano-checker",
         initialDelay: const Duration(days: 7), //duration before showing the notification
         constraints: Constraints(

@@ -2,6 +2,7 @@
 //TODO: Notifications: todays food, credit is low, didnt order for next week
 
 import 'package:autojidelna/main.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
@@ -32,6 +33,18 @@ class AnalyticSettingsPage extends StatelessWidget {
                   children: [
                     _Graphics(),
                     _dataUsage(context),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            AwesomeNotifications().showNotificationConfigPage();
+                          },
+                          child: const Text('Zobrazit nastavení oznámení'),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

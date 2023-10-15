@@ -462,6 +462,7 @@ Future<void> saveDataToSecureStorage(String key, String value) async {
 ///saves the loginData class to secure storage
 Future<void> saveLoginToSecureStorage(LoginData loginData) async {
   await saveDataToSecureStorage('loginData', jsonEncode(loginData));
+  initAwesome();
 }
 
 ///gets an instance of loginData.
