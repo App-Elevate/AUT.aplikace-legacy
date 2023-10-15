@@ -1,4 +1,5 @@
 import 'package:autojidelna/every_import.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 ReleaseInfo? releaseInfo;
@@ -7,6 +8,14 @@ ReleaseInfo? releaseInfo;
 ///it does so only on android
 Future<ReleaseInfo> getLatestRelease() async {
   try {
+    if (kDebugMode) {
+      bool isAndroid = false;
+      if (Platform.isAndroid) {
+        isAndroid = true;
+      }
+      releaseInfo = ReleaseInfo(isAndroid: isAndroid, currentlyLatestVersion: true);
+      return releaseInfo!;
+    }
     bool isAndroid = false;
     if (Platform.isAndroid) {
       isAndroid = true;
