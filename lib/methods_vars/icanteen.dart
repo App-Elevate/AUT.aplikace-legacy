@@ -42,9 +42,10 @@ Ordering ordering = Ordering();
 /// 'no internet' - when there is no internet connection
 ///
 /// 'Uživatel není přihlášen' - when user is not logged in and doesn't have credentials in storage
-Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? username, String? password}) async {
+Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? username, String? password, bool? doIndexing}) async {
   LoginData loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
+  doIndexing ??= true;
 
   if (url.contains('https://')) {
     url = url.replaceAll('https://', '');
@@ -152,21 +153,21 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
   } catch (e) {
     return Future.error('no internet');
   }
-
-  try {
-    canteenData = CanteenData(
-      username: username,
-      url: url,
-      uzivatel: await canteenInstance!.ziskejUzivatele(),
-      jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
-      jidelnicky: jidelnicky,
-      pocetJidel: canteenData == null ? {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length} : canteenData!.pocetJidel,
-    );
-  } catch (e) {
-    return Future.error('no internet');
+  if (doIndexing) {
+    try {
+      canteenData = CanteenData(
+        username: username,
+        url: url,
+        uzivatel: await canteenInstance!.ziskejUzivatele(),
+        jidlaNaBurze: await canteenInstance!.ziskatBurzu(),
+        jidelnicky: jidelnicky,
+        pocetJidel: canteenData == null ? {currentDateWithoutTime: jidelnicky[currentDateWithoutTime]!.jidla.length} : canteenData!.pocetJidel,
+      );
+    } catch (e) {
+      return Future.error('no internet');
+    }
+    smartPreIndexing(currentDateWithoutTime);
   }
-  smartPreIndexing(currentDateWithoutTime);
-
   return canteenInstance!;
 }
 

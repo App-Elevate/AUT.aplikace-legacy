@@ -37,14 +37,6 @@ class MainAppScreenState extends State<MainAppScreen> {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-      id: 10,
-      channelKey: 'basic_channel',
-      actionType: ActionType.Default,
-      title: 'Hello World!',
-      body: 'This is my first notification!',
-    ));
   }
 
   ///reloads the page
