@@ -1,5 +1,6 @@
 //other imports from current project
 import 'package:flutter/foundation.dart';
+import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -9,12 +10,23 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
+@pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) {
+    print("Native called background task: $task"); //simpleTask will be emitted here.
+    return Future.value(true);
+  });
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Workmanager().initialize(callbackDispatcher, // The top level function, aka callbackDispatcher
+      isInDebugMode: true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+      );
+  Workmanager().registerOneOffTask("task-identifier", "simpleTask");
   AwesomeNotifications().initialize(
     // set the icon to null if you want to use the default app icon
-    'resource://notifications/ic_launcher.png',
+    null,
     [
       NotificationChannel(
           channelGroupKey: 'basic_channel_group',
