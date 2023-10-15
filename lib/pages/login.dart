@@ -251,7 +251,9 @@ class LoginScreen extends StatelessWidget {
           loginData.currentlyLoggedIn = true;
           loginData.currentlyLoggedInId = loginData.users.length;
           loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));
-
+          canteenData = null;
+          canteenInstance = null;
+          changeDate(newDate: DateTime.now());
           saveLoginToSecureStorage(loginData);
 
           saveData('url', _urlController.text);

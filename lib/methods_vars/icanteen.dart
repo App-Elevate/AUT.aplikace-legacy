@@ -343,6 +343,9 @@ Future<void> logout({int? id}) async {
     loginData.currentlyLoggedIn = false;
     loginData.currentlyLoggedInId = null;
   }
+  canteenData = null;
+  canteenInstance = null;
+  changeDate(newDate: DateTime.now());
   saveLoginToSecureStorage(loginData);
   return;
 }
