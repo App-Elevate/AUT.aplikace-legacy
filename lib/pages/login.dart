@@ -253,7 +253,11 @@ class LoginScreen extends StatelessWidget {
           loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));
           canteenData = null;
           canteenInstance = null;
-          changeDate(newDate: DateTime.now());
+          try {
+            changeDate(newDate: DateTime.now());
+          } catch (e) {
+            //this needs to be done only if we are loggin in the second time
+          }
           saveLoginToSecureStorage(loginData);
 
           saveData('url', _urlController.text);
