@@ -247,7 +247,7 @@ class LoginScreen extends StatelessWidget {
         if (login.prihlasen) {
           TextInput.finishAutofillContext();
 
-          LoginData loginData = await getLoginDataFromSecureStorage();
+          LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
           loginData.currentlyLoggedIn = true;
           loginData.currentlyLoggedInId = loginData.users.length;
           loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));

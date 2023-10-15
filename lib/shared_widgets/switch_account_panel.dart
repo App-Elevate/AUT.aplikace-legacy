@@ -19,7 +19,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
     topLeft: Radius.circular(16.0),
     topRight: Radius.circular(16.0),
   );
-  void updateAccountPanel(LoginData loginData) {
+  void updateAccountPanel(LoginDataAutojidelna loginData) {
     loggedAccounts.value.usernames.clear();
     for (int i = 0; i < loginData.users.length; i++) {
       loggedAccounts.value.usernames.add(loginData.users[i].username);
@@ -40,7 +40,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             future: getLoginDataFromSecureStorage(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                final loginData = snapshot.data as LoginData;
+                final loginData = snapshot.data as LoginDataAutojidelna;
                 updateAccountPanel(loginData);
                 return ValueListenableBuilder(
                     valueListenable: loggedAccounts,
@@ -120,7 +120,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
               if (!currentAccount) {
                 SwitchAccountVisible().setVisible(false);
                 await Future.delayed(const Duration(milliseconds: 500));
-                LoginData loginData = await getLoginDataFromSecureStorage();
+                LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
                 loginData.currentlyLoggedInId = id;
                 saveLoginToSecureStorage(loginData);
                 widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));

@@ -13,7 +13,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
 Future<bool> initAwesome() async {
-  LoginData loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   List<NotificationChannelGroup> notificationChannelGroups = [];
   List<NotificationChannel> notificationChannels = [];
   for (int i = 0; i < loginData.users.length; i++) {
@@ -71,7 +71,7 @@ Future<bool> initAwesome() async {
 }
 
 Future<void> doNotifications() async {
-  LoginData loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   for (int i = 0; i < loginData.users.length; i++) {
     Canteen canteenInstance = await initCanteen(
         hasToBeNew: true,
@@ -304,7 +304,7 @@ class LoggingInWidget extends StatelessWidget {
       future: getLoginDataFromSecureStorage(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          final loginData = snapshot.data as LoginData;
+          final loginData = snapshot.data as LoginDataAutojidelna;
           final isLoggedIn = loginData.currentlyLoggedIn;
           if (isLoggedIn) {
             return FutureBuilder(

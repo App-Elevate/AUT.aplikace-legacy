@@ -43,7 +43,7 @@ Ordering ordering = Ordering();
 ///
 /// 'Uživatel není přihlášen' - when user is not logged in and doesn't have credentials in storage
 Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? username, String? password, bool? doIndexing}) async {
-  LoginData loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
   doIndexing ??= true;
 
@@ -460,21 +460,21 @@ Future<void> saveDataToSecureStorage(String key, String value) async {
 }
 
 ///saves the loginData class to secure storage
-Future<void> saveLoginToSecureStorage(LoginData loginData) async {
+Future<void> saveLoginToSecureStorage(LoginDataAutojidelna loginData) async {
   await saveDataToSecureStorage('loginData', jsonEncode(loginData));
   initAwesome();
 }
 
 ///gets an instance of loginData.
-Future<LoginData> getLoginDataFromSecureStorage() async {
+Future<LoginDataAutojidelna> getLoginDataFromSecureStorage() async {
   try {
     String? value = await getDataFromSecureStorage('loginData');
     if (value == null || value == '') {
-      return LoginData(currentlyLoggedIn: false);
+      return LoginDataAutojidelna(currentlyLoggedIn: false);
     }
-    return LoginData.fromJson(jsonDecode(value));
+    return LoginDataAutojidelna.fromJson(jsonDecode(value));
   } catch (e) {
-    return LoginData(currentlyLoggedIn: false);
+    return LoginDataAutojidelna(currentlyLoggedIn: false);
   }
 }
 
@@ -512,7 +512,7 @@ Future<void> logout({int? id}) async {
   if (analyticsEnabledGlobally && analytics != null) {
     analytics!.logEvent(name: 'logout');
   }
-  LoginData loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   //removing just the one item from the array
 
   //ensuring correct loginData.currentlyloggedInId
@@ -534,7 +534,7 @@ Future<void> logout({int? id}) async {
 
 ///logs out everyone
 Future<void> logoutEveryone() async {
-  LoginData loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   loginData.currentlyLoggedIn = false;
   loginData.users.clear();
   loginData.currentlyLoggedInId = null;

@@ -28,15 +28,15 @@ class LoggedInUser {
 }
 
 ///všichni přihlášení uživatelé
-class LoginData {
-  LoginData({
+class LoginDataAutojidelna {
+  LoginDataAutojidelna({
     required this.currentlyLoggedIn,
   });
   bool currentlyLoggedIn;
   int? currentlyLoggedInId;
   List<LoggedInUser> users = [];
 
-  LoginData.fromJson(Map<String, dynamic> json)
+  LoginDataAutojidelna.fromJson(Map<String, dynamic> json)
       : currentlyLoggedIn = json['currentlyLoggedIn'],
         currentlyLoggedInId = json['currentlyLoggedInId'],
         users = json['users'].map<LoggedInUser>((e) => LoggedInUser.fromJson(e)).toList();
