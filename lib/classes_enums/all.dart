@@ -1,4 +1,5 @@
 import './../every_import.dart';
+export './notifications.dart';
 
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }

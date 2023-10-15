@@ -1,4 +1,5 @@
 import './../every_import.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({
@@ -22,6 +23,19 @@ class MainAppScreenState extends State<MainAppScreen> {
     if (!mounted) return;
     setState(() {
       scaffoldBody = widget;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        // This is just a basic example. For real apps, you must show some
+        // friendly dialog box before call the request method.
+        // This is very important to not harm the user experience
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
     });
   }
 
@@ -598,6 +612,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           onPressed: isButtonDisabled
               ? null
               : () async {
+                  AwesomeNotifications().createNotification(
+                      content: NotificationContent(
+                    id: 10,
+                    channelKey: 'basic_channel',
+                    actionType: ActionType.Default,
+                    title: 'Hello World!',
+                    body: 'This is my first notification!',
+                  ));
                   void snackBarMessage(String message) {
                     // Find the ScaffoldMessenger in the widget tree
                     // and use it to show a SnackBar.
