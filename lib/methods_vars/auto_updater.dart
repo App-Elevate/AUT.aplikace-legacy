@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 ReleaseInfo? releaseInfo;
 
 ///gets the latest release info from github
-///it does so only on android
 Future<ReleaseInfo> getLatestRelease() async {
   try {
     if (kDebugMode) {
