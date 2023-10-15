@@ -255,8 +255,9 @@ class MainAppScreenState extends State<MainAppScreen> {
         future: getLunchesForDay(minimalDate.add(Duration(days: index))),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
-            return const Center(child: CircularProgressIndicator());
+            //this causes errors for some reason
+            //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
+            return const Center(child: Text('nepodařilo se načíst obědy zkuste znovu načíst stránku'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -286,7 +287,7 @@ class ListJidel extends StatelessWidget {
     try {
       jidlaListener.value = (await refreshLunches(currentDate)).jidla;
     } catch (e) {
-      Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', setHomeWidget));
+      //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', setHomeWidget));
     }
   }
 
