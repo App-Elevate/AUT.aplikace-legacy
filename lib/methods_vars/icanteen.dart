@@ -329,8 +329,17 @@ Future<void> logout({int? id}) async {
     analytics!.logEvent(name: 'logout');
   }
   LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
-  AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
-  AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+  bool isDuplicate = false;
+  for (int i = 0; i < loginData.users.length; i++) {
+    if (loginData.users[i].username == loginData.users[id].username && i != id) {
+      isDuplicate = true;
+      break;
+    }
+  }
+  if (!isDuplicate) {
+    AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+    AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+  }
   //removing just the one item from the array
 
   //ensuring correct loginData.currentlyloggedInId
