@@ -251,9 +251,8 @@ class LoginScreen extends StatelessWidget {
           loginData.currentlyLoggedIn = true;
           loginData.currentlyLoggedInId = loginData.users.length;
           loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));
-          canteenData = null;
-          canteenInstance = null;
           try {
+            canteenData!.pocetJidel = {};
             changeDate(newDate: DateTime.now());
           } catch (e) {
             //this needs to be done only if we are loggin in the second time
