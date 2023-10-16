@@ -42,7 +42,7 @@ Ordering ordering = Ordering();
 ///
 /// 'no internet' - when there is no internet connection
 ///
-/// 'nejdříve se musíte přihlásit' - when user is not logged in and doesn't have credentials in storage
+/// 'Nejdříve se musíte přihlásit' - when user is not logged in and doesn't have credentials in storage
 Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? username, String? password, bool? doIndexing}) async {
   LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
@@ -59,7 +59,7 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
   if (username == null || password == null) {
     savedCredetnials = true;
     if (loginData.currentlyLoggedInId == null) {
-      return Future.error('nejdříve se musíte přihlásit');
+      return Future.error('Nejdříve se musíte přihlásit');
     }
   }
 
@@ -145,7 +145,7 @@ void pridatStatistiku(TypStatistiky statistika) async {
 ///získá Jídelníček pro den [den]
 ///tuto funkci nevolat globálně, nebere informace s canteenData a zároveň je neukládá
 ///uživatel musí být přihlášen
-///Jinak vyhodí chybu 'nejdříve se musíte přihlásit'
+///Jinak vyhodí chybu 'Nejdříve se musíte přihlásit'
 ///může vyhodit chybu 'no internet'
 Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
   try {
@@ -156,14 +156,14 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     /// this variable is used as a maximum number of Lunches that it should check for this error. If you change it it only lowers/highers the effectiveness of this fix with a tradeoff in performance
     return jidelnicek;
   } catch (e) {
-    if (e == 'nejdříve se musíte přihlásit') {
+    if (e == 'Nejdříve se musíte přihlásit') {
       try {
         await initCanteen(hasToBeNew: true);
         await Future.delayed(const Duration(seconds: 1));
         return await ziskatJidelnicekDen(den);
       } catch (e) {
-        if (e == 'nejdříve se musíte přihlásit') {
-          return Future.error('nejdříve se musíte přihlásit');
+        if (e == 'Nejdříve se musíte přihlásit') {
+          return Future.error('Nejdříve se musíte přihlásit');
         }
         return Future.error('no internet');
       }
