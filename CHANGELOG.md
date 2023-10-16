@@ -2,7 +2,7 @@
 
 - opravena velikost uživatelského jména v profilu
 - méně nyní vyskakuje "nelze se připojit"
-- nyní využíváno toto místo release-notes.md
+- nyní využíván CHANGELOG.md místo release-notes.md pro získání dat o nové verzi
 
 ## 1.2.4
 
