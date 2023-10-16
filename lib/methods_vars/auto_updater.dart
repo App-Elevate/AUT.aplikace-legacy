@@ -42,7 +42,10 @@ Future<ReleaseInfo> getLatestRelease() async {
       if (apkname.contains('.apk')) {
         apkname.replaceAll('.apk', '');
       } else {
-        patchNotes = utf8.decode((await http.get(Uri.parse(json['assets'][i]['browser_download_url']))).bodyBytes);
+        patchNotes =
+            utf8.decode((await http.get(Uri.parse('https://raw.githubusercontent.com/tpkowastaken/autojidelna/v$version/CHANGELOG.md'))).bodyBytes);
+        patchNotes = patchNotes.split('## $appVersion')[0];
+        patchNotes = patchNotes.trim();
       }
       for (int k = 0; k < androidInfo.supportedAbis.length; k++) {
         if (downloadUrl != null) {
