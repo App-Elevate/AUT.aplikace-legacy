@@ -20,14 +20,14 @@ Future<bool> initAwesome() async {
     LoggedInUser user = loginData.users[i];
     notificationChannelGroups.add(
       NotificationChannelGroup(
-        channelGroupKey: '${i}channel_group_${user.username}',
+        channelGroupKey: 'channel_group_${user.username}',
         channelGroupName: 'Notifikace pro ${user.username}',
       ),
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: '${i}channel_group_${user.username}',
-        channelKey: '${i}kredit_channel_${user.username}',
+        channelGroupKey: 'channel_group_${user.username}',
+        channelKey: 'kredit_channel_${user.username}',
         channelName: 'Docházející kredit - ${user.username}',
         channelDescription: 'Notifikace o tom, zda vám dochází kredit týden dopředu',
         defaultColor: const Color(0xFF9D50DD),
@@ -36,8 +36,8 @@ Future<bool> initAwesome() async {
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: '${i}channel_group_${user.username}',
-        channelKey: '${i}objednano_channel_${user.username}',
+        channelGroupKey: 'channel_group_${user.username}',
+        channelKey: 'objednano_channel_${user.username}',
         channelName: 'Objednáno? - ${user.username}',
         channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednaly jídlo na příští týden',
         defaultColor: const Color(0xFF9D50DD),
@@ -103,7 +103,7 @@ Future<void> doNotifications() async {
       AwesomeNotifications().createNotification(
           content: NotificationContent(
         id: 255 - i,
-        channelKey: '${i}kredit_channel_${loginData.users[i].username}',
+        channelKey: 'kredit_channel_${loginData.users[i].username}',
         actionType: ActionType.Default,
         title: 'Dochází vám kredit!',
         body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
@@ -114,7 +114,7 @@ Future<void> doNotifications() async {
       AwesomeNotifications().createNotification(
           content: NotificationContent(
         id: i,
-        channelKey: '${i}objednano_channel_${loginData.users[i].username}',
+        channelKey: 'objednano_channel_${loginData.users[i].username}',
         actionType: ActionType.Default,
         title: 'Objednejte si na příští týden',
         body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',

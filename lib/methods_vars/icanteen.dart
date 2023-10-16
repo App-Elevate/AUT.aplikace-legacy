@@ -1,4 +1,5 @@
 import 'package:autojidelna/main.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import '../every_import.dart';
 
 /// initCanteen has to be called before using this variable
@@ -41,7 +42,7 @@ Ordering ordering = Ordering();
 ///
 /// 'no internet' - when there is no internet connection
 ///
-/// 'Uživatel není přihlášen' - when user is not logged in and doesn't have credentials in storage
+/// 'nejdříve se musíte přihlásit' - when user is not logged in and doesn't have credentials in storage
 Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? username, String? password, bool? doIndexing}) async {
   LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
   url ??= loginData.users[loginData.currentlyLoggedInId!].url;
@@ -58,7 +59,7 @@ Future<Canteen> initCanteen({bool hasToBeNew = false, String? url, String? usern
   if (username == null || password == null) {
     savedCredetnials = true;
     if (loginData.currentlyLoggedInId == null) {
-      return Future.error('Uživatel není přihlášen');
+      return Future.error('nejdříve se musíte přihlásit');
     }
   }
 
@@ -144,7 +145,7 @@ void pridatStatistiku(TypStatistiky statistika) async {
 ///získá Jídelníček pro den [den]
 ///tuto funkci nevolat globálně, nebere informace s canteenData a zároveň je neukládá
 ///uživatel musí být přihlášen
-///Jinak vyhodí chybu 'Uživatel není přihlášen'
+///Jinak vyhodí chybu 'nejdříve se musíte přihlásit'
 ///může vyhodit chybu 'no internet'
 Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
   try {
@@ -155,14 +156,14 @@ Future<Jidelnicek> ziskatJidelnicekDen(DateTime den) async {
     /// this variable is used as a maximum number of Lunches that it should check for this error. If you change it it only lowers/highers the effectiveness of this fix with a tradeoff in performance
     return jidelnicek;
   } catch (e) {
-    if (e == 'Uživatel není přihlášen') {
+    if (e == 'nejdříve se musíte přihlásit') {
       try {
         await initCanteen(hasToBeNew: true);
         await Future.delayed(const Duration(seconds: 1));
         return await ziskatJidelnicekDen(den);
       } catch (e) {
-        if (e == 'Uživatel není přihlášen') {
-          return Future.error('Uživatel není přihlášen');
+        if (e == 'nejdříve se musíte přihlásit') {
+          return Future.error('nejdříve se musíte přihlásit');
         }
         return Future.error('no internet');
       }
@@ -328,10 +329,24 @@ Future<void> logout({int? id}) async {
     analytics!.logEvent(name: 'logout');
   }
   LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+  bool isDuplicate = false;
+  for (int i = 0; i < loginData.users.length; i++) {
+    if (loginData.users[i].username == loginData.users[id].username && i != id) {
+      isDuplicate = true;
+      break;
+    }
+  }
+  if (!isDuplicate) {
+    AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+    AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+  }
   //removing just the one item from the array
 
   //ensuring correct loginData.currentlyloggedInId
   if (id == loginData.currentlyLoggedInId) {
+    canteenData = null;
+    canteenInstance = null;
+    changeDate(newDate: DateTime.now());
     loginData.currentlyLoggedInId = loginData.users.length - 2;
   } else if (loginData.currentlyLoggedInId != null && loginData.currentlyLoggedInId! > id) {
     loginData.currentlyLoggedInId = loginData.currentlyLoggedInId! - 1;
@@ -343,9 +358,6 @@ Future<void> logout({int? id}) async {
     loginData.currentlyLoggedIn = false;
     loginData.currentlyLoggedInId = null;
   }
-  canteenData = null;
-  canteenInstance = null;
-  changeDate(newDate: DateTime.now());
   saveLoginToSecureStorage(loginData);
   return;
 }

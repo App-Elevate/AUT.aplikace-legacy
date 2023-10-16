@@ -123,9 +123,13 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
                 loginData.currentlyLoggedInId = id;
                 saveLoginToSecureStorage(loginData);
-                canteenData = null;
-                canteenInstance = null;
-                changeDate(newDate: DateTime.now());
+                try {
+                  canteenData = null;
+                  canteenInstance = null;
+                  changeDate(newDate: DateTime.now());
+                } catch (e) {
+                  //not needed
+                }
                 widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
               } else {
                 SwitchAccountVisible().setVisible(false);
