@@ -82,7 +82,10 @@ class ProfilePage extends StatelessWidget {
                       Builder(
                         builder: (context) {
                           if (canteenData!.uzivatel.uzivatelskeJmeno != null) {
-                            return Text(canteenData!.uzivatel.uzivatelskeJmeno!);
+                            return Text(
+                              canteenData!.uzivatel.uzivatelskeJmeno!,
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            );
                           } else {
                             return FutureBuilder(
                               future: getLoginDataFromSecureStorage(),
@@ -90,10 +93,13 @@ class ProfilePage extends StatelessWidget {
                                 if (snapshot.hasData) {
                                   return Text(
                                     snapshot.data?.users[snapshot.data!.currentlyLoggedInId!].username ?? '',
-                                    style: Theme.of(context).textTheme.headlineLarge,
+                                    style: Theme.of(context).textTheme.headlineMedium,
                                   );
                                 } else {
-                                  return const Text('Načítání');
+                                  return Text(
+                                    'Načítání',
+                                    style: Theme.of(context).textTheme.headlineMedium,
+                                  );
                                 }
                               },
                             );
