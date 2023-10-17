@@ -1,5 +1,4 @@
 //TODO: skip weekends while browsing
-//TODO: Notifications: todays food, credit is low, didnt order for next week
 
 import 'package:autojidelna/main.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';

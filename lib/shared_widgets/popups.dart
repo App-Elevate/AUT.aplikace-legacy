@@ -59,7 +59,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (releaseInfo!.isAndroid)
+                if (releaseInfo!.isAndroid || (releaseInfo?.isOnAppstore ?? false))
                   SizedBox(
                     width: 500,
                     child: ElevatedButton(
@@ -69,6 +69,13 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                       ),
                       child: const Text('Aktualizovat'),
                       onPressed: () {
+                        if (Platform.isAndroid && (releaseInfo?.isOnGooglePlay ?? false)) {
+                          launchUrl(Uri.parse(releaseInfo!.googlePlayUrl!), mode: LaunchMode.externalApplication);
+                          return;
+                        } else if (Platform.isIOS && (releaseInfo?.isOnAppstore ?? false)) {
+                          launchUrl(Uri.parse(releaseInfo!.appStoreUrl!), mode: LaunchMode.externalApplication);
+                          return;
+                        }
                         Navigator.of(context).pop();
 
                         PackageInfo.fromPlatform().then(

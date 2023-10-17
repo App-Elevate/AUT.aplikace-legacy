@@ -70,11 +70,19 @@ class ReleaseInfo {
     this.latestVersion,
     this.downloadUrl,
     this.changelog,
+    this.appStoreUrl,
+    this.isOnAppstore,
+    this.googlePlayUrl,
+    this.isOnGooglePlay,
     required this.currentlyLatestVersion,
   });
   String? latestVersion;
   String? downloadUrl;
   String? changelog;
+  bool? isOnAppstore;
+  bool? isOnGooglePlay;
+  String? googlePlayUrl;
+  String? appStoreUrl;
   bool currentlyLatestVersion;
   bool isAndroid;
 }

@@ -25,6 +25,9 @@ Future<ReleaseInfo> getLatestRelease() async {
       'X-GitHub-Api-Version': '2022-11-28',
     };
     final response = await http.get(url, headers: headers);
+    final isOnAppstore = await http.get(Uri.parse('https://autojidelna.tomprotiva.com/release/appStore.json'));
+    //decode isOnAppstore as json
+    final isOnAppstoreJson = jsonDecode(isOnAppstore.body);
     var json = jsonDecode(response.body);
     String version = json['tag_name'].replaceAll('v', '');
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -37,15 +40,22 @@ Future<ReleaseInfo> getLatestRelease() async {
     String? downloadUrl;
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    try {
+      patchNotes =
+          utf8.decode((await http.get(Uri.parse('https://raw.githubusercontent.com/tpkowastaken/autojidelna/v$version/CHANGELOG.md'))).bodyBytes);
+      patchNotes = patchNotes.split('## $appVersion')[0];
+      patchNotes = patchNotes.trim();
+    } catch (e) {
+      patchNotes = 'Nepodařilo se získat změny :/';
+    }
+    if (patchNotes == '404: Not Found') {
+      patchNotes = 'Nepodařilo se získat změny :/';
+    }
+
     for (int i = 0; i < json['assets'].length; i++) {
       String apkname = json['assets'][i]['browser_download_url'].split('/').last;
       if (apkname.contains('.apk')) {
         apkname.replaceAll('.apk', '');
-      } else {
-        patchNotes =
-            utf8.decode((await http.get(Uri.parse('https://raw.githubusercontent.com/tpkowastaken/autojidelna/v$version/CHANGELOG.md'))).bodyBytes);
-        patchNotes = patchNotes.split('## $appVersion')[0];
-        patchNotes = patchNotes.trim();
       }
       for (int k = 0; k < androidInfo.supportedAbis.length; k++) {
         if (downloadUrl != null) {
@@ -58,8 +68,27 @@ Future<ReleaseInfo> getLatestRelease() async {
       }
     }
     //get current app version
-    releaseInfo = ReleaseInfo(
-        isAndroid: isAndroid, latestVersion: version, downloadUrl: downloadUrl, changelog: patchNotes, currentlyLatestVersion: version == appVersion);
+    try {
+      releaseInfo = ReleaseInfo(
+        isAndroid: isAndroid,
+        latestVersion: version,
+        downloadUrl: downloadUrl,
+        changelog: patchNotes,
+        currentlyLatestVersion: version == appVersion,
+        isOnGooglePlay: bool.tryParse(isOnAppstoreJson?['onGooglePlay']) ?? false,
+        googlePlayUrl: isOnAppstoreJson?['GooglePlayUrl'],
+        appStoreUrl: isOnAppstoreJson?['AppStoreUrl'],
+        isOnAppstore: bool.tryParse(isOnAppstoreJson?['onAppStore']) ?? false,
+      );
+    } catch (e) {
+      releaseInfo = ReleaseInfo(
+        isAndroid: isAndroid,
+        latestVersion: version,
+        downloadUrl: downloadUrl,
+        changelog: patchNotes,
+        currentlyLatestVersion: version == appVersion,
+      );
+    }
     return releaseInfo!;
   } catch (e) {
     //having the last version isn't so important so we can just ignore it if it goes wrong
