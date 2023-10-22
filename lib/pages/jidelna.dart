@@ -343,9 +343,9 @@ class ListJidel extends StatelessWidget {
     try {
       if (jidelnicekListener.value.jidla.length < numberOfMaxLunches) {
         Future.delayed(const Duration(milliseconds: 300)).then((_) async {
-          Jidelnicek jidelnicek = (await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true));
-          if (jidelnicekListener.value.jidla.length < jidelnicek.jidla.length) {
-            jidelnicekListener.value = jidelnicek;
+          Jidelnicek jidelnicekNovy = (await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true));
+          if (jidelnicekListener.value.jidla.length < jidelnicekNovy.jidla.length) {
+            jidelnicekListener.value = jidelnicekNovy;
           }
         });
       }
@@ -492,7 +492,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
         Jidelnicek jidelnicekCheck = await loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: widget.indexDne)), requireNew: true);
         for (int i = 0; i < jidelnicekCheck.jidla.length; i++) {
           if (widget.jidelnicekListener.value.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
-            widget.softRefresh();
+            widget.jidelnicekListener.value = jidelnicekCheck;
             return;
           }
         }
@@ -567,6 +567,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 cannotBeOrderedFix();
               }
             } catch (e) {
+              print(e);
               //hope it's not important
             }
             if (loggedInCanteen.uzivatel!.kredit < jidlo!.cena! && !datumJidla.isBefore(DateTime.now())) {

@@ -119,7 +119,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             onTap: () async {
               if (!currentAccount) {
                 SwitchAccountVisible().setVisible(false);
-                loggedInCanteen.changeAccount(id);
+                loggedInCanteen.switchAccount(id);
                 await Future.delayed(const Duration(milliseconds: 300));
                 widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
               } else {

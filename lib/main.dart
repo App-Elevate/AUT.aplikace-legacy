@@ -29,8 +29,8 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: 'channel_group_${user.username}',
         channelKey: 'kredit_channel_${user.username}',
-        channelName: 'Docházející kredit - ${user.username}',
-        channelDescription: 'Notifikace o tom, zda vám dochází kredit týden dopředu',
+        channelName: 'Docházející kredit',
+        channelDescription: 'Notifikace o tom, zda vám dochází kredit týden dopředu pro ${user.username}',
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -39,8 +39,8 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: 'channel_group_${user.username}',
         channelKey: 'objednano_channel_${user.username}',
-        channelName: 'Objednáno? - ${user.username}',
-        channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednaly jídlo na příští týden',
+        channelName: 'Objednáno?',
+        channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden pro ${user.username}',
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -166,8 +166,19 @@ void doVerification() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initAwesome();
+  await initAwesome();
   String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
+  //get the version of the app
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  String version = packageInfo.version;
+  //check if the version is the same as the last one
+  String? lastVersion = await loggedInCanteen.readData('lastVersion');
+  if (lastVersion != version) {
+    //if not, set the new version as the last one
+    loggedInCanteen.saveData('lastVersion', version);
+    await AwesomeNotifications().dispose();
+    initAwesome();
+  }
   // know if this release is debug
   if (kDebugMode) {
     analyticsDisabled = '1';

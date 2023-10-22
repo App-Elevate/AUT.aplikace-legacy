@@ -1,4 +1,3 @@
-import 'package:autojidelna/main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:http/http.dart' as http;
@@ -246,10 +245,11 @@ class LoginScreen extends StatelessWidget {
         bool login = await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
         if (login) {
           loggedInCanteen.saveData('url', url);
+          changeDate(newDate: DateTime.now());
           if (context.mounted) {
-            Navigator.maybeOf(context)!.maybePop();
+            Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
           }
-          setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+          setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
         } else {
           _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         }

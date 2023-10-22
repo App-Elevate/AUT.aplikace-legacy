@@ -146,7 +146,7 @@ class LoggedInCanteen {
       checked = {};
       currentlyLoading = {};
       _canteenData = CanteenData(
-        id: safetyId ?? 0,
+        id: (safetyId ?? 0) + 1,
         pocetJidel: {},
         username: username,
         url: url,
@@ -199,8 +199,10 @@ class LoggedInCanteen {
       Future.delayed(const Duration(seconds: 1), () => currentlyLoading.remove(den));
       return jidelnicek;
     } catch (e) {
-      currentlyLoading[den]!.completeError(e);
-      currentlyLoading.remove(den);
+      if (currentlyLoading[den] != null) {
+        currentlyLoading[den]!.completeError(e);
+        currentlyLoading.remove(den);
+      }
       if (e == 'Nejdříve se musíte přihlásit') {
         return _ziskatJidelnicekDen(den, tries: tries + 1);
       }
@@ -263,6 +265,14 @@ class LoggedInCanteen {
     return;
   }
 
+  //just switches the account - YOU NEED TO CALL [loginFromStorage] AFTER THIS
+  Future<void> switchAccount(int id) async {
+    LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+    loginData.currentlyLoggedInId = id;
+    await saveLoginToSecureStorage(loginData);
+  }
+
+  //switches the account and logs in as the new account
   Future<bool> changeAccount(int id, {bool indexLunches = false}) async {
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     String url = loginData.users[id].url;
@@ -271,7 +281,7 @@ class LoggedInCanteen {
     loginData.currentlyLoggedInId = id;
     saveLoginToSecureStorage(loginData);
     try {
-      _canteenInstance = await _login(url, username, password, safetyId: _canteenData?.id ?? 0, indexLunches: indexLunches);
+      _canteenInstance = await _login(url, username, password, safetyId: (_canteenData?.id ?? 0) + 1, indexLunches: indexLunches);
       return true;
     } catch (e) {
       return false;
@@ -280,7 +290,7 @@ class LoggedInCanteen {
 
   Future<bool> addAccount(String url, String username, String password) async {
     try {
-      _canteenInstance = await _login(url, username, password, safetyId: _canteenData?.id ?? 0);
+      await _login(url, username, password, safetyId: (_canteenData?.id ?? 0) + 1);
       LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
       loginData.users.add(LoggedInUser(username: username, password: password, url: url));
       loginData.currentlyLoggedInId = loginData.users.length - 1;
@@ -372,7 +382,9 @@ class LoggedInCanteen {
       loginData.currentlyLoggedInId = null;
     }
     await saveLoginToSecureStorage(loginData);
-    changeAccount(loginData.currentlyLoggedInId!);
+    if (loginData.currentlyLoggedInId == null) {
+      await logoutEveryone();
+    }
     return;
   }
 
