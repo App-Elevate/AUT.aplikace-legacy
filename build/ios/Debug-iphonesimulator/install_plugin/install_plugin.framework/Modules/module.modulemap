@@ -1,0 +1,11 @@
+framework module install_plugin {
+  umbrella header "install_plugin-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module install_plugin.Swift {
+  header "install_plugin-Swift.h"
+  requires objc
+}

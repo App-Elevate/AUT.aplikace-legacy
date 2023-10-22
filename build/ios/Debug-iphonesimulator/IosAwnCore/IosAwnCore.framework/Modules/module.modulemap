@@ -1,0 +1,11 @@
+framework module IosAwnCore {
+  umbrella header "IosAwnCore-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module IosAwnCore.Swift {
+  header "IosAwnCore-Swift.h"
+  requires objc
+}
