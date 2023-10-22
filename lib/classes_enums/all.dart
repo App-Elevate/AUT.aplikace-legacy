@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import './../every_import.dart';
 export './notifications.dart';
 
@@ -89,6 +91,9 @@ class ReleaseInfo {
 
 ///Třída pro kešování dat Canteeny
 class CanteenData {
+  /// id, aby se nám neindexovaly špatně jídelníčky
+  int id;
+
   /// login uživatele
   String username;
 
@@ -98,7 +103,7 @@ class CanteenData {
   /// info o uživateli - např kredit,jméno,příjmení...
   Uzivatel uzivatel;
 
-  /// seznam jídelníčků začínající Od Pondělí tohoto týdne
+  /// seznam předindexovaných jídelníčků začínající Od Pondělí tohoto týdne
   Map<DateTime, Jidelnicek> jidelnicky;
 
   /// fix pro api vracející méně jídel než by mělo
@@ -108,24 +113,27 @@ class CanteenData {
   List<Burza> jidlaNaBurze;
 
   /// jídelníčky, které aktuálně načítáme
-  List<DateTime> currentlyLoading = [];
+  Map<DateTime, Completer<Jidelnicek>> currentlyLoading;
+
   CanteenData({
-    required this.pocetJidel,
     required this.username,
     required this.url,
     required this.uzivatel,
-    required this.jidelnicky,
     required this.jidlaNaBurze,
+    this.id = 0,
+    required this.currentlyLoading,
+    required this.jidelnicky,
+    required this.pocetJidel,
   });
   CanteenData copyWith() {
     return CanteenData(
-      pocetJidel: pocetJidel,
-      username: username,
-      url: url,
-      uzivatel: uzivatel,
-      jidelnicky: jidelnicky,
-      jidlaNaBurze: jidlaNaBurze,
-    );
+        username: username,
+        url: url,
+        uzivatel: uzivatel,
+        jidlaNaBurze: jidlaNaBurze,
+        currentlyLoading: currentlyLoading,
+        jidelnicky: jidelnicky,
+        pocetJidel: pocetJidel);
   }
 }
 

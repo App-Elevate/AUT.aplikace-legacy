@@ -1,7 +1,7 @@
 import 'package:autojidelna/main.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:http/http.dart' as http;
 
 import './../every_import.dart';
 
@@ -71,7 +71,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void setLastUrl() async {
-    String? lastUrl = await readData('url');
+    String? lastUrl = await loggedInCanteen.readData('url');
     if (lastUrl != null) {
       _urlController.text = lastUrl;
     }
@@ -243,30 +243,13 @@ class LoginScreen extends StatelessWidget {
       loggingIn.value = true;
       String url = _urlController.text;
       try {
-        Canteen login = await initCanteen(hasToBeNew: true, url: url, username: _usernameController.text, password: _passwordController.text);
-        if (login.prihlasen) {
-          TextInput.finishAutofillContext();
-
-          LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
-          loginData.currentlyLoggedIn = true;
-          loginData.currentlyLoggedInId = loginData.users.length;
-          loginData.users.add(LoggedInUser(username: _usernameController.text, password: _passwordController.text, url: url));
-          try {
-            canteenData = null;
-            canteenInstance = null;
-            changeDate(newDate: DateTime.now());
-          } catch (e) {
-            //this needs to be done only if we are loggin in the second time
+        bool login = await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
+        if (login) {
+          loggedInCanteen.saveData('url', url);
+          if (context.mounted) {
+            Navigator.maybeOf(context)!.maybePop();
           }
-          saveLoginToSecureStorage(loginData);
-
-          saveData('url', _urlController.text);
-          if (context.mounted && Navigator.canPop(context)) {
-            Navigator.pop(context);
-            setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
-          } else {
-            setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
-          }
+          setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
         } else {
           _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         }
@@ -274,16 +257,27 @@ class LoginScreen extends StatelessWidget {
         bool connected = await InternetConnectionChecker().hasConnection;
         if (!connected) {
           _setErrorText('Nejste připojeni k internetu', LoginFormErrorField.url);
-        } else if (e.toString().contains('bad url')) {
-          _setErrorText('Nesprávné url', LoginFormErrorField.url);
-        } else if (e.toString().contains('login failed')) {
-          _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
         } else {
-          _setErrorText('Připojení k serveru selhalo.', LoginFormErrorField.url);
+          try {
+            //make a get request to the server to see if it is reachable
+            url = url.replaceAll('https://', '');
+            url = url.replaceAll('http://', '');
+            url = url.split('/')[0];
+            await http.get(Uri.parse('https://$url'));
+            _setErrorText('Připojení k serveru selhalo. Kontaktujte vývojáře', LoginFormErrorField.url);
+          } catch (e) {
+            try {
+              url = url.replaceAll('https://', 'http://');
+              await http.get(Uri.parse('http://$url'));
+              _setErrorText('Připojení k serveru selhalo. Kontaktujte vývojáře', LoginFormErrorField.url);
+            } catch (e) {
+              _setErrorText('Nesprávné url', LoginFormErrorField.url);
+            }
+          }
         }
       }
+      loggingIn.value = false;
+      loginScreenVisible = false;
     }
-    loggingIn.value = false;
-    loginScreenVisible = false;
   }
 }

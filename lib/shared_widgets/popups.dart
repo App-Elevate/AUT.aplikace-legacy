@@ -125,6 +125,38 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
   );
 }
 
+void failedLunchDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Selhalo načítání jídelníčku'),
+        content: Text(message),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+            },
+            child: const Text('Zkusit znovu'),
+          ),
+          TextButton(
+            onPressed: () {
+              loggedInCanteen.logout();
+              Navigator.of(context).pop();
+              setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
+            },
+            child: const Text('Odhlásit se'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 void failedLoginDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
   showDialog(
     context: context,
@@ -145,7 +177,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
           ),
           TextButton(
             onPressed: () {
-              logout();
+              loggedInCanteen.logout();
               Navigator.of(context).pop();
               setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
             },

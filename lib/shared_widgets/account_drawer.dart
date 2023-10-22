@@ -14,7 +14,7 @@ class MainAccountDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String username = canteenData!.username;
+    final String username = loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? '';
     return Drawer(
       child: SingleChildScrollView(
         child: Padding(
@@ -79,7 +79,7 @@ class MainAccountDrawer extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${canteenData!.uzivatel.kredit.toInt()}',
+                                        '${loggedInCanteen.uzivatel!.kredit.toInt()}',
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                       const Text('Kč'),

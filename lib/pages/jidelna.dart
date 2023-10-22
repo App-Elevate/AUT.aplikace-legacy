@@ -41,13 +41,12 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   ///reloads the page
   Future<void> reload() async {
-    if (refreshing) return;
+    if (loadingIndicator) return;
     setState(() {
       loadingIndicator = true;
     });
-    refreshing = true;
     try {
-      await initCanteen(hasToBeNew: true);
+      await loggedInCanteen.refreshLunches(minimalDate.add(Duration(days: pageviewController.page!.round())));
     } catch (e) {
       // Find the ScaffoldMessenger in the widget tree
       // and use it to show a SnackBar.
@@ -63,7 +62,6 @@ class MainAppScreenState extends State<MainAppScreen> {
     setState(() {
       loadingIndicator = false;
     });
-    refreshing = false;
     setScaffoldBody(jidelnicekWidget());
   }
 
@@ -183,7 +181,7 @@ class MainAppScreenState extends State<MainAppScreen> {
             valueListenable: dateListener,
             builder: (ctx, value, child) {
               DateTime currentDate = value;
-              String dayOfWeek = ziskatDenZData(currentDate.weekday);
+              String dayOfWeek = loggedInCanteen.ziskatDenZData(currentDate.weekday);
               return SizedBox(
                 height: 70,
                 child: Row(
@@ -252,11 +250,9 @@ class MainAppScreenState extends State<MainAppScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: FutureBuilder(
-        future: getLunchesForDay(minimalDate.add(Duration(days: index))),
+        future: loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: index))),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            //this causes errors for some reason
-            //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', widget.setHomeWidget));
             return const Center(child: Text('nepodařilo se načíst obědy zkuste znovu načíst stránku'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -285,7 +281,9 @@ class ListJidel extends StatelessWidget {
   void refreshButtons(BuildContext context) async {
     DateTime currentDate = minimalDate.add(Duration(days: indexDne));
     try {
-      jidlaListener.value = (await refreshLunches(currentDate)).jidla;
+      jidlaListener.value = (await loggedInCanteen.getLunchesForDay(currentDate, requireNew: true)).jidla;
+      Future.delayed(const Duration(milliseconds: 30));
+      ordering = false;
     } catch (e) {
       //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', setHomeWidget));
     }
@@ -294,22 +292,29 @@ class ListJidel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     jidlaListener.value = jidelnicek.jidla;
-    if (jidlaListener.value.length < numberOfMaxLunches) {
-      getLunchesForDay(minimalDate.add(Duration(days: indexDne)), requireNew: true).then((value) {
-        if (jidlaListener.value.length < numberOfMaxLunches) {
-          jidlaListener.value = value.jidla;
-        }
-      });
+    //second layer fix pro api returning garbage when switching orders
+    try {
+      if (jidlaListener.value.length < numberOfMaxLunches && !(loggedInCanteen.checked[dateListener.value] ?? false)) {
+        print('hey');
+        Future.delayed(Duration.zero).then((_) async {
+          Jidelnicek jidelnicek = await (await loggedInCanteen.canteenInstance).jidelnicekDen(den: dateListener.value);
+          print('hey');
+          loggedInCanteen.checked[dateListener.value] = true;
+          if (jidelnicek.jidla.length > jidlaListener.value.length) {
+            jidlaListener.value = jidelnicek.jidla;
+          }
+        });
+      }
+    } catch (e) {
+      //We're fine if it fails. Something else will scream instead
     }
     return Column(
       children: [
         Builder(
           builder: (_) {
             Future<void> softRefresh() async {
-              if (refreshing) return;
-              refreshing = true;
               try {
-                await initCanteen(hasToBeNew: true);
+                await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
               } catch (e) {
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
@@ -322,7 +327,6 @@ class ListJidel extends StatelessWidget {
                   });
                 }
               }
-              refreshing = false;
               setScaffoldBody(MainAppScreenState().jidelnicekWidget());
             }
 
@@ -360,6 +364,7 @@ class ListJidel extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => JidloDetail(
+                              softRefresh: softRefresh,
                               indexDne: indexDne,
                               refreshButtons: refreshButtons,
                               jidlaListener: jidlaListener,
@@ -388,6 +393,7 @@ class ListJidel extends StatelessWidget {
                                 }),
                                 const SizedBox(height: 16),
                                 ObjednatJidloTlacitko(
+                                  softRefresh: softRefresh,
                                   indexDne: indexDne,
                                   refreshButtons: refreshButtons,
                                   jidlaListener: jidlaListener,
@@ -411,16 +417,17 @@ class ListJidel extends StatelessWidget {
 }
 
 class ObjednatJidloTlacitko extends StatefulWidget {
-  const ObjednatJidloTlacitko({
-    super.key,
-    required this.indexJidlaVeDni,
-    required this.jidlaListener,
-    required this.refreshButtons,
-    required this.indexDne,
-  });
+  const ObjednatJidloTlacitko(
+      {super.key,
+      required this.indexJidlaVeDni,
+      required this.jidlaListener,
+      required this.refreshButtons,
+      required this.indexDne,
+      required this.softRefresh});
   final ValueNotifier<List<Jidlo>> jidlaListener;
   final int indexDne;
   final int indexJidlaVeDni;
+  final Future<void> Function() softRefresh;
   final Function(BuildContext context) refreshButtons;
 
   @override
@@ -434,10 +441,10 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   void cannotBeOrderedFix() async {
     try {
       if (!minimalDate.add(Duration(days: widget.indexDne)).isBefore(DateTime.now())) {
-        Jidelnicek jidelnicekCheck = await getLunchesForDay(minimalDate.add(Duration(days: widget.indexDne)), requireNew: true);
+        Jidelnicek jidelnicekCheck = await loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: widget.indexDne)), requireNew: true);
         for (int i = 0; i < jidelnicekCheck.jidla.length; i++) {
           if (widget.jidlaListener.value[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
-            widget.jidlaListener.value = jidelnicekCheck.jidla;
+            widget.softRefresh();
             return;
           }
         }
@@ -472,7 +479,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           stavJidla = StavJidla.objednanoNelzeOdebrat;
         } else if (!jidlo!.objednano && jidlo!.lzeObjednat) {
           stavJidla = StavJidla.neobjednano;
-        } else if (jeJidloNaBurze(jidlo!)) {
+        } else if (loggedInCanteen.jeJidloNaBurze(jidlo!)) {
           stavJidla = StavJidla.dostupneNaBurze;
         } else if (!jidlo!.objednano && !jidlo!.lzeObjednat) {
           stavJidla = StavJidla.nedostupne;
@@ -497,11 +504,11 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             try {
               bool jeVeDneDostupnyObed = false;
               int prvniIndex = -1;
-              for (int i = 0; i < canteenData!.jidelnicky[datumJidla]!.jidla.length; i++) {
-                if (canteenData!.jidelnicky[datumJidla]!.jidla[i].lzeObjednat ||
-                    canteenData!.jidelnicky[datumJidla]!.jidla[i].objednano ||
-                    jeJidloNaBurze(canteenData!.jidelnicky[datumJidla]!.jidla[i]) ||
-                    canteenData!.jidelnicky[datumJidla]!.jidla[i].burzaUrl != null) {
+              for (int i = 0; i < loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla.length; i++) {
+                if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i].lzeObjednat ||
+                    loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i].objednano ||
+                    loggedInCanteen.jeJidloNaBurze(loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i]) ||
+                    loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i].burzaUrl != null) {
                   jeVeDneDostupnyObed = true;
                   break;
                 } else {
@@ -514,7 +521,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             } catch (e) {
               //hope it's not important
             }
-            if (canteenData!.uzivatel.kredit < jidlo!.cena! && !datumJidla.isBefore(DateTime.now())) {
+            if (loggedInCanteen.uzivatel!.kredit < jidlo!.cena! && !datumJidla.isBefore(DateTime.now())) {
               obedText = 'Nedostatek kreditu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             } else {
               obedText = 'Nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
@@ -537,7 +544,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
             break;
         }
-        if (!ordering.ordering) {
+        if (!ordering) {
           switch (stavJidla) {
             case StavJidla.objednano:
               icon = const Icon(Icons.check);
@@ -593,10 +600,10 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     }
                   }
 
-                  if (ordering.ordering) {
+                  if (ordering) {
                     return;
                   }
-                  ordering.ordering = true;
+                  ordering = true;
                   setState(() {
                     icon = SizedBox(
                       height: 20,
@@ -609,7 +616,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   });
                   late Canteen canteen;
                   try {
-                    canteen = await initCanteen();
+                    canteen = await loggedInCanteen.canteenInstance;
                   } catch (e) {
                     snackBarMessage('Nastala chyba při objednávání jídla: $e');
                     return;
@@ -619,14 +626,8 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.neobjednano:
                       {
                         try {
-                          for (int i = 0; i < 20 && canteenData!.jidelnicky[datumJidla] == null; i++) {
-                            if (i >= 19) {
-                              throw Exception('Nepovedl se načíst jídelníček, aktualizujte stránku');
-                            }
-                            await Future.delayed(const Duration(milliseconds: 100));
-                          }
-                          canteenData!.jidelnicky[datumJidla]!.jidla[index] = await canteen.objednat(jidlo!);
-                          pridatStatistiku(TypStatistiky.objednavka);
+                          await canteen.objednat(jidlo!);
+                          loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                         } catch (e) {
                           snackBarMessage('Nastala chyba při objednávání jídla: $e');
                         }
@@ -634,21 +635,25 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       break;
                     case StavJidla.dostupneNaBurze:
                       {
-                        String varianta = jidlo!.varianta;
-                        DateTime den = jidlo!.den;
-                        bool nalezenoJidloNaBurze = false;
-                        for (var jidloNaBurze in canteenData!.jidlaNaBurze) {
-                          if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
-                            try {
-                              await canteen.objednatZBurzy(jidloNaBurze);
-                              pridatStatistiku(TypStatistiky.objednavka);
-                            } catch (e) {
-                              snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
+                        try {
+                          String varianta = jidlo!.varianta;
+                          DateTime den = jidlo!.den;
+                          bool nalezenoJidloNaBurze = false;
+                          for (var jidloNaBurze in (await loggedInCanteen.canteenData).jidlaNaBurze) {
+                            if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
+                              try {
+                                await canteen.objednatZBurzy(jidloNaBurze);
+                                loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
+                              } catch (e) {
+                                snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
+                              }
                             }
                           }
-                        }
-                        if (nalezenoJidloNaBurze == false) {
-                          snackBarMessage('Nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
+                          if (nalezenoJidloNaBurze == false) {
+                            snackBarMessage('Nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
+                          }
+                        } catch (e) {
+                          snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
                         }
                       }
                       break;
@@ -672,9 +677,13 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti)');
                           break;
                         }
-                        if (canteenData!.uzivatel.kredit < jidlo!.cena!) {
-                          snackBarMessage('Oběd nelze objednat - Nedostatečný kredit');
-                          break;
+                        try {
+                          if (loggedInCanteen.uzivatel!.kredit < jidlo!.cena!) {
+                            snackBarMessage('Oběd nelze objednat - Nedostatečný kredit');
+                            break;
+                          }
+                        } catch (e) {
+                          //pokud se nepodaří načíst kredit, tak to necháme být
                         }
                         snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)');
                       }
@@ -682,13 +691,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.objednano:
                       {
                         try {
-                          for (int i = 0; i < 20 && canteenData!.jidelnicky[datumJidla] == null; i++) {
-                            if (i >= 19) {
-                              throw Exception('Nepovedlo se načíst jídelníček, aktualizujte stránku');
-                            }
-                            await Future.delayed(const Duration(milliseconds: 100));
-                          }
-                          canteenData!.jidelnicky[datumJidla]!.jidla[index] = await canteen.objednat(jidlo!);
+                          await canteen.objednat(jidlo!);
                         } catch (e) {
                           snackBarMessage('Nastala chyba při rušení objednávky: $e');
                         }
@@ -699,7 +702,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                         try {
                           await canteen.doBurzy(jidlo!);
                         } catch (e) {
-                          snackBarMessage('Nsastala chyba při dávání jídla na burzu: $e');
+                          snackBarMessage('Nastala chyba při dávání jídla na burzu: $e');
                         }
                       }
                       break;
@@ -707,7 +710,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   if (context.mounted) {
                     widget.refreshButtons(context);
                   }
-                  ordering.ordering = false;
                   if (context.mounted) {
                     setState(() {
                       icon = null;

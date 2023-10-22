@@ -46,8 +46,8 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: IconButton(
         onPressed: () async {
-          logout();
           Navigator.of(context).pop();
+          await loggedInCanteen.logout();
           await Future.delayed(const Duration(milliseconds: 300));
           setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
         },
@@ -79,35 +79,12 @@ class ProfilePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Builder(
-                        builder: (context) {
-                          if (canteenData!.uzivatel.uzivatelskeJmeno != null) {
-                            return Text(
-                              canteenData!.uzivatel.uzivatelskeJmeno!,
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            );
-                          } else {
-                            return FutureBuilder(
-                              future: getLoginDataFromSecureStorage(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    snapshot.data?.users[snapshot.data!.currentlyLoggedInId!].username ?? '',
-                                    style: Theme.of(context).textTheme.headlineMedium,
-                                  );
-                                } else {
-                                  return Text(
-                                    'Načítání',
-                                    style: Theme.of(context).textTheme.headlineMedium,
-                                  );
-                                }
-                              },
-                            );
-                          }
-                        },
+                      Text(
+                        loggedInCanteen.uzivatel!.uzivatelskeJmeno!,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
-                        'Kredit: ${canteenData!.uzivatel.kredit.toInt()} kč',
+                        'Kredit: ${loggedInCanteen.uzivatel!.kredit.toInt()} kč',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
@@ -139,9 +116,9 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    if (canteenData!.uzivatel.jmeno != null || canteenData!.uzivatel.prijmeni != null) {
+                    if (loggedInCanteen.uzivatel!.jmeno != null || loggedInCanteen.uzivatel!.prijmeni != null) {
                       return Text(
-                        'Jméno: ${canteenData!.uzivatel.jmeno ?? ''} ${canteenData!.uzivatel.prijmeni}',
+                        'Jméno: ${loggedInCanteen.uzivatel!.jmeno ?? ''} ${loggedInCanteen.uzivatel!.prijmeni}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -151,9 +128,9 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Builder(
                   builder: (context) {
-                    if (canteenData!.uzivatel.kategorie != null) {
+                    if (loggedInCanteen.uzivatel!.kategorie != null) {
                       return Text(
-                        'Kategorie: ${canteenData!.uzivatel.kategorie!}',
+                        'Kategorie: ${loggedInCanteen.uzivatel!.kategorie!}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -187,9 +164,9 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    if (canteenData!.uzivatel.ucetProPlatby != null && canteenData!.uzivatel.ucetProPlatby != '') {
+                    if (loggedInCanteen.uzivatel!.ucetProPlatby != null && loggedInCanteen.uzivatel!.ucetProPlatby != '') {
                       return Text(
-                        'Číslo účtu: ${canteenData!.uzivatel.ucetProPlatby}',
+                        'Číslo účtu: ${loggedInCanteen.uzivatel!.ucetProPlatby}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -199,9 +176,9 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Builder(
                   builder: (context) {
-                    if (canteenData!.uzivatel.specSymbol != null && canteenData!.uzivatel.specSymbol != '') {
+                    if (loggedInCanteen.uzivatel!.specSymbol != null && loggedInCanteen.uzivatel!.specSymbol != '') {
                       return Text(
-                        'Specifický Symbol: ${canteenData!.uzivatel.specSymbol}',
+                        'Specifický Symbol: ${loggedInCanteen.uzivatel!.specSymbol}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -212,9 +189,9 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Builder(
                   builder: (context) {
-                    if (canteenData!.uzivatel.varSymbol != null && canteenData!.uzivatel.varSymbol != '') {
+                    if (loggedInCanteen.uzivatel!.varSymbol != null && loggedInCanteen.uzivatel!.varSymbol != '') {
                       return Text(
-                        'Variabilní Symbol: ${canteenData!.uzivatel.varSymbol}',
+                        'Variabilní Symbol: ${loggedInCanteen.uzivatel!.varSymbol}',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -245,7 +222,7 @@ class ProfilePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: FutureBuilder(
-              future: readData('statistika:objednavka'),
+              future: loggedInCanteen.readData('statistika:objednavka'),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text(

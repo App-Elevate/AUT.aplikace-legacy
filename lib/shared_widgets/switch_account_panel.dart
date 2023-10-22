@@ -37,7 +37,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           color: Theme.of(context).colorScheme.surface,
         ),
         child: FutureBuilder(
-            future: getLoginDataFromSecureStorage(),
+            future: loggedInCanteen.getLoginDataFromSecureStorage(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 final loginData = snapshot.data as LoginDataAutojidelna;
@@ -119,17 +119,8 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             onTap: () async {
               if (!currentAccount) {
                 SwitchAccountVisible().setVisible(false);
-                await Future.delayed(const Duration(milliseconds: 500));
-                LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
-                loginData.currentlyLoggedInId = id;
-                saveLoginToSecureStorage(loginData);
-                try {
-                  canteenData = null;
-                  canteenInstance = null;
-                  changeDate(newDate: DateTime.now());
-                } catch (e) {
-                  //not needed
-                }
+                loggedInCanteen.changeAccount(id);
+                await Future.delayed(const Duration(milliseconds: 300));
                 widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
               } else {
                 SwitchAccountVisible().setVisible(false);
@@ -163,13 +154,13 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
           onPressed: () async {
-            await logout(id: id);
+            await loggedInCanteen.logout(id: id);
             if (currentAccount) {
               SwitchAccountVisible().setVisible(false);
               await Future.delayed(const Duration(milliseconds: 500));
               widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
             }
-            updateAccountPanel(await getLoginDataFromSecureStorage());
+            updateAccountPanel(await loggedInCanteen.getLoginDataFromSecureStorage());
           },
         ),
       ],

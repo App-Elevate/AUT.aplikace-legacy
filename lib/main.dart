@@ -1,6 +1,7 @@
 //other imports from current project
 
 import 'package:flutter/foundation.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
@@ -13,7 +14,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
 Future<bool> initAwesome() async {
-  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   List<NotificationChannelGroup> notificationChannelGroups = [];
   List<NotificationChannel> notificationChannels = [];
   for (int i = 0; i < loginData.users.length; i++) {
@@ -71,54 +72,53 @@ Future<bool> initAwesome() async {
 }
 
 Future<void> doNotifications() async {
-  LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+  LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   for (int i = 0; i < loginData.users.length; i++) {
-    Canteen canteenInstance = await initCanteen(
-        hasToBeNew: true,
-        username: loginData.users[i].username,
-        password: loginData.users[i].password,
-        url: loginData.users[i].url,
-        doIndexing: false);
-    Uzivatel uzivatel = await canteenInstance.ziskejUzivatele();
-    //7 is limit for how many lunches we are gonna search for
-    int objednano = 0;
-    int cena = 0;
-    for (int denIndex = 0; denIndex < 10; denIndex++) {
-      Jidelnicek jidelnicek = await canteenInstance.jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
-      //pokud nalezneme jídlo s cenou
-      if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
-        cena += jidelnicek.jidla[0].cena!.toInt();
-      }
-      if (jidelnicek.jidla.isEmpty) {
-        objednano++;
-        continue;
-      }
-      for (int jidloIndex = 0; jidloIndex < jidelnicek.jidla.length; jidloIndex++) {
-        if (jidelnicek.jidla[jidloIndex].objednano) {
+    try {
+      loggedInCanteen.changeAccount(i);
+      Uzivatel uzivatel = (await loggedInCanteen.canteenData).uzivatel;
+      //7 is limit for how many lunches we are gonna search for
+      int objednano = 0;
+      int cena = 0;
+      for (int denIndex = 0; denIndex < 10; denIndex++) {
+        Jidelnicek jidelnicek = await (await loggedInCanteen.canteenInstance).jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
+        //pokud nalezneme jídlo s cenou
+        if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
+          cena += jidelnicek.jidla[0].cena!.toInt();
+        }
+        if (jidelnicek.jidla.isEmpty) {
           objednano++;
+          continue;
+        }
+        for (int jidloIndex = 0; jidloIndex < jidelnicek.jidla.length; jidloIndex++) {
+          if (jidelnicek.jidla[jidloIndex].objednano) {
+            objednano++;
+          }
         }
       }
-    }
-    if (cena != 0 && uzivatel.kredit < cena) {
-      AwesomeNotifications().createNotification(
-          content: NotificationContent(
-        id: 255 - i,
-        channelKey: 'kredit_channel_${loginData.users[i].username}',
-        actionType: ActionType.Default,
-        title: 'Dochází vám kredit!',
-        body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
-      ));
-    }
-    //pokud chybí aspoň 3 obědy z příštích 10 dní
-    if (objednano <= 7) {
-      AwesomeNotifications().createNotification(
-          content: NotificationContent(
-        id: i,
-        channelKey: 'objednano_channel_${loginData.users[i].username}',
-        actionType: ActionType.Default,
-        title: 'Objednejte si na příští týden',
-        body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
-      ));
+      if (cena != 0 && uzivatel.kredit < cena) {
+        AwesomeNotifications().createNotification(
+            content: NotificationContent(
+          id: 255 - i,
+          channelKey: 'kredit_channel_${loginData.users[i].username}',
+          actionType: ActionType.Default,
+          title: 'Dochází vám kredit!',
+          body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
+        ));
+      }
+      //pokud chybí aspoň 3 obědy z příštích 10 dní
+      if (objednano <= 7) {
+        AwesomeNotifications().createNotification(
+            content: NotificationContent(
+          id: i,
+          channelKey: 'objednano_channel_${loginData.users[i].username}',
+          actionType: ActionType.Default,
+          title: 'Objednejte si na příští týden',
+          body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
+        ));
+      }
+    } catch (e) {
+      //do nothing
     }
   }
 }
@@ -167,7 +167,7 @@ void doVerification() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initAwesome();
-  String? analyticsDisabled = await readData('disableAnalytics');
+  String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
   // know if this release is debug
   if (kDebugMode) {
     analyticsDisabled = '1';
@@ -261,7 +261,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
     return FutureBuilder(
-      future: readData("ThemeMode"),
+      future: loggedInCanteen.readData("ThemeMode"),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
@@ -301,41 +301,40 @@ class LoggingInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getLoginDataFromSecureStorage(),
+      future: loggedInCanteen.loginFromStorage(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final loginData = snapshot.data as LoginDataAutojidelna;
-          final isLoggedIn = loginData.currentlyLoggedIn;
-          if (isLoggedIn) {
-            return FutureBuilder(
-              future: initCanteen(hasToBeNew: true),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  if (snapshot.error == 'no internet') {
-                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-                  } else if (snapshot.error == 'login failed') {
-                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Přihlášení selhalo', setHomeWidget));
-                  } else if (snapshot.error == 'bad url') {
-                    Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-                  } else {
-                    return LoginScreen(setHomeWidget: setHomeWidget);
-                  }
-                  return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  Future.delayed(Duration.zero, () => newUpdateDialog(context));
-                  return MainAppScreen(setHomeWidget: setHomeWidget);
-                } else {
-                  return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-                }
-              },
-            );
-          } else {
-            return LoginScreen(
-              setHomeWidget: setHomeWidget,
-            );
+        if (snapshot.hasError) {
+          if (snapshot.error == 'no login') {
+            return LoginScreen(setHomeWidget: setHomeWidget);
           }
+          if (snapshot.error == 'bad url or connection') {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
+          } else if (snapshot.error == 'Špatné heslo') {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
+          } else {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
+          }
+          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
+        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data == true) {
+          try {
+            changeDate(newDate: DateTime.now());
+          } catch (e) {
+            //do nothing
+          }
+          Future.delayed(Duration.zero, () => newUpdateDialog(context));
+          return MainAppScreen(setHomeWidget: setHomeWidget);
+        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data == false) {
+          //test internet connection
+          InternetConnectionChecker().hasConnection.then((value) {
+            if (value) {
+              Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
+              return;
+            }
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
+          });
+          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         } else {
-          return const LoadingLoginPage(textWidget: null);
+          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         }
       },
     );

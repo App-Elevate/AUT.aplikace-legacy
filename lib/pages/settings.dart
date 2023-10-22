@@ -14,7 +14,7 @@ class AnalyticSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: readData('disableAnalytics'),
+      future: loggedInCanteen.readData('disableAnalytics'),
       builder: (context, snaphot) {
         if (snaphot.connectionState == ConnectionState.done) {
           if (snaphot.data == '1') {
@@ -91,9 +91,9 @@ class AnalyticSettingsPage extends StatelessWidget {
                     collectData.value = value;
                     analyticsEnabledGlobally = !value;
                     if (value) {
-                      saveData('disableAnalytics', '1');
+                      loggedInCanteen.saveData('disableAnalytics', '1');
                     } else {
-                      saveData('disableAnalytics', '');
+                      loggedInCanteen.saveData('disableAnalytics', '');
                     }
                   },
                 );
@@ -166,10 +166,10 @@ class _GraphicsState extends State<_Graphics> {
           ),
           const Divider(),
           FutureBuilder(
-            future: readData("ThemeMode"),
+            future: loggedInCanteen.readData("ThemeMode"),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                selectedMode = snapshot.data!;
+                selectedMode = snapshot.data! == '' ? "system" : snapshot.data!;
               } else {
                 selectedMode = "system";
               }
@@ -182,13 +182,13 @@ class _GraphicsState extends State<_Graphics> {
                       selectedMode = newSelection.first;
                     });
                     if (selectedMode == "2") {
-                      saveData('ThemeMode', "2");
+                      loggedInCanteen.saveData('ThemeMode', "2");
                       NotifyTheme().setTheme(ThemeMode.dark);
                     } else if (selectedMode == "1") {
-                      saveData("ThemeMode", "1");
+                      loggedInCanteen.saveData("ThemeMode", "1");
                       NotifyTheme().setTheme(ThemeMode.light);
                     } else {
-                      saveData("ThemeMode", "0");
+                      loggedInCanteen.saveData("ThemeMode", "0");
                       NotifyTheme().setTheme(ThemeMode.system);
                     }
                   },

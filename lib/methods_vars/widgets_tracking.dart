@@ -1,5 +1,8 @@
 import './../every_import.dart';
 
+bool reloading = false;
+bool ordering = false;
+
 // snackbar je ze začátku skrytý
 SnackBarShown snackbarshown = SnackBarShown(shown: false);
 
@@ -20,7 +23,7 @@ bool loginScreenVisible = false;
 ///index - changes the date by the index of the page
 void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
   if (newDate != null && animateToPage != null && animateToPage) {
-    smartPreIndexing(newDate);
+    loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
     pageviewController.animateToPage(
       newDate.difference(minimalDate).inDays,
@@ -29,7 +32,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     );
   } else if (daysChange != null) {
     newDate = dateListener.value.add(Duration(days: daysChange));
-    smartPreIndexing(newDate);
+    loggedInCanteen.smartPreIndexing(newDate);
     pageviewController.animateToPage(
       newDate.difference(minimalDate).inDays,
       duration: const Duration(milliseconds: 150),
@@ -37,10 +40,10 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     );
   } else if (index != null) {
     newDate = minimalDate.add(Duration(days: index));
-    smartPreIndexing(newDate);
+    loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
   } else if (newDate != null) {
-    smartPreIndexing(newDate);
+    loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
     pageviewController.jumpToPage(newDate.difference(minimalDate).inDays);
   }

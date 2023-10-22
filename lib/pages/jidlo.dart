@@ -8,8 +8,10 @@ class JidloDetail extends StatelessWidget {
     required this.indexDne,
     required this.refreshButtons,
     required this.jidlaListener,
+    required this.softRefresh,
   });
   final DateTime datumJidla;
+  final Future<void> Function() softRefresh;
   final int indexDne;
   final Function(BuildContext context) refreshButtons;
   final ValueNotifier<List<Jidlo>> jidlaListener;
@@ -20,7 +22,7 @@ class JidloDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getLunchesForDay(datumJidla),
+      future: loggedInCanteen.getLunchesForDay(datumJidla),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
           Jidlo jidlo = snapshot.data!.jidla[indexJidlaVeDni];
@@ -214,6 +216,7 @@ class JidloDetail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
               child: ObjednatJidloTlacitko(
+                softRefresh: softRefresh,
                 refreshButtons: refreshButtons,
                 indexJidlaVeDni: indexJidlaVeDni,
                 indexDne: indexDne,
