@@ -165,7 +165,7 @@ class LoggedInCanteen {
   }
 
   ///získá Jídelníček pro den [den]
-  ///tuto funkci nevolat globálně, nebere informace s canteenData a zároveň je neukládá
+  ///tuto funkci nevolat globálně, nebere informace z canteenData a zároveň je neukládá
   ///uživatel musí být přihlášen
   ///Jinak vyhodí chybu 'Nejdříve se musíte přihlásit'
   ///může vyhodit chybu 'no internet'
