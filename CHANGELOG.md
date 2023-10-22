@@ -1,8 +1,10 @@
 ## 1.2.5
 
 - opravena velikost uživatelského jména v profilu
-- méně nyní vyskakuje "nelze se připojit"
+- už nevyskakuje "nelze se připojit" u podporovaných jídelen
+- optimalizována aplikace a opraveny chyby s nedostupným obědem nebo chybějícími obědy
 - nyní využíván CHANGELOG.md místo release-notes.md pro získání dat o nové verzi
+- aplikace připravena pro update na google play
 
 ## 1.2.4
 
