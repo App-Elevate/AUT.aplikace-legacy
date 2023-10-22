@@ -1,7 +1,7 @@
 //TODO: skip weekends while browsing
 
 import 'package:autojidelna/main.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+//import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
@@ -59,7 +59,7 @@ class AnalyticSettingsPage extends StatelessWidget {
           ListTile(
             title: ElevatedButton(
               onPressed: () {
-                AwesomeNotifications().showNotificationConfigPage();
+                //AwesomeNotifications().showNotificationConfigPage();
               },
               child: const Text('Zobrazit nastavení oznámení'),
             ),

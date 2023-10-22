@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:autojidelna/main.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+//import 'package:awesome_notifications/awesome_notifications.dart';
 import '../every_import.dart';
 
 ///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
@@ -314,7 +314,7 @@ class LoggedInCanteen {
   ///saves the loginData class to secure storage
   Future<void> saveLoginToSecureStorage(LoginDataAutojidelna loginData) async {
     await saveDataToSecureStorage('loginData', jsonEncode(loginData));
-    initAwesome();
+    //initAwesome();
   }
 
   ///gets an instance of loginData.
@@ -360,11 +360,11 @@ class LoggedInCanteen {
         isDuplicate = true;
         break;
       }
-    }
+    } /*
     if (!isDuplicate) {
       AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
       AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
-    }
+    }*/
     //removing just the one item from the array
 
     //ensuring correct loginData.currentlyloggedInId
@@ -395,8 +395,9 @@ class LoggedInCanteen {
     loginData.users.clear();
     loginData.currentlyLoggedInId = null;
     for (int id = 0; id < loginData.users.length; id++) {
+      /*
       AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[id].username}');
-      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');
+      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');*/
     }
     //even though I don't like this it is safe because this is called rarely
     _canteenInstance = null;

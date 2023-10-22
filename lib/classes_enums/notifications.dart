@@ -1,5 +1,5 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-
+//import 'package:awesome_notifications/awesome_notifications.dart';
+/*
 class NotificationController {
   /// Use this method to detect when a new notification or a schedule is created
   @pragma("vm:entry-point")
@@ -28,3 +28,4 @@ class NotificationController {
     // Your code goes here
   }
 }
+*/

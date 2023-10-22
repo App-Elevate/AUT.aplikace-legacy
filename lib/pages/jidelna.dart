@@ -1,5 +1,5 @@
 import './../every_import.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+//import 'package:awesome_notifications/awesome_notifications.dart';
 
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({
@@ -28,7 +28,8 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   @override
   void initState() {
-    super.initState();
+    super
+        .initState(); /*
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         // This is just a basic example. For real apps, you must show some
@@ -36,7 +37,7 @@ class MainAppScreenState extends State<MainAppScreen> {
         // This is very important to not harm the user experience
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
-    });
+    });*/
   }
 
   ///reloads the page

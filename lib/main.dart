@@ -2,18 +2,18 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:workmanager/workmanager.dart';
+//import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+//import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
-Future<bool> initAwesome() async {
+/*Future<bool> initAwesome() async {
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   List<NotificationChannelGroup> notificationChannelGroups = [];
   List<NotificationChannel> notificationChannels = [];
@@ -162,11 +162,11 @@ void doVerification() async {
       body: e.toString(),
     ));
   }
-}
+}*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initAwesome();
+  //await initAwesome();
   String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
   //get the version of the app
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -176,8 +176,8 @@ void main() async {
   if (lastVersion != version) {
     //if not, set the new version as the last one
     loggedInCanteen.saveData('lastVersion', version);
-    await AwesomeNotifications().dispose();
-    initAwesome();
+    //await AwesomeNotifications().dispose();
+    //initAwesome();
   }
   // know if this release is debug
   if (kDebugMode) {
@@ -202,8 +202,9 @@ void main() async {
     // TODO: implement background_fetch - https://pub.dev/packages/background_fetch package instead
     await AndroidAlarmManager.initialize();
     AndroidAlarmManager.cancel(helloAlarmID);
-    await AndroidAlarmManager.periodic(const Duration(days: 1), helloAlarmID, doVerification);
+    //await AndroidAlarmManager.periodic(const Duration(days: 1), helloAlarmID, doVerification);
   } else if (Platform.isIOS) {
+    /*
     Workmanager().initialize(callbackDispatcher, // The top level function, aka callbackDispatcher
         isInDebugMode: kDebugMode // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
         );
@@ -212,7 +213,7 @@ void main() async {
         initialDelay: const Duration(days: 7), //duration before showing the notification
         constraints: Constraints(
           networkType: NetworkType.connected,
-        ));
+        ));*/
   }
 }
 
@@ -246,13 +247,13 @@ class _MyAppState extends State<MyApp> {
   late Widget homeWidget;
   @override
   void initState() {
-    // Only after at least the action method is set, the notification events are delivered
+    /*// Only after at least the action method is set, the notification events are delivered
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
         onNotificationCreatedMethod: NotificationController.onNotificationCreatedMethod,
         onNotificationDisplayedMethod: NotificationController.onNotificationDisplayedMethod,
         onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
-    homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);
+    homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);*/
     super.initState();
   }
 
