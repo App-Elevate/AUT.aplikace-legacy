@@ -567,7 +567,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                 cannotBeOrderedFix();
               }
             } catch (e) {
-              print(e);
               //hope it's not important
             }
             if (loggedInCanteen.uzivatel!.kredit < jidlo!.cena! && !datumJidla.isBefore(DateTime.now())) {

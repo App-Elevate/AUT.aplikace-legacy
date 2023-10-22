@@ -201,7 +201,7 @@ class ColorSchemes {
     surface: Colors.white,
     onSurface: Colors.black,
     surfaceVariant: Colors.black12,
-    //onSurfaceVariant: Colors.black54, //maybe #14?
+    onSurfaceVariant: Colors.black54, //maybe #14?
     scrim: Colors.black54,
     surfaceTint: Colors.black,
     inverseSurface: Color(0xFF121212),
@@ -221,7 +221,7 @@ class ColorSchemes {
     surface: Color(0xff121212),
     onSurface: Colors.white,
     surfaceVariant: Colors.white12,
-    //onSurfaceVariant: Colors.white54, //maybe #14?
+    onSurfaceVariant: Colors.white54, //maybe #14?
     scrim: Colors.black54,
     surfaceTint: Colors.white,
     inverseSurface: Color(0xFFdddddd),
