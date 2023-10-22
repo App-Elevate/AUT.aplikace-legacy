@@ -245,6 +245,24 @@ class MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
+  Future<void> portableSoftRefresh(BuildContext context) async {
+    try {
+      await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
+    } catch (e) {
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      if (context.mounted && !snackbarshown.shown) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
+            .closed
+            .then((SnackBarClosedReason reason) {
+          snackbarshown.shown = false;
+        });
+      }
+    }
+    setScaffoldBody(MainAppScreenState().jidelnicekWidget());
+  }
+
   ///widget for the Jidelnicek for the day - mainly the getting lunches logic
   SizedBox jidelnicekDenWidget(int index) {
     return SizedBox(
@@ -253,7 +271,12 @@ class MainAppScreenState extends State<MainAppScreen> {
         future: loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: index))),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('nepodařilo se načíst obědy zkuste znovu načíst stránku'));
+            portableSoftRefresh(context);
+            return RefreshIndicator(
+                onRefresh: () async {
+                  await portableSoftRefresh(context);
+                },
+                child: const Center(child: Text('nepodařilo se načíst obědy zkuste znovu načíst stránku')));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -276,13 +299,19 @@ class ListJidel extends StatelessWidget {
   final int indexDne;
   final Function(Widget widget) setHomeWidget;
   final Function(Widget widget) setScaffoldBody;
-  final ValueNotifier<List<Jidlo>> jidlaListener = ValueNotifier<List<Jidlo>>([]);
-  ListJidel({required this.indexDne, required this.setHomeWidget, required this.jidelnicek, super.key, required this.setScaffoldBody});
+  final ValueNotifier<Jidelnicek> jidelnicekListener = ValueNotifier<Jidelnicek>(Jidelnicek(dateListener.value, []));
+  ListJidel({
+    required this.indexDne,
+    required this.setHomeWidget,
+    required this.jidelnicek,
+    super.key,
+    required this.setScaffoldBody,
+  });
   void refreshButtons(BuildContext context) async {
     DateTime currentDate = minimalDate.add(Duration(days: indexDne));
     try {
-      jidlaListener.value = (await loggedInCanteen.getLunchesForDay(currentDate, requireNew: true)).jidla;
-      Future.delayed(const Duration(milliseconds: 30));
+      jidelnicekListener.value = await loggedInCanteen.getLunchesForDay(currentDate, requireNew: true);
+      await Future.delayed(const Duration(milliseconds: 30));
       ordering = false;
     } catch (e) {
       //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', setHomeWidget));
@@ -309,16 +338,14 @@ class ListJidel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    jidlaListener.value = jidelnicek.jidla;
+    jidelnicekListener.value = jidelnicek;
     //second layer fix pro api returning garbage when switching orders
     try {
-      if (jidlaListener.value.length < numberOfMaxLunches) {
-        Future.delayed(const Duration(milliseconds: 200)).then((_) async {
+      if (jidelnicekListener.value.jidla.length < numberOfMaxLunches) {
+        Future.delayed(const Duration(milliseconds: 300)).then((_) async {
           Jidelnicek jidelnicek = (await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true));
-          if (jidlaListener.value.length < jidelnicek.jidla.length) {
-            //this is solved in the function
-            // ignore: use_build_context_synchronously
-            portableSoftRefresh(context);
+          if (jidelnicekListener.value.jidla.length < jidelnicek.jidla.length) {
+            jidelnicekListener.value = jidelnicek;
           }
         });
       }
@@ -327,8 +354,9 @@ class ListJidel extends StatelessWidget {
     }
     return Column(
       children: [
-        Builder(
-          builder: (_) {
+        ValueListenableBuilder(
+          valueListenable: jidelnicekListener,
+          builder: (context, value, child) {
             Future<void> softRefresh() async {
               try {
                 await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
@@ -347,7 +375,7 @@ class ListJidel extends StatelessWidget {
               setScaffoldBody(MainAppScreenState().jidelnicekWidget());
             }
 
-            if (jidelnicek.jidla.isEmpty) {
+            if (value.jidla.isEmpty) {
               return Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
@@ -373,7 +401,7 @@ class ListJidel extends StatelessWidget {
                   await softRefresh();
                 },
                 child: ListView.builder(
-                  itemCount: jidelnicek.jidla.length,
+                  itemCount: value.jidla.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
@@ -384,7 +412,7 @@ class ListJidel extends StatelessWidget {
                               softRefresh: softRefresh,
                               indexDne: indexDne,
                               refreshButtons: refreshButtons,
-                              jidlaListener: jidlaListener,
+                              jidelnicekListener: jidelnicekListener,
                               datumJidla: minimalDate.add(Duration(days: indexDne)),
                               indexJidlaVeDni: index,
                             ),
@@ -400,9 +428,12 @@ class ListJidel extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Builder(builder: (_) {
-                                  String jidlo = (jidelnicek.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicek.jidla[index].nazev) == ''
-                                      ? jidelnicek.jidla[index].nazev
-                                      : (jidelnicek.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicek.jidla[index].nazev);
+                                  String jidlo = (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ??
+                                              jidelnicekListener.value.jidla[index].nazev) ==
+                                          ''
+                                      ? jidelnicekListener.value.jidla[index].nazev
+                                      : (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ??
+                                          jidelnicekListener.value.jidla[index].nazev);
                                   return HtmlWidget(
                                     jidlo,
                                     textStyle: Theme.of(context).textTheme.titleLarge,
@@ -413,7 +444,7 @@ class ListJidel extends StatelessWidget {
                                   softRefresh: softRefresh,
                                   indexDne: indexDne,
                                   refreshButtons: refreshButtons,
-                                  jidlaListener: jidlaListener,
+                                  jidelnicekListener: jidelnicekListener,
                                   indexJidlaVeDni: index,
                                 ),
                               ],
@@ -437,11 +468,11 @@ class ObjednatJidloTlacitko extends StatefulWidget {
   const ObjednatJidloTlacitko(
       {super.key,
       required this.indexJidlaVeDni,
-      required this.jidlaListener,
+      required this.jidelnicekListener,
       required this.refreshButtons,
       required this.indexDne,
       required this.softRefresh});
-  final ValueNotifier<List<Jidlo>> jidlaListener;
+  final ValueNotifier<Jidelnicek> jidelnicekListener;
   final int indexDne;
   final int indexJidlaVeDni;
   final Future<void> Function() softRefresh;
@@ -460,7 +491,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
       if (!minimalDate.add(Duration(days: widget.indexDne)).isBefore(DateTime.now())) {
         Jidelnicek jidelnicekCheck = await loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: widget.indexDne)), requireNew: true);
         for (int i = 0; i < jidelnicekCheck.jidla.length; i++) {
-          if (widget.jidlaListener.value[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
+          if (widget.jidelnicekListener.value.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
             widget.softRefresh();
             return;
           }
@@ -481,9 +512,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
     final DateTime datumJidla = minimalDate.add(Duration(days: widget.indexDne));
     String obedText;
     return ValueListenableBuilder(
-      valueListenable: widget.jidlaListener,
+      valueListenable: widget.jidelnicekListener,
       builder: (context, value, child) {
-        jidlo = value[index];
+        jidlo = value.jidla[index];
         if (jidlo!.naBurze) {
           //pokud je od nás vloženo na burze, tak není potřeba kontrolovat nic jiného
           stavJidla = StavJidla.naBurze;

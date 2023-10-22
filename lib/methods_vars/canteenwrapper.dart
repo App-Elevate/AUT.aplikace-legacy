@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:autojidelna/main.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../every_import.dart';
 
 ///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
@@ -131,14 +130,14 @@ class LoggedInCanteen {
   ///
   /// 'Nejdříve se musíte přihlásit' - when user is not logged in and doesn't have credentials in storage
   Future<Canteen> _login(String url, String username, String password, {int? safetyId, bool indexLunches = true}) async {
-    Canteen canteenInstance = Canteen(url);
+    _canteenInstance = Canteen(url);
     try {
-      if (!await canteenInstance.login(username, password)) {
+      if (!await _canteenInstance!.login(username, password)) {
         return Future.error('Špatné heslo');
       }
     } catch (e) {
       try {
-        await canteenInstance.login(username, password); //second try's the charm
+        await _canteenInstance!.login(username, password); //second try's the charm
       } catch (e) {
         return Future.error('bad url or connection');
       }
@@ -151,8 +150,8 @@ class LoggedInCanteen {
         pocetJidel: {},
         username: username,
         url: url,
-        uzivatel: await canteenInstance.ziskejUzivatele(),
-        jidlaNaBurze: await canteenInstance.ziskatBurzu(),
+        uzivatel: await _canteenInstance!.ziskejUzivatele(),
+        jidlaNaBurze: await _canteenInstance!.ziskatBurzu(),
         currentlyLoading: {},
         jidelnicky: {},
       );
@@ -162,7 +161,6 @@ class LoggedInCanteen {
     if (indexLunches) {
       smartPreIndexing(DateTime.now());
     }
-    _canteenInstance = canteenInstance;
     return canteenInstance;
   }
 
@@ -201,11 +199,11 @@ class LoggedInCanteen {
       Future.delayed(const Duration(seconds: 1), () => currentlyLoading.remove(den));
       return jidelnicek;
     } catch (e) {
+      currentlyLoading[den]!.completeError(e);
       currentlyLoading.remove(den);
       if (e == 'Nejdříve se musíte přihlásit') {
         return _ziskatJidelnicekDen(den, tries: tries + 1);
       }
-      FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       await loginFromStorage();
       return _ziskatJidelnicekDen(den, tries: tries + 1);
     }

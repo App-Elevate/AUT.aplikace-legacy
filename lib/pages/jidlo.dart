@@ -7,14 +7,14 @@ class JidloDetail extends StatelessWidget {
     required this.indexJidlaVeDni,
     required this.indexDne,
     required this.refreshButtons,
-    required this.jidlaListener,
+    required this.jidelnicekListener,
     required this.softRefresh,
   });
   final DateTime datumJidla;
   final Future<void> Function() softRefresh;
   final int indexDne;
   final Function(BuildContext context) refreshButtons;
-  final ValueNotifier<List<Jidlo>> jidlaListener;
+  final ValueNotifier<Jidelnicek> jidelnicekListener;
 
   /// index jídla v jídelníčku dne (0 - první jídlo dne datumJidla)
   final int indexJidlaVeDni;
@@ -220,7 +220,7 @@ class JidloDetail extends StatelessWidget {
                 refreshButtons: refreshButtons,
                 indexJidlaVeDni: indexJidlaVeDni,
                 indexDne: indexDne,
-                jidlaListener: jidlaListener,
+                jidelnicekListener: jidelnicekListener,
               ),
             ),
           );
