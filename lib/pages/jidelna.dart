@@ -289,19 +289,36 @@ class ListJidel extends StatelessWidget {
     }
   }
 
+  Future<void> portableSoftRefresh(BuildContext context) async {
+    try {
+      await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
+    } catch (e) {
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      if (context.mounted && !snackbarshown.shown) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
+            .closed
+            .then((SnackBarClosedReason reason) {
+          snackbarshown.shown = false;
+        });
+      }
+    }
+    setScaffoldBody(MainAppScreenState().jidelnicekWidget());
+  }
+
   @override
   Widget build(BuildContext context) {
     jidlaListener.value = jidelnicek.jidla;
     //second layer fix pro api returning garbage when switching orders
     try {
-      if (jidlaListener.value.length < numberOfMaxLunches && !(loggedInCanteen.checked[dateListener.value] ?? false)) {
-        print('hey');
-        Future.delayed(Duration.zero).then((_) async {
-          Jidelnicek jidelnicek = await (await loggedInCanteen.canteenInstance).jidelnicekDen(den: dateListener.value);
-          print('hey');
-          loggedInCanteen.checked[dateListener.value] = true;
-          if (jidelnicek.jidla.length > jidlaListener.value.length) {
-            jidlaListener.value = jidelnicek.jidla;
+      if (jidlaListener.value.length < numberOfMaxLunches) {
+        Future.delayed(const Duration(milliseconds: 200)).then((_) async {
+          Jidelnicek jidelnicek = (await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true));
+          if (jidlaListener.value.length < jidelnicek.jidla.length) {
+            //this is solved in the function
+            // ignore: use_build_context_synchronously
+            portableSoftRefresh(context);
           }
         });
       }
