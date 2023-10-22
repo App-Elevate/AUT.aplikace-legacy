@@ -268,12 +268,12 @@ class LoginScreen extends StatelessWidget {
             url = url.replaceAll('http://', '');
             url = url.split('/')[0];
             await http.get(Uri.parse('https://$url'));
-            _setErrorText('Připojení k serveru selhalo. Kontaktujte vývojáře', LoginFormErrorField.url);
+            _setErrorText('Připojení k serveru selhalo. Zkuste to znovu.', LoginFormErrorField.url);
           } catch (e) {
             try {
               url = url.replaceAll('https://', 'http://');
               await http.get(Uri.parse('http://$url'));
-              _setErrorText('Připojení k serveru selhalo. Kontaktujte vývojáře', LoginFormErrorField.url);
+              _setErrorText('Připojení k serveru selhalo. Zkuste to znovu', LoginFormErrorField.url);
             } catch (e) {
               _setErrorText('Nesprávné url', LoginFormErrorField.url);
             }
