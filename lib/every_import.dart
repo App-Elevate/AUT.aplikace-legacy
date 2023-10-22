@@ -13,7 +13,6 @@ export 'package:canteenlib/canteenlib.dart';
 
 //flutter widgets
 export 'package:flutter/material.dart';
-export 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 //toast
 export 'package:fluttertoast/fluttertoast.dart';
@@ -23,7 +22,7 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //package info
-export 'package:package_info/package_info.dart';
+export 'package:package_info_plus/package_info_plus.dart';
 export 'package:url_launcher/url_launcher.dart';
 
 //device info
