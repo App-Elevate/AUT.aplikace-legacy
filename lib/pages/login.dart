@@ -245,9 +245,13 @@ class LoginScreen extends StatelessWidget {
         bool login = await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
         if (login) {
           loggedInCanteen.saveData('url', url);
-          changeDate(newDate: DateTime.now());
-          if (context.mounted) {
-            Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
+          try {
+            changeDate(newDate: DateTime.now());
+            if (context.mounted) {
+              Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
+            }
+          } catch (e) {
+            //if it is not connected we don't have to do anything
           }
           setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
         } else {
