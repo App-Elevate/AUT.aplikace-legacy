@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:autojidelna/main.dart';
-//import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import '../every_import.dart';
 
 ///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
@@ -360,11 +360,11 @@ class LoggedInCanteen {
         isDuplicate = true;
         break;
       }
-    } /*
+    }
     if (!isDuplicate) {
       AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
       AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
-    }*/
+    }
     //removing just the one item from the array
 
     //ensuring correct loginData.currentlyloggedInId

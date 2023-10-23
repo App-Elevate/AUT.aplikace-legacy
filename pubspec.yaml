@@ -50,7 +50,7 @@ dependencies:
   share_plus: ^4.5.3
   android_alarm_manager_plus: ^3.0.3
 
-  #awesome_notifications: ^0.8.2
+  awesome_notifications: ^0.8.2
   #workmanager: ^0.5.2
 
   # Firebase
