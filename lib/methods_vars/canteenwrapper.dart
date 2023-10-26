@@ -314,7 +314,7 @@ class LoggedInCanteen {
   ///saves the loginData class to secure storage
   Future<void> saveLoginToSecureStorage(LoginDataAutojidelna loginData) async {
     await saveDataToSecureStorage('loginData', jsonEncode(loginData));
-    //initAwesome();
+    initAwesome();
   }
 
   ///gets an instance of loginData.
@@ -395,9 +395,8 @@ class LoggedInCanteen {
     loginData.users.clear();
     loginData.currentlyLoggedInId = null;
     for (int id = 0; id < loginData.users.length; id++) {
-      /*
       AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[id].username}');
-      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');*/
+      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');
     }
     //even though I don't like this it is safe because this is called rarely
     _canteenInstance = null;
