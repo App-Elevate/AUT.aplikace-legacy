@@ -434,9 +434,9 @@ class ListJidel extends StatelessWidget {
                                       ? jidelnicekListener.value.jidla[index].nazev
                                       : (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ??
                                           jidelnicekListener.value.jidla[index].nazev);
-                                  return HtmlWidget(
+                                  return Text(
                                     jidlo,
-                                    textStyle: Theme.of(context).textTheme.titleLarge,
+                                    style: Theme.of(context).textTheme.titleLarge,
                                   );
                                 }),
                                 const SizedBox(height: 16),

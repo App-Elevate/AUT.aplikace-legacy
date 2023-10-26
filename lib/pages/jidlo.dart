@@ -61,9 +61,9 @@ class JidloDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: HtmlWidget(
+                      child: Text(
                         jidloString.polevka!,
-                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -89,9 +89,9 @@ class JidloDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: HtmlWidget(
+                      child: Text(
                         jidloString.hlavniJidlo!,
-                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -117,9 +117,9 @@ class JidloDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: HtmlWidget(
+                      child: Text(
                         jidloString.piti!,
-                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -145,9 +145,9 @@ class JidloDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: HtmlWidget(
+                      child: Text(
                         jidloString.salatovyBar!,
-                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -173,9 +173,9 @@ class JidloDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: HtmlWidget(
+                      child: Text(
                         jidloString.ostatni!,
-                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],
@@ -201,9 +201,9 @@ class JidloDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: HtmlWidget(
+                      child: Text(
                         alergeny,
-                        textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       ),
                     ),
                   ],

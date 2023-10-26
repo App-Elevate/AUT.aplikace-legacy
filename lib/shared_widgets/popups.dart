@@ -1,6 +1,7 @@
 import 'package:autojidelna/every_import.dart';
 import 'package:autojidelna/main.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 void newUpdateDialog(BuildContext context, {int? tries}) {
   if (tries != null && tries > 5) {

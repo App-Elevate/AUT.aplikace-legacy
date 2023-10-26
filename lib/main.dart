@@ -2,7 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:workmanager/workmanager.dart';
+//import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -123,6 +123,7 @@ Future<void> doNotifications() async {
   }
 }
 
+/*
 @pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
@@ -146,7 +147,7 @@ void callbackDispatcher() {
     }
     return Future.value(true);
   });
-}
+}*/
 
 @pragma('vm:entry-point')
 void doVerification() async {
@@ -197,22 +198,13 @@ void main() async {
     analytics = FirebaseAnalytics.instance;
   }
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
-  const int helloAlarmID = 0;
   if (Platform.isAndroid) {
     // TODO: implement background_fetch - https://pub.dev/packages/background_fetch package instead
     await AndroidAlarmManager.initialize();
-    AndroidAlarmManager.cancel(helloAlarmID);
-    await AndroidAlarmManager.periodic(const Duration(days: 1), helloAlarmID, doVerification);
+    AndroidAlarmManager.cancel(0);
+    await AndroidAlarmManager.periodic(const Duration(days: 1), 0, doVerification);
   } else if (Platform.isIOS) {
-    Workmanager().initialize(callbackDispatcher, // The top level function, aka callbackDispatcher
-        isInDebugMode: kDebugMode // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-        );
-    Workmanager().cancelAll();
-    Workmanager().registerOneOffTask("task-identifier", "kredit-checker-je-jidlo-objednano-checker",
-        initialDelay: const Duration(days: 7), //duration before showing the notification
-        constraints: Constraints(
-          networkType: NetworkType.connected,
-        ));
+    doNotifications();
   }
 }
 
