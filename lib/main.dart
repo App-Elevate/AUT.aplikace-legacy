@@ -198,12 +198,11 @@ void main() async {
     analytics = FirebaseAnalytics.instance;
   }
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
-  const int helloAlarmID = 0;
   if (Platform.isAndroid) {
     // TODO: implement background_fetch - https://pub.dev/packages/background_fetch package instead
     await AndroidAlarmManager.initialize();
-    AndroidAlarmManager.cancel(helloAlarmID);
-    await AndroidAlarmManager.periodic(const Duration(days: 1), helloAlarmID, doVerification);
+    AndroidAlarmManager.cancel(0);
+    await AndroidAlarmManager.periodic(const Duration(days: 1), 0, doVerification);
   } else if (Platform.isIOS) {
     doNotifications();
   }
