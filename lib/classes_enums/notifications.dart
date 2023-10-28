@@ -18,6 +18,14 @@ class NotificationController {
   /// Use this method to detect if the user dismissed a notification
   @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 10,
+      channelKey: 'else_channel',
+      actionType: ActionType.Default,
+      title: 'Dismissed',
+      body: 'hh',
+    ));
     if (receivedAction.buttonKeyPressed == '') return;
     //ztlumit notifikaci o neobjednaném jídle na příští týden
     if (receivedAction.buttonKeyPressed.substring(0, 16) == 'ignore_objednat_') {
@@ -37,6 +45,14 @@ class NotificationController {
   /// Use this method to detect when the user taps on a notification or action button
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 10,
+      channelKey: 'else_channel',
+      actionType: ActionType.Default,
+      title: 'ActionCreated',
+      body: 'hh',
+    ));
     if (receivedAction.payload != {} && receivedAction.payload != null && receivedAction.payload!['user'] != null) {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
       for (LoggedInUser uzivatel in loginData.users) {
