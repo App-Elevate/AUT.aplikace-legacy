@@ -241,3 +241,9 @@ class NotifyTheme {
     themeNotifier.value = mode;
   }
 }
+
+class LoginStructure {
+  bool success;
+  int id;
+  LoginStructure(this.id, this.success);
+}

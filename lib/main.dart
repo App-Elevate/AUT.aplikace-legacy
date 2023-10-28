@@ -93,6 +93,7 @@ Future<bool> initAwesome() async {
         channelGroupKey: 'channel_group_${user.username}',
         channelKey: 'kredit_channel_${user.username}',
         channelName: 'Docházející kredit',
+        channelShowBadge: true,
         channelDescription: 'Notifikace o tom, zda vám dochází kredit týden dopředu pro ${user.username}',
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
@@ -103,6 +104,7 @@ Future<bool> initAwesome() async {
         channelGroupKey: 'channel_group_${user.username}',
         channelKey: 'objednano_channel_${user.username}',
         channelName: 'Objednáno?',
+        channelShowBadge: true,
         channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden pro ${user.username}',
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
@@ -135,10 +137,20 @@ Future<bool> initAwesome() async {
 }
 
 Future<void> doNotifications() async {
+  LoggedInCanteen loggedInCanteen = LoggedInCanteen();
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   for (int i = 0; i < loginData.users.length; i++) {
+    //ensuring we only send the notifications once a day
+
+    DateTime now = DateTime.now();
+    String nowString = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    /*if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString) {
+      continue;
+    }*/
+    loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
+
     try {
-      loggedInCanteen.changeAccount(i);
+      await loggedInCanteen.changeAccount(i, saveToStorage: false);
       Uzivatel uzivatel = (await loggedInCanteen.canteenData).uzivatel;
       //7 is limit for how many lunches we are gonna search for
       int objednano = 0;
@@ -159,26 +171,61 @@ Future<void> doNotifications() async {
           }
         }
       }
-      if (cena != 0 && uzivatel.kredit < cena) {
+      //parse ignore date to DateTime
+      String? ignoreDateStr = await loggedInCanteen.readData('ignore_kredit_${loginData.users[i].username}');
+      DateTime ignoreDate =
+          ignoreDateStr == null || ignoreDateStr == '' ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.parse(ignoreDateStr);
+      if (true /*cena != 0 && uzivatel.kredit < cena*/ && ignoreDate.isBefore(DateTime.now())) {
         AwesomeNotifications().createNotification(
-            content: NotificationContent(
-          id: 255 - i,
-          channelKey: 'kredit_channel_${loginData.users[i].username}',
-          actionType: ActionType.Default,
-          title: 'Dochází vám kredit!',
-          body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
-        ));
+          content: NotificationContent(
+            id: 255 - i,
+            channelKey: 'kredit_channel_${loginData.users[i].username}',
+            actionType: ActionType.Default,
+            title: 'Dochází vám kredit!',
+            payload: {'user': loginData.users[i].username},
+            body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
+          ),
+          actionButtons: [
+            NotificationActionButton(
+              key: 'ignore_kredit_${loginData.users[i].username}',
+              label: 'Ztlumit na týden',
+              actionType: ActionType.DismissAction,
+              enabled: true,
+            ),
+          ],
+        );
       }
       //pokud chybí aspoň 3 obědy z příštích 10 dní
-      if (objednano <= 7) {
+      DateTime ignoreDateObjednano = await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}') == null ||
+              await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}') == ''
+          ? DateTime.now().subtract(const Duration(days: 1))
+          : DateTime.parse((await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}'))!);
+      if (true /*objednano <= 7*/ && ignoreDateObjednano.isBefore(DateTime.now())) {
         AwesomeNotifications().createNotification(
-            content: NotificationContent(
-          id: i,
-          channelKey: 'objednano_channel_${loginData.users[i].username}',
-          actionType: ActionType.Default,
-          title: 'Objednejte si na příští týden',
-          body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
-        ));
+          content: NotificationContent(
+            id: i,
+            channelKey: 'objednano_channel_${loginData.users[i].username}',
+            actionType: ActionType.Default,
+            title: 'Objednejte si na příští týden',
+            payload: {'user': loginData.users[i].username},
+            body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
+          ),
+          actionButtons: [
+            NotificationActionButton(
+              key: 'objednat_${loginData.users[i].username}',
+              label: 'Objednat vždy 1.',
+              isDangerousOption: true,
+              actionType: ActionType.DismissAction,
+              enabled: true,
+            ),
+            NotificationActionButton(
+              key: 'ignore_objednat_${loginData.users[i].username}',
+              label: 'Ztlumit na týden',
+              actionType: ActionType.DismissAction,
+              enabled: true,
+            ),
+          ],
+        );
       }
     } catch (e) {
       //do nothing
@@ -263,19 +310,12 @@ void main() async {
     analytics = FirebaseAnalytics.instance;
   }
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
-  if (Platform.isAndroid) {
-    doNotifications();
-    /*
-    await AndroidAlarmManager.initialize();
-    AndroidAlarmManager.cancel(0);
-    await AndroidAlarmManager.periodic(const Duration(days: 1), 0, doVerification);*/
-  } else if (Platform.isIOS) {
-    doNotifications();
-  }
+  doNotifications();
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -304,6 +344,7 @@ class _MyAppState extends State<MyApp> {
   late Widget homeWidget;
   @override
   void initState() {
+    setHomeWidgetPublic = setHomeWidget;
     // Only after at least the action method is set, the notification events are delivered
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,
@@ -346,6 +387,7 @@ class _MyAppState extends State<MyApp> {
           valueListenable: NotifyTheme().themeNotifier,
           builder: (context, themeMode, child) {
             return MaterialApp(
+              navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               theme: Themes.getTheme(ColorSchemes.light),
               darkTheme: Themes.getTheme(ColorSchemes.dark),
@@ -384,7 +426,7 @@ class LoggingInWidget extends StatelessWidget {
             Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
           }
           return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data == true) {
+        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
           try {
             changeDate(newDate: DateTime.now());
           } catch (e) {
@@ -392,7 +434,7 @@ class LoggingInWidget extends StatelessWidget {
           }
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);
-        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data == false) {
+        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data?.success == false) {
           //test internet connection
           InternetConnectionChecker().hasConnection.then((value) {
             if (value) {

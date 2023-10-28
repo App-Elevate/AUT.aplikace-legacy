@@ -22,7 +22,7 @@ class LoggedInCanteen {
     if (_canteenInstance != null && _canteenInstance!.prihlasen) {
       return _canteenInstance!;
     }
-    if (await loginFromStorage()) {
+    if ((await loginFromStorage()).success) {
       return _canteenInstance!;
     }
     //uživatel není přihlášen
@@ -33,7 +33,7 @@ class LoggedInCanteen {
     if (_canteenData != null && _canteenInstance!.prihlasen) {
       return _canteenData!;
     }
-    if (await loginFromStorage()) {
+    if ((await loginFromStorage()).success) {
       return _canteenData!;
     }
     //uživatel není přihlášen
@@ -92,19 +92,19 @@ class LoggedInCanteen {
   ///logs you in if you are already logged in or gets the already existing instance
   ///We don't have to do much of error handling here because we already know that the user has been logged in.
   ///If there is an error it's probably because of the internet connection or change of password. The popup is the best solution.
-  Future<bool> loginFromStorage() async {
+  Future<LoginStructure> loginFromStorage() async {
     try {
       LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
       if (loginData.currentlyLoggedIn) {
         _canteenInstance = await _login(loginData.users[loginData.currentlyLoggedInId!].url, loginData.users[loginData.currentlyLoggedInId!].username,
             loginData.users[loginData.currentlyLoggedInId!].password,
             safetyId: (_canteenData?.id ?? 0) + 1);
-        return true;
+        return LoginStructure(loginData.currentlyLoggedInId!, true);
       } else {
         return Future.error('no login');
       }
     } catch (e) {
-      return false;
+      return LoginStructure(0, false);
     }
   }
 
@@ -216,7 +216,7 @@ class LoggedInCanteen {
   /// in both cases it throws 'no internet'
   Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
     date = DateTime(date.year, date.month, date.day);
-    if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen) && !await loginFromStorage()) {
+    if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen) && !(await loginFromStorage()).success) {
       return Future.error('no login');
     }
     int id = _canteenData!.id;
@@ -273,13 +273,15 @@ class LoggedInCanteen {
   }
 
   //switches the account and logs in as the new account
-  Future<bool> changeAccount(int id, {bool indexLunches = false}) async {
+  Future<bool> changeAccount(int id, {bool indexLunches = false, bool saveToStorage = true}) async {
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     String url = loginData.users[id].url;
     String username = loginData.users[id].username;
     String password = loginData.users[id].password;
     loginData.currentlyLoggedInId = id;
-    saveLoginToSecureStorage(loginData);
+    if (saveToStorage) {
+      saveLoginToSecureStorage(loginData);
+    }
     try {
       _canteenInstance = await _login(url, username, password, safetyId: (_canteenData?.id ?? 0) + 1, indexLunches: indexLunches);
       return true;
@@ -450,6 +452,37 @@ class LoggedInCanteen {
       }
     } catch (e) {
       return false;
+    }
+    return false;
+  }
+
+  /// don't call from main thread
+  /// objedná první jídlo v každém dni, pokud už v tom dni nemáme objednáno.
+  Future<void> quickOrder(String username) async {
+    if (!await loginAsUsername(username)) return;
+    for (int i = 0; i < 10; i++) {
+      bool mameObjednano = false;
+      Jidelnicek jidelnicek = await getLunchesForDay(DateTime.now().add(Duration(days: i)));
+      for (Jidlo jidlo in jidelnicek.jidla) {
+        if (jidlo.objednano) {
+          mameObjednano = true;
+          break;
+        }
+      }
+      if (!mameObjednano && jidelnicek.jidla.isNotEmpty) {
+        await _canteenInstance!.objednat(jidelnicek.jidla[0]);
+      }
+    }
+    return;
+  }
+
+  Future<bool> loginAsUsername(String username, {bool saveToStorage = false}) async {
+    LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+    for (LoggedInUser uzivatel in loginData.users) {
+      if (uzivatel.username == username) {
+        await changeAccount(loginData.users.indexOf(uzivatel), indexLunches: false, saveToStorage: saveToStorage);
+        return true;
+      }
     }
     return false;
   }

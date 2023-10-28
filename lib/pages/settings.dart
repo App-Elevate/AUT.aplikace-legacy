@@ -64,6 +64,18 @@ class AnalyticSettingsPage extends StatelessWidget {
               child: const Text('Zobrazit nastavení oznámení'),
             ),
           ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+                for (LoggedInUser uzivatel in loginData.users) {
+                  loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
+                  loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
+                }
+              },
+              child: const Text('Zrušit všechna ztlumení'),
+            ),
+          ),
         ],
       ),
     );

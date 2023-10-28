@@ -6,6 +6,8 @@ bool ordering = false;
 // snackbar je ze začátku skrytý
 SnackBarShown snackbarshown = SnackBarShown(shown: false);
 
+late void Function(Widget widget) setHomeWidgetPublic;
+
 final DateTime minimalDate = DateTime(2006, 5, 23);
 
 ///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
