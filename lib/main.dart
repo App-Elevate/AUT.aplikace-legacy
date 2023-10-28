@@ -9,7 +9,70 @@ import 'firebase_options.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:background_fetch/background_fetch.dart';
+
+// Platform messages are asynchronous, so we initialize in an async method.
+Future<void> initPlatformState() async {
+  // Configure BackgroundFetch.
+  int status = await BackgroundFetch.configure(
+      BackgroundFetchConfig(
+        minimumFetchInterval: 15,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresStorageNotLow: false,
+        requiresDeviceIdle: false,
+        startOnBoot: true,
+        requiredNetworkType: NetworkType.ANY,
+      ), (String taskId) async {
+    // <-- Event handler
+    // This is the fetch-event callback.
+    if (kDebugMode) {
+      print("[BackgroundFetch] Event received $taskId");
+    }
+    // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+    // for taking too long in the background.
+    await doNotifications();
+    BackgroundFetch.finish(taskId);
+  }, (String taskId) async {
+    // <-- Task timeout handler.
+    // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+    if (kDebugMode) {
+      print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+    }
+    BackgroundFetch.finish(taskId);
+  });
+  if (kDebugMode) {
+    print('[BackgroundFetch] configure success: $status');
+  }
+
+  // If the widget was removed from the tree while the asynchronous platform
+  // message was in flight, we want to discard the reply rather than calling
+  // setState to update our non-existent appearance.
+}
+
+// [Android-only] This "Headless Task" is run when the Android app is terminated with `enableHeadless: true`
+// Be sure to annotate your callback function to avoid issues in release mode on Flutter >= 3.3.0
+@pragma('vm:entry-point')
+void backgroundFetchHeadlessTask(HeadlessTask task) async {
+  String taskId = task.taskId;
+  bool isTimeout = task.timeout;
+  if (isTimeout) {
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing and immediately .finish(taskId)
+    if (kDebugMode) {
+      print("[BackgroundFetch] Headless task timed-out: $taskId");
+    }
+    BackgroundFetch.finish(taskId);
+    return;
+  }
+  if (kDebugMode) {
+    print('[BackgroundFetch] Headless event received.');
+  }
+  await doNotifications();
+  BackgroundFetch.finish(taskId);
+}
 
 FirebaseAnalytics? analytics;
 bool analyticsEnabledGlobally = false;
@@ -121,6 +184,7 @@ Future<void> doNotifications() async {
       //do nothing
     }
   }
+  return;
 }
 
 /*
@@ -167,6 +231,7 @@ void doVerification() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
   await initAwesome();
   String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
   //get the version of the app
@@ -199,10 +264,11 @@ void main() async {
   }
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
   if (Platform.isAndroid) {
-    // TODO: implement background_fetch - https://pub.dev/packages/background_fetch package instead
+    doNotifications();
+    /*
     await AndroidAlarmManager.initialize();
     AndroidAlarmManager.cancel(0);
-    await AndroidAlarmManager.periodic(const Duration(days: 1), 0, doVerification);
+    await AndroidAlarmManager.periodic(const Duration(days: 1), 0, doVerification);*/
   } else if (Platform.isIOS) {
     doNotifications();
   }
