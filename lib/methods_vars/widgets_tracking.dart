@@ -18,6 +18,8 @@ final PageController pageviewController = PageController(initialPage: DateTime.n
 
 bool loginScreenVisible = false;
 
+bool skipWeekends = false;
+
 ///changes the date of the Jidelnicek
 ///newDate - just sets the new date
 ///newDate and animateToPage - animates to the new page

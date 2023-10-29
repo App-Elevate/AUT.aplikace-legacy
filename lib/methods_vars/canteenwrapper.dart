@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:autojidelna/main.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import '../every_import.dart';
 

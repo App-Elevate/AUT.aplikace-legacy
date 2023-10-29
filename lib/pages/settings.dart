@@ -1,7 +1,7 @@
 //TODO: skip weekends while browsing
 
-import 'package:autojidelna/main.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
@@ -10,6 +10,7 @@ class AnalyticSettingsPage extends StatelessWidget {
   AnalyticSettingsPage({super.key});
 
   final ValueNotifier<bool> collectData = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,9 @@ class AnalyticSettingsPage extends StatelessWidget {
                   children: [
                     _Graphics(),
                     _dataUsage(context),
-                    _notifications(),
+                    _convenience(context),
+                    _notifications(context),
+                    if (kDebugMode) _debug(),
                   ],
                 ),
               ),
@@ -45,7 +48,67 @@ class AnalyticSettingsPage extends StatelessWidget {
     );
   }
 
-  Padding _notifications() {
+  Padding _convenience(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text('Jídelníček'),
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text("Přeskakovat víkendy při procházení jídelníčku"),
+            trailing: ValueListenableBuilder(
+              valueListenable: skipWeekendsNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: (value) async {
+                    skipWeekendsNotifier.value = value;
+                    skipWeekends = value;
+                    if (value) {
+                      loggedInCanteen.saveData('skipWeekends', '1');
+                    } else {
+                      loggedInCanteen.saveData('skipWeekends', '');
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _debug() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text('Debug Options'),
+          ),
+          const Divider(),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                doNotifications(fireAnyways: true);
+              },
+              child: const Text('Zobrazit všechna oznámení'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding _notifications(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -71,6 +134,16 @@ class AnalyticSettingsPage extends StatelessWidget {
                 for (LoggedInUser uzivatel in loginData.users) {
                   loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
                   loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
+                }
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                if (context.mounted && !snackbarshown.shown) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
+                      .closed
+                      .then((SnackBarClosedReason reason) {
+                    snackbarshown.shown = false;
+                  });
                 }
               },
               child: const Text('Zrušit všechna ztlumení'),

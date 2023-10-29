@@ -1,4 +1,3 @@
-import 'package:autojidelna/main.dart';
 import 'package:background_fetch/background_fetch.dart';
 
 import './../every_import.dart';

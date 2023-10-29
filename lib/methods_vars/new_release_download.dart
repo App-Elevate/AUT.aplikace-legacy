@@ -1,4 +1,3 @@
-import 'package:autojidelna/main.dart';
 import 'package:autojidelna/pages/needed_install_permission.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
