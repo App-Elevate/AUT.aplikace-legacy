@@ -28,6 +28,27 @@ class MainAppScreenState extends State<MainAppScreen> {
     });
   }
 
+  @override
+  initState() {
+    loggedInCanteen.readData('firstTime').then((value) {
+      if (value != '1') {
+        initPlatformState().then((value) async {
+          await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+            if (!isAllowed) {
+              // This is just a basic example. For real apps, you must show some
+              // friendly dialog box before call the request method.
+              // This is very important to not harm the user experience
+              AwesomeNotifications().requestPermissionToSendNotifications();
+            }
+            BackgroundFetch.start();
+          });
+        });
+      }
+      loggedInCanteen.saveData('firstTime', '1');
+    });
+    super.initState();
+  }
+
   ///reloads the page
   Future<void> reload() async {
     if (loadingIndicator) return;
