@@ -334,9 +334,9 @@ class LoggedInCanteen {
   }
 
   /// save data to shared preferences used for storing url, statistics and settings
-  void saveData(String key, String value) async {
+  Future<void> saveData(String key, String value) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, value);
+    await prefs.setString(key, value);
   }
 
   /// get data from shared preferences used for storing url, statistics and settings

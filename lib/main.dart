@@ -129,10 +129,12 @@ Future<bool> initAwesome() async {
   return await AwesomeNotifications().initialize(
     // set the icon to null if you want to use the default app icon
     null,
+
     notificationChannels,
+
     channelGroups: notificationChannelGroups,
     // Channel groups are only visual and are not required
-    debug: kDebugMode,
+    debug: false,
   );
 }
 
@@ -189,7 +191,7 @@ Future<void> doNotifications() async {
             NotificationActionButton(
               key: 'ignore_kredit_${loginData.users[i].username}',
               label: 'Ztlumit na týden',
-              actionType: ActionType.DismissAction,
+              actionType: ActionType.SilentAction,
               enabled: true,
             ),
           ],
@@ -215,13 +217,13 @@ Future<void> doNotifications() async {
               key: 'objednat_${loginData.users[i].username}',
               label: 'Objednat vždy 1.',
               isDangerousOption: true,
-              actionType: ActionType.DismissAction,
+              actionType: ActionType.SilentAction,
               enabled: true,
             ),
             NotificationActionButton(
               key: 'ignore_objednat_${loginData.users[i].username}',
               label: 'Ztlumit na týden',
-              actionType: ActionType.DismissAction,
+              actionType: ActionType.SilentAction,
               enabled: true,
             ),
           ],
@@ -278,7 +280,22 @@ void doVerification() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+      onNotificationCreatedMethod: NotificationController.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: NotificationController.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  ReceivedAction? receivedAction = await AwesomeNotifications().getInitialNotificationAction(removeFromActionEvents: false);
+  if (receivedAction?.payload?['user'] != null) {
+    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+    for (LoggedInUser uzivatel in loginData.users) {
+      if (uzivatel.username == receivedAction?.payload?['user']) {
+        await loggedInCanteen.switchAccount(loginData.users.indexOf(uzivatel));
+        break;
+      }
+    }
+  }
   await initAwesome();
   String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
   //get the version of the app
@@ -290,7 +307,7 @@ void main() async {
     //if not, set the new version as the last one
     loggedInCanteen.saveData('lastVersion', version);
     await AwesomeNotifications().dispose();
-    initAwesome();
+    await initAwesome();
   }
   // know if this release is debug
   if (kDebugMode) {
@@ -346,11 +363,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     setHomeWidgetPublic = setHomeWidget;
     // Only after at least the action method is set, the notification events are delivered
-    AwesomeNotifications().setListeners(
-        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
-        onNotificationCreatedMethod: NotificationController.onNotificationCreatedMethod,
-        onNotificationDisplayedMethod: NotificationController.onNotificationDisplayedMethod,
-        onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
     homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);
     super.initState();
   }
