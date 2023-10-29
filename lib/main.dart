@@ -224,8 +224,8 @@ class LoggingInWidget extends StatelessWidget {
                   BackgroundFetch.start();
                 });
               });
-              loggedInCanteen.saveData('firstTime', '1');
             }
+            loggedInCanteen.saveData('firstTime', '1');
           });
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);
