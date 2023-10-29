@@ -1,4 +1,4 @@
-# autojidelna
+# Autojidelna
 
 Aplikace pro objednávání ze systému Icanteen. Cíl této aplikace je zjednodušit, zrychlit, (případně i zautomatizovat) objednávání obědů.
 
