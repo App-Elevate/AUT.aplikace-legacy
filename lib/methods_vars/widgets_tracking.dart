@@ -62,20 +62,26 @@ void setCurrentDate() async {
 ///newDate and animateToPage - animates to the new page
 ///daysChange - animates the change of date by the number of days
 ///index - changes the date by the index of the page
-void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage}) {
+void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage, int overflow = 0}) {
+  if (overflow > 5) {
+    return;
+  }
   if (newDate != null && animateToPage != null && animateToPage) {
     loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
     lastChangeDateIndex = newDate.difference(minimalDate).inDays;
-    pageviewController.animateToPage(
-      newDate.difference(minimalDate).inDays,
-      duration: const Duration(milliseconds: 150),
-      curve: Curves.linear,
-    );
+    animating = true;
+    pageviewController
+        .animateToPage(
+          newDate.difference(minimalDate).inDays,
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.linear,
+        )
+        .then((value) => animating = false);
   } else if (daysChange != null) {
     newDate = dateListener.value.add(Duration(days: daysChange));
     if (newDate.weekday == 6 || newDate.weekday == 7 && skipWeekends) {
-      return changeDate(daysChange: daysChange > 0 ? daysChange + 1 : daysChange - 1);
+      return changeDate(daysChange: daysChange > 0 ? daysChange + 1 : daysChange - 1, overflow: overflow + 1);
     }
     loggedInCanteen.smartPreIndexing(newDate);
 
@@ -102,7 +108,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     }
     newDate = minimalDate.add(Duration(days: index));
     if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
-      return changeDate(index: index);
+      return changeDate(index: index, overflow: overflow + 1);
     }
     if (hasToBeAnimated) {
       animating = true;
