@@ -110,6 +110,7 @@ class _MyAppState extends State<MyApp> {
   late Widget homeWidget;
   @override
   void initState() {
+    getLatestRelease();
     setHomeWidgetPublic = setHomeWidget;
     // Only after at least the action method is set, the notification events are delivered
     homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);
@@ -118,19 +119,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    getLatestRelease();
-    var pop = WillPopScope(
-      onWillPop: () => _backPressed(_myAppKey),
-      child: Navigator(
-        key: _myAppKey,
-        pages: [
-          MaterialPage(child: homeWidget),
-        ],
-        onPopPage: (route, result) {
-          return route.didPop(result);
-        },
-      ),
-    );
     return FutureBuilder(
       future: loggedInCanteen.readData("ThemeMode"),
       initialData: ThemeMode.system,
@@ -156,9 +144,24 @@ class _MyAppState extends State<MyApp> {
               home: child,
             );
           },
-          child: pop,
+          child: _pop(),
         );
       },
+    );
+  }
+
+  WillPopScope _pop() {
+    return WillPopScope(
+      onWillPop: () => _backPressed(_myAppKey),
+      child: Navigator(
+        key: _myAppKey,
+        pages: [
+          MaterialPage(child: homeWidget),
+        ],
+        onPopPage: (route, result) {
+          return route.didPop(result);
+        },
+      ),
     );
   }
 }
