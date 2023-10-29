@@ -82,6 +82,17 @@ Future<bool> initAwesome() async {
     notificationChannels.add(
       NotificationChannel(
         channelGroupKey: 'channel_group_${user.username}',
+        channelKey: 'jidlo_channel_${user.username}',
+        channelName: 'Dnešní jídlo',
+        channelShowBadge: true,
+        channelDescription: 'Notifikace každý den o tom jaké je dnes jídlo pro ${user.username}',
+        defaultColor: const Color(0xFF9D50DD),
+        ledColor: Colors.white,
+      ),
+    );
+    notificationChannels.add(
+      NotificationChannel(
+        channelGroupKey: 'channel_group_${user.username}',
         channelKey: 'kredit_channel_${user.username}',
         channelName: 'Docházející kredit',
         channelShowBadge: true,
@@ -134,22 +145,60 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   for (int i = 0; i < loginData.users.length; i++) {
     //ensuring we only send the notifications once a day
-
+    bool jidloDne = true;
+    bool ostatni = true;
     DateTime now = DateTime.now();
     String nowString = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    String? timeOfDayFoodNotification = await loggedInCanteen.readData('FoodNotificationTime');
+    timeOfDayFoodNotification ??= '11:00';
+    TimeOfDay timeOfDay =
+        TimeOfDay(hour: int.parse(timeOfDayFoodNotification.split(':')[0]), minute: int.parse(timeOfDayFoodNotification.split(':')[1]));
+    DateTime time = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+    int difference = time.difference(now).inMinutes;
+    //difference from time of day to now
+
+    if ((await loggedInCanteen.readData('lastJidloDneCheck-${loginData.users[i].username}') == nowString ||
+            await loggedInCanteen.readData('sendFoodInfo') != '1' ||
+            difference > 30) &&
+        !fireAnyways) {
+      jidloDne = false;
+    } else {
+      loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
+    }
+
     if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !fireAnyways) {
+      ostatni = false;
+    } else {
+      loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
+    }
+    if (!jidloDne && !ostatni) {
       continue;
     }
-    loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
-
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
+      if (jidloDne) {
+        Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(now);
+        if (jidelnicek.jidla.isNotEmpty) {
+          AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: 1024 - i,
+              channelKey: 'jidlo_channel_${loginData.users[i].username}',
+              actionType: ActionType.Default,
+              title: 'Dnešní jídlo',
+              payload: {'user': loginData.users[i].username},
+              body: jidelnicek.jidla[0].nazev,
+            ),
+          );
+        }
+      }
+      if (!ostatni) continue;
       Uzivatel uzivatel = (await loggedInCanteen.canteenData).uzivatel;
       //7 is limit for how many lunches we are gonna search for
       int objednano = 0;
       int cena = 0;
       for (int denIndex = 0; denIndex < 10; denIndex++) {
-        Jidelnicek jidelnicek = await (await loggedInCanteen.canteenInstance).jidelnicekDen(den: DateTime.now().add(Duration(days: denIndex)));
+        Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(DateTime.now().add(Duration(days: denIndex)));
         //pokud nalezneme jídlo s cenou
         if (jidelnicek.jidla.isNotEmpty && !(jidelnicek.jidla[0].cena?.isNaN ?? true)) {
           cena += jidelnicek.jidla[0].cena!.toInt();
@@ -171,7 +220,7 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
       if ((fireAnyways || cena != 0 && uzivatel.kredit < cena) && ignoreDate.isBefore(DateTime.now())) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
-            id: 255 - i,
+            id: 512 - i,
             channelKey: 'kredit_channel_${loginData.users[i].username}',
             actionType: ActionType.Default,
             title: 'Dochází vám kredit!',

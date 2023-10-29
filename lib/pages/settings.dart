@@ -9,26 +9,70 @@ class AnalyticSettingsPage extends StatelessWidget {
 
   final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
+  final ValueNotifier<bool> jidloNotificationNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
+
+  Future<void> setSettings() async {
+    String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
+    if (kDebugMode) {
+      analyticsDisabled = '1';
+    }
+    if (analyticsDisabled == '1') {
+      collectData.value = true;
+      analyticsEnabledGlobally = false;
+    } else {
+      collectData.value = false;
+      analyticsEnabledGlobally = true;
+    }
+    String? skipWeekendsString = await loggedInCanteen.readData('skipWeekends');
+    if (skipWeekendsString == '1') {
+      skipWeekendsNotifier.value = true;
+      skipWeekends = true;
+    } else {
+      skipWeekendsNotifier.value = false;
+      skipWeekends = false;
+    }
+    String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo');
+    if (jidloNotificationString == '1') {
+      jidloNotificationNotifier.value = true;
+    } else {
+      jidloNotificationNotifier.value = false;
+    }
+    String? jidloNotificationTimeString = await loggedInCanteen.readData('FoodNotificationTime');
+    if (jidloNotificationTimeString == null || jidloNotificationTimeString == '') {
+      jidloNotificationTime.value = "11:00";
+    } else {
+      jidloNotificationTime.value = jidloNotificationTimeString;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Nastavení")),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Graphics(),
-              _dataUsage(context),
-              _convenience(context),
-              _notifications(context),
-              if (kDebugMode) _debug(),
-            ],
-          ),
-        ),
-      ),
+      body: FutureBuilder(
+          future: setSettings(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _Graphics(),
+                      _dataUsage(context),
+                      _convenience(context),
+                      _notifications(context),
+                      if (kDebugMode) _debug(),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          }),
     );
   }
 
@@ -103,6 +147,47 @@ class AnalyticSettingsPage extends StatelessWidget {
             child: Text('Oznámení'),
           ),
           const Divider(),
+          ExpansionTile(
+            title: const Text("Zasílat oznámení o dnešním jídle"),
+            trailing: ValueListenableBuilder(
+                valueListenable: jidloNotificationNotifier,
+                builder: (context, value, child) {
+                  return Switch.adaptive(
+                    value: value,
+                    onChanged: (value) async {
+                      jidloNotificationNotifier.value = value;
+                      if (value) {
+                        loggedInCanteen.saveData('sendFoodInfo', '1');
+                      } else {
+                        loggedInCanteen.saveData('sendFoodInfo', '');
+                      }
+                    },
+                  );
+                }),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text("Čas oznámení: "),
+                  ValueListenableBuilder(
+                      valueListenable: jidloNotificationTime,
+                      builder: (context, value, child) {
+                        return ElevatedButton(
+                            onPressed: () async {
+                              TimeOfDay? timeOfDay = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
+                              if (timeOfDay != null && context.mounted) {
+                                jidloNotificationTime.value = timeOfDay.format(context);
+                                loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
+                              }
+                            },
+                            child: Text(value));
+                      }),
+                ],
+              )
+            ],
+          ),
           ListTile(
             title: ElevatedButton(
               onPressed: () {
@@ -234,51 +319,41 @@ class _GraphicsState extends State<_Graphics> {
             child: Text('Vzhled'),
           ),
           const Divider(),
-          FutureBuilder(
-            future: loggedInCanteen.readData("ThemeMode"),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                selectedMode = snapshot.data! == '' ? "system" : snapshot.data!;
-              } else {
-                selectedMode = "system";
-              }
-              return ListTile(
-                title: SegmentedButton<String>(
-                  showSelectedIcon: false,
-                  selected: <String>{selectedMode},
-                  onSelectionChanged: (Set<String> newSelection) {
-                    setState(() {
-                      selectedMode = newSelection.first;
-                    });
-                    if (selectedMode == "2") {
-                      loggedInCanteen.saveData('ThemeMode', "2");
-                      NotifyTheme().setTheme(ThemeMode.dark);
-                    } else if (selectedMode == "1") {
-                      loggedInCanteen.saveData("ThemeMode", "1");
-                      NotifyTheme().setTheme(ThemeMode.light);
-                    } else {
-                      loggedInCanteen.saveData("ThemeMode", "0");
-                      NotifyTheme().setTheme(ThemeMode.system);
-                    }
-                  },
-                  segments: const [
-                    ButtonSegment<String>(
-                      value: "0",
-                      label: Text("Systém"),
-                      enabled: true,
-                    ),
-                    ButtonSegment<String>(
-                      value: "1",
-                      label: Text("Světlý"),
-                    ),
-                    ButtonSegment<String>(
-                      value: "2",
-                      label: Text("Tmavý"),
-                    ),
-                  ],
+          ListTile(
+            title: SegmentedButton<String>(
+              showSelectedIcon: false,
+              selected: <String>{selectedMode},
+              onSelectionChanged: (Set<String> newSelection) {
+                setState(() {
+                  selectedMode = newSelection.first;
+                });
+                if (selectedMode == "2") {
+                  loggedInCanteen.saveData('ThemeMode', "2");
+                  NotifyTheme().setTheme(ThemeMode.dark);
+                } else if (selectedMode == "1") {
+                  loggedInCanteen.saveData("ThemeMode", "1");
+                  NotifyTheme().setTheme(ThemeMode.light);
+                } else {
+                  loggedInCanteen.saveData("ThemeMode", "0");
+                  NotifyTheme().setTheme(ThemeMode.system);
+                }
+              },
+              segments: const [
+                ButtonSegment<String>(
+                  value: "0",
+                  label: Text("Systém"),
+                  enabled: true,
                 ),
-              );
-            },
+                ButtonSegment<String>(
+                  value: "1",
+                  label: Text("Světlý"),
+                ),
+                ButtonSegment<String>(
+                  value: "2",
+                  label: Text("Tmavý"),
+                ),
+              ],
+            ),
           ),
         ],
       ),
