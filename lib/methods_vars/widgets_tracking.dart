@@ -22,6 +22,8 @@ bool skipWeekends = false;
 
 int? lastChangeDateIndex;
 
+bool animating = false;
+
 ///changes the date of the Jidelnicek
 ///newDate - just sets the new date
 ///newDate and animateToPage - animates to the new page
@@ -52,9 +54,9 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
   } else if (index != null) {
     lastChangeDateIndex ??= index;
     newDate = minimalDate.add(Duration(days: index));
-    bool hasToBeJumped = false;
-    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends) {
-      hasToBeJumped = true;
+    bool hasToBeAnimated = false;
+    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
+      hasToBeAnimated = true;
       bool forwardOrBackward = index > lastChangeDateIndex!;
       switch (forwardOrBackward) {
         case true:
@@ -66,10 +68,19 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
       }
     }
     newDate = minimalDate.add(Duration(days: index));
-    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends) {
+    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
       return changeDate(index: index);
     }
-    if (hasToBeJumped) pageviewController.jumpToPage(index);
+    if (hasToBeAnimated) {
+      animating = true;
+      pageviewController
+          .animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.linear,
+          )
+          .then((value) => animating = false);
+    }
     lastChangeDateIndex = index;
     loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;

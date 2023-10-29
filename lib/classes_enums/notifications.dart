@@ -168,7 +168,7 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
       String? ignoreDateStr = await loggedInCanteen.readData('ignore_kredit_${loginData.users[i].username}');
       DateTime ignoreDate =
           ignoreDateStr == null || ignoreDateStr == '' ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.parse(ignoreDateStr);
-      if (fireAnyways || cena != 0 && uzivatel.kredit < cena && ignoreDate.isBefore(DateTime.now())) {
+      if ((fireAnyways || cena != 0 && uzivatel.kredit < cena) && ignoreDate.isBefore(DateTime.now())) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: 255 - i,
@@ -193,7 +193,7 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
               await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}') == ''
           ? DateTime.now().subtract(const Duration(days: 1))
           : DateTime.parse((await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}'))!);
-      if (fireAnyways || objednano <= 7 && ignoreDateObjednano.isBefore(DateTime.now())) {
+      if ((fireAnyways || objednano <= 7) && ignoreDateObjednano.isBefore(DateTime.now())) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: i,

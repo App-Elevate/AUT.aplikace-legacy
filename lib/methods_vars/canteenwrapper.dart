@@ -9,8 +9,9 @@ LoggedInCanteen loggedInCanteen = LoggedInCanteen();
 
 class LoggedInCanteen {
   LoggedInCanteen();
-  Map<DateTime, Completer<Jidelnicek>> currentlyLoading = {};
+  Map<DateTime, Completer<Jidelnicek>> _currentlyLoading = {};
   Map<DateTime, bool> checked = {};
+  Completer<Canteen>? _loginCompleter;
 
   Completer<void> _indexingCompleter = Completer<void>();
 
@@ -129,21 +130,28 @@ class LoggedInCanteen {
   ///
   /// 'Nejdříve se musíte přihlásit' - when user is not logged in and doesn't have credentials in storage
   Future<Canteen> _login(String url, String username, String password, {int? safetyId, bool indexLunches = true}) async {
+    if (_loginCompleter == null || _loginCompleter!.isCompleted) {
+      _loginCompleter = Completer<Canteen>();
+    } else {
+      return _loginCompleter!.future;
+    }
     _canteenInstance = Canteen(url);
     try {
       if (!await _canteenInstance!.login(username, password)) {
+        _loginCompleter!.completeError('Špatné heslo');
         return Future.error('Špatné heslo');
       }
     } catch (e) {
       try {
         await _canteenInstance!.login(username, password); //second try's the charm
       } catch (e) {
+        _loginCompleter!.completeError('bad url or connection');
         return Future.error('bad url or connection');
       }
     }
     try {
       checked = {};
-      currentlyLoading = {};
+      _currentlyLoading = {};
       _canteenData = CanteenData(
         id: (safetyId ?? 0) + 1,
         pocetJidel: {},
@@ -155,11 +163,13 @@ class LoggedInCanteen {
         jidelnicky: {},
       );
     } catch (e) {
+      _loginCompleter!.completeError('bad url or connection');
       return Future.error('bad url or connection');
     }
     if (indexLunches) {
       smartPreIndexing(DateTime.now());
     }
+    _loginCompleter!.complete(_canteenInstance!);
     return canteenInstance;
   }
 
@@ -169,20 +179,20 @@ class LoggedInCanteen {
   ///Jinak vyhodí chybu 'Nejdříve se musíte přihlásit'
   ///může vyhodit chybu 'no internet'
   Future<Jidelnicek> _ziskatJidelnicekDen(DateTime den, {int? tries}) async {
-    if (currentlyLoading.containsKey(den) && (tries == 0 || tries == null)) {
-      return currentlyLoading[den]!.future;
+    if (_currentlyLoading.containsKey(den) && (tries == 0 || tries == null)) {
+      return _currentlyLoading[den]!.future;
     }
-    currentlyLoading[den] ??= Completer<Jidelnicek>();
+    _currentlyLoading[den] ??= Completer<Jidelnicek>();
     tries ??= 0;
     try {
       Jidelnicek jidelnicek = await (await canteenInstance).jidelnicekDen(den: den);
       if (tries >= 2) {
         try {
-          currentlyLoading[den]!.complete(jidelnicek);
+          _currentlyLoading[den]!.complete(jidelnicek);
         } catch (e) {
           //nothing
         }
-        Future.delayed(const Duration(seconds: 1), () => currentlyLoading.remove(den));
+        Future.delayed(const Duration(seconds: 1), () => _currentlyLoading.remove(den));
         return jidelnicek;
       }
       //addition to fix api sometimes giving us less lunches that it should. This is a second layer for the fix
@@ -191,16 +201,16 @@ class LoggedInCanteen {
         return _ziskatJidelnicekDen(den, tries: tries + 1);
       }
       try {
-        currentlyLoading[den]!.complete(jidelnicek);
+        _currentlyLoading[den]!.complete(jidelnicek);
       } catch (e) {
         //nothing
       }
-      Future.delayed(const Duration(seconds: 1), () => currentlyLoading.remove(den));
+      Future.delayed(const Duration(seconds: 1), () => _currentlyLoading.remove(den));
       return jidelnicek;
     } catch (e) {
-      if (currentlyLoading[den] != null) {
-        currentlyLoading[den]!.completeError(e);
-        currentlyLoading.remove(den);
+      if (_currentlyLoading[den] != null) {
+        _currentlyLoading[den]!.completeError(e);
+        _currentlyLoading.remove(den);
       }
       if (e == 'Nejdříve se musíte přihlásit') {
         return _ziskatJidelnicekDen(den, tries: tries + 1);
