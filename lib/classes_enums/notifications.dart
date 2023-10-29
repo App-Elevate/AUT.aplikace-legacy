@@ -38,7 +38,7 @@ class NotificationController {
       channelKey: 'else_channel',
       actionType: ActionType.Default,
       title: 'Dismissed',
-      body: 'hh',
+      body: receivedAction.buttonKeyPressed,
     ));
   }
 
