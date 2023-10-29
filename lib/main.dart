@@ -211,6 +211,23 @@ class LoggingInWidget extends StatelessWidget {
           } catch (e) {
             //do nothing
           }
+          // request notification permissions if they are not already granted but only the first time the user loggs in
+          loggedInCanteen.readData('firstTime').then((value) {
+            if (value != '1') {
+              initPlatformState().then((value) async {
+                await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+                  if (!isAllowed) {
+                    // This is just a basic example. For real apps, you must show some
+                    // friendly dialog box before call the request method.
+                    // This is very important to not harm the user experience
+                    AwesomeNotifications().requestPermissionToSendNotifications();
+                  }
+                  BackgroundFetch.start();
+                });
+              });
+              loggedInCanteen.saveData('firstTime', '1');
+            }
+          });
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data?.success == false) {
