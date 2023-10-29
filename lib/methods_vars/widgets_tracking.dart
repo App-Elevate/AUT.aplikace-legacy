@@ -11,10 +11,10 @@ late void Function(Widget widget) setHomeWidgetPublic;
 final DateTime minimalDate = DateTime(2006, 5, 23);
 
 ///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
-final ValueNotifier<DateTime> dateListener = ValueNotifier<DateTime>(DateTime.now());
+late final ValueNotifier<DateTime> dateListener;
 
 ///page controller for the PageView which tells which date is currently selected
-final PageController pageviewController = PageController(initialPage: DateTime.now().difference(minimalDate).inDays);
+late final PageController pageviewController;
 
 bool loginScreenVisible = false;
 
@@ -23,6 +23,39 @@ bool skipWeekends = false;
 int? lastChangeDateIndex;
 
 bool animating = false;
+
+void setCurrentDate() async {
+  DateTime initialDate = DateTime.now();
+  if (!skipWeekends) {
+    bool success = false;
+    while (!success) {
+      try {
+        changeDate(newDate: initialDate);
+        success = true;
+      } catch (e) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+    }
+    return;
+  }
+  while (initialDate.weekday == 6 || initialDate.weekday == 7) {
+    initialDate = initialDate.add(const Duration(days: 1));
+  }
+  int index = initialDate.difference(minimalDate).inDays;
+  while (initialDate.add(Duration(days: index)).weekday == 6 || initialDate.add(Duration(days: index)).weekday == 7) {
+    index++;
+  }
+  bool success = false;
+  while (!success) {
+    try {
+      pageviewController.jumpToPage(index);
+      success = true;
+    } catch (e) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+  }
+  changeDate(index: index);
+}
 
 ///changes the date of the Jidelnicek
 ///newDate - just sets the new date

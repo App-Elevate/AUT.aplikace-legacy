@@ -1,5 +1,3 @@
-//TODO: skip weekends while browsing
-
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
