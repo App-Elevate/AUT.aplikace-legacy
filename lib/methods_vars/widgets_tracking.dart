@@ -20,6 +20,8 @@ bool loginScreenVisible = false;
 
 bool skipWeekends = false;
 
+int? lastChangeDateIndex;
+
 ///changes the date of the Jidelnicek
 ///newDate - just sets the new date
 ///newDate and animateToPage - animates to the new page
@@ -29,6 +31,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
   if (newDate != null && animateToPage != null && animateToPage) {
     loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
+    lastChangeDateIndex = newDate.difference(minimalDate).inDays;
     pageviewController.animateToPage(
       newDate.difference(minimalDate).inDays,
       duration: const Duration(milliseconds: 150),
@@ -36,14 +39,38 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     );
   } else if (daysChange != null) {
     newDate = dateListener.value.add(Duration(days: daysChange));
+    if (newDate.weekday == 6 || newDate.weekday == 7 && skipWeekends) {
+      return changeDate(daysChange: daysChange > 0 ? daysChange + 1 : daysChange - 1);
+    }
     loggedInCanteen.smartPreIndexing(newDate);
+
     pageviewController.animateToPage(
       newDate.difference(minimalDate).inDays,
       duration: const Duration(milliseconds: 150),
       curve: Curves.linear,
     );
   } else if (index != null) {
+    lastChangeDateIndex ??= index;
     newDate = minimalDate.add(Duration(days: index));
+    bool hasToBeJumped = false;
+    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends) {
+      hasToBeJumped = true;
+      bool forwardOrBackward = index > lastChangeDateIndex!;
+      switch (forwardOrBackward) {
+        case true:
+          index += newDate.weekday == 6 ? 2 : 1;
+          break;
+        case false:
+          index -= newDate.weekday == 7 ? 2 : 1;
+          break;
+      }
+    }
+    newDate = minimalDate.add(Duration(days: index));
+    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends) {
+      return changeDate(index: index);
+    }
+    if (hasToBeJumped) pageviewController.jumpToPage(index);
+    lastChangeDateIndex = index;
     loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
   } else if (newDate != null) {

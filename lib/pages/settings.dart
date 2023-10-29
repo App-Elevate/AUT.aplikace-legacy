@@ -9,42 +9,28 @@ import './../every_import.dart';
 class AnalyticSettingsPage extends StatelessWidget {
   AnalyticSettingsPage({super.key});
 
-  final ValueNotifier<bool> collectData = ValueNotifier<bool>(false);
-  final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
+  final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: loggedInCanteen.readData('disableAnalytics'),
-      builder: (context, snaphot) {
-        if (snaphot.connectionState == ConnectionState.done) {
-          if (snaphot.data == '1') {
-            collectData.value = true;
-          } else {
-            collectData.value = false;
-          }
-          return Scaffold(
-            appBar: AppBar(title: const Text("Nastavení")),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _Graphics(),
-                    _dataUsage(context),
-                    _convenience(context),
-                    _notifications(context),
-                    if (kDebugMode) _debug(),
-                  ],
-                ),
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox();
-        }
-      },
+    return Scaffold(
+      appBar: AppBar(title: const Text("Nastavení")),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _Graphics(),
+              _dataUsage(context),
+              _convenience(context),
+              _notifications(context),
+              if (kDebugMode) _debug(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
