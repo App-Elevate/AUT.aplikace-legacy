@@ -10,9 +10,12 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
   final ValueNotifier<bool> jidloNotificationNotifier = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> lowCreditNotificationNotifier = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
 
   Future<void> setSettings() async {
+    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
@@ -44,6 +47,20 @@ class AnalyticSettingsPage extends StatelessWidget {
     } else {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
+    for (LoggedInUser uzivatel in loginData.users) {
+      String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_${uzivatel.username}');
+      if (lowCreditNotificationString == '') {
+        lowCreditNotificationNotifier.value = true;
+      } else {
+        lowCreditNotificationNotifier.value = false;
+      }
+      String? nextWeekOrderNotificationString = await loggedInCanteen.readData('ignore_objednat_${uzivatel.username}');
+      if (nextWeekOrderNotificationString == '') {
+        nextWeekOrderNotificationNotifier.value = true;
+      } else {
+        nextWeekOrderNotificationNotifier.value = false;
+      }
+    }
   }
 
   @override
@@ -51,28 +68,29 @@ class AnalyticSettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Nastavení")),
       body: FutureBuilder(
-          future: setSettings(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _Graphics(),
-                      _dataUsage(context),
-                      _convenience(context),
-                      _notifications(context),
-                      if (kDebugMode) _debug(),
-                    ],
-                  ),
+        future: setSettings(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _Graphics(),
+                    _dataUsage(context),
+                    _convenience(context),
+                    _notifications(context),
+                    if (kDebugMode) _debug(),
+                  ],
                 ),
-              );
-            } else {
-              return const SizedBox();
-            }
-          }),
+              ),
+            );
+          } else {
+            return const SizedBox();
+          }
+        },
+      ),
     );
   }
 
@@ -83,7 +101,7 @@ class AnalyticSettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text('Jídelníček'),
           ),
           const Divider(),
@@ -119,7 +137,7 @@ class AnalyticSettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text('Debug Options'),
           ),
           const Divider(),
@@ -143,50 +161,96 @@ class AnalyticSettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text('Oznámení'),
           ),
           const Divider(),
           ExpansionTile(
-            title: const Text("Zasílat oznámení o dnešním jídle"),
+            title: const Text("Dnešní jídlo"),
             trailing: ValueListenableBuilder(
-                valueListenable: jidloNotificationNotifier,
-                builder: (context, value, child) {
-                  return Switch.adaptive(
-                    value: value,
-                    onChanged: (value) async {
-                      jidloNotificationNotifier.value = value;
-                      if (value) {
-                        loggedInCanteen.saveData('sendFoodInfo', '1');
-                      } else {
-                        loggedInCanteen.saveData('sendFoodInfo', '');
-                      }
-                    },
-                  );
-                }),
+              valueListenable: jidloNotificationNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: (value) async {
+                    jidloNotificationNotifier.value = value;
+                    if (value) {
+                      loggedInCanteen.saveData('sendFoodInfo', '1');
+                    } else {
+                      loggedInCanteen.saveData('sendFoodInfo', '');
+                    }
+                  },
+                );
+              },
+            ),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Text("Čas oznámení: "),
                   ValueListenableBuilder(
-                      valueListenable: jidloNotificationTime,
-                      builder: (context, value, child) {
-                        return ElevatedButton(
-                            onPressed: () async {
-                              TimeOfDay? timeOfDay = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
-                              if (timeOfDay != null && context.mounted) {
-                                jidloNotificationTime.value = timeOfDay.format(context);
-                                loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
-                              }
-                            },
-                            child: Text(value));
-                      }),
+                    valueListenable: jidloNotificationTime,
+                    builder: (context, value, child) {
+                      return ElevatedButton(
+                        onPressed: () async {
+                          TimeOfDay? timeOfDay = await showTimePicker(
+                              context: context, initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
+                          if (timeOfDay != null && context.mounted) {
+                            jidloNotificationTime.value = timeOfDay.format(context);
+                            loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
+                          }
+                        },
+                        child: Text(value),
+                      );
+                    },
+                  ),
                 ],
               )
             ],
+          ),
+          ListTile(
+            title: const Text("Nízký credit"),
+            trailing: ValueListenableBuilder(
+              valueListenable: lowCreditNotificationNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: (value) async {
+                    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+                    lowCreditNotificationNotifier.value = value;
+                    for (LoggedInUser uzivatel in loginData.users) {
+                      if (value) {
+                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
+                      } else {
+                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '1');
+                      }
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text("Objednat jídla na příští týden"),
+            trailing: ValueListenableBuilder(
+              valueListenable: nextWeekOrderNotificationNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: (value) async {
+                    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+                    nextWeekOrderNotificationNotifier.value = value;
+                    for (LoggedInUser uzivatel in loginData.users) {
+                      if (value) {
+                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
+                      } else {
+                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '1');
+                      }
+                    }
+                  },
+                );
+              },
+            ),
           ),
           ListTile(
             title: ElevatedButton(
@@ -196,28 +260,28 @@ class AnalyticSettingsPage extends StatelessWidget {
               child: const Text('Zobrazit nastavení oznámení'),
             ),
           ),
-          ListTile(
-            title: ElevatedButton(
-              onPressed: () async {
-                LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-                for (LoggedInUser uzivatel in loginData.users) {
-                  loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-                  loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-                }
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                if (context.mounted && !snackbarshown.shown) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
-                }
-              },
-              child: const Text('Zrušit všechna ztlumení'),
-            ),
-          ),
+          // ListTile(
+          //   title: ElevatedButton(
+          //     onPressed: () async {
+          //       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+          //       for (LoggedInUser uzivatel in loginData.users) {
+          //         loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
+          //         loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
+          //       }
+          //       // Find the ScaffoldMessenger in the widget tree
+          //       // and use it to show a SnackBar.
+          //       if (context.mounted && !snackbarshown.shown) {
+          //         ScaffoldMessenger.of(context)
+          //             .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
+          //             .closed
+          //             .then((SnackBarClosedReason reason) {
+          //           snackbarshown.shown = false;
+          //         });
+          //       }
+          //     },
+          //     child: const Text('Zrušit všechna ztlumení'),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -230,7 +294,7 @@ class AnalyticSettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text('Shromažďování údajů'),
           ),
           const Divider(),
@@ -315,7 +379,7 @@ class _GraphicsState extends State<_Graphics> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             child: Text('Vzhled'),
           ),
           const Divider(),
