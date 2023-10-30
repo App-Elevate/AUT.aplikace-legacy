@@ -20,7 +20,7 @@ bool loginScreenVisible = false;
 
 bool skipWeekends = false;
 
-int? lastChangeDateIndex;
+int lastChangeDateIndex = 0;
 
 bool animating = false;
 
@@ -81,12 +81,11 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
       curve: Curves.linear,
     );
   } else if (index != null) {
-    lastChangeDateIndex ??= index;
     newDate = convertIndexToDatetime(index);
     bool hasToBeAnimated = false;
     if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
       hasToBeAnimated = true;
-      bool forwardOrBackward = index > lastChangeDateIndex!;
+      bool forwardOrBackward = index > lastChangeDateIndex;
       switch (forwardOrBackward) {
         case true:
           index += newDate.weekday == 6 ? 2 : 1;

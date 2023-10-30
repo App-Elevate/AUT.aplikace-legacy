@@ -380,7 +380,6 @@ class LoggedInCanteen {
 
     //ensuring correct loginData.currentlyloggedInId
     if (id == loginData.currentlyLoggedInId) {
-      setCurrentDate();
       loginData.currentlyLoggedInId = loginData.users.length - 2;
     } else if (loginData.currentlyLoggedInId != null && loginData.currentlyLoggedInId! > id) {
       loginData.currentlyLoggedInId = loginData.currentlyLoggedInId! - 1;

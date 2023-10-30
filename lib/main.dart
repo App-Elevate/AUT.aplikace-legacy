@@ -203,6 +203,11 @@ class LoggingInWidget extends StatelessWidget {
           }
           return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
+          try {
+            setCurrentDate();
+          } catch (e) {
+            //do nothing
+          }
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data?.success == false) {

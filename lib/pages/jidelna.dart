@@ -1,3 +1,4 @@
+import 'package:autojidelna/main.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/gestures.dart';
 
@@ -48,32 +49,6 @@ class MainAppScreenState extends State<MainAppScreen> {
       loggedInCanteen.saveData('firstTime', '1');
     });
     super.initState();
-  }
-
-  ///reloads the page
-  Future<void> reload() async {
-    if (loadingIndicator) return;
-    setState(() {
-      loadingIndicator = true;
-    });
-    try {
-      await loggedInCanteen.refreshLunches(minimalDate.add(Duration(days: pageviewController.page!.round())));
-    } catch (e) {
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
-      if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
-            .closed
-            .then((SnackBarClosedReason reason) {
-          snackbarshown.shown = false;
-        });
-      }
-    }
-    setState(() {
-      loadingIndicator = false;
-    });
-    setScaffoldBody(jidelnicekWidget());
   }
 
   ///callback for SlidingUpPanel
@@ -159,24 +134,12 @@ class MainAppScreenState extends State<MainAppScreen> {
                   opticalSize: 30,
                 ),
                 onPressed: () {
-                  reload();
+                  widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
                 },
               ),
             ],
           ),
-          body: Stack(
-            children: [
-              scaffoldBody,
-              //if (loadingIndicator)
-              //  Container(
-              //    alignment: Alignment.center,
-              //    color: Colors.black.withOpacity(0.5),
-              //    child: const Center(
-              //      child: CircularProgressIndicator(),
-              //    ),
-              //  ),
-            ],
-          ),
+          body: scaffoldBody,
           drawer: Builder(
             builder: (context) {
               return WillPopScope(
@@ -338,14 +301,7 @@ class ListJidel extends StatelessWidget {
     required this.setScaffoldBody,
   });
   void refreshButtons(BuildContext context) async {
-    DateTime currentDate = convertIndexToDatetime(indexDne);
-    try {
-      jidelnicekListener.value = await loggedInCanteen.getLunchesForDay(currentDate, requireNew: true);
-      await Future.delayed(const Duration(milliseconds: 30));
-      ordering = false;
-    } catch (e) {
-      //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', setHomeWidget));
-    }
+    await portableSoftRefresh(context);
   }
 
   Future<void> portableSoftRefresh(BuildContext context) async {
@@ -785,6 +741,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       }
                       break;
                   }
+                  ordering = false;
                   if (context.mounted) {
                     widget.refreshButtons(context);
                   }
