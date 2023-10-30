@@ -242,38 +242,31 @@ class AnalyticSettingsPage extends StatelessWidget {
               onPressed: () {
                 AwesomeNotifications().showNotificationConfigPage();
               },
+              child: const Text('Zobrazit nastavení oznámení'),
             ),
           ),
           ListTile(
             title: ElevatedButton(
-              onPressed: () {
-                AwesomeNotifications().showNotificationConfigPage();
+              onPressed: () async {
+                LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+                for (LoggedInUser uzivatel in loginData.users) {
+                  loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
+                  loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
+                }
+                // Find the ScaffoldMessenger in the widget tree
+                // and use it to show a SnackBar.
+                if (context.mounted && !snackbarshown.shown) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
+                      .closed
+                      .then((SnackBarClosedReason reason) {
+                    snackbarshown.shown = false;
+                  });
+                }
               },
-              child: const Text('Zobrazit nastavení oznámení'),
+              child: const Text('Zrušit všechna ztlumení'),
             ),
           ),
-           ListTile(
-             title: ElevatedButton(
-               onPressed: () async {
-                 LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-                 for (LoggedInUser uzivatel in loginData.users) {
-                   loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-                   loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-                 }
-                 // Find the ScaffoldMessenger in the widget tree
-                 // and use it to show a SnackBar.
-                 if (context.mounted && !snackbarshown.shown) {
-                   ScaffoldMessenger.of(context)
-                       .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
-                       .closed
-                       .then((SnackBarClosedReason reason) {
-                     snackbarshown.shown = false;
-                   });
-                 }
-               },
-               child: const Text('Zrušit všechna ztlumení'),
-             ),
-           ),
         ],
       ),
     );
