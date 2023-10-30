@@ -1,3 +1,10 @@
+## 1.2.6
+
+- přidány tlačítka u notifikací
+- možnost přeskakovat víkendy při procházení jídelníčku
+- přidána notifikace zasílat oznámení o dnešním jídle
+- možnost ztlumit notifikaci na týden
+
 ## 1.2.5
 
 - opravena velikost uživatelského jména v profilu
