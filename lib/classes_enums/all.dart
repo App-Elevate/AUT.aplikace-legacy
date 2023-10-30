@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import './../every_import.dart';
-export './notifications.dart';
+export '../methods_vars/notifications.dart';
 
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }

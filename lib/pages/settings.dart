@@ -4,8 +4,10 @@ import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
 
-class AnalyticSettingsPage extends StatelessWidget {
-  AnalyticSettingsPage({super.key});
+class SettingsPage extends StatelessWidget {
+  SettingsPage({super.key, this.onlyAnalytics = false});
+  final bool onlyAnalytics;
+  late final String username;
 
   final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
@@ -16,7 +18,7 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
-    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+    username = (await loggedInCanteen.canteenData).username;
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
@@ -36,7 +38,7 @@ class AnalyticSettingsPage extends StatelessWidget {
       skipWeekendsNotifier.value = false;
       skipWeekends = false;
     }
-    String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo');
+    String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo-$username');
     if (jidloNotificationString == '1') {
       jidloNotificationNotifier.value = true;
     } else {
@@ -54,6 +56,18 @@ class AnalyticSettingsPage extends StatelessWidget {
     } else {
       themeNotifier.value = themeString;
     }
+    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('ignore_objednat_$username');
+    if (nextWeekOrderNotificationNotifierString == '') {
+      nextWeekOrderNotificationNotifier.value = true;
+    } else {
+      nextWeekOrderNotificationNotifier.value = false;
+    }
+    String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_$username');
+    if (lowCreditNotificationString == '') {
+      lowCreditNotificationNotifier.value = true;
+    } else {
+      lowCreditNotificationNotifier.value = false;
+    }
   }
 
   @override
@@ -70,11 +84,11 @@ class AnalyticSettingsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _graphics(),
+                    if (!onlyAnalytics) _graphics(),
                     _dataUsage(context),
-                    _convenience(context),
-                    _notifications(context),
-                    if (kDebugMode) _debug(),
+                    if (!onlyAnalytics) _convenience(context),
+                    if (!onlyAnalytics) _notifications(context),
+                    if (kDebugMode && !onlyAnalytics) _debug(),
                   ],
                 ),
               ),
@@ -137,7 +151,17 @@ class AnalyticSettingsPage extends StatelessWidget {
           ListTile(
             title: ElevatedButton(
               onPressed: () async {
-                doNotifications(fireAnyways: true);
+                doNotifications(force: true);
+              },
+              child: const Text('Násilím zobrazit všechna oznámení'),
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                await loggedInCanteen.saveData('lastJidloDneCheck-$username', '2000-00-00');
+                await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
+                doNotifications();
               },
               child: const Text('Zobrazit všechna oznámení'),
             ),
@@ -153,9 +177,9 @@ class AnalyticSettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Oznámení'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text('Oznámení pro $username'),
           ),
           const Divider(),
           ExpansionTile(
@@ -168,9 +192,9 @@ class AnalyticSettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     jidloNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('sendFoodInfo', '1');
+                      loggedInCanteen.saveData('sendFoodInfo-$username', '1');
                     } else {
-                      loggedInCanteen.saveData('sendFoodInfo', '');
+                      loggedInCanteen.saveData('sendFoodInfo-$username', '');
                     }
                   },
                 );
@@ -198,7 +222,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                     },
                   ),
                 ],
-              )
+              ),
             ],
           ),
           ListTile(
@@ -209,14 +233,11 @@ class AnalyticSettingsPage extends StatelessWidget {
                 return Switch.adaptive(
                   value: value,
                   onChanged: (value) async {
-                    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
                     lowCreditNotificationNotifier.value = value;
-                    for (LoggedInUser uzivatel in loginData.users) {
-                      if (value) {
-                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-                      } else {
-                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '1');
-                      }
+                    if (value) {
+                      loggedInCanteen.saveData('ignore_kredit_$username', '');
+                    } else {
+                      loggedInCanteen.saveData('ignore_kredit_$username', '1');
                     }
                   },
                 );
@@ -224,21 +245,18 @@ class AnalyticSettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text("Objednat jídla na příští týden"),
+            title: const Text("Nemáte objednáno na příští týden"),
             trailing: ValueListenableBuilder(
               valueListenable: nextWeekOrderNotificationNotifier,
               builder: (context, value, child) {
                 return Switch.adaptive(
                   value: value,
                   onChanged: (value) async {
-                    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
                     nextWeekOrderNotificationNotifier.value = value;
-                    for (LoggedInUser uzivatel in loginData.users) {
-                      if (value) {
-                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-                      } else {
-                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '1');
-                      }
+                    if (value) {
+                      loggedInCanteen.saveData('ignore_objednat_$username', '');
+                    } else {
+                      loggedInCanteen.saveData('ignore_objednat_$username', '1');
                     }
                   },
                 );
@@ -253,28 +271,6 @@ class AnalyticSettingsPage extends StatelessWidget {
               child: const Text('Zobrazit nastavení oznámení'),
             ),
           ),
-          // ListTile(
-          //   title: ElevatedButton(
-          //     onPressed: () async {
-          //       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-          //       for (LoggedInUser uzivatel in loginData.users) {
-          //         loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-          //         loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-          //       }
-          //       // Find the ScaffoldMessenger in the widget tree
-          //       // and use it to show a SnackBar.
-          //       if (context.mounted && !snackbarshown.shown) {
-          //         ScaffoldMessenger.of(context)
-          //             .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
-          //             .closed
-          //             .then((SnackBarClosedReason reason) {
-          //           snackbarshown.shown = false;
-          //         });
-          //       }
-          //     },
-          //     child: const Text('Zrušit všechna ztlumení'),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -367,43 +363,44 @@ class AnalyticSettingsPage extends StatelessWidget {
           ),
           const Divider(),
           ValueListenableBuilder(
-              valueListenable: themeNotifier,
-              builder: (context, value, child) {
-                return ListTile(
-                  title: SegmentedButton<String>(
-                    showSelectedIcon: false,
-                    selected: <String>{value},
-                    onSelectionChanged: (Set<String> newSelection) {
-                      themeNotifier.value = newSelection.first;
-                      if (newSelection.first == "2") {
-                        loggedInCanteen.saveData('ThemeMode', "2");
-                        NotifyTheme().setTheme(ThemeMode.dark);
-                      } else if (newSelection.first == "1") {
-                        loggedInCanteen.saveData("ThemeMode", "1");
-                        NotifyTheme().setTheme(ThemeMode.light);
-                      } else {
-                        loggedInCanteen.saveData("ThemeMode", "0");
-                        NotifyTheme().setTheme(ThemeMode.system);
-                      }
-                    },
-                    segments: const [
-                      ButtonSegment<String>(
-                        value: "0",
-                        label: Text("Systém"),
-                        enabled: true,
-                      ),
-                      ButtonSegment<String>(
-                        value: "1",
-                        label: Text("Světlý"),
-                      ),
-                      ButtonSegment<String>(
-                        value: "2",
-                        label: Text("Tmavý"),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+            valueListenable: themeNotifier,
+            builder: (context, value, child) {
+              return ListTile(
+                title: SegmentedButton<String>(
+                  showSelectedIcon: false,
+                  selected: <String>{value},
+                  onSelectionChanged: (Set<String> newSelection) {
+                    themeNotifier.value = newSelection.first;
+                    if (newSelection.first == "2") {
+                      loggedInCanteen.saveData('ThemeMode', "2");
+                      NotifyTheme().setTheme(ThemeMode.dark);
+                    } else if (newSelection.first == "1") {
+                      loggedInCanteen.saveData("ThemeMode", "1");
+                      NotifyTheme().setTheme(ThemeMode.light);
+                    } else {
+                      loggedInCanteen.saveData("ThemeMode", "0");
+                      NotifyTheme().setTheme(ThemeMode.system);
+                    }
+                  },
+                  segments: const [
+                    ButtonSegment<String>(
+                      value: "0",
+                      label: Text("Systém"),
+                      enabled: true,
+                    ),
+                    ButtonSegment<String>(
+                      value: "1",
+                      label: Text("Světlý"),
+                    ),
+                    ButtonSegment<String>(
+                      value: "2",
+                      label: Text("Tmavý"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

@@ -1,4 +1,6 @@
+import 'package:autojidelna/main.dart';
 import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -47,32 +49,6 @@ class MainAppScreenState extends State<MainAppScreen> {
       loggedInCanteen.saveData('firstTime', '1');
     });
     super.initState();
-  }
-
-  ///reloads the page
-  Future<void> reload() async {
-    if (loadingIndicator) return;
-    setState(() {
-      loadingIndicator = true;
-    });
-    try {
-      await loggedInCanteen.refreshLunches(minimalDate.add(Duration(days: pageviewController.page!.round())));
-    } catch (e) {
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
-      if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
-            .closed
-            .then((SnackBarClosedReason reason) {
-          snackbarshown.shown = false;
-        });
-      }
-    }
-    setState(() {
-      loadingIndicator = false;
-    });
-    setScaffoldBody(jidelnicekWidget());
   }
 
   ///callback for SlidingUpPanel
@@ -124,13 +100,32 @@ class MainAppScreenState extends State<MainAppScreen> {
             centerTitle: true,
             title: const Text('Autojídelna'),
             actions: [
-              //calendar button
-              IconButton(
-                onPressed: () {
-                  changeDate(newDate: DateTime.now(), animateToPage: true);
-                },
-                icon: const Icon(Icons.calendar_today_rounded),
+              //go to today button
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1.5,
+                    color: Theme.of(context).appBarTheme.actionsIconTheme!.color!,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: SizedBox(
+                  width: 27,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          changeDate(newDate: DateTime.now(), animateToPage: true);
+                        },
+                      text: DateTime.now().day.toString(),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).appBarTheme.actionsIconTheme!.color),
+                    ),
+                  ),
+                ),
               ),
+
+              //refresh button
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -139,24 +134,12 @@ class MainAppScreenState extends State<MainAppScreen> {
                   opticalSize: 30,
                 ),
                 onPressed: () {
-                  reload();
+                  widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
                 },
               ),
             ],
           ),
-          body: Stack(
-            children: [
-              scaffoldBody,
-              if (loadingIndicator)
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.black.withOpacity(0.5),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-            ],
-          ),
+          body: scaffoldBody,
           drawer: Builder(
             builder: (context) {
               return WillPopScope(
@@ -204,9 +187,9 @@ class MainAppScreenState extends State<MainAppScreen> {
                       icon: const Icon(Icons.arrow_left),
                     ),
                     TextButton(
-                      style: const ButtonStyle(
-                        overlayColor: MaterialStatePropertyAll(Colors.transparent),
-                      ),
+                      style: Theme.of(context).textButtonTheme.style?.copyWith(
+                            foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                          ),
                       onPressed: () async {
                         var datePicked = await showDatePicker(
                           context: context,
@@ -278,7 +261,7 @@ class MainAppScreenState extends State<MainAppScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: FutureBuilder(
-        future: loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: index))),
+        future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(index)),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             portableSoftRefresh(context);
@@ -318,14 +301,7 @@ class ListJidel extends StatelessWidget {
     required this.setScaffoldBody,
   });
   void refreshButtons(BuildContext context) async {
-    DateTime currentDate = minimalDate.add(Duration(days: indexDne));
-    try {
-      jidelnicekListener.value = await loggedInCanteen.getLunchesForDay(currentDate, requireNew: true);
-      await Future.delayed(const Duration(milliseconds: 30));
-      ordering = false;
-    } catch (e) {
-      //Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nelze Připojit k internetu', setHomeWidget));
-    }
+    await portableSoftRefresh(context);
   }
 
   Future<void> portableSoftRefresh(BuildContext context) async {
@@ -423,7 +399,7 @@ class ListJidel extends StatelessWidget {
                               indexDne: indexDne,
                               refreshButtons: refreshButtons,
                               jidelnicekListener: jidelnicekListener,
-                              datumJidla: minimalDate.add(Duration(days: indexDne)),
+                              datumJidla: convertIndexToDatetime(indexDne),
                               indexJidlaVeDni: index,
                             ),
                           ),
@@ -765,6 +741,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       }
                       break;
                   }
+                  ordering = false;
                   if (context.mounted) {
                     widget.refreshButtons(context);
                   }
