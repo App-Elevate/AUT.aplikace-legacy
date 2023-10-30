@@ -6,6 +6,7 @@ import './../every_import.dart';
 
 class AnalyticSettingsPage extends StatelessWidget {
   AnalyticSettingsPage({super.key});
+  late final String username;
 
   final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
@@ -16,7 +17,8 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
-    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+    String loginUsername = (await loggedInCanteen.canteenData).username;
+    username = loginUsername;
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
@@ -61,22 +63,21 @@ class AnalyticSettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Nastavení")),
       body: FutureBuilder(
-          future: setSettings(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _graphics(),
-                      _dataUsage(context),
-                      _convenience(context),
-                      _notifications(context),
-                      if (kDebugMode) _debug(),
-                    ],
-                  ),
+        future: setSettings(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _graphics(),
+                    _dataUsage(context),
+                    _convenience(context),
+                    _notifications(context),
+                    if (kDebugMode) _debug(),
+                  ],
                 ),
               ),
             );
@@ -138,7 +139,17 @@ class AnalyticSettingsPage extends StatelessWidget {
           ListTile(
             title: ElevatedButton(
               onPressed: () async {
-                doNotifications(fireAnyways: true);
+                doNotifications(force: true);
+              },
+              child: const Text('Násilím zobrazit všechna oznámení'),
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                await loggedInCanteen.saveData('lastJidloDneCheck-$username', '2000-00-00');
+                await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
+                doNotifications();
               },
               child: const Text('Zobrazit všechna oznámení'),
             ),
@@ -154,9 +165,9 @@ class AnalyticSettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Oznámení'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text('Oznámení pro $username'),
           ),
           const Divider(),
           ExpansionTile(
@@ -209,17 +220,7 @@ class AnalyticSettingsPage extends StatelessWidget {
               builder: (context, value, child) {
                 return Switch.adaptive(
                   value: value,
-                  onChanged: (value) async {
-                    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-                    lowCreditNotificationNotifier.value = value;
-                    for (LoggedInUser uzivatel in loginData.users) {
-                      if (value) {
-                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-                      } else {
-                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '1');
-                      }
-                    }
-                  },
+                  onChanged: (value) async {},
                 );
               },
             ),
@@ -231,18 +232,15 @@ class AnalyticSettingsPage extends StatelessWidget {
               builder: (context, value, child) {
                 return Switch.adaptive(
                   value: value,
-                  onChanged: (value) async {
-                    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-                    nextWeekOrderNotificationNotifier.value = value;
-                    for (LoggedInUser uzivatel in loginData.users) {
-                      if (value) {
-                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-                      } else {
-                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '1');
-                      }
-                    }
-                  },
+                  onChanged: (value) async {},
                 );
+              },
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () {
+                AwesomeNotifications().showNotificationConfigPage();
               },
             ),
           ),
@@ -254,28 +252,28 @@ class AnalyticSettingsPage extends StatelessWidget {
               child: const Text('Zobrazit nastavení oznámení'),
             ),
           ),
-          // ListTile(
-          //   title: ElevatedButton(
-          //     onPressed: () async {
-          //       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-          //       for (LoggedInUser uzivatel in loginData.users) {
-          //         loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-          //         loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-          //       }
-          //       // Find the ScaffoldMessenger in the widget tree
-          //       // and use it to show a SnackBar.
-          //       if (context.mounted && !snackbarshown.shown) {
-          //         ScaffoldMessenger.of(context)
-          //             .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
-          //             .closed
-          //             .then((SnackBarClosedReason reason) {
-          //           snackbarshown.shown = false;
-          //         });
-          //       }
-          //     },
-          //     child: const Text('Zrušit všechna ztlumení'),
-          //   ),
-          // ),
+           ListTile(
+             title: ElevatedButton(
+               onPressed: () async {
+                 LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+                 for (LoggedInUser uzivatel in loginData.users) {
+                   loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
+                   loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
+                 }
+                 // Find the ScaffoldMessenger in the widget tree
+                 // and use it to show a SnackBar.
+                 if (context.mounted && !snackbarshown.shown) {
+                   ScaffoldMessenger.of(context)
+                       .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
+                       .closed
+                       .then((SnackBarClosedReason reason) {
+                     snackbarshown.shown = false;
+                   });
+                 }
+               },
+               child: const Text('Zrušit všechna ztlumení'),
+             ),
+           ),
         ],
       ),
     );

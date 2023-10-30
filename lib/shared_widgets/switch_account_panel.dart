@@ -30,6 +30,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      borderRadius: radius,
       elevation: 4,
       child: Container(
         decoration: BoxDecoration(
