@@ -139,7 +139,17 @@ class AnalyticSettingsPage extends StatelessWidget {
           ListTile(
             title: ElevatedButton(
               onPressed: () async {
-                doNotifications(fireAnyways: true);
+                doNotifications(force: true);
+              },
+              child: const Text('Násilím zobrazit všechna oznámení'),
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                await loggedInCanteen.saveData('lastJidloDneCheck-$username', '2000-00-00');
+                await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
+                doNotifications();
               },
               child: const Text('Zobrazit všechna oznámení'),
             ),
