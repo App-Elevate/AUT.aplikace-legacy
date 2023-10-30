@@ -31,6 +31,17 @@ class MainAppScreenState extends State<MainAppScreen> {
   @override
   void initState() {
     super.initState();
+    initPlatformState().then((value) async {
+      await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+        if (!isAllowed) {
+          // This is just a basic example. For real apps, you must show some
+          // friendly dialog box before call the request method.
+          // This is very important to not harm the user experience
+          AwesomeNotifications().requestPermissionToSendNotifications();
+        }
+        BackgroundFetch.start();
+      });
+    });
   }
 
   ///reloads the page
