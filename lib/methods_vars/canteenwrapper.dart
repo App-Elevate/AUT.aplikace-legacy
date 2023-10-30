@@ -376,8 +376,9 @@ class LoggedInCanteen {
       }
     }
     if (!isDuplicate) {
-      AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
-      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[loginData.currentlyLoggedInId!].username}');
+      AwesomeNotifications().removeChannel('jidlo_channel_${loginData.users[id].username}');
+      AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[id].username}');
+      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');
     }
     //removing just the one item from the array
 
