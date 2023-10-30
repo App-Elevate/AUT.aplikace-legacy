@@ -222,7 +222,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                       if (value) {
                         loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
                       } else {
-                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '1');
+                        loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '3000-10-14');
                       }
                     }
                   },
@@ -244,7 +244,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                       if (value) {
                         loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
                       } else {
-                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '1');
+                        loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '3000-10-14');
                       }
                     }
                   },

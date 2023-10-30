@@ -228,12 +228,12 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
             body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
           ),
           actionButtons: [
-            NotificationActionButton(
-              key: 'ignore_kredit_${loginData.users[i].username}',
-              label: 'Ztlumit na týden',
-              actionType: ActionType.Default,
-              enabled: true,
-            ),
+            // NotificationActionButton(
+            //   key: 'ignore_kredit_${loginData.users[i].username}',
+            //   label: 'Ztlumit na týden',
+            //   actionType: ActionType.Default,
+            //   enabled: true,
+            // ),
           ],
         );
       }
@@ -260,25 +260,26 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
               actionType: ActionType.Default,
               enabled: true,
             ),
-            NotificationActionButton(
-              key: 'ignore_objednat_${loginData.users[i].username}',
-              label: 'Ztlumit na týden',
-              actionType: ActionType.Default,
-              enabled: true,
-            ),
+            // NotificationActionButton(
+            //   key: 'ignore_objednat_${loginData.users[i].username}',
+            //   label: 'Ztlumit na týden',
+            //   actionType: ActionType.Default,
+            //   enabled: true,
+            // ),
           ],
         );
       }
     } catch (e) {
       if (kDebugMode) {
         AwesomeNotifications().createNotification(
-            content: NotificationContent(
-          id: 10,
-          channelKey: 'else_channel',
-          actionType: ActionType.Default,
-          title: 'Nastala Chyba',
-          body: e.toString(),
-        ));
+          content: NotificationContent(
+            id: 10,
+            channelKey: 'else_channel',
+            actionType: ActionType.Default,
+            title: 'Nastala Chyba',
+            body: e.toString(),
+          ),
+        );
       }
     }
   }

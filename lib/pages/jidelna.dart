@@ -124,7 +124,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                 onPressed: () {
                   changeDate(newDate: DateTime.now(), animateToPage: true);
                 },
-                icon: const Icon(Icons.calendar_today_rounded),
+                icon: const Icon(Icons.home_filled),
               ),
               IconButton(
                 splashColor: Colors.transparent,
@@ -199,9 +199,10 @@ class MainAppScreenState extends State<MainAppScreen> {
                       icon: const Icon(Icons.arrow_left),
                     ),
                     TextButton(
-                      style: const ButtonStyle(
-                        overlayColor: MaterialStatePropertyAll(Colors.transparent),
-                      ),
+                      style: Theme.of(context).textButtonTheme.style?.copyWith(
+                            foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+                          ),
                       onPressed: () async {
                         var datePicked = await showDatePicker(
                           context: context,
