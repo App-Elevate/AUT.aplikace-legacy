@@ -61,22 +61,21 @@ class AnalyticSettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Nastavení")),
       body: FutureBuilder(
-          future: setSettings(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _graphics(),
-                      _dataUsage(context),
-                      _convenience(context),
-                      _notifications(context),
-                      if (kDebugMode) _debug(),
-                    ],
-                  ),
+        future: setSettings(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _graphics(),
+                    _dataUsage(context),
+                    _convenience(context),
+                    _notifications(context),
+                    if (kDebugMode) _debug(),
+                  ],
                 ),
               ),
             );
