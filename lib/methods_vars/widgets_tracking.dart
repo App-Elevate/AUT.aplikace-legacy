@@ -28,6 +28,7 @@ void setCurrentDate() async {
   for (int i = 0; i < 20; i++) {
     try {
       changeDate(newDate: DateTime.now(), animateToPage: true);
+      return;
     } catch (e) {
       Future.delayed(const Duration(milliseconds: 50));
     }
