@@ -13,9 +13,9 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<bool> lowCreditNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
+  final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
-    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
@@ -47,19 +47,11 @@ class AnalyticSettingsPage extends StatelessWidget {
     } else {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
-    for (LoggedInUser uzivatel in loginData.users) {
-      String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_${uzivatel.username}');
-      if (lowCreditNotificationString == '') {
-        lowCreditNotificationNotifier.value = true;
-      } else {
-        lowCreditNotificationNotifier.value = false;
-      }
-      String? nextWeekOrderNotificationString = await loggedInCanteen.readData('ignore_objednat_${uzivatel.username}');
-      if (nextWeekOrderNotificationString == '') {
-        nextWeekOrderNotificationNotifier.value = true;
-      } else {
-        nextWeekOrderNotificationNotifier.value = false;
-      }
+    String? themeString = await loggedInCanteen.readData('ThemeMode');
+    if (themeString == null || themeString == '') {
+      themeNotifier.value = "0";
+    } else {
+      themeNotifier.value = themeString;
     }
   }
 
@@ -68,29 +60,28 @@ class AnalyticSettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Nastavení")),
       body: FutureBuilder(
-        future: setSettings(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _Graphics(),
-                    _dataUsage(context),
-                    _convenience(context),
-                    _notifications(context),
-                    if (kDebugMode) _debug(),
-                  ],
+          future: setSettings(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _graphics(),
+                      _dataUsage(context),
+                      _convenience(context),
+                      _notifications(context),
+                      if (kDebugMode) _debug(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return const SizedBox();
-          }
-        },
-      ),
+              );
+            } else {
+              return const SizedBox();
+            }
+          }),
     );
   }
 
@@ -205,7 +196,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                     },
                   ),
                 ],
-              )
+              ),
             ],
           ),
           ListTile(
@@ -361,18 +352,8 @@ class AnalyticSettingsPage extends StatelessWidget {
       ),
     );
   }
-}
 
-class _Graphics extends StatefulWidget {
-  @override
-  State<_Graphics> createState() => _GraphicsState();
-}
-
-class _GraphicsState extends State<_Graphics> {
-  String selectedMode = "0";
-
-  @override
-  Widget build(BuildContext context) {
+  Padding _graphics() {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -383,41 +364,44 @@ class _GraphicsState extends State<_Graphics> {
             child: Text('Vzhled'),
           ),
           const Divider(),
-          ListTile(
-            title: SegmentedButton<String>(
-              showSelectedIcon: false,
-              selected: <String>{selectedMode},
-              onSelectionChanged: (Set<String> newSelection) {
-                setState(() {
-                  selectedMode = newSelection.first;
-                });
-                if (selectedMode == "2") {
-                  loggedInCanteen.saveData('ThemeMode', "2");
-                  NotifyTheme().setTheme(ThemeMode.dark);
-                } else if (selectedMode == "1") {
-                  loggedInCanteen.saveData("ThemeMode", "1");
-                  NotifyTheme().setTheme(ThemeMode.light);
-                } else {
-                  loggedInCanteen.saveData("ThemeMode", "0");
-                  NotifyTheme().setTheme(ThemeMode.system);
-                }
-              },
-              segments: const [
-                ButtonSegment<String>(
-                  value: "0",
-                  label: Text("Systém"),
-                  enabled: true,
+          ValueListenableBuilder(
+            valueListenable: themeNotifier,
+            builder: (context, value, child) {
+              return ListTile(
+                title: SegmentedButton<String>(
+                  showSelectedIcon: false,
+                  selected: <String>{value},
+                  onSelectionChanged: (Set<String> newSelection) {
+                    themeNotifier.value = newSelection.first;
+                    if (newSelection.first == "2") {
+                      loggedInCanteen.saveData('ThemeMode', "2");
+                      NotifyTheme().setTheme(ThemeMode.dark);
+                    } else if (newSelection.first == "1") {
+                      loggedInCanteen.saveData("ThemeMode", "1");
+                      NotifyTheme().setTheme(ThemeMode.light);
+                    } else {
+                      loggedInCanteen.saveData("ThemeMode", "0");
+                      NotifyTheme().setTheme(ThemeMode.system);
+                    }
+                  },
+                  segments: const [
+                    ButtonSegment<String>(
+                      value: "0",
+                      label: Text("Systém"),
+                      enabled: true,
+                    ),
+                    ButtonSegment<String>(
+                      value: "1",
+                      label: Text("Světlý"),
+                    ),
+                    ButtonSegment<String>(
+                      value: "2",
+                      label: Text("Tmavý"),
+                    ),
+                  ],
                 ),
-                ButtonSegment<String>(
-                  value: "1",
-                  label: Text("Světlý"),
-                ),
-                ButtonSegment<String>(
-                  value: "2",
-                  label: Text("Tmavý"),
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ],
       ),
