@@ -307,9 +307,9 @@ class ListJidel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     jidelnicekListener.value = jidelnicek;
-    Future.delayed(const Duration(milliseconds: 50)).then((value) {
+    Future.delayed(const Duration(milliseconds: 50)).then((value) async {
       if (indexJidlaCoMaBytZobrazeno != null && indexJidlaCoMaBytZobrazeno == indexDne) {
-        MyApp.navigatorKey.currentState!.push(
+        await MyApp.navigatorKey.currentState!.push(
           MaterialPageRoute(
             builder: (context) => JidloDetail(
               indexDne: indexDne,
@@ -320,6 +320,8 @@ class ListJidel extends StatelessWidget {
             ),
           ),
         );
+        indexJidlaCoMaBytZobrazeno = null;
+        indexJidlaKtereMaBytZobrazeno = null;
       }
     });
     //second layer fix pro api returning garbage when switching orders

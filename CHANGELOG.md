@@ -4,6 +4,7 @@
 - možnost přeskakovat víkendy při procházení jídelníčku
 - přidána notifikace zasílat oznámení o dnešním jídle
 - možnost ztlumit notifikaci na týden
+- opravy menších chyb
 
 ## 1.2.5
 
