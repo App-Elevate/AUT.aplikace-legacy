@@ -62,9 +62,9 @@ class SettingsPage extends StatelessWidget {
     } else if (nextWeekOrderNotificationNotifierString != null) {
       DateTime? ignoreDate = DateTime.tryParse(nextWeekOrderNotificationNotifierString);
       if (ignoreDate == null || ignoreDate.isBefore(DateTime.now())) {
-        nextWeekOrderNotificationNotifier.value = false;
-      } else {
         nextWeekOrderNotificationNotifier.value = true;
+      } else {
+        nextWeekOrderNotificationNotifier.value = false;
       }
     } else {
       nextWeekOrderNotificationNotifier.value = false;
@@ -75,9 +75,9 @@ class SettingsPage extends StatelessWidget {
     } else if (lowCreditNotificationString != null) {
       DateTime? ignoreDate = DateTime.tryParse(lowCreditNotificationString);
       if (ignoreDate == null || ignoreDate.isBefore(DateTime.now())) {
-        lowCreditNotificationNotifier.value = false;
-      } else {
         lowCreditNotificationNotifier.value = true;
+      } else {
+        lowCreditNotificationNotifier.value = false;
       }
     } else {
       lowCreditNotificationNotifier.value = false;
