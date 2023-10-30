@@ -25,9 +25,16 @@ int? lastChangeDateIndex;
 bool animating = false;
 
 void setCurrentDate() async {
+  DateTime newDate = DateTime.now();
+  if (skipWeekends) {
+    while (newDate.weekday == 6 || newDate.weekday == 7) {
+      newDate = newDate.add(const Duration(days: 1));
+    }
+  }
+
   for (int i = 0; i < 20; i++) {
     try {
-      changeDate(newDate: DateTime.now(), animateToPage: true);
+      changeDate(newDate: newDate, animateToPage: true);
       return;
     } catch (e) {
       Future.delayed(const Duration(milliseconds: 50));
