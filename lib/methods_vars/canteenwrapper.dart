@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import '../every_import.dart';
 
 ///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
@@ -214,6 +215,8 @@ class LoggedInCanteen {
       }
       if (e == 'Nejdříve se musíte přihlásit') {
         return _ziskatJidelnicekDen(den, tries: tries + 1);
+      } else if (analyticsEnabledGlobally && analytics != null) {
+        FirebaseCrashlytics.instance.log(e.toString());
       }
       await loginFromStorage();
       return _ziskatJidelnicekDen(den, tries: tries + 1);

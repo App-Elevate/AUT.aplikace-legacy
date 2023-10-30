@@ -232,7 +232,6 @@ class JidloDetail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
               child: ObjednatJidloTlacitko(
-                refreshButtons: refreshButtons,
                 indexJidlaVeDni: indexJidlaVeDni,
                 indexDne: indexDne,
                 jidelnicekListener: jidelnicekListener,
