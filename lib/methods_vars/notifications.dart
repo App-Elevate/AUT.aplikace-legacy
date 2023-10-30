@@ -164,32 +164,23 @@ Future<void> doNotifications({bool force = false}) async {
 
     if ((await loggedInCanteen.readData('lastJidloDneCheck-${loginData.users[i].username}') == nowString ||
             await loggedInCanteen.readData('sendFoodInfo-${loginData.users[i].username}') != '1' ||
-            difference > 30) &&
+            difference > 30 ||
+            difference < -30) &&
         !force) {
       jidloDne = false;
-    } else {
-      loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
     }
 
-    if ((await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString ||
-            await loggedInCanteen.readData('kredit_notifications_${loginData.users[i].username}') != '1') &&
-        !force) {
+    if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !force) {
       kredit = false;
-    } else {
-      loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
     }
 
-    if ((await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString ||
-            await loggedInCanteen.readData('objednavka_notifications_${loginData.users[i].username}') != '1') &&
-        !force) {
+    if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !force) {
       objednavka = false;
-    } else {
-      loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
     }
-
     if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
+    loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
 
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
@@ -230,8 +221,22 @@ Future<void> doNotifications({bool force = false}) async {
       }
       //parse ignore date to DateTime
       String? ignoreDateStr = await loggedInCanteen.readData('ignore_kredit_${loginData.users[i].username}');
-      DateTime ignoreDate =
-          ignoreDateStr == null || ignoreDateStr == '' ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.parse(ignoreDateStr);
+      DateTime ignoreDate;
+      switch (ignoreDateStr) {
+        //not ignored
+        case '':
+        case null:
+          ignoreDate = DateTime.now().subtract(const Duration(days: 2));
+          break;
+        //ignored forewer
+        case '1':
+          ignoreDate = DateTime.now().add(const Duration(days: 1));
+          break;
+        //ignored for a week
+        default:
+          ignoreDate = DateTime.parse(ignoreDateStr);
+          break;
+      }
       if (force || (cena != 0 && uzivatel.kredit < cena && kredit && ignoreDate.isBefore(DateTime.now()))) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
@@ -253,10 +258,24 @@ Future<void> doNotifications({bool force = false}) async {
         );
       }
       //pokud chybí aspoň 3 obědy z příštích 10 dní
-      DateTime ignoreDateObjednano = await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}') == null ||
-              await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}') == ''
-          ? DateTime.now().subtract(const Duration(days: 1))
-          : DateTime.parse((await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}'))!);
+      //parse ignore date to DateTime
+      String? ignoreDateStrObjednano = await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}');
+      DateTime ignoreDateObjednano;
+      switch (ignoreDateStrObjednano) {
+        //not ignored
+        case '':
+        case null:
+          ignoreDateObjednano = DateTime.now().subtract(const Duration(days: 2));
+          break;
+        //ignored forewer
+        case '1':
+          ignoreDateObjednano = DateTime.now().add(const Duration(days: 1));
+          break;
+        //ignored for a week
+        default:
+          ignoreDateObjednano = DateTime.parse(ignoreDateStrObjednano);
+          break;
+      }
       if (force || (objednano <= 7 && objednavka && ignoreDateObjednano.isBefore(DateTime.now()))) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(

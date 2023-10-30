@@ -178,7 +178,7 @@ class LoginScreen extends StatelessWidget {
                         ..onTap = () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => AnalyticSettingsPage(),
+                              builder: (context) => SettingsPage(onlyAnalytics: true),
                             ),
                           );
                         },

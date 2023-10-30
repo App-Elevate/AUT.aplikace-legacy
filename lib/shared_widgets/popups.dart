@@ -129,7 +129,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
 void failedLunchDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
   showDialog(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Selhalo načítání jídelníčku'),

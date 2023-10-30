@@ -4,8 +4,9 @@ import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
 
-class AnalyticSettingsPage extends StatelessWidget {
-  AnalyticSettingsPage({super.key});
+class SettingsPage extends StatelessWidget {
+  SettingsPage({super.key, this.onlyAnalytics = false});
+  final bool onlyAnalytics;
   late final String username;
 
   final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
@@ -17,6 +18,7 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
+    username = (await loggedInCanteen.canteenData).username;
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
@@ -36,7 +38,7 @@ class AnalyticSettingsPage extends StatelessWidget {
       skipWeekendsNotifier.value = false;
       skipWeekends = false;
     }
-    String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo');
+    String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo-$username');
     if (jidloNotificationString == '1') {
       jidloNotificationNotifier.value = true;
     } else {
@@ -54,6 +56,18 @@ class AnalyticSettingsPage extends StatelessWidget {
     } else {
       themeNotifier.value = themeString;
     }
+    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('ignore_objednat_$username');
+    if (nextWeekOrderNotificationNotifierString == '') {
+      nextWeekOrderNotificationNotifier.value = true;
+    } else {
+      nextWeekOrderNotificationNotifier.value = false;
+    }
+    String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_$username');
+    if (lowCreditNotificationString == '') {
+      lowCreditNotificationNotifier.value = true;
+    } else {
+      lowCreditNotificationNotifier.value = false;
+    }
   }
 
   @override
@@ -70,11 +84,11 @@ class AnalyticSettingsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _graphics(),
+                    if (!onlyAnalytics) _graphics(),
                     _dataUsage(context),
-                    _convenience(context),
-                    _notifications(context),
-                    if (kDebugMode) _debug(),
+                    if (!onlyAnalytics) _convenience(context),
+                    if (!onlyAnalytics) _notifications(context),
+                    if (kDebugMode && !onlyAnalytics) _debug(),
                   ],
                 ),
               ),
@@ -178,9 +192,9 @@ class AnalyticSettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     jidloNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('sendFoodInfo', '1');
+                      loggedInCanteen.saveData('sendFoodInfo-$username', '1');
                     } else {
-                      loggedInCanteen.saveData('sendFoodInfo', '');
+                      loggedInCanteen.saveData('sendFoodInfo-$username', '');
                     }
                   },
                 );
@@ -218,19 +232,33 @@ class AnalyticSettingsPage extends StatelessWidget {
               builder: (context, value, child) {
                 return Switch.adaptive(
                   value: value,
-                  onChanged: (value) async {},
+                  onChanged: (value) async {
+                    lowCreditNotificationNotifier.value = value;
+                    if (value) {
+                      loggedInCanteen.saveData('ignore_kredit_$username', '');
+                    } else {
+                      loggedInCanteen.saveData('ignore_kredit_$username', '1');
+                    }
+                  },
                 );
               },
             ),
           ),
           ListTile(
-            title: const Text("Objednat jídla na příští týden"),
+            title: const Text("Nemáte objednáno na příští týden"),
             trailing: ValueListenableBuilder(
               valueListenable: nextWeekOrderNotificationNotifier,
               builder: (context, value, child) {
                 return Switch.adaptive(
                   value: value,
-                  onChanged: (value) async {},
+                  onChanged: (value) async {
+                    nextWeekOrderNotificationNotifier.value = value;
+                    if (value) {
+                      loggedInCanteen.saveData('ignore_objednat_$username', '');
+                    } else {
+                      loggedInCanteen.saveData('ignore_objednat_$username', '1');
+                    }
+                  },
                 );
               },
             ),
@@ -241,28 +269,6 @@ class AnalyticSettingsPage extends StatelessWidget {
                 AwesomeNotifications().showNotificationConfigPage();
               },
               child: const Text('Zobrazit nastavení oznámení'),
-            ),
-          ),
-          ListTile(
-            title: ElevatedButton(
-              onPressed: () async {
-                LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-                for (LoggedInUser uzivatel in loginData.users) {
-                  loggedInCanteen.saveData('ignore_objednat_${uzivatel.username}', '');
-                  loggedInCanteen.saveData('ignore_kredit_${uzivatel.username}', '');
-                }
-                // Find the ScaffoldMessenger in the widget tree
-                // and use it to show a SnackBar.
-                if (context.mounted && !snackbarshown.shown) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('Nyní se zase budou zobrazovat všechna oznámení 👍'))
-                      .closed
-                      .then((SnackBarClosedReason reason) {
-                    snackbarshown.shown = false;
-                  });
-                }
-              },
-              child: const Text('Zrušit všechna ztlumení'),
             ),
           ),
         ],
