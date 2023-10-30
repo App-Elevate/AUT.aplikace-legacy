@@ -88,6 +88,11 @@ class Themes {
         ),
         actionsPadding: const EdgeInsets.fromLTRB(0, 0, 20, 7),
       ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: colorScheme.background,
+        dialHandColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
+        elevation: 0,
+      ),
 
       //inputs
       inputDecorationTheme: const InputDecorationTheme(
