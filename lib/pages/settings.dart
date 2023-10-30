@@ -62,9 +62,9 @@ class SettingsPage extends StatelessWidget {
     } else if (nextWeekOrderNotificationNotifierString != null) {
       DateTime? ignoreDate = DateTime.tryParse(nextWeekOrderNotificationNotifierString);
       if (ignoreDate == null || ignoreDate.isBefore(DateTime.now())) {
-        nextWeekOrderNotificationNotifier.value = true;
-      } else {
         nextWeekOrderNotificationNotifier.value = false;
+      } else {
+        nextWeekOrderNotificationNotifier.value = true;
       }
     } else {
       nextWeekOrderNotificationNotifier.value = false;
@@ -75,9 +75,9 @@ class SettingsPage extends StatelessWidget {
     } else if (lowCreditNotificationString != null) {
       DateTime? ignoreDate = DateTime.tryParse(lowCreditNotificationString);
       if (ignoreDate == null || ignoreDate.isBefore(DateTime.now())) {
-        lowCreditNotificationNotifier.value = true;
-      } else {
         lowCreditNotificationNotifier.value = false;
+      } else {
+        lowCreditNotificationNotifier.value = true;
       }
     } else {
       lowCreditNotificationNotifier.value = false;
@@ -167,7 +167,7 @@ class SettingsPage extends StatelessWidget {
               onPressed: () async {
                 doNotifications(force: true);
               },
-              child: const Text('Násilím zobrazit všechna oznámení'),
+              child: const Text('Force send notifs'),
             ),
           ),
           ListTile(
@@ -177,7 +177,7 @@ class SettingsPage extends StatelessWidget {
                 await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
                 doNotifications();
               },
-              child: const Text('Zobrazit všechna oznámení'),
+              child: const Text('Send notifs'),
             ),
           ),
         ],
@@ -215,27 +215,34 @@ class SettingsPage extends StatelessWidget {
               },
             ),
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text("Čas oznámení: "),
-                  ValueListenableBuilder(
-                    valueListenable: jidloNotificationTime,
-                    builder: (context, value, child) {
-                      return ElevatedButton(
-                        onPressed: () async {
-                          TimeOfDay? timeOfDay = await showTimePicker(
-                              context: context, initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
-                          if (timeOfDay != null && context.mounted) {
-                            jidloNotificationTime.value = timeOfDay.format(context);
-                            loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
-                          }
-                        },
-                        child: Text(value),
-                      );
-                    },
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 18,
+                  right: 5,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("Čas oznámení: "),
+                    ValueListenableBuilder(
+                      valueListenable: jidloNotificationTime,
+                      builder: (context, value, child) {
+                        return ElevatedButton(
+                          onPressed: () async {
+                            TimeOfDay? timeOfDay = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
+                            if (timeOfDay != null && context.mounted) {
+                              jidloNotificationTime.value = timeOfDay.format(context);
+                              loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
+                            }
+                          },
+                          child: Text(value),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -278,16 +285,17 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-              title: RichText(
-            text: TextSpan(
-              text: 'Další možnosti v nastavení systému...',
-              style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  AwesomeNotifications().showNotificationConfigPage();
-                },
+            title: RichText(
+              text: TextSpan(
+                text: 'Další možnosti v nastavení systému...',
+                style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    AwesomeNotifications().showNotificationConfigPage();
+                  },
+              ),
             ),
-          ))
+          ),
         ],
       ),
     );
