@@ -140,13 +140,17 @@ Future<bool> initAwesome() async {
   );
 }
 
-Future<void> doNotifications({bool fireAnyways = false}) async {
+Future<void> doNotifications({bool force = false}) async {
   LoggedInCanteen loggedInCanteen = LoggedInCanteen();
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+  if ((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force) {
+    return;
+  }
   for (int i = 0; i < loginData.users.length; i++) {
     //ensuring we only send the notifications once a day
     bool jidloDne = true;
-    bool ostatni = true;
+    bool kredit = true;
+    bool objednavka = true;
     DateTime now = DateTime.now();
     String nowString = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
@@ -159,25 +163,37 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
     //difference from time of day to now
 
     if ((await loggedInCanteen.readData('lastJidloDneCheck-${loginData.users[i].username}') == nowString ||
-            await loggedInCanteen.readData('sendFoodInfo') != '1' ||
+            await loggedInCanteen.readData('sendFoodInfo-${loginData.users[i].username}') != '1' ||
             difference > 30) &&
-        !fireAnyways) {
+        !force) {
       jidloDne = false;
     } else {
       loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
     }
 
-    if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !fireAnyways) {
-      ostatni = false;
+    if ((await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString ||
+            await loggedInCanteen.readData('kredit_notifications_${loginData.users[i].username}') != '1') &&
+        !force) {
+      kredit = false;
     } else {
       loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
     }
-    if (!jidloDne && !ostatni) {
+
+    if ((await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString ||
+            await loggedInCanteen.readData('objednavka_notifications_${loginData.users[i].username}') != '1') &&
+        !force) {
+      objednavka = false;
+    } else {
+      loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
+    }
+
+    if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
+
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
-      if (jidloDne) {
+      if (jidloDne || force) {
         Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(now);
         if (jidelnicek.jidla.isNotEmpty) {
           AwesomeNotifications().createNotification(
@@ -192,7 +208,6 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
           );
         }
       }
-      if (!ostatni) continue;
       Uzivatel uzivatel = (await loggedInCanteen.canteenData).uzivatel;
       //7 is limit for how many lunches we are gonna search for
       int objednano = 0;
@@ -217,7 +232,7 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
       String? ignoreDateStr = await loggedInCanteen.readData('ignore_kredit_${loginData.users[i].username}');
       DateTime ignoreDate =
           ignoreDateStr == null || ignoreDateStr == '' ? DateTime.now().subtract(const Duration(days: 1)) : DateTime.parse(ignoreDateStr);
-      if ((fireAnyways || cena != 0 && uzivatel.kredit < cena) && ignoreDate.isBefore(DateTime.now())) {
+      if (force || (cena != 0 && uzivatel.kredit < cena && kredit && ignoreDate.isBefore(DateTime.now()))) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: 512 - i,
@@ -228,12 +243,12 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
             body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
           ),
           actionButtons: [
-            // NotificationActionButton(
-            //   key: 'ignore_kredit_${loginData.users[i].username}',
-            //   label: 'Ztlumit na týden',
-            //   actionType: ActionType.Default,
-            //   enabled: true,
-            // ),
+            NotificationActionButton(
+              key: 'ignore_kredit_${loginData.users[i].username}',
+              label: 'Ztlumit na týden',
+              actionType: ActionType.Default,
+              enabled: true,
+            ),
           ],
         );
       }
@@ -242,7 +257,7 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
               await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}') == ''
           ? DateTime.now().subtract(const Duration(days: 1))
           : DateTime.parse((await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}'))!);
-      if ((fireAnyways || objednano <= 7) && ignoreDateObjednano.isBefore(DateTime.now())) {
+      if (force || (objednano <= 7 && objednavka && ignoreDateObjednano.isBefore(DateTime.now()))) {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: i,
@@ -260,26 +275,25 @@ Future<void> doNotifications({bool fireAnyways = false}) async {
               actionType: ActionType.Default,
               enabled: true,
             ),
-            // NotificationActionButton(
-            //   key: 'ignore_objednat_${loginData.users[i].username}',
-            //   label: 'Ztlumit na týden',
-            //   actionType: ActionType.Default,
-            //   enabled: true,
-            // ),
+            NotificationActionButton(
+              key: 'ignore_objednat_${loginData.users[i].username}',
+              label: 'Ztlumit na týden',
+              actionType: ActionType.Default,
+              enabled: true,
+            ),
           ],
         );
       }
     } catch (e) {
       if (kDebugMode) {
         AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: 10,
-            channelKey: 'else_channel',
-            actionType: ActionType.Default,
-            title: 'Nastala Chyba',
-            body: e.toString(),
-          ),
-        );
+            content: NotificationContent(
+          id: 10,
+          channelKey: 'else_channel',
+          actionType: ActionType.Default,
+          title: 'Nastala Chyba',
+          body: e.toString(),
+        ));
       }
     }
   }

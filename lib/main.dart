@@ -80,14 +80,11 @@ void main() async {
       initialDate = initialDate.add(const Duration(days: 1));
     }
     int index = initialDate.difference(minimalDate).inDays;
-    while (initialDate.add(Duration(days: index)).weekday == 6 || initialDate.add(Duration(days: index)).weekday == 7) {
-      index++;
-    }
     pageviewController = PageController(initialPage: index);
-    dateListener = ValueNotifier<DateTime>(minimalDate.add(Duration(days: index)));
+    dateListener = ValueNotifier<DateTime>(convertIndexToDatetime(index));
   } else {
     pageviewController = PageController(initialPage: DateTime.now().difference(minimalDate).inDays);
-    dateListener = ValueNotifier<DateTime>(DateTime.now());
+    dateListener = ValueNotifier<DateTime>(convertIndexToDatetime(DateTime.now().difference(minimalDate).inDays));
   }
 
   runApp(const MyApp()); // Create an instance of MyApp and pass it to runApp.
@@ -206,11 +203,6 @@ class LoggingInWidget extends StatelessWidget {
           }
           return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
-          try {
-            setCurrentDate();
-          } catch (e) {
-            //do nothing
-          }
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data?.success == false) {
