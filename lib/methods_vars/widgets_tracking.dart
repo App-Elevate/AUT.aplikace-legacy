@@ -24,6 +24,11 @@ int lastChangeDateIndex = 0;
 
 bool animating = false;
 
+//index (jaký den)
+int? indexJidlaCoMaBytZobrazeno;
+//index (kolikáté jídlo ve dni)
+int? indexJidlaKtereMaBytZobrazeno;
+
 void setCurrentDate() async {
   DateTime newDate = DateTime.now();
   if (skipWeekends) {
@@ -45,13 +50,12 @@ void setCurrentDate() async {
 void changeDateTillSuccess(int index) async {
   DateTime newDate = convertIndexToDatetime(index);
 
-  for (int i = 0; i < 10000; i++) {
+  for (int i = 0; i < 20; i++) {
     try {
       changeDate(newDate: newDate);
-      print('success');
       return;
     } catch (e) {
-      Future.delayed(const Duration(milliseconds: 100));
+      Future.delayed(const Duration(milliseconds: 50));
     }
   }
 }

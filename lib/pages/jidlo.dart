@@ -8,10 +8,8 @@ class JidloDetail extends StatelessWidget {
     required this.indexDne,
     required this.refreshButtons,
     required this.jidelnicekListener,
-    required this.softRefresh,
   });
   final DateTime datumJidla;
-  final Future<void> Function() softRefresh;
   final int indexDne;
   final Function(BuildContext context) refreshButtons;
   final ValueNotifier<Jidelnicek> jidelnicekListener;
@@ -25,7 +23,25 @@ class JidloDetail extends StatelessWidget {
       future: loggedInCanteen.getLunchesForDay(datumJidla),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-          Jidlo jidlo = snapshot.data!.jidla[indexJidlaVeDni];
+          late Jidlo jidlo;
+          try {
+            jidlo = snapshot.data!.jidla[indexJidlaVeDni];
+          } catch (e) {
+            return FutureBuilder(
+                future: loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return JidloDetail(
+                        datumJidla: datumJidla,
+                        indexJidlaVeDni: indexJidlaVeDni,
+                        indexDne: indexDne,
+                        refreshButtons: refreshButtons,
+                        jidelnicekListener: jidelnicekListener);
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                });
+          }
           String alergeny = '';
           for (Alergen alergen in jidlo.alergeny) {
             alergeny += '${alergen.nazev}, ';
@@ -216,7 +232,6 @@ class JidloDetail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
               child: ObjednatJidloTlacitko(
-                softRefresh: softRefresh,
                 refreshButtons: refreshButtons,
                 indexJidlaVeDni: indexJidlaVeDni,
                 indexDne: indexDne,

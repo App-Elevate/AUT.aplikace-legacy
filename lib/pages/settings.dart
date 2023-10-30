@@ -278,13 +278,16 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: ElevatedButton(
-              onPressed: () {
-                AwesomeNotifications().showNotificationConfigPage();
-              },
-              child: const Text('Zobrazit nastavení oznámení'),
+              title: RichText(
+            text: TextSpan(
+              text: 'Další možnosti v nastavení systému...',
+              style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () async {
+                  AwesomeNotifications().showNotificationConfigPage();
+                },
             ),
-          ),
+          ))
         ],
       ),
     );

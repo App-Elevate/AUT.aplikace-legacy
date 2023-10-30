@@ -30,6 +30,24 @@ class MainAppScreenState extends State<MainAppScreen> {
     });
   }
 
+  Future<void> portableSoftRefresh(BuildContext context) async {
+    try {
+      await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
+    } catch (e) {
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      if (context.mounted && !snackbarshown.shown) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
+            .closed
+            .then((SnackBarClosedReason reason) {
+          snackbarshown.shown = false;
+        });
+      }
+    }
+    setScaffoldBody(MainAppScreenState().jidelnicekWidget());
+  }
+
   @override
   initState() {
     loggedInCanteen.readData('firstTime').then((value) {
@@ -238,24 +256,6 @@ class MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
-  Future<void> portableSoftRefresh(BuildContext context) async {
-    try {
-      await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
-    } catch (e) {
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
-      if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
-            .closed
-            .then((SnackBarClosedReason reason) {
-          snackbarshown.shown = false;
-        });
-      }
-    }
-    setScaffoldBody(MainAppScreenState().jidelnicekWidget());
-  }
-
   ///widget for the Jidelnicek for the day - mainly the getting lunches logic
   SizedBox jidelnicekDenWidget(int index) {
     return SizedBox(
@@ -276,6 +276,7 @@ class MainAppScreenState extends State<MainAppScreen> {
           }
           Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
           return ListJidel(
+            portableSoftRefresh: portableSoftRefresh,
             setHomeWidget: widget.setHomeWidget,
             setScaffoldBody: setScaffoldBody,
             indexDne: index,
@@ -292,39 +293,35 @@ class ListJidel extends StatelessWidget {
   final int indexDne;
   final Function(Widget widget) setHomeWidget;
   final Function(Widget widget) setScaffoldBody;
+  final Function(BuildContext context) portableSoftRefresh;
   final ValueNotifier<Jidelnicek> jidelnicekListener = ValueNotifier<Jidelnicek>(Jidelnicek(dateListener.value, []));
   ListJidel({
+    required this.portableSoftRefresh,
     required this.indexDne,
     required this.setHomeWidget,
     required this.jidelnicek,
     super.key,
     required this.setScaffoldBody,
   });
-  void refreshButtons(BuildContext context) async {
-    await portableSoftRefresh(context);
-  }
-
-  Future<void> portableSoftRefresh(BuildContext context) async {
-    try {
-      await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true);
-    } catch (e) {
-      // Find the ScaffoldMessenger in the widget tree
-      // and use it to show a SnackBar.
-      if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
-            .closed
-            .then((SnackBarClosedReason reason) {
-          snackbarshown.shown = false;
-        });
-      }
-    }
-    setScaffoldBody(MainAppScreenState().jidelnicekWidget());
-  }
 
   @override
   Widget build(BuildContext context) {
     jidelnicekListener.value = jidelnicek;
+    Future.delayed(const Duration(milliseconds: 50)).then((value) {
+      if (indexJidlaCoMaBytZobrazeno != null && indexJidlaCoMaBytZobrazeno == indexDne) {
+        MyApp.navigatorKey.currentState!.push(
+          MaterialPageRoute(
+            builder: (context) => JidloDetail(
+              indexDne: indexDne,
+              refreshButtons: portableSoftRefresh,
+              jidelnicekListener: jidelnicekListener,
+              datumJidla: convertIndexToDatetime(indexDne),
+              indexJidlaVeDni: indexJidlaKtereMaBytZobrazeno!,
+            ),
+          ),
+        );
+      }
+    });
     //second layer fix pro api returning garbage when switching orders
     try {
       if (jidelnicekListener.value.jidla.length < numberOfMaxLunches) {
@@ -395,9 +392,8 @@ class ListJidel extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => JidloDetail(
-                              softRefresh: softRefresh,
                               indexDne: indexDne,
-                              refreshButtons: refreshButtons,
+                              refreshButtons: portableSoftRefresh,
                               jidelnicekListener: jidelnicekListener,
                               datumJidla: convertIndexToDatetime(indexDne),
                               indexJidlaVeDni: index,
@@ -427,9 +423,8 @@ class ListJidel extends StatelessWidget {
                                 }),
                                 const SizedBox(height: 16),
                                 ObjednatJidloTlacitko(
-                                  softRefresh: softRefresh,
                                   indexDne: indexDne,
-                                  refreshButtons: refreshButtons,
+                                  refreshButtons: portableSoftRefresh,
                                   jidelnicekListener: jidelnicekListener,
                                   indexJidlaVeDni: index,
                                 ),
@@ -451,17 +446,16 @@ class ListJidel extends StatelessWidget {
 }
 
 class ObjednatJidloTlacitko extends StatefulWidget {
-  const ObjednatJidloTlacitko(
-      {super.key,
-      required this.indexJidlaVeDni,
-      required this.jidelnicekListener,
-      required this.refreshButtons,
-      required this.indexDne,
-      required this.softRefresh});
+  const ObjednatJidloTlacitko({
+    super.key,
+    required this.indexJidlaVeDni,
+    required this.jidelnicekListener,
+    required this.refreshButtons,
+    required this.indexDne,
+  });
   final ValueNotifier<Jidelnicek> jidelnicekListener;
   final int indexDne;
   final int indexJidlaVeDni;
-  final Future<void> Function() softRefresh;
   final Function(BuildContext context) refreshButtons;
 
   @override

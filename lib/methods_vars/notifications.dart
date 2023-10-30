@@ -187,16 +187,26 @@ Future<void> doNotifications({bool force = false}) async {
       if (jidloDne || force) {
         Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(now);
         if (jidelnicek.jidla.isNotEmpty) {
-          AwesomeNotifications().createNotification(
-            content: NotificationContent(
-              id: 1024 - i,
-              channelKey: 'jidlo_channel_${loginData.users[i].username}',
-              actionType: ActionType.Default,
-              title: 'Dnešní jídlo',
-              payload: {'user': loginData.users[i].username},
-              body: jidelnicek.jidla[0].nazev,
-            ),
-          );
+          for (int i = 0; i < jidelnicek.jidla.length; i++) {
+            if (!jidelnicek.jidla[i].objednano) {
+              continue;
+            }
+            AwesomeNotifications().createNotification(
+              content: NotificationContent(
+                id: 1024 - i,
+                channelKey: 'jidlo_channel_${loginData.users[i].username}',
+                actionType: ActionType.Default,
+                title: 'Dnešní jídlo',
+                payload: {
+                  'user': loginData.users[i].username,
+                  'index': i.toString(),
+                  'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(),
+                },
+                body: jidelnicek.jidla[0].nazev,
+              ),
+            );
+            break;
+          }
         }
       }
       Uzivatel uzivatel = (await loggedInCanteen.canteenData).uzivatel;
@@ -345,6 +355,10 @@ Future<void> handleNotificationAction(ReceivedAction? receivedAction) async {
       }
     }
   }
+  if (receivedAction?.payload?['index'] != null) {
+    indexJidlaKtereMaBytZobrazeno = int.parse(receivedAction!.payload!['index']!);
+    indexJidlaCoMaBytZobrazeno = int.parse(receivedAction.payload!['indexDne']!);
+  }
 }
 
 class NotificationController {
@@ -410,6 +424,10 @@ class NotificationController {
           break;
         }
       }
+    }
+    if (receivedAction.payload?['index'] != null) {
+      indexJidlaKtereMaBytZobrazeno = int.parse(receivedAction.payload!['index']!);
+      indexJidlaCoMaBytZobrazeno = int.parse(receivedAction.payload!['indexDne']!);
     }
   }
 }
