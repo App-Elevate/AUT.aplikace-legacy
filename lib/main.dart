@@ -182,7 +182,9 @@ class LoggingInWidget extends StatelessWidget {
   const LoggingInWidget({
     super.key,
     required this.setHomeWidget,
+    this.index = -1,
   });
+  final int index;
 
   final Function(Widget widget) setHomeWidget;
   @override
@@ -203,10 +205,18 @@ class LoggingInWidget extends StatelessWidget {
           }
           return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
-          try {
-            setCurrentDate();
-          } catch (e) {
-            //do nothing
+          if (index != -1) {
+            try {
+              Future.delayed(Duration.zero, () => changeDateTillSuccess(index));
+            } catch (e) {
+              //do nothing
+            }
+          } else {
+            try {
+              setCurrentDate();
+            } catch (e) {
+              //do nothing
+            }
           }
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);

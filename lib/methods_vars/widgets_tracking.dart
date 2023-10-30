@@ -42,6 +42,20 @@ void setCurrentDate() async {
   }
 }
 
+void changeDateTillSuccess(int index) async {
+  DateTime newDate = convertIndexToDatetime(index);
+
+  for (int i = 0; i < 10000; i++) {
+    try {
+      changeDate(newDate: newDate);
+      print('success');
+      return;
+    } catch (e) {
+      Future.delayed(const Duration(milliseconds: 100));
+    }
+  }
+}
+
 ///changes the date of the Jidelnicek
 ///newDate - just sets the new date
 ///newDate and animateToPage - animates to the new page
