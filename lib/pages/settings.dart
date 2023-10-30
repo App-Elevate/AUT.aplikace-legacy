@@ -59,28 +59,29 @@ class SettingsPage extends StatelessWidget {
     String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('ignore_objednat_$username');
     if (nextWeekOrderNotificationNotifierString == '') {
       nextWeekOrderNotificationNotifier.value = true;
+    } else if (nextWeekOrderNotificationNotifierString == '1') {
+      nextWeekOrderNotificationNotifier.value = false;
     } else if (nextWeekOrderNotificationNotifierString != null) {
       DateTime? ignoreDate = DateTime.tryParse(nextWeekOrderNotificationNotifierString);
-      if (ignoreDate == null || ignoreDate.isBefore(DateTime.now())) {
+      if (ignoreDate != null && ignoreDate.isBefore(DateTime.now())) {
         nextWeekOrderNotificationNotifier.value = true;
       } else {
         nextWeekOrderNotificationNotifier.value = false;
       }
-    } else {
-      nextWeekOrderNotificationNotifier.value = false;
     }
+
     String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_$username');
     if (lowCreditNotificationString == '') {
       lowCreditNotificationNotifier.value = true;
+    } else if (lowCreditNotificationString == '1') {
+      lowCreditNotificationNotifier.value = false;
     } else if (lowCreditNotificationString != null) {
       DateTime? ignoreDate = DateTime.tryParse(lowCreditNotificationString);
-      if (ignoreDate == null || ignoreDate.isBefore(DateTime.now())) {
+      if (ignoreDate != null && ignoreDate.isBefore(DateTime.now())) {
         lowCreditNotificationNotifier.value = true;
       } else {
         lowCreditNotificationNotifier.value = false;
       }
-    } else {
-      lowCreditNotificationNotifier.value = false;
     }
   }
 
