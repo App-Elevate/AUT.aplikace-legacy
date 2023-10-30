@@ -174,6 +174,7 @@ class Themes {
             ),
           ),
           splashFactory: NoSplash.splashFactory,
+          overlayColor: const MaterialStatePropertyAll(Colors.transparent),
         ),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(

@@ -1,4 +1,5 @@
 import 'package:background_fetch/background_fetch.dart';
+import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -124,13 +125,32 @@ class MainAppScreenState extends State<MainAppScreen> {
             centerTitle: true,
             title: const Text('Autojídelna'),
             actions: [
-              //calendar button
-              IconButton(
-                onPressed: () {
-                  setCurrentDate();
-                },
-                icon: const Icon(Icons.home_filled),
+              //go to today button
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1.5,
+                    color: Theme.of(context).appBarTheme.actionsIconTheme!.color!,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                ),
+                child: SizedBox(
+                  width: 27,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          changeDate(newDate: DateTime.now(), animateToPage: true);
+                        },
+                      text: DateTime.now().day.toString(),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).appBarTheme.actionsIconTheme!.color),
+                    ),
+                  ),
+                ),
               ),
+
+              //refresh button
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -147,14 +167,14 @@ class MainAppScreenState extends State<MainAppScreen> {
           body: Stack(
             children: [
               scaffoldBody,
-              if (loadingIndicator)
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.black.withOpacity(0.5),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+              //if (loadingIndicator)
+              //  Container(
+              //    alignment: Alignment.center,
+              //    color: Colors.black.withOpacity(0.5),
+              //    child: const Center(
+              //      child: CircularProgressIndicator(),
+              //    ),
+              //  ),
             ],
           ),
           drawer: Builder(
@@ -206,7 +226,6 @@ class MainAppScreenState extends State<MainAppScreen> {
                     TextButton(
                       style: Theme.of(context).textButtonTheme.style?.copyWith(
                             foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
-                            overlayColor: const MaterialStatePropertyAll(Colors.transparent),
                           ),
                       onPressed: () async {
                         var datePicked = await showDatePicker(

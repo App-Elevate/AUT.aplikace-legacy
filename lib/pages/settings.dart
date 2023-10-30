@@ -17,8 +17,6 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
-    String loginUsername = (await loggedInCanteen.canteenData).username;
-    username = loginUsername;
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
@@ -210,7 +208,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                     },
                   ),
                 ],
-              )
+              ),
             ],
           ),
           ListTile(
@@ -359,43 +357,44 @@ class AnalyticSettingsPage extends StatelessWidget {
           ),
           const Divider(),
           ValueListenableBuilder(
-              valueListenable: themeNotifier,
-              builder: (context, value, child) {
-                return ListTile(
-                  title: SegmentedButton<String>(
-                    showSelectedIcon: false,
-                    selected: <String>{value},
-                    onSelectionChanged: (Set<String> newSelection) {
-                      themeNotifier.value = newSelection.first;
-                      if (newSelection.first == "2") {
-                        loggedInCanteen.saveData('ThemeMode', "2");
-                        NotifyTheme().setTheme(ThemeMode.dark);
-                      } else if (newSelection.first == "1") {
-                        loggedInCanteen.saveData("ThemeMode", "1");
-                        NotifyTheme().setTheme(ThemeMode.light);
-                      } else {
-                        loggedInCanteen.saveData("ThemeMode", "0");
-                        NotifyTheme().setTheme(ThemeMode.system);
-                      }
-                    },
-                    segments: const [
-                      ButtonSegment<String>(
-                        value: "0",
-                        label: Text("Systém"),
-                        enabled: true,
-                      ),
-                      ButtonSegment<String>(
-                        value: "1",
-                        label: Text("Světlý"),
-                      ),
-                      ButtonSegment<String>(
-                        value: "2",
-                        label: Text("Tmavý"),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+            valueListenable: themeNotifier,
+            builder: (context, value, child) {
+              return ListTile(
+                title: SegmentedButton<String>(
+                  showSelectedIcon: false,
+                  selected: <String>{value},
+                  onSelectionChanged: (Set<String> newSelection) {
+                    themeNotifier.value = newSelection.first;
+                    if (newSelection.first == "2") {
+                      loggedInCanteen.saveData('ThemeMode', "2");
+                      NotifyTheme().setTheme(ThemeMode.dark);
+                    } else if (newSelection.first == "1") {
+                      loggedInCanteen.saveData("ThemeMode", "1");
+                      NotifyTheme().setTheme(ThemeMode.light);
+                    } else {
+                      loggedInCanteen.saveData("ThemeMode", "0");
+                      NotifyTheme().setTheme(ThemeMode.system);
+                    }
+                  },
+                  segments: const [
+                    ButtonSegment<String>(
+                      value: "0",
+                      label: Text("Systém"),
+                      enabled: true,
+                    ),
+                    ButtonSegment<String>(
+                      value: "1",
+                      label: Text("Světlý"),
+                    ),
+                    ButtonSegment<String>(
+                      value: "2",
+                      label: Text("Tmavý"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
