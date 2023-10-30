@@ -127,7 +127,7 @@ class MainAppScreenState extends State<MainAppScreen> {
               //calendar button
               IconButton(
                 onPressed: () {
-                  changeDate(newDate: DateTime.now(), animateToPage: true);
+                  setCurrentDate();
                 },
                 icon: const Icon(Icons.home_filled),
               ),
@@ -279,7 +279,7 @@ class MainAppScreenState extends State<MainAppScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: FutureBuilder(
-        future: loggedInCanteen.getLunchesForDay(minimalDate.add(Duration(days: index))),
+        future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(index)),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             portableSoftRefresh(context);
@@ -319,7 +319,7 @@ class ListJidel extends StatelessWidget {
     required this.setScaffoldBody,
   });
   void refreshButtons(BuildContext context) async {
-    DateTime currentDate = minimalDate.add(Duration(days: indexDne));
+    DateTime currentDate = convertIndexToDatetime(indexDne);
     try {
       jidelnicekListener.value = await loggedInCanteen.getLunchesForDay(currentDate, requireNew: true);
       await Future.delayed(const Duration(milliseconds: 30));
@@ -424,7 +424,7 @@ class ListJidel extends StatelessWidget {
                               indexDne: indexDne,
                               refreshButtons: refreshButtons,
                               jidelnicekListener: jidelnicekListener,
-                              datumJidla: minimalDate.add(Duration(days: indexDne)),
+                              datumJidla: convertIndexToDatetime(indexDne),
                               indexJidlaVeDni: index,
                             ),
                           ),

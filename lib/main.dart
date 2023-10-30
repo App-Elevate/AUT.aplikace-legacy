@@ -80,11 +80,8 @@ void main() async {
       initialDate = initialDate.add(const Duration(days: 1));
     }
     int index = initialDate.difference(minimalDate).inDays;
-    while (initialDate.add(Duration(days: index)).weekday == 6 || initialDate.add(Duration(days: index)).weekday == 7) {
-      index++;
-    }
     pageviewController = PageController(initialPage: index);
-    dateListener = ValueNotifier<DateTime>(minimalDate.add(Duration(days: index)));
+    dateListener = ValueNotifier<DateTime>(convertIndexToDatetime(index));
   } else {
     pageviewController = PageController(initialPage: DateTime.now().difference(minimalDate).inDays);
     dateListener = ValueNotifier<DateTime>(DateTime.now());

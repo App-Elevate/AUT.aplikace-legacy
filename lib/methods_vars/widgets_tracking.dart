@@ -25,36 +25,13 @@ int? lastChangeDateIndex;
 bool animating = false;
 
 void setCurrentDate() async {
-  DateTime initialDate = DateTime.now();
-  if (!skipWeekends) {
-    bool success = false;
-    while (!success) {
-      try {
-        changeDate(newDate: initialDate);
-        success = true;
-      } catch (e) {
-        await Future.delayed(const Duration(milliseconds: 100));
-      }
-    }
-    return;
-  }
-  while (initialDate.weekday == 6 || initialDate.weekday == 7) {
-    initialDate = initialDate.add(const Duration(days: 1));
-  }
-  int index = initialDate.difference(minimalDate).inDays;
-  while (initialDate.add(Duration(days: index)).weekday == 6 || initialDate.add(Duration(days: index)).weekday == 7) {
-    index++;
-  }
-  bool success = false;
-  while (!success) {
+  for (int i = 0; i < 20; i++) {
     try {
-      pageviewController.jumpToPage(index);
-      success = true;
+      changeDate(newDate: DateTime.now(), animateToPage: true);
     } catch (e) {
-      await Future.delayed(const Duration(milliseconds: 100));
+      Future.delayed(const Duration(milliseconds: 50));
     }
   }
-  changeDate(index: index);
 }
 
 ///changes the date of the Jidelnicek
@@ -70,14 +47,19 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
     lastChangeDateIndex = newDate.difference(minimalDate).inDays;
-    animating = true;
-    pageviewController
-        .animateToPage(
-          newDate.difference(minimalDate).inDays,
-          duration: const Duration(milliseconds: 150),
-          curve: Curves.linear,
-        )
-        .then((value) => animating = false);
+    try {
+      animating = true;
+      pageviewController
+          .animateToPage(
+            newDate.difference(minimalDate).inDays,
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.linear,
+          )
+          .then((value) => animating = false);
+    } catch (e) {
+      animating = false;
+      rethrow;
+    }
   } else if (daysChange != null) {
     newDate = dateListener.value.add(Duration(days: daysChange));
     if (newDate.weekday == 6 || newDate.weekday == 7 && skipWeekends) {
@@ -92,7 +74,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     );
   } else if (index != null) {
     lastChangeDateIndex ??= index;
-    newDate = minimalDate.add(Duration(days: index));
+    newDate = convertIndexToDatetime(index);
     bool hasToBeAnimated = false;
     if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
       hasToBeAnimated = true;
@@ -106,19 +88,21 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
           break;
       }
     }
-    newDate = minimalDate.add(Duration(days: index));
-    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
-      return changeDate(index: index, overflow: overflow + 1);
-    }
+    newDate = convertIndexToDatetime(index);
     if (hasToBeAnimated) {
-      animating = true;
-      pageviewController
-          .animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.linear,
-          )
-          .then((value) => animating = false);
+      try {
+        animating = true;
+        pageviewController
+            .animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.linear,
+            )
+            .then((value) => animating = false);
+      } catch (e) {
+        animating = false;
+        rethrow;
+      }
     }
     lastChangeDateIndex = index;
     loggedInCanteen.smartPreIndexing(newDate);
