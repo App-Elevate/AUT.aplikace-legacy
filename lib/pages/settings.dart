@@ -11,6 +11,7 @@ class AnalyticSettingsPage extends StatelessWidget {
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
   final ValueNotifier<bool> jidloNotificationNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
+  final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
@@ -44,6 +45,12 @@ class AnalyticSettingsPage extends StatelessWidget {
     } else {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
+    String? themeString = await loggedInCanteen.readData('ThemeMode');
+    if (themeString == null || themeString == '') {
+      themeNotifier.value = "0";
+    } else {
+      themeNotifier.value = themeString;
+    }
   }
 
   @override
@@ -60,7 +67,7 @@ class AnalyticSettingsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _Graphics(),
+                      _graphics(),
                       _dataUsage(context),
                       _convenience(context),
                       _notifications(context),
@@ -297,18 +304,8 @@ class AnalyticSettingsPage extends StatelessWidget {
       ),
     );
   }
-}
 
-class _Graphics extends StatefulWidget {
-  @override
-  State<_Graphics> createState() => _GraphicsState();
-}
-
-class _GraphicsState extends State<_Graphics> {
-  String selectedMode = "0";
-
-  @override
-  Widget build(BuildContext context) {
+  Padding _graphics() {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -319,42 +316,44 @@ class _GraphicsState extends State<_Graphics> {
             child: Text('Vzhled'),
           ),
           const Divider(),
-          ListTile(
-            title: SegmentedButton<String>(
-              showSelectedIcon: false,
-              selected: <String>{selectedMode},
-              onSelectionChanged: (Set<String> newSelection) {
-                setState(() {
-                  selectedMode = newSelection.first;
-                });
-                if (selectedMode == "2") {
-                  loggedInCanteen.saveData('ThemeMode', "2");
-                  NotifyTheme().setTheme(ThemeMode.dark);
-                } else if (selectedMode == "1") {
-                  loggedInCanteen.saveData("ThemeMode", "1");
-                  NotifyTheme().setTheme(ThemeMode.light);
-                } else {
-                  loggedInCanteen.saveData("ThemeMode", "0");
-                  NotifyTheme().setTheme(ThemeMode.system);
-                }
-              },
-              segments: const [
-                ButtonSegment<String>(
-                  value: "0",
-                  label: Text("Systém"),
-                  enabled: true,
-                ),
-                ButtonSegment<String>(
-                  value: "1",
-                  label: Text("Světlý"),
-                ),
-                ButtonSegment<String>(
-                  value: "2",
-                  label: Text("Tmavý"),
-                ),
-              ],
-            ),
-          ),
+          ValueListenableBuilder(
+              valueListenable: themeNotifier,
+              builder: (context, value, child) {
+                return ListTile(
+                  title: SegmentedButton<String>(
+                    showSelectedIcon: false,
+                    selected: <String>{value},
+                    onSelectionChanged: (Set<String> newSelection) {
+                      themeNotifier.value = newSelection.first;
+                      if (newSelection.first == "2") {
+                        loggedInCanteen.saveData('ThemeMode', "2");
+                        NotifyTheme().setTheme(ThemeMode.dark);
+                      } else if (newSelection.first == "1") {
+                        loggedInCanteen.saveData("ThemeMode", "1");
+                        NotifyTheme().setTheme(ThemeMode.light);
+                      } else {
+                        loggedInCanteen.saveData("ThemeMode", "0");
+                        NotifyTheme().setTheme(ThemeMode.system);
+                      }
+                    },
+                    segments: const [
+                      ButtonSegment<String>(
+                        value: "0",
+                        label: Text("Systém"),
+                        enabled: true,
+                      ),
+                      ButtonSegment<String>(
+                        value: "1",
+                        label: Text("Světlý"),
+                      ),
+                      ButtonSegment<String>(
+                        value: "2",
+                        label: Text("Tmavý"),
+                      ),
+                    ],
+                  ),
+                );
+              }),
         ],
       ),
     );
