@@ -1,3 +1,4 @@
++sync:.megaignore
 # Miscellaneous
 -:*.class
 -:*.log
