@@ -150,6 +150,7 @@ class _MyAppState extends State<MyApp> {
             return MaterialApp(
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
+              //debugShowMaterialGrid: true,
               theme: Themes.getTheme(ColorSchemes.light),
               darkTheme: Themes.getTheme(ColorSchemes.dark),
               themeMode: themeMode,

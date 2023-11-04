@@ -1,7 +1,6 @@
 import 'package:autojidelna/main.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/gestures.dart';
 
 import './../every_import.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -119,31 +118,6 @@ class MainAppScreenState extends State<MainAppScreen> {
             centerTitle: true,
             title: const Text('Autojídelna'),
             actions: [
-              //go to today button
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1.5,
-                    color: Theme.of(context).appBarTheme.actionsIconTheme!.color!,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                ),
-                child: SizedBox(
-                  width: 27,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          changeDate(newDate: DateTime.now(), animateToPage: true);
-                        },
-                      text: DateTime.now().day.toString(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).appBarTheme.actionsIconTheme!.color),
-                    ),
-                  ),
-                ),
-              ),
-
               //refresh button
               IconButton(
                 splashColor: Colors.transparent,
@@ -189,54 +163,114 @@ class MainAppScreenState extends State<MainAppScreen> {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
       child: Column(
         children: [
-          ValueListenableBuilder(
-            valueListenable: dateListener,
-            builder: (ctx, value, child) {
-              DateTime currentDate = value;
-              String dayOfWeek = loggedInCanteen.ziskatDenZData(currentDate.weekday);
-              return SizedBox(
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        changeDate(daysChange: -1);
-                      },
-                      icon: const Icon(Icons.arrow_left),
-                    ),
-                    TextButton(
-                      style: Theme.of(context).textButtonTheme.style?.copyWith(
-                            foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //open calendar button
+              MaterialButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                minWidth: 0,
+                textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                padding: EdgeInsets.zero,
+                onPressed: () async {
+                  DateTime currentDate = dateListener.value;
+                  var datePicked = await showDatePicker(
+                    context: context,
+                    helpText: 'Vyberte datum',
+                    initialDate: currentDate,
+                    currentDate: DateTime.now(),
+                    firstDate: minimalDate,
+                    lastDate: currentDate.add(const Duration(days: 365 * 2)),
+                  );
+                  if (datePicked == null) return;
+                  changeDate(newDate: datePicked);
+                },
+                child: const Icon(Icons.calendar_today),
+              ),
+
+              //Date
+              ValueListenableBuilder(
+                valueListenable: dateListener,
+                builder: (ctx, value, child) {
+                  DateTime currentDate = value;
+                  String dayOfWeek = loggedInCanteen.ziskatDenZData(currentDate.weekday);
+                  return SizedBox(
+                    height: 70,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MaterialButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          minWidth: 0,
+                          textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                          onPressed: () {
+                            changeDate(daysChange: -1);
+                          },
+                          child: const Icon(Icons.arrow_left),
+                        ),
+                        TextButton(
+                          style: Theme.of(context).textButtonTheme.style?.copyWith(
+                                foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                              ),
+                          onPressed: () async {
+                            var datePicked = await showDatePicker(
+                              context: context,
+                              helpText: 'Vyberte datum',
+                              initialDate: currentDate,
+                              currentDate: DateTime.now(),
+                              firstDate: minimalDate,
+                              lastDate: currentDate.add(const Duration(days: 365 * 2)),
+                            );
+                            if (datePicked == null) return;
+                            changeDate(newDate: datePicked);
+                          },
+                          child: SizedBox(
+                            //relative to the width of the viewport
+                            width: MediaQuery.of(context).size.width * 0.33,
+                            child: Center(child: Text("${currentDate.day}. ${currentDate.month}. - $dayOfWeek")),
                           ),
-                      onPressed: () async {
-                        var datePicked = await showDatePicker(
-                          context: context,
-                          helpText: 'Vyberte datum',
-                          initialDate: currentDate,
-                          currentDate: DateTime.now(),
-                          firstDate: minimalDate,
-                          lastDate: currentDate.add(const Duration(days: 365 * 2)),
-                        );
-                        if (datePicked == null) return;
-                        changeDate(newDate: datePicked);
-                      },
-                      child: SizedBox(
-                        //relative to the width of the viewport
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Center(child: Text("${currentDate.day}. ${currentDate.month}. ${currentDate.year} - $dayOfWeek")),
-                      ),
+                        ),
+                        MaterialButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          minWidth: 0,
+                          textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                          onPressed: () {
+                            changeDate(daysChange: 1);
+                          },
+                          child: const Icon(Icons.arrow_right),
+                        )
+                      ],
                     ),
-                    IconButton(
-                      onPressed: () {
-                        changeDate(daysChange: 1);
-                      },
-                      icon: const Icon(Icons.arrow_right),
-                    )
-                  ],
+                  );
+                },
+              ),
+
+              //go to today button
+              MaterialButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                minWidth: 0,
+                height: 27.5,
+                textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                padding: const EdgeInsets.symmetric(horizontal: 7.5),
+                shape: ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.5),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                    width: 1.5,
+                  ),
                 ),
-              );
-            },
+                child: Text(DateTime.now().day.toString()),
+                onPressed: () {
+                  changeDate(newDate: DateTime.now(), animateToPage: true);
+                },
+              ),
+            ],
           ),
           Expanded(
             child: PageView.builder(

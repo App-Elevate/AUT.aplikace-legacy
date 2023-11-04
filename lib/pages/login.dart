@@ -146,7 +146,7 @@ class LoginScreen extends StatelessWidget {
                                 onPressed: () {
                                   passwordNotifier.value = [passwordNotifier.value[0], !passwordNotifier.value[1]];
                                 },
-                                icon: Icon(value[1] ? Icons.visibility_off : Icons.visibility),
+                                icon: Icon(value[1] ? Icons.visibility : Icons.visibility_off),
                               ),
                             ),
                             validator: (value) {
