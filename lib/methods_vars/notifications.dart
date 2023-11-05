@@ -210,20 +210,20 @@ Future<void> doNotifications({bool force = false}) async {
       if (jidloDne || force) {
         Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(now);
         if (jidelnicek.jidla.isNotEmpty) {
-          for (int i = 0; i < jidelnicek.jidla.length; i++) {
-            if (!jidelnicek.jidla[i].objednano) {
+          for (int k = 0; k < jidelnicek.jidla.length; k++) {
+            if (!jidelnicek.jidla[k].objednano) {
               continue;
             }
             AwesomeNotifications().createNotification(
               content: NotificationContent(
                 id: 1024 - i,
-                channelKey: 'jidlo_channel_${loginData.users[i].username}',
+                channelKey: 'jidlo_channel_${loginData.users[k].username}',
                 actionType: ActionType.Default,
                 title: 'Dnešní jídlo',
                 payload: {
                   'user': loginData.users[i].username,
-                  'index': i.toString(),
-                  'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(),
+                  'index': k.toString(), //index jídla
+                  'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(), //index dne
                 },
                 body: jidelnicek.jidla[0].nazev,
               ),
