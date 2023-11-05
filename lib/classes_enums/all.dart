@@ -57,14 +57,6 @@ class LoggedAccountsInAccountPanel {
   LoggedAccountsInAccountPanel({required this.usernames, required this.loggedInID});
 }
 
-///toggle, jestli se jídla můžou objednávat
-///true - nesmí se objednávat, false - smí se objednávat
-///je to proto, aby se neobjednávaly dva najednou, nebo když se načítá stránka
-class Ordering {
-  bool ordering;
-  Ordering({this.ordering = false});
-}
-
 ///informace o nejnovější verzi aplikace (podpora jen pro android)
 class ReleaseInfo {
   ReleaseInfo({

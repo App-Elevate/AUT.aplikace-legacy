@@ -1,7 +1,6 @@
 import './../every_import.dart';
 
 bool reloading = false;
-bool ordering = false;
 
 // snackbar je ze začátku skrytý
 SnackBarShown snackbarshown = SnackBarShown(shown: false);

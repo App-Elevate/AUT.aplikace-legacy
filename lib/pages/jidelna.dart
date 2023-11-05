@@ -507,6 +507,7 @@ class ObjednatJidloTlacitko extends StatefulWidget {
 }
 
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
+  bool ordering = false;
   Future<void> refreshButtons({int? indexJidlaKdeProbehlaZmena}) async {
     try {
       Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(convertIndexToDatetime(widget.indexDne), requireNew: true);
@@ -529,8 +530,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           probehlaZmena = true;
         }
       }
-      widget.jidelnicekListener.value = jidelnicek;
       ordering = false;
+      widget.jidelnicekListener.value = jidelnicek;
+      setState(() {});
     } catch (e) {
       if (context.mounted && !snackbarshown.shown) {
         ScaffoldMessenger.of(context)
