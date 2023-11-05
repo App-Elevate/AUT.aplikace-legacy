@@ -143,6 +143,17 @@ Future<bool> initAwesome() async {
 Future<void> doNotifications({bool force = false}) async {
   LoggedInCanteen loggedInCanteen = LoggedInCanteen();
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+  if (kDebugMode) {
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: -1,
+      channelKey: 'else_channel',
+      actionType: ActionType.Default,
+      title: 'Spouštím notifikace',
+      body: DateTime.now().toString(),
+    ));
+  }
+  // Don't send notifications before 9 and after 22
   if ((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force) {
     return;
   }
@@ -168,6 +179,8 @@ Future<void> doNotifications({bool force = false}) async {
             difference < -30) &&
         !force) {
       jidloDne = false;
+    } else {
+      await loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
     }
 
     if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !force) {
@@ -177,10 +190,20 @@ Future<void> doNotifications({bool force = false}) async {
     if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !force) {
       objednavka = false;
     }
+    if (kDebugMode) {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+        id: -1,
+        channelKey: 'else_channel',
+        actionType: ActionType.Default,
+        title: 'Notifikace Info',
+        body: 'jidloDne: $jidloDne, kredit: $kredit, objednavka: $objednavka',
+      ));
+    }
     if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
-    loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
+    loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
 
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
@@ -207,6 +230,21 @@ Future<void> doNotifications({bool force = false}) async {
             );
             break;
           }
+        } else if (kDebugMode) {
+          AwesomeNotifications().createNotification(
+            content: NotificationContent(
+              id: 1024,
+              channelKey: 'jidlo_channel_${loginData.users[i].username}',
+              actionType: ActionType.Default,
+              title: 'Dnešní jídlo',
+              payload: {
+                'user': loginData.users[i].username,
+              },
+              body: 'Žádné jídlo není',
+            ),
+          );
+        } else {
+          AwesomeNotifications().cancel(1024);
         }
       }
       Uzivatel uzivatel = (await loggedInCanteen.canteenData).uzivatel;
