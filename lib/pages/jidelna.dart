@@ -194,7 +194,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                     lastDate: currentDate.add(const Duration(days: 365 * 2)),
                   );
                   if (datePicked == null) return;
-                  changeDate(newDate: datePicked);
+                  changeDate(newDate: datePicked, animateToPage: true);
                 },
                 child: const Icon(Icons.calendar_today),
               ),
@@ -235,7 +235,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                               lastDate: currentDate.add(const Duration(days: 365 * 2)),
                             );
                             if (datePicked == null) return;
-                            changeDate(newDate: datePicked);
+                            changeDate(newDate: datePicked, animateToPage: true);
                           },
                           child: SizedBox(
                             //relative to the width of the viewport
