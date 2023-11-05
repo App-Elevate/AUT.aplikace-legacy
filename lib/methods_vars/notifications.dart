@@ -217,13 +217,13 @@ Future<void> doNotifications({bool force = false}) async {
             AwesomeNotifications().createNotification(
               content: NotificationContent(
                 id: 1024 - i,
-                channelKey: 'jidlo_channel_${loginData.users[k].username}',
+                channelKey: 'jidlo_channel_${loginData.users[i].username}',
                 actionType: ActionType.Default,
                 title: 'Dnešní jídlo',
                 payload: {
                   'user': loginData.users[i].username,
-                  'index': k.toString(), //index jídla
-                  'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(), //index dne
+                  'index': k.toString(),
+                  'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(),
                 },
                 body: jidelnicek.jidla[0].nazev,
               ),
