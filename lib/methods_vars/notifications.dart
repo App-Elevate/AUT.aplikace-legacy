@@ -10,7 +10,7 @@ Future<void> initPlatformState() async {
   // Configure BackgroundFetch.
   await BackgroundFetch.configure(
       BackgroundFetchConfig(
-        minimumFetchInterval: 15,
+        minimumFetchInterval: 120,
         stopOnTerminate: false,
         enableHeadless: true,
         requiresBatteryNotLow: false,
@@ -175,8 +175,8 @@ Future<void> doNotifications({bool force = false}) async {
 
     if ((await loggedInCanteen.readData('lastJidloDneCheck-${loginData.users[i].username}') == nowString ||
             await loggedInCanteen.readData('sendFoodInfo-${loginData.users[i].username}') != '1' ||
-            difference > 30 ||
-            difference < -30) &&
+            difference > 80 ||
+            difference < -80) &&
         !force) {
       jidloDne = false;
     } else {
