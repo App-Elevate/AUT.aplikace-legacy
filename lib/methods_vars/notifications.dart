@@ -144,7 +144,6 @@ Future<void> doNotifications({bool force = false}) async {
   LoggedInCanteen loggedInCanteen = LoggedInCanteen();
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   if (kDebugMode) {
-    /*
     AwesomeNotifications().createNotification(
         content: NotificationContent(
       id: -1,
@@ -152,7 +151,7 @@ Future<void> doNotifications({bool force = false}) async {
       actionType: ActionType.Default,
       title: 'Spouštím notifikace',
       body: DateTime.now().toString(),
-    ));*/
+    ));
   }
   // Don't send notifications before 9 and after 22
   if ((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force) {
@@ -192,7 +191,6 @@ Future<void> doNotifications({bool force = false}) async {
       objednavka = false;
     }
     if (kDebugMode) {
-      /*
       AwesomeNotifications().createNotification(
           content: NotificationContent(
         id: -1,
@@ -200,7 +198,7 @@ Future<void> doNotifications({bool force = false}) async {
         actionType: ActionType.Default,
         title: 'Notifikace Info',
         body: 'jidloDne: $jidloDne, kredit: $kredit, objednavka: $objednavka',
-      ));*/
+      ));
     }
     if (!jidloDne && !kredit && !objednavka) {
       continue;
