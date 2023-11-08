@@ -267,6 +267,11 @@ Future<void> doNotifications({bool force = false}) async {
       //7 is limit for how many lunches we are gonna search for
       int objednano = 0;
       int cena = 0;
+      List<Future<Jidelnicek>> jidelnickyFuture = [];
+      for (int i = 0; i < 10; i++) {
+        jidelnickyFuture.add(loggedInCanteen.getLunchesForDay(DateTime.now().add(Duration(days: i))));
+      }
+      await Future.wait(jidelnickyFuture);
       for (int denIndex = 0; denIndex < 10; denIndex++) {
         Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(DateTime.now().add(Duration(days: denIndex)));
         //pokud nalezneme jídlo s cenou
