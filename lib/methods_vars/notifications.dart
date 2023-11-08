@@ -143,16 +143,14 @@ Future<bool> initAwesome() async {
 Future<void> doNotifications({bool force = false}) async {
   LoggedInCanteen loggedInCanteen = LoggedInCanteen();
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-  if (kDebugMode) {
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-      id: -1,
-      channelKey: 'else_channel',
-      actionType: ActionType.Default,
-      title: 'Spouštím notifikace',
-      body: DateTime.now().toString(),
-    ));
-  }
+  AwesomeNotifications().createNotification(
+      content: NotificationContent(
+    id: 588,
+    locked: true,
+    channelKey: 'else_channel',
+    actionType: ActionType.Default,
+    title: 'Získávám data pro notifikace...',
+  ));
   // Don't send notifications before 9 and after 22
   if ((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force) {
     return;
@@ -175,8 +173,8 @@ Future<void> doNotifications({bool force = false}) async {
 
     if ((await loggedInCanteen.readData('lastJidloDneCheck-${loginData.users[i].username}') == nowString ||
             await loggedInCanteen.readData('sendFoodInfo-${loginData.users[i].username}') != '1' ||
-            difference > 80 ||
-            difference < -80) &&
+            difference > 120 ||
+            difference < -120) &&
         !force) {
       jidloDne = false;
     } else {
@@ -191,6 +189,7 @@ Future<void> doNotifications({bool force = false}) async {
       objednavka = false;
     }
     if (kDebugMode) {
+      /*
       AwesomeNotifications().createNotification(
           content: NotificationContent(
         id: -1,
@@ -198,7 +197,7 @@ Future<void> doNotifications({bool force = false}) async {
         actionType: ActionType.Default,
         title: 'Notifikace Info',
         body: 'jidloDne: $jidloDne, kredit: $kredit, objednavka: $objednavka',
-      ));
+      ));*/
     }
     if (!jidloDne && !kredit && !objednavka) {
       continue;
@@ -213,6 +212,23 @@ Future<void> doNotifications({bool force = false}) async {
           for (int k = 0; k < jidelnicek.jidla.length; k++) {
             if (!jidelnicek.jidla[k].objednano) {
               continue;
+            }
+            if (difference > 0) {
+              AwesomeNotifications().createNotification(
+                  content: NotificationContent(
+                    id: 1024 - i,
+                    channelKey: 'jidlo_channel_${loginData.users[i].username}',
+                    actionType: ActionType.Default,
+                    title: 'Dnešní jídlo',
+                    payload: {
+                      'user': loginData.users[i].username,
+                      'index': k.toString(),
+                      'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(),
+                    },
+                    body: jidelnicek.jidla[0].nazev,
+                  ),
+                  schedule: NotificationCalendar.fromDate(date: time));
+              break;
             }
             AwesomeNotifications().createNotification(
               content: NotificationContent(
@@ -364,6 +380,7 @@ Future<void> doNotifications({bool force = false}) async {
       }
     }
   }
+  AwesomeNotifications().cancel(588);
   return;
 }
 
