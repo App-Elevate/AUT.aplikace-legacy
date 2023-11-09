@@ -1,3 +1,7 @@
+## 1.2.7
+
+- Přidán prompt, zda se chcete odhlásit
+
 ## 1.2.6
 
 - přidány tlačítka u notifikací
