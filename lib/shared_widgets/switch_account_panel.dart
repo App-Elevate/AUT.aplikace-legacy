@@ -155,6 +155,14 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
           onPressed: () async {
+            try {
+              if (!((await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) ==
+                  true))) {
+                return;
+              }
+            } catch (e) {
+              return;
+            }
             await loggedInCanteen.logout(id: id);
             if (currentAccount) {
               SwitchAccountVisible().setVisible(false);

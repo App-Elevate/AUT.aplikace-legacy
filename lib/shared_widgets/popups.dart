@@ -126,6 +126,28 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
   );
 }
 
+Widget logoutDialog(BuildContext context) {
+  return AlertDialog(
+    title: const Text('Opravdu se chcete odhlásit?'),
+    actionsAlignment: MainAxisAlignment.spaceBetween,
+    actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+    actions: <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(true);
+        },
+        child: const Text('Odhlásit se'),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(false);
+        },
+        child: const Text('Zrušit'),
+      ),
+    ],
+  );
+}
+
 void failedLunchDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
   showDialog(
     context: context,

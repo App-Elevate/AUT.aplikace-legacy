@@ -46,7 +46,16 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: IconButton(
         onPressed: () async {
-          Navigator.of(context).pop();
+          try {
+            if (!((await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) == true))) {
+              return;
+            }
+          } catch (e) {
+            return;
+          }
+          if (context.mounted && Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
           await loggedInCanteen.logout();
           await Future.delayed(const Duration(milliseconds: 300));
           setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
