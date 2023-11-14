@@ -18,7 +18,7 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
 
   Future<void> setSettings() async {
-    username = (await loggedInCanteen.canteenData).username;
+    username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
     String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
     if (kDebugMode) {
       analyticsDisabled = '1';
