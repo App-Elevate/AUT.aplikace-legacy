@@ -228,6 +228,9 @@ class LoggedInCanteen {
   /// in both cases it throws 'no internet'
   Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
     date = DateTime(date.year, date.month, date.day);
+    if (!await InternetConnectionChecker().hasConnection) {
+      return Future.error('no login');
+    }
     if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen) && !(await loginFromStorage()).success) {
       return Future.error('no login');
     }

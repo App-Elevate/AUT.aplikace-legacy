@@ -317,34 +317,36 @@ class MainAppScreenState extends State<MainAppScreen> {
             future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(index)),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                portableSoftRefresh(context);
                 return RefreshIndicator(
                   onRefresh: () async {
                     await portableSoftRefresh(context);
                   },
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Symbols.sentiment_sad,
-                          size: 250,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.025),
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width * 0.75,
-                          child: Text(
-                            'Nepodařilo se načíst obědy, obnovte stránku nebo to zkuste prosím později.',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Symbols.sentiment_sad,
+                            size: 250,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
-                        ),
-                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.15),
-                      ],
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.025),
+                          SizedBox(
+                            width: MediaQuery.sizeOf(context).width * 0.75,
+                            child: Text(
+                              'Nepodařilo se načíst obědy, obnovte stránku nebo to zkuste prosím později.',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  ),
+                            ),
+                          ),
+                          SizedBox(height: MediaQuery.sizeOf(context).height * 0.15),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -430,7 +432,7 @@ class ListJidel extends StatelessWidget {
                 // and use it to show a SnackBar.
                 if (context.mounted && !snackbarshown.shown) {
                   ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to prosím znovu.'))
+                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu.'))
                       .closed
                       .then((SnackBarClosedReason reason) {
                     snackbarshown.shown = false;

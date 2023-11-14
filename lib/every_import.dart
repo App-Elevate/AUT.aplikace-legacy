@@ -38,3 +38,6 @@ export 'dart:io';
 export 'dart:convert';
 
 export 'package:sliding_up_panel/sliding_up_panel.dart';
+
+//internet connection checker
+export 'package:internet_connection_checker/internet_connection_checker.dart';
