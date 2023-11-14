@@ -1,3 +1,7 @@
+## 1.2.8
+
+- Opraveno moc dlouhé získávání notifikací v noci
+
 ## 1.2.7
 
 - Přidán prompt, zda se chcete odhlásit

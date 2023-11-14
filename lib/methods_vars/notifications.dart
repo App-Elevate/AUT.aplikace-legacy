@@ -124,8 +124,8 @@ Future<bool> initAwesome() async {
       channelKey: 'else_channel',
       channelName: 'Ostatní',
       channelDescription: 'Ostatní notifikace, např. chybové hlášky...',
-      defaultColor: const Color(0xFF9D50DD),
-      ledColor: Colors.red,
+      importance: NotificationImportance.Min,
+      playSound: false,
     ),
   );
   return await AwesomeNotifications().initialize(
