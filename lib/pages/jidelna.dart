@@ -167,193 +167,201 @@ class MainAppScreenState extends State<MainAppScreen> {
   }
 
   ///widget for the Jidelnicek including the date picker with all the lunches
-  Padding jidelnicekWidget() {
+  Builder jidelnicekWidget() {
     //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Builder(
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
+          child: Column(
             children: [
-              //open calendar button
-              MaterialButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                minWidth: 0,
-                textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
-                padding: EdgeInsets.zero,
-                onPressed: () async {
-                  DateTime currentDate = dateListener.value;
-                  var datePicked = await showDatePicker(
-                    context: context,
-                    helpText: 'Vyberte datum',
-                    initialDate: currentDate,
-                    currentDate: DateTime.now(),
-                    firstDate: minimalDate,
-                    lastDate: currentDate.add(const Duration(days: 365 * 2)),
-                  );
-                  if (datePicked == null) return;
-                  changeDate(newDate: datePicked, animateToPage: true);
-                },
-                child: const Icon(Icons.calendar_today),
-              ),
-
-              //Date
-              ValueListenableBuilder(
-                valueListenable: dateListener,
-                builder: (ctx, value, child) {
-                  DateTime currentDate = value;
-                  String dayOfWeek = loggedInCanteen.ziskatDenZData(currentDate.weekday);
-                  return SizedBox(
-                    height: 70,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MaterialButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          minWidth: 0,
-                          textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
-                          onPressed: () {
-                            changeDate(daysChange: -1);
-                          },
-                          child: const Icon(Icons.arrow_left),
-                        ),
-                        TextButton(
-                          style: Theme.of(context).textButtonTheme.style?.copyWith(
-                                foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
-                              ),
-                          onPressed: () async {
-                            var datePicked = await showDatePicker(
-                              context: context,
-                              helpText: 'Vyberte datum',
-                              initialDate: currentDate,
-                              currentDate: DateTime.now(),
-                              firstDate: minimalDate,
-                              lastDate: currentDate.add(const Duration(days: 365 * 2)),
-                            );
-                            if (datePicked == null) return;
-                            changeDate(newDate: datePicked, animateToPage: true);
-                          },
-                          child: SizedBox(
-                            //relative to the width of the viewport
-                            width: MediaQuery.sizeOf(context).width * 0.35,
-                            child: Center(child: Text("${currentDate.day}. ${currentDate.month}. - $dayOfWeek")),
-                          ),
-                        ),
-                        MaterialButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          minWidth: 0,
-                          textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
-                          onPressed: () {
-                            changeDate(daysChange: 1);
-                          },
-                          child: const Icon(Icons.arrow_right),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-
-              //go to today button
-              MaterialButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                minWidth: 0,
-                height: 27.5,
-                textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
-                padding: const EdgeInsets.symmetric(horizontal: 7.5),
-                shape: ContinuousRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.5),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
-                    width: 1.75,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //open calendar button
+                  MaterialButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    minWidth: 0,
+                    textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                    padding: EdgeInsets.zero,
+                    onPressed: () async {
+                      DateTime currentDate = dateListener.value;
+                      var datePicked = await showDatePicker(
+                        context: context,
+                        helpText: 'Vyberte datum',
+                        initialDate: currentDate,
+                        currentDate: DateTime.now(),
+                        firstDate: minimalDate,
+                        lastDate: currentDate.add(const Duration(days: 365 * 2)),
+                      );
+                      if (datePicked == null) return;
+                      changeDate(newDate: datePicked, animateToPage: true);
+                    },
+                    child: const Icon(Icons.calendar_today),
                   ),
+
+                  //Date
+                  ValueListenableBuilder(
+                    valueListenable: dateListener,
+                    builder: (ctx, value, child) {
+                      DateTime currentDate = value;
+                      String dayOfWeek = loggedInCanteen.ziskatDenZData(currentDate.weekday);
+                      return SizedBox(
+                        height: 70,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MaterialButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              minWidth: 0,
+                              textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                              onPressed: () {
+                                changeDate(daysChange: -1);
+                              },
+                              child: const Icon(Icons.arrow_left),
+                            ),
+                            TextButton(
+                              style: Theme.of(context).textButtonTheme.style?.copyWith(
+                                    foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                                  ),
+                              onPressed: () async {
+                                var datePicked = await showDatePicker(
+                                  context: context,
+                                  helpText: 'Vyberte datum',
+                                  initialDate: currentDate,
+                                  currentDate: DateTime.now(),
+                                  firstDate: minimalDate,
+                                  lastDate: currentDate.add(const Duration(days: 365 * 2)),
+                                );
+                                if (datePicked == null) return;
+                                changeDate(newDate: datePicked, animateToPage: true);
+                              },
+                              child: SizedBox(
+                                //relative to the width of the viewport
+                                width: MediaQuery.sizeOf(context).width * 0.35,
+                                child: Center(child: Text("${currentDate.day}. ${currentDate.month}. - $dayOfWeek")),
+                              ),
+                            ),
+                            MaterialButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              minWidth: 0,
+                              textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                              onPressed: () {
+                                changeDate(daysChange: 1);
+                              },
+                              child: const Icon(Icons.arrow_right),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+                  //go to today button
+                  MaterialButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    minWidth: 0,
+                    height: 27.5,
+                    textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                    padding: const EdgeInsets.symmetric(horizontal: 7.5),
+                    shape: ContinuousRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.5),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                        width: 1.75,
+                      ),
+                    ),
+                    child: Text(DateTime.now().day.toString()),
+                    onPressed: () {
+                      changeDate(newDate: DateTime.now(), animateToPage: true);
+                    },
+                  ),
+                ],
+              ),
+              Expanded(
+                child: PageView.builder(
+                  controller: pageviewController,
+                  onPageChanged: (value) {
+                    changeDate(index: value);
+                  },
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return jidelnicekDenWidget(
+                      index,
+                    );
+                  },
                 ),
-                child: Text(DateTime.now().day.toString()),
-                onPressed: () {
-                  changeDate(newDate: DateTime.now(), animateToPage: true);
-                },
               ),
             ],
           ),
-          Expanded(
-            child: PageView.builder(
-              controller: pageviewController,
-              onPageChanged: (value) {
-                changeDate(index: value);
-              },
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return jidelnicekDenWidget(
-                  index,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   ///widget for the Jidelnicek for the day - mainly the getting lunches logic
-  SizedBox jidelnicekDenWidget(int index) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: FutureBuilder(
-        future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(index)),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            portableSoftRefresh(context);
-            return RefreshIndicator(
-              onRefresh: () async {
-                await portableSoftRefresh(context);
-              },
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Symbols.sentiment_sad,
-                      size: 250,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+  Builder jidelnicekDenWidget(int index) {
+    return Builder(
+      builder: (context) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: FutureBuilder(
+            future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(index)),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                portableSoftRefresh(context);
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await portableSoftRefresh(context);
+                  },
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Symbols.sentiment_sad,
+                          size: 250,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.025),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.75,
+                          child: Text(
+                            'Nepodařilo se načíst obědy, obnovte stránku nebo to zkuste prosím později.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ),
+                        SizedBox(height: MediaQuery.sizeOf(context).height * 0.15),
+                      ],
                     ),
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.025),
-                    SizedBox(
-                      width: MediaQuery.sizeOf(context).width * 0.75,
-                      child: Text(
-                        'Nepodařilo se načíst obědy, obnovte stránku nebo to zkuste prosím později.',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.15),
-                  ],
-                ),
-              ),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
-          return ListJidel(
-            portableSoftRefresh: portableSoftRefresh,
-            setHomeWidget: widget.setHomeWidget,
-            setScaffoldBody: setScaffoldBody,
-            indexDne: index,
-            jidelnicek: jidelnicek,
-          );
-        },
-      ),
+                  ),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
+              return ListJidel(
+                portableSoftRefresh: portableSoftRefresh,
+                setHomeWidget: widget.setHomeWidget,
+                setScaffoldBody: setScaffoldBody,
+                indexDne: index,
+                jidelnicek: jidelnicek,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

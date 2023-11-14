@@ -1,0 +1,22 @@
+# .github/workflows/publish.yml
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - "*" # tag pattern on pub.dev: 'v'
+
+# Publish using custom workflow
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for authentication using OIDC
+    steps:
+      - uses: actions/checkout@v3
+      - name: rename CHANGELOG.md to release-notes.md
+        run: mv CHANGELOG.md release-notes.md
+      - name: Upload release-notes to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: release-notes.md
