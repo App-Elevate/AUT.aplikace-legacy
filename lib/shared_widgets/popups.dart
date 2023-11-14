@@ -53,7 +53,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
           ),
         ),
         actionsAlignment: MainAxisAlignment.spaceBetween,
-        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        alignment: Alignment.bottomCenter,
         actions: <Widget>[
           Center(
             child: Column(
@@ -130,7 +130,7 @@ Widget logoutDialog(BuildContext context) {
   return AlertDialog(
     title: const Text('Opravdu se chcete odhlásit?'),
     actionsAlignment: MainAxisAlignment.spaceBetween,
-    actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+    alignment: Alignment.bottomCenter,
     actions: <Widget>[
       TextButton(
         onPressed: () {
@@ -142,6 +142,7 @@ Widget logoutDialog(BuildContext context) {
         onPressed: () {
           Navigator.of(context).pop(false);
         },
+        style: Theme.of(context).textButtonTheme.style!.copyWith(foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary)),
         child: const Text('Zrušit'),
       ),
     ],
@@ -157,7 +158,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
         title: const Text('Selhalo načítání jídelníčku'),
         content: Text(message),
         actionsAlignment: MainAxisAlignment.spaceBetween,
-        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        alignment: Alignment.bottomCenter,
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -189,7 +190,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
         title: const Text('Přihlašování selhalo'),
         content: Text('Při přihlašování došlo k chybě: $message'),
         actionsAlignment: MainAxisAlignment.spaceBetween,
-        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        alignment: Alignment.bottomCenter,
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -236,6 +237,7 @@ void failedDownload(BuildContext context, {int? tries}) async {
         title: const Text('Aktualizace aplikace selhala'),
         content: const Text('Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.'),
         actionsAlignment: MainAxisAlignment.spaceBetween,
+        alignment: Alignment.bottomCenter,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         actions: <Widget>[
           TextButton(

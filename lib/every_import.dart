@@ -8,6 +8,9 @@ export './pages/all.dart';
 //Themes
 export 'app_themes.dart';
 
+//icons
+export 'package:material_symbols_icons/symbols.dart';
+
 //icanteenlib
 export 'package:canteenlib/canteenlib.dart';
 

@@ -272,7 +272,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                   borderRadius: BorderRadius.circular(12.5),
                   side: BorderSide(
                     color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
-                    width: 1.5,
+                    width: 1.75,
                   ),
                 ),
                 child: Text(DateTime.now().day.toString()),
@@ -311,10 +311,35 @@ class MainAppScreenState extends State<MainAppScreen> {
           if (snapshot.hasError) {
             portableSoftRefresh(context);
             return RefreshIndicator(
-                onRefresh: () async {
-                  await portableSoftRefresh(context);
-                },
-                child: const Center(child: Text('nepodařilo se načíst obědy zkuste znovu načíst stránku')));
+              onRefresh: () async {
+                await portableSoftRefresh(context);
+              },
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Symbols.sentiment_sad,
+                      size: 250,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.025),
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.75,
+                      child: Text(
+                        'Nepodařilo se načíst obědy, obnovte stránku nebo to zkuste prosím později.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.15),
+                  ],
+                ),
+              ),
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -395,7 +420,7 @@ class ListJidel extends StatelessWidget {
                 // and use it to show a SnackBar.
                 if (context.mounted && !snackbarshown.shown) {
                   ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
+                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to prosím znovu'))
                       .closed
                       .then((SnackBarClosedReason reason) {
                     snackbarshown.shown = false;
