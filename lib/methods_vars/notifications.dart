@@ -152,10 +152,7 @@ Future<void> doNotifications({bool force = false}) async {
     title: 'Získávám data pro notifikace...',
   ));
   // Don't send notifications before 9 and after 22
-  if ((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force) {
-    return;
-  }
-  for (int i = 0; i < loginData.users.length; i++) {
+  for (int i = 0; i < loginData.users.length && !((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force); i++) {
     //ensuring we only send the notifications once a day
     bool jidloDne = true;
     bool kredit = true;
@@ -373,6 +370,7 @@ Future<void> doNotifications({bool force = false}) async {
         );
       }
     } catch (e) {
+      AwesomeNotifications().cancel(588);
       if (kDebugMode) {
         AwesomeNotifications().createNotification(
             content: NotificationContent(
