@@ -194,7 +194,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 }
                                 Future.delayed(Duration.zero, () => newUpdateDialog(context));
                               },
-                              child: const Text('Zkontrolovat aktualizace'),
+                              child: const Text('Zkontrolovat aktualizace', textAlign: TextAlign.center),
                             ),
                           );
                         },

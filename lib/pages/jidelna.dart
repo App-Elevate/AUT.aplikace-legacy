@@ -239,7 +239,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                           },
                           child: SizedBox(
                             //relative to the width of the viewport
-                            width: MediaQuery.of(context).size.width * 0.33,
+                            width: MediaQuery.sizeOf(context).width * 0.35,
                             child: Center(child: Text("${currentDate.day}. ${currentDate.month}. - $dayOfWeek")),
                           ),
                         ),
