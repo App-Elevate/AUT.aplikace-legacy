@@ -38,7 +38,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       // and use it to show a SnackBar.
       if (context.mounted && !snackbarshown.shown) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
+            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu.'))
             .closed
             .then((SnackBarClosedReason reason) {
           snackbarshown.shown = false;
@@ -168,13 +168,13 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   ///widget for the Jidelnicek including the date picker with all the lunches
   Builder jidelnicekWidget() {
-    //bool isWeekend = dayOfWeek == 'Sobota' || dayOfWeek == 'Neděle'; //to be implemented...
     return Builder(
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
           child: Column(
             children: [
+              //toolbar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -212,6 +212,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            //day before button
                             MaterialButton(
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
@@ -245,6 +246,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                                 child: Center(child: Text("${currentDate.day}. ${currentDate.month}. - $dayOfWeek")),
                               ),
                             ),
+                            //next day button
                             MaterialButton(
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
@@ -310,7 +312,7 @@ class MainAppScreenState extends State<MainAppScreen> {
     return Builder(
       builder: (context) {
         return SizedBox(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery.sizeOf(context).width,
           child: FutureBuilder(
             future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(index)),
             builder: (context, snapshot) {
@@ -428,7 +430,7 @@ class ListJidel extends StatelessWidget {
                 // and use it to show a SnackBar.
                 if (context.mounted && !snackbarshown.shown) {
                   ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to prosím znovu'))
+                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to prosím znovu.'))
                       .closed
                       .then((SnackBarClosedReason reason) {
                     snackbarshown.shown = false;
@@ -450,8 +452,8 @@ class ListJidel extends StatelessWidget {
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Padding(
                         //half of the screen height padding
-                        padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height / 2 - 100),
-                        child: const Text('Žádná Jídla pro tento den'),
+                        padding: EdgeInsets.symmetric(vertical: MediaQuery.sizeOf(context).height / 2 - 100),
+                        child: const Text('Žádná Jídla pro tento den.'),
                       ),
                     ),
                   ),
@@ -569,7 +571,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
     } catch (e) {
       if (context.mounted && !snackbarshown.shown) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu'))
+            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu.'))
             .closed
             .then((SnackBarClosedReason reason) {
           snackbarshown.shown = false;
@@ -811,7 +813,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                             }
                           }
                           if (nalezenoJidloNaBurze == false) {
-                            snackBarMessage('Nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem');
+                            snackBarMessage('Nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem.');
                           }
                         } catch (e) {
                           snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
@@ -820,7 +822,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       break;
                     case StavJidla.objednanoVyprsenaPlatnost:
                       {
-                        snackBarMessage('Oběd nelze zrušit. Platnost objednávky vypršela. (pravděpodobně je toto oběd z minulosti)');
+                        snackBarMessage('Oběd nelze zrušit. Platnost objednávky vypršela.');
                       }
                       break;
                     case StavJidla.objednanoNelzeOdebrat:
@@ -836,18 +838,18 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.nedostupne:
                       {
                         if (datumJidla.isBefore(DateTime.now())) {
-                          snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti)');
+                          snackBarMessage('Oběd nelze objednat.');
                           break;
                         }
                         try {
                           if (loggedInCanteen.uzivatel!.kredit < jidlo.cena!) {
-                            snackBarMessage('Oběd nelze objednat - Nedostatečný kredit');
+                            snackBarMessage('Oběd nelze objednat - Nedostatečný kredit.');
                             break;
                           }
                         } catch (e) {
                           //pokud se nepodaří načíst kredit, tak to necháme být
                         }
-                        snackBarMessage('Oběd nelze objednat. (pravděpodobně je toto oběd z minulosti nebo aktuálně není na burze)');
+                        snackBarMessage('Oběd nelze objednat.');
                       }
                       break;
                     case StavJidla.objednano:
