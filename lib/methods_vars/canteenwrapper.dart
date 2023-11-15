@@ -228,9 +228,6 @@ class LoggedInCanteen {
   /// in both cases it throws 'no internet'
   Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
     date = DateTime(date.year, date.month, date.day);
-    if (!await InternetConnectionChecker().hasConnection) {
-      return Future.error('no login');
-    }
     if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen) && !(await loginFromStorage()).success) {
       return Future.error('no login');
     }
@@ -242,6 +239,9 @@ class LoggedInCanteen {
     }
     if (_canteenData!.currentlyLoading[date] != null) {
       return _canteenData!.currentlyLoading[date]!.future;
+    }
+    if (!await InternetConnectionChecker().hasConnection) {
+      return Future.error('bad url or connection');
     }
     Jidelnicek jidelnicek = await _ziskatJidelnicekDen(date);
 
