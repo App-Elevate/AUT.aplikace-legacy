@@ -754,6 +754,11 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     }
                   }
 
+                  if (!await InternetConnectionChecker().hasConnection) {
+                    snackBarMessage('Nastala chyba při objednávání jídla, zkontrolujte připojení a zkuste to znovu.');
+                    return;
+                  }
+
                   if (ordering) {
                     return;
                   }
