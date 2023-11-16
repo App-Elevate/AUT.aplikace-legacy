@@ -1,7 +1,6 @@
 //other imports from current project
 
 import 'package:flutter/foundation.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 //import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';

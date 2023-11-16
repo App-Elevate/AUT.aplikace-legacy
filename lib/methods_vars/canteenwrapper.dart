@@ -240,6 +240,9 @@ class LoggedInCanteen {
     if (_canteenData!.currentlyLoading[date] != null) {
       return _canteenData!.currentlyLoading[date]!.future;
     }
+    if (!await InternetConnectionChecker().hasConnection) {
+      return Future.error('bad url or connection');
+    }
     Jidelnicek jidelnicek = await _ziskatJidelnicekDen(date);
 
     //saving to cache

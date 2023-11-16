@@ -22,13 +22,13 @@ class Themes {
       shadowColor: Colors.transparent,
       splashColor: Colors.transparent,
       splashFactory: NoSplash.splashFactory,
+      typography: Typography.material2021(),
+
+      //main
       iconTheme: IconThemeData(
         size: 30,
         color: colorScheme.onBackground,
       ),
-      typography: Typography.material2021(),
-
-      //main
       appBarTheme: AppBarTheme(
         elevation: 2,
         backgroundColor: dark ? colorScheme.background : colorScheme.primary,
@@ -86,7 +86,7 @@ class Themes {
         contentTextStyle: const TextStyle(
           fontSize: 15,
         ),
-        actionsPadding: const EdgeInsets.fromLTRB(0, 0, 20, 7),
+        actionsPadding: const EdgeInsets.fromLTRB(12, 0, 16, 7),
       ),
       timePickerTheme: TimePickerThemeData(
         backgroundColor: colorScheme.background,

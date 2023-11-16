@@ -8,6 +8,9 @@ export './pages/all.dart';
 //Themes
 export 'app_themes.dart';
 
+//icons
+export 'package:material_symbols_icons/symbols.dart';
+
 //icanteenlib
 export 'package:canteenlib/canteenlib.dart';
 
@@ -35,3 +38,6 @@ export 'dart:io';
 export 'dart:convert';
 
 export 'package:sliding_up_panel/sliding_up_panel.dart';
+
+//internet connection checker
+export 'package:internet_connection_checker/internet_connection_checker.dart';
