@@ -98,7 +98,6 @@ class Themes {
       inputDecorationTheme: const InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
-        isCollapsed: true,
         errorMaxLines: 1,
         labelStyle: TextStyle(),
         floatingLabelAlignment: FloatingLabelAlignment.start,
