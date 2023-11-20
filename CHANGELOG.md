@@ -1,3 +1,9 @@
+## 1.2.9
+
+- Opraveny chyby v offline režimu aplikace
+- Přidána ochrana proti nekonečnému načítání
+- Přidána ochrana proti nechtěnému ukončení aplikace gestem
+
 ## 1.2.8
 
 - Opraveno moc dlouhé získávání notifikací v noci
