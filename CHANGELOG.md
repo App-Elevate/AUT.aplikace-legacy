@@ -4,6 +4,7 @@
 - Přidána ochrana proti nekonečnému načítání
 - Přidána ochrana proti nechtěnému ukončení aplikace gestem
 - Opraveno moc dlouhé získávání notifikací v noci
+- vylepšení gui u popupů
 
 ## 1.2.7
 
