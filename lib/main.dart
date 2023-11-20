@@ -100,6 +100,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
+    if (SwitchAccountVisible().isVisible()) {
+      SwitchAccountVisible().setVisible(false);
+      return Future<bool>.value(false);
+    }
     //Checks if current Navigator still has screens on the stack.
     if (yourKey.currentState!.canPop()) {
       // 'maybePop' method handles the decision of 'pop' to another WillPopScope if they exist.
@@ -107,7 +111,16 @@ class _MyAppState extends State<MyApp> {
       yourKey.currentState!.maybePop();
       return Future<bool>.value(false);
     }
-    //if nothing remains in the stack, it simply pops
+    canpop.value = true;
+    Future.delayed(const Duration(seconds: 5), () => canpop.value = false);
+    Fluttertoast.showToast(
+        msg: "Zmáčkněte tlačítko zpět pro ukončení aplikace",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0);
     return Future<bool>.value(true);
   }
 
@@ -162,19 +175,29 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  WillPopScope _pop() {
-    return WillPopScope(
-      onWillPop: () => _backPressed(_myAppKey),
-      child: Navigator(
-        key: _myAppKey,
-        pages: [
-          MaterialPage(child: homeWidget),
-        ],
-        onPopPage: (route, result) {
-          return route.didPop(result);
+  ValueNotifier<bool> canpop = ValueNotifier<bool>(false);
+
+  ValueListenableBuilder _pop() {
+    return ValueListenableBuilder(
+        valueListenable: canpop,
+        builder: (context, value, child) {
+          return PopScope(
+            canPop: value,
+            onPopInvoked: (_) async {
+              await _backPressed(_myAppKey);
+            },
+            child: child!,
+          );
         },
-      ),
-    );
+        child: Navigator(
+          key: _myAppKey,
+          pages: [
+            MaterialPage(child: homeWidget),
+          ],
+          onPopPage: (route, result) {
+            return route.didPop(result);
+          },
+        ));
   }
 }
 

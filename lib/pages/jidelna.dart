@@ -101,66 +101,47 @@ class MainAppScreenState extends State<MainAppScreen> {
       topLeft: Radius.circular(16.0),
       topRight: Radius.circular(16.0),
     );
-    return WillPopScope(
-      onWillPop: () async {
-        if (SwitchAccountVisible().isVisible()) {
-          SwitchAccountVisible().setVisible(false);
-          return false; // Prevents the default back button behavior
-        }
-        return true; // Allows the default back button behavior
-      },
-      child: SlidingUpPanel(
-        backdropEnabled: true,
-        border: Border.all(width: 0),
-        borderRadius: radius,
-        minHeight: 0,
-        maxHeight: 300,
-        controller: panelController,
-        panel: Builder(
+    return SlidingUpPanel(
+      backdropEnabled: true,
+      border: Border.all(width: 0),
+      borderRadius: radius,
+      minHeight: 0,
+      maxHeight: 300,
+      controller: panelController,
+      panel: Builder(
+        builder: (context) {
+          return SwitchAccountPanel(
+            setHomeWidget: widget.setHomeWidget,
+          );
+        },
+      ),
+      body: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Autojídelna'),
+          actions: [
+            //refresh button
+            IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              icon: const Icon(
+                Icons.refresh_rounded,
+                opticalSize: 30,
+              ),
+              onPressed: () {
+                widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget, index: pageviewController.page!.round().toInt()));
+              },
+            ),
+          ],
+        ),
+        body: scaffoldBody,
+        drawer: Builder(
           builder: (context) {
-            return SwitchAccountPanel(
+            return MainAccountDrawer(
               setHomeWidget: widget.setHomeWidget,
+              page: NavigationDrawerItem.jidelnicek,
             );
           },
-        ),
-        body: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text('Autojídelna'),
-            actions: [
-              //refresh button
-              IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                icon: const Icon(
-                  Icons.refresh_rounded,
-                  opticalSize: 30,
-                ),
-                onPressed: () {
-                  widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget, index: pageviewController.page!.round().toInt()));
-                },
-              ),
-            ],
-          ),
-          body: scaffoldBody,
-          drawer: Builder(
-            builder: (context) {
-              return WillPopScope(
-                onWillPop: () async {
-                  //if the drawer is open close the drawer
-                  if (Scaffold.of(context).isDrawerOpen) {
-                    Navigator.pop(context);
-                    return Future.value(false);
-                  }
-                  return Future.value(true);
-                },
-                child: MainAccountDrawer(
-                  setHomeWidget: widget.setHomeWidget,
-                  page: NavigationDrawerItem.jidelnicek,
-                ),
-              );
-            },
-          ),
         ),
       ),
     );
