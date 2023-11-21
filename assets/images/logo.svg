@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="..\website\src\public\favicon.svg"
+   inkscape:export-xdpi="3"
+   inkscape:export-ydpi="3"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title1">Logo - Autojídelna</title>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     inkscape:zoom="0.75878906"
+     inkscape:cx="344.62806"
+     inkscape:cy="347.26384"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path2"
+       style="fill:#000000;fill-opacity:1;stroke-width:1.24847"
+       d="m 283.14827,48.273685 -37.84202,14.80859 -46.07172,63.345565 -1.6435,145.61337 34.55012,-4.11363 3.2919,182.63608 28.793,13.16266 z m 126.69359,0 -39.49039,15.630342 -41.95567,74.040543 15.63034,74.86471 28.79301,36.19852 -2.46768,209.78312 36.1985,-13.16509 9.04902,-188.39077 23.85761,-44.42578 39.48796,-64.99152 -33.72838,-78.154156 z M 111.2096,71.30955 79.124729,79.536826 81.592414,180.7244 61.026687,182.37034 60.202493,81.180317 l -27.147055,7.40551 0.821759,140.677983 52.650587,50.18291 -8.227249,180.16596 43.604025,-3.29187 4.93538,-181.81191 19.74399,-54.29654 -0.82175,-140.675534 -17.27629,-1.645946 -2.46769,105.30121 h -18.92223 z" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Autojídelna - Logo</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Matěj Verhaegen</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>Logo for the app Autojídelna</dc:description>
+        <dc:date>15/10/2023</dc:date>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
