@@ -53,7 +53,6 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
           ),
         ),
         actionsAlignment: MainAxisAlignment.spaceBetween,
-        alignment: Alignment.bottomCenter,
         actions: <Widget>[
           Center(
             child: Column(
