@@ -211,6 +211,7 @@ class SettingsPage extends StatelessWidget {
                     } else {
                       loggedInCanteen.saveData('sendFoodInfo-$username', '');
                     }
+                    doNotifications();
                   },
                 );
               },
@@ -236,6 +237,7 @@ class SettingsPage extends StatelessWidget {
                             if (timeOfDay != null && context.mounted) {
                               jidloNotificationTime.value = timeOfDay.format(context);
                               loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
+                              doNotifications();
                             }
                           },
                           child: Text(value),
@@ -261,6 +263,7 @@ class SettingsPage extends StatelessWidget {
                     } else {
                       loggedInCanteen.saveData('ignore_kredit_$username', '1');
                     }
+                    doNotifications();
                   },
                 );
               },
@@ -280,6 +283,7 @@ class SettingsPage extends StatelessWidget {
                     } else {
                       loggedInCanteen.saveData('ignore_objednat_$username', '1');
                     }
+                    doNotifications();
                   },
                 );
               },
