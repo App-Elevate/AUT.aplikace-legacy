@@ -571,6 +571,21 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   Jidlo? jidlo;
   //fix for api returning garbage when switching orders
   void cannotBeOrderedFix() async {
+    void snackBarMessage(String message) {
+      // Find the ScaffoldMessenger in the widget tree
+      // and use it to show a SnackBar.
+      // toto je upozornění dole (Snackbar)
+      // snackbarshown je aby se snackbar nezobrazil vícekrát
+      if (context.mounted && snackbarshown.shown == false) {
+        snackbarshown.shown = true;
+        ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(message)).closed.then(
+          (SnackBarClosedReason reason) {
+            snackbarshown.shown = false;
+          },
+        );
+      }
+    }
+
     await Future.delayed(const Duration(milliseconds: 200));
     try {
       if (!convertIndexToDatetime(widget.indexDne).isBefore(DateTime.now())) {
@@ -583,10 +598,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
         }
       }
     } catch (e) {
-      //if get lunches for day failes we hope api gave us the right values but we still report it to firebase 😉
-      if (analyticsEnabledGlobally && analytics != null) {
-        FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
-      }
+      snackBarMessage('Nastala chyba pri pripojovani k serveru: $e');
     }
   }
 
@@ -767,7 +779,11 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   }
                   Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                   if (jidelnicek.jidla.length <= index) {
-                    jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
+                    try {
+                      jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
+                    } catch (e) {
+                      snackBarMessage('Nastala chyba připojení při objednávání jídla');
+                    }
                   }
                   if (jidelnicek.jidla.length <= index) {
                     snackBarMessage('Nastala chyba při objednávání jídla: Nepodařilo získat url pro objednání. Zkuste to znovu.');
