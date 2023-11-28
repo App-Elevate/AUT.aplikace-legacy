@@ -47,18 +47,6 @@ class LoggedInCanteen {
 
   CanteenData? get canteenDataUnsafe => _canteenData;
 
-  ///refreshes lunches for the [currentDate]
-  ///doesn't get a new token hovewer gets the lunches with supporting the api check
-  Future<Jidelnicek> refreshLunches(DateTime currentDate) async {
-    (await canteenData).jidelnicky = {};
-    smartPreIndexing(currentDate);
-    try {
-      return await getLunchesForDay(currentDate);
-    } catch (e) {
-      return Future.error(e);
-    }
-  }
-
   ///přidá +1 pro counter statistiky a pokud je zapnutý analytics tak ji pošle do firebase
   void pridatStatistiku(TypStatistiky statistika) async {
     switch (statistika) {
