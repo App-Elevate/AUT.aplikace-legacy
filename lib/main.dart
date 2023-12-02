@@ -90,7 +90,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -179,25 +179,26 @@ class _MyAppState extends State<MyApp> {
 
   ValueListenableBuilder _pop() {
     return ValueListenableBuilder(
-        valueListenable: canpop,
-        builder: (context, value, child) {
-          return PopScope(
-            canPop: value,
-            onPopInvoked: (_) async {
-              await _backPressed(_myAppKey);
-            },
-            child: child!,
-          );
-        },
-        child: Navigator(
-          key: _myAppKey,
-          pages: [
-            MaterialPage(child: homeWidget),
-          ],
-          onPopPage: (route, result) {
-            return route.didPop(result);
+      valueListenable: canpop,
+      builder: (context, value, child) {
+        return PopScope(
+          canPop: value,
+          onPopInvoked: (_) async {
+            await _backPressed(_myAppKey);
           },
-        ));
+          child: child!,
+        );
+      },
+      child: Navigator(
+        key: _myAppKey,
+        pages: [
+          MaterialPage(child: homeWidget),
+        ],
+        onPopPage: (route, result) {
+          return route.didPop(result);
+        },
+      ),
+    );
   }
 }
 
