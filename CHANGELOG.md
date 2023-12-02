@@ -4,7 +4,7 @@
 - Přidána ochrana proti nekonečnému načítání
 - Přidána ochrana proti nechtěnému ukončení aplikace gestem
 - Opraveno moc dlouhé získávání notifikací v noci
-- vylepšení gui u popupů
+- Vylepšení gui u popupů
 
 ## 1.2.7
 
@@ -12,25 +12,25 @@
 
 ## 1.2.6
 
-- přidány tlačítka u notifikací
-- možnost přeskakovat víkendy při procházení jídelníčku
-- přidána notifikace zasílat oznámení o dnešním jídle
-- možnost ztlumit notifikaci na týden
-- opravy menších chyb
+- Přidány tlačítka u notifikací
+- Možnost přeskakovat víkendy při procházení jídelníčku
+- Přidána notifikace zasílat oznámení o dnešním jídle
+- Možnost ztlumit notifikaci na týden
+- Opravy menších chyb
 
 ## 1.2.5
 
-- opravena velikost uživatelského jména v profilu
-- už nevyskakuje "nelze se připojit" u podporovaných jídelen
-- optimalizována aplikace a opraveny chyby s nedostupným obědem nebo chybějícími obědy
-- nyní využíván CHANGELOG.md místo release-notes.md pro získání dat o nové verzi
-- aplikace připravena pro update na google play
+- Opravena velikost uživatelského jména v profilu
+- Už nevyskakuje "nelze se připojit" u podporovaných jídelen
+- Optimalizována aplikace a opraveny chyby s nedostupným obědem nebo chybějícími obědy
+- Nyní využíván CHANGELOG.md místo release-notes.md pro získání dat o nové verzi
+- Aplikace připravena pro update na google play
 
 ## 1.2.4
 
-- podpora pro další školy
+- Podpora pro další školy
 - Opraveny kritické chyby s loginem a notifikacemi
-- aktualizován canteenlib a s ním i stabilnější obědy a podpora pro další školy
+- Aktualizován canteenlib a s ním i stabilnější obědy a podpora pro další školy
 
 ## 1.2.3
 
@@ -44,23 +44,23 @@
 
 ## 1.2.2
 
-- vylepšení GUI
-- lepší zobrazení jídel v detailu
+- Vylepšení GUI
+- Lepší zobrazení jídel v detailu
 
 ## 1.2.1
 
-- podpora http
-- vylepšen tento popup (aktualizace)
-- optimalizace aplikace
-- opravy chyb a quality-of-life vylepšení
+- Podpora http
+- Vylepšen tento popup (aktualizace)
+- Optimalizace aplikace
+- Opravy chyb a quality-of-life vylepšení
 
 ## 1.2.0
 
-- kompletní redesign celého uživatelského rozhraní
-- možnost se přihlásit do více účtů najednou
-- optimalizace a zrychlení aplikace
-- opravy chyb
-- přidání tlačítka pro přechod na dnešní den
+- Kompletní redesign celého uživatelského rozhraní
+- Možnost se přihlásit do více účtů najednou
+- Optimalizace a zrychlení aplikace
+- Opravy chyb
+- Přidání tlačítka pro přechod na dnešní den
 
 ## 1.1.1
 
@@ -69,8 +69,8 @@
 
 ## 1.1.0
 
-- opravena chyba kdy "Objednat z burzy" přesahovalo obsah tlačítka
-- přidán refreshIndicator
+- Opravena chyba kdy "Objednat z burzy" přesahovalo obsah tlačítka
+- Přidán refreshIndicator
 
 ## 1.0.2
 
@@ -79,35 +79,35 @@
 ## 1.0.1
 
 - Opraveny menší chybky při formátování na škole trebesin.cz
-- aplikace občas nenačítala všechny obědy
+- Aplikace občas nenačítala všechny obědy
 
 ## 1.0.0
 
-- opravena chyba kdy "Objednat z burzy" přesahovalo obsah tlačítka
-- přidán refreshIndicator
+- Opravena chyba kdy "Objednat z burzy" přesahovalo obsah tlačítka
+- Přidán refreshIndicator
 
 ## 0.1.1-beta
 
 - Ověřena funkcionalita kromě používání burzy
 - Zvětšeny tlačítka pro lepší použitelnost
-- vyfiltrovány zbytečné informace u obědů (experimentální feature)
-- přidána profile page
-- přidán dark mode
+- Vyfiltrovány zbytečné informace u obědů (experimentální feature)
+- Přidána profile page
+- Přidán dark mode
 
 ## 0.1.0-beta
 
 - Aplikace Začíná být použitelná, ale funkcionalita zatím nemůže být otestována, takže stále označuji jako betu.
-- lepší kód pro objednávací tlačítka a je větší šance, že budou fungovat.
-- přidána podpora pro burzu
-- přidáno tlačítko aktualizovat
+- Lepší kód pro objednávací tlačítka a je větší šance, že budou fungovat.
+- Přidána podpora pro burzu
+- Přidáno tlačítko aktualizovat
 - Změněn celý systém navigator (z v1.0 na v2.0-declarative)
-- hodně stylistických změn
-- oprava pár bugů
+- Hodně stylistických změn
+- Oprava pár bugů
 
 ## 0.0.1-alpha
 
-- horizontální scrollování,
-- šipky pro měnění obědů
-- ikonky
-- objednávání obědů (netestováno, nemáme na čem)
-- funkční kalendář
+- Horizontální scrollování,
+- Šipky pro měnění obědů
+- Ikonky
+- Objednávání obědů (netestováno, nemáme na čem)
+- Funkční kalendář
