@@ -1,16 +1,22 @@
 import 'package:flutter/foundation.dart';
-
 import './../every_import.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MainAccountDrawer extends StatelessWidget {
-  const MainAccountDrawer({
+  MainAccountDrawer({
     super.key,
     required this.setHomeWidget,
     required this.page,
   });
   final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
+  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>("0");
+  final List locations = [];
+
+  Future<void> getLocation() async {
+    String? pickedLocationString = await loggedInCanteen.readData('location');
+    pickedLocationNotifier.value = pickedLocationString!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,30 +96,22 @@ class MainAccountDrawer extends StatelessWidget {
                             ),
                           ),
                           const VerticalDivider(),
-                          //Nothing yet
-                          const SizedBox(
-                            width: 100,
-                            //  child: Row(
-                            //    mainAxisAlignment: MainAxisAlignment.center,
-                            //    crossAxisAlignment: CrossAxisAlignment.center,
-                            //    children: [
-                            //      Icon(),
-                            //      Padding(
-                            //        padding: const EdgeInsets.only(left: 10.0),
-                            //        child: Column(
-                            //          mainAxisAlignment: MainAxisAlignment.center,
-                            //          crossAxisAlignment: CrossAxisAlignment.start,
-                            //          children: [
-                            //            const Text(""),
-                            //            Text(
-                            //              "",
-                            //              style: TextStyle(fontSize: 20)),
-                            //          ],
-                            //        ),
-                            //      ),
-                            //    ],
-                            //  ),
-                          ),
+                          //location
+                          if (locations.isNotEmpty)
+                            FutureBuilder(
+                              future: getLocation(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.done) {
+                                  if (!locations.contains(pickedLocationNotifier.value)) {
+                                    pickedLocationNotifier.value = locations[0];
+                                  }
+                                  return locationPicker(context);
+                                } else {
+                                  return const SizedBox(width: 100);
+                                }
+                              },
+                            ),
+                          if (locations.isEmpty) const SizedBox(width: 100),
                         ],
                       ),
                     ),
@@ -220,6 +218,102 @@ class MainAccountDrawer extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  MaterialButton locationPicker(BuildContext context) {
+    return MaterialButton(
+      highlightColor: Colors.transparent,
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.all(0),
+      textColor: Theme.of(context).colorScheme.primary,
+      onPressed: () {
+        //pick location dialog
+        if (locations.length > 1) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width * 0.5,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: Text(
+                            "Vyberte lokaci:",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        const Divider(height: 0),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: locations.length,
+                          itemBuilder: (context, value) {
+                            return MaterialButton(
+                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onPressed: () {
+                                pickedLocationNotifier.value = locations[value];
+                                loggedInCanteen.saveData("location", locations[value]);
+                                Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
+                              },
+                              child: ListTile(
+                                dense: true,
+                                visualDensity: VisualDensity.compact,
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      locations[value],
+                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 19),
+                                    ),
+                                    if (pickedLocationNotifier.value == locations[value]) const Icon(Icons.check),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      },
+      child: SizedBox(
+        width: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.location_on,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            SizedBox(
+              width: 70,
+              child: ValueListenableBuilder(
+                valueListenable: pickedLocationNotifier,
+                builder: (context, pickedLocation, child) {
+                  return Text(
+                    pickedLocation,
+                    style: const TextStyle(fontSize: 15),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
