@@ -1,11 +1,16 @@
-## eventy pro zjištění chyby v loginu
-* Počet nesprávně zadaných údajů
-* Počet nesprávně zadaného url a url samotné
-## statistiky
-* počet objednaných obědů
-* počet přihlášení
-* počet odhlášení
-* aktualizace aplikace
-* Země ve které nainstalujete aplikaci
-## nahlašování chyb
-* Chyby se automaticky odesílají pokud není nastaveno jinak v nastavení
+## Eventy pro zjištění chyby v loginu
+
+- Počet nesprávně zadaných údajů
+- Počet nesprávně zadaného url a url samotné
+
+## Statistiky
+
+- Počet objednaných obědů
+- Počet přihlášení
+- Počet odhlášení
+- Aktualizace aplikace
+- Země ve které nainstalujete aplikaci
+
+## Nahlašování chyb
+
+- Chyby se automaticky odesílají pokud není nastaveno jinak v nastavení
