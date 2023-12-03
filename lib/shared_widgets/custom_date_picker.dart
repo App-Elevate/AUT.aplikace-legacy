@@ -3,7 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CustomDatePicker {
   Future<DateTime?> showDatePicker(BuildContext context, DateTime currentDate) {
-    ValueNotifier focusedDate = ValueNotifier<DateTime>(currentDate);
+    ValueNotifier focusedDateNotifier = ValueNotifier<DateTime>(currentDate);
 
     return showDialog<DateTime?>(
       context: context,
@@ -15,7 +15,7 @@ class CustomDatePicker {
               shrinkWrap: true,
               children: [
                 ValueListenableBuilder(
-                  valueListenable: focusedDate,
+                  valueListenable: focusedDateNotifier,
                   builder: (context, value, child) {
                     return TableCalendar(
                       sixWeekMonthsEnforced: false,
@@ -54,8 +54,22 @@ class CustomDatePicker {
                         return isSameDay(currentDate, day);
                       },
                       onDaySelected: (selectedDay, focusedDay) {
-                        focusedDate.value = selectedDay;
+                        focusedDateNotifier.value = selectedDay;
                         currentDate = focusedDay;
+                      },
+                      eventLoader: (day) {
+                        List<DateTime> orderedFoodDays = [];
+                        DateTime date = DateTime(day.year, day.month, day.day);
+
+                        if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[date] != null) {
+                          for (int i = 0; i < loggedInCanteen.canteenDataUnsafe!.jidelnicky[date]!.jidla.length; i++) {
+                            if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[date]!.jidla[i].objednano) {
+                              orderedFoodDays.add(date);
+                            }
+                          }
+                        }
+
+                        return orderedFoodDays;
                       },
                     );
                   },
@@ -74,7 +88,7 @@ class CustomDatePicker {
                       padding: const EdgeInsets.only(right: 10.0),
                       child: TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(focusedDate.value);
+                          Navigator.of(context).pop(focusedDateNotifier.value);
                         },
                         child: const Text('OK'),
                       ),
