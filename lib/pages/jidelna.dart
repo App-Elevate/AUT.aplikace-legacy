@@ -1,7 +1,6 @@
 import 'package:autojidelna/main.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-
 import './../every_import.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -168,14 +167,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                     padding: EdgeInsets.zero,
                     onPressed: () async {
                       DateTime currentDate = dateListener.value;
-                      var datePicked = await showDatePicker(
-                        context: context,
-                        helpText: 'Vyberte datum',
-                        initialDate: currentDate,
-                        currentDate: DateTime.now(),
-                        firstDate: minimalDate,
-                        lastDate: currentDate.add(const Duration(days: 365 * 2)),
-                      );
+                      var datePicked = await CustomDatePicker().showDatePicker(context, currentDate);
                       if (datePicked == null) return;
                       changeDate(newDate: datePicked, animateToPage: true);
                     },
@@ -210,14 +202,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                                     foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
                                   ),
                               onPressed: () async {
-                                var datePicked = await showDatePicker(
-                                  context: context,
-                                  helpText: 'Vyberte datum',
-                                  initialDate: currentDate,
-                                  currentDate: DateTime.now(),
-                                  firstDate: minimalDate,
-                                  lastDate: currentDate.add(const Duration(days: 365 * 2)),
-                                );
+                                var datePicked = await CustomDatePicker().showDatePicker(context, currentDate);
                                 if (datePicked == null) return;
                                 changeDate(newDate: datePicked, animateToPage: true);
                               },
