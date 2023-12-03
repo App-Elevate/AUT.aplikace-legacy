@@ -43,7 +43,7 @@ class CustomDatePicker {
                           shape: BoxShape.circle,
                         ),
                         defaultTextStyle: Theme.of(context).textTheme.titleMedium!,
-                        defaultDecoration: BoxDecoration(shape: BoxShape.circle),
+                        defaultDecoration: const BoxDecoration(shape: BoxShape.circle),
                       ),
                       rowHeight: 45,
                       focusedDay: currentDate,
@@ -64,19 +64,20 @@ class CustomDatePicker {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    MaterialButton(
-                      highlightColor: Colors.transparent,
+                    TextButton(
                       onPressed: () {
                         Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
                       },
                       child: const Text('Zrušit'),
                     ),
-                    MaterialButton(
-                      highlightColor: Colors.transparent,
-                      onPressed: () {
-                        Navigator.of(context).pop(focusedDate.value);
-                      },
-                      child: const Text('OK'),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(focusedDate.value);
+                        },
+                        child: const Text('OK'),
+                      ),
                     ),
                   ],
                 ),
