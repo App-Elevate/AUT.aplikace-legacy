@@ -11,7 +11,7 @@ class MainAccountDrawer extends StatelessWidget {
   final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
   final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>("0");
-  final List locations = [];
+  final List locations = ["Lokace 1", "Lokace 2"];
 
   Future<void> getLocation() async {
     String? pickedLocationString = await loggedInCanteen.readData('location');
@@ -223,82 +223,86 @@ class MainAccountDrawer extends StatelessWidget {
     );
   }
 
-  MaterialButton locationPicker(BuildContext context) {
-    return MaterialButton(
-      highlightColor: Colors.transparent,
-      visualDensity: VisualDensity.compact,
-      padding: const EdgeInsets.all(0),
-      textColor: Theme.of(context).colorScheme.primary,
-      onPressed: () {
-        //pick location dialog
-        if (locations.length > 1) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width * 0.5,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: Text(
-                            "Vyberte lokaci:",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ),
-                        const Divider(height: 0),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: locations.length,
-                          itemBuilder: (context, value) {
-                            return MaterialButton(
-                              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              onPressed: () {
-                                pickedLocationNotifier.value = locations[value];
-                                loggedInCanteen.saveData("location", locations[value]);
-                                Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
-                              },
-                              child: ListTile(
-                                dense: true,
-                                visualDensity: VisualDensity.compact,
-                                title: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      locations[value],
-                                      style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 19),
+  TextButton locationPicker(BuildContext context) {
+    return TextButton(
+      style: Theme.of(context).textButtonTheme.style!.copyWith(
+            foregroundColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.disabled)) {
+                return Theme.of(context).colorScheme.onBackground;
+              }
+              return Theme.of(context).colorScheme.primary;
+            }),
+            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+          ),
+      onPressed: locations.length < 2
+          ? null
+          : () {
+              //pick location dialog
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+                      child: SizedBox(
+                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
+                              child: Row(children: [Text("Vyberte lokaci:")]),
+                            ),
+                            const Divider(height: 0, indent: 10, endIndent: 10),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: locations.length,
+                              itemBuilder: (context, value) {
+                                return MaterialButton(
+                                  padding: const EdgeInsets.all(0),
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  onPressed: () {
+                                    pickedLocationNotifier.value = locations[value];
+                                    loggedInCanteen.saveData("location", locations[value]);
+                                    Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
+                                  },
+                                  child: ListTile(
+                                    visualDensity: VisualDensity.compact,
+                                    title: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.sizeOf(context).width * 0.5,
+                                          child: Text(
+                                            locations[value],
+                                            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 19),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        if (pickedLocationNotifier.value == locations[value]) const Icon(Icons.check),
+                                      ],
                                     ),
-                                    if (pickedLocationNotifier.value == locations[value]) const Icon(Icons.check),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
             },
-          );
-        }
-      },
       child: SizedBox(
         width: 100,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              Icons.location_on,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            const Icon(Icons.location_on),
             SizedBox(
               width: 70,
               child: ValueListenableBuilder(
