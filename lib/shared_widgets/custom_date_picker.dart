@@ -18,7 +18,7 @@ class CustomDatePicker {
                   valueListenable: focusedDateNotifier,
                   builder: (context, value, child) {
                     return TableCalendar(
-                      sixWeekMonthsEnforced: false,
+                      sixWeekMonthsEnforced: true,
                       headerStyle: HeaderStyle(
                         formatButtonVisible: false,
                         titleCentered: true,
@@ -35,6 +35,10 @@ class CustomDatePicker {
                         todayTextStyle: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
                         todayDecoration: BoxDecoration(
                           border: Border.all(color: Theme.of(context).colorScheme.primary),
+                          shape: BoxShape.circle,
+                        ),
+                        markerDecoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
                           shape: BoxShape.circle,
                         ),
                         selectedTextStyle: Theme.of(context).textTheme.titleMedium!,
