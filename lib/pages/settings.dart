@@ -16,6 +16,7 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(true);
 
   Future<void> setSettings() async {
     username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
@@ -68,6 +69,12 @@ class SettingsPage extends StatelessWidget {
       } else {
         nextWeekOrderNotificationNotifier.value = false;
       }
+    }
+    String? bigMarkersString = await loggedInCanteen.readData('calendar_big_markers');
+    if (bigMarkersString == "1") {
+      calendarBigMarkersNotifier.value = true;
+    } else {
+      calendarBigMarkersNotifier.value = false;
     }
 
     String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_$username');
@@ -430,6 +437,26 @@ class SettingsPage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+            title: const Text("Velké ukazatele v kalendáři"),
+            trailing: ValueListenableBuilder(
+              valueListenable: calendarBigMarkersNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: (value) async {
+                    calendarBigMarkersNotifier.value = value;
+                    if (value) {
+                      loggedInCanteen.saveData('calendar_big_markers', '1');
+                    } else {
+                      loggedInCanteen.saveData('calendar_big_markers', '');
+                    }
+                    doNotifications();
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
