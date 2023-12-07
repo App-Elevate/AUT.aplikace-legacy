@@ -1,3 +1,8 @@
+## 1.2.9
+
+- Předělaný kalendář
+- Opraveno chování androidu, kdy se proces aplikace nespoštěl, tudíž nechodily notifikace
+
 ## 1.2.8
 
 - Opraveny chyby v offline režimu aplikace

@@ -237,6 +237,10 @@ class SettingsPage extends StatelessWidget {
                             if (timeOfDay != null && context.mounted) {
                               jidloNotificationTime.value = timeOfDay.format(context);
                               loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
+                              LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+                              for (LoggedInUser uzivatel in loginData.users) {
+                                await loggedInCanteen.saveData("lastJidloDneCheck-${uzivatel.username}", '');
+                              }
                               doNotifications();
                             }
                           },
