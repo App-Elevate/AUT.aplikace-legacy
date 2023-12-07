@@ -370,6 +370,7 @@ Future<void> doNotifications({bool force = false}) async {
         );
       }
     } catch (e) {
+      await Future.delayed(const Duration(seconds: 5));
       AwesomeNotifications().cancel(588);
       if (kDebugMode) {
         AwesomeNotifications().createNotification(
@@ -383,6 +384,7 @@ Future<void> doNotifications({bool force = false}) async {
       }
     }
   }
+  await Future.delayed(const Duration(seconds: 5));
   AwesomeNotifications().cancel(588);
   return;
 }
