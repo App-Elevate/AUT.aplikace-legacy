@@ -10,8 +10,8 @@ class MainAccountDrawer extends StatelessWidget {
   });
   final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
-  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>("0");
-  final List locations = ["Lokace 1", "Lokace 2"];
+  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>("Neznámá lokace");
+  final List locations = [];
 
   Future<void> getLocation() async {
     String? pickedLocationString = await loggedInCanteen.readData('location');

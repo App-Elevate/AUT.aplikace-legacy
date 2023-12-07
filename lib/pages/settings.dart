@@ -16,7 +16,7 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
-  final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(false);
 
   Future<void> setSettings() async {
     username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
