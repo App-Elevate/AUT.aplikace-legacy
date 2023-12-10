@@ -1,7 +1,6 @@
 //other imports from current project
 
 import 'package:flutter/foundation.dart';
-//import 'package:workmanager/workmanager.dart';
 import "every_import.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -90,7 +89,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
