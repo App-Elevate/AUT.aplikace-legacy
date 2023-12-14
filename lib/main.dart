@@ -5,6 +5,8 @@ import 'package:autojidelna/local_imports.dart';
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:localization/localization.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -124,6 +126,12 @@ class _MyAppState extends State<MyApp> {
   // Key for the navigator
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
 
+  // ValueNotifier for the back button
+  ValueNotifier<bool> canpop = ValueNotifier<bool>(false);
+
+  // root widget of the app
+  late Widget homeWidget;
+
   // Handling the back button on android being pressed.
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
     if (SwitchAccountVisible().isVisible()) {
@@ -145,7 +153,7 @@ class _MyAppState extends State<MyApp> {
     // After it expires the timer resets and user has to press back button twice again
     Future.delayed(const Duration(seconds: 5), () => canpop.value = false);
     Fluttertoast.showToast(
-        msg: "Zmáčkněte tlačítko zpět pro ukončení aplikace",
+        msg: consts.texts.toastsExit.i18n(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -163,7 +171,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  late Widget homeWidget;
   @override
   void initState() {
     getLatestRelease();
@@ -181,19 +188,48 @@ class _MyAppState extends State<MyApp> {
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == "2") {
-            NotifyTheme().setTheme(ThemeMode.dark);
-          } else if (snapshot.data == "1") {
-            NotifyTheme().setTheme(ThemeMode.light);
-          } else {
-            NotifyTheme().setTheme(ThemeMode.system);
+          switch (snapshot.data) {
+            case '1':
+              NotifyTheme().setTheme(ThemeMode.light);
+              break;
+            case '2':
+              NotifyTheme().setTheme(ThemeMode.dark);
+              break;
+            default:
+              NotifyTheme().setTheme(ThemeMode.system);
+              break;
           }
         }
+
+        LocalJsonLocalization.delegate.directories = ['assets/lang'];
 
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
           builder: (context, themeMode, child) {
             return MaterialApp(
+              localizationsDelegates: [
+                // delegate from flutter_localization
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+
+                // delegate from localization package.
+                //json-file
+                LocalJsonLocalization.delegate,
+                //or map
+                MapLocalization.delegate,
+              ],
+              supportedLocales: const [
+                Locale('cs', 'cz'),
+                //Locale('en', 'US'),
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (supportedLocales.contains(locale)) {
+                  return locale;
+                }
+                // default language
+                return const Locale('en', 'US');
+              },
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
@@ -208,8 +244,6 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-
-  ValueNotifier<bool> canpop = ValueNotifier<bool>(false);
 
   ValueListenableBuilder _pop() {
     return ValueListenableBuilder(
@@ -240,41 +274,33 @@ class LoggingInWidget extends StatelessWidget {
   const LoggingInWidget({
     super.key,
     required this.setHomeWidget,
-    this.index = -1,
+    this.pageIndex = -1,
   });
-  final int index;
+  // index aktualniho dne - pro refresh button v pravo nahoře
+  final int pageIndex;
 
   final Function(Widget widget) setHomeWidget;
+
   @override
   Widget build(BuildContext context) {
+    // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
       future: loggedInCanteen.loginFromStorage(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          if (snapshot.error == 'no login') {
+          if (snapshot.error == ConnectionErrors.noLogin) {
             return LoginScreen(setHomeWidget: setHomeWidget);
-          }
-          if (snapshot.error == 'bad url or connection') {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-          } else if (snapshot.error == 'Špatné heslo') {
+          } else if (snapshot.error == ConnectionErrors.badPassword) {
             Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
           } else {
             Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
           }
           return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
-          if (index != -1) {
-            try {
-              Future.delayed(Duration.zero, () => changeDateTillSuccess(index));
-            } catch (e) {
-              //do nothing
-            }
+          if (pageIndex != -1) {
+            Future.delayed(Duration.zero, () => changeDateTillSuccess(pageIndex));
           } else {
-            try {
-              setCurrentDate();
-            } catch (e) {
-              //do nothing
-            }
+            setCurrentDate();
           }
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
           return MainAppScreen(setHomeWidget: setHomeWidget);

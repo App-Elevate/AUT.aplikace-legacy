@@ -5,8 +5,9 @@ class Prefs {
   final String theme = 'themeMode';
 }
 
+// Strings shown to the user
 class Texts {
-  final String appName = 'Autojídelna';
+  final String toastsExit = 'toasts-exit';
 }
 
 class Consts {

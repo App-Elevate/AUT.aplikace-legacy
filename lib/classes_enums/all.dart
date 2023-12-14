@@ -8,6 +8,23 @@ import 'package:flutter/material.dart';
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }
 
+enum ConnectionErrors {
+  /// user is not logged in (no username and password in secure storage)
+  noLogin,
+
+  /// user has entered the wrong password/username
+  badPassword,
+
+  /// user has entered the wrong url
+  wrongUrl,
+
+  /// connection to the canteen server failed
+  connectionFailed,
+
+  /// user is not connected to the internet
+  noInternet,
+}
+
 //classy pro přihlašování
 
 ///samotný uživatel
