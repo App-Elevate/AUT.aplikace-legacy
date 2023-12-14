@@ -236,3 +236,12 @@ class ColorSchemes {
     onInverseSurface: Colors.black,
   );
 }
+
+class AutojidelnaStyles {
+  final BorderRadiusGeometry accountPanelRadius = const BorderRadius.only(
+    topLeft: Radius.circular(16.0),
+    topRight: Radius.circular(16.0),
+  );
+}
+
+AutojidelnaStyles autojidelnaStyles = AutojidelnaStyles();

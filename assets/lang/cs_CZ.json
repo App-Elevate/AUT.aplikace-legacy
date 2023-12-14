@@ -9,5 +9,9 @@
 
   // Misc
 
-  "logging-in": "Přihlašování..."
+  "logging-in": "Přihlašování...",
+
+  //Account panel
+  "Switch-account-panel-add-account": "Přidat účet",
+  "Switch-account-title": "Účty"
 }
