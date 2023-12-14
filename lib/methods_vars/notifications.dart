@@ -1,9 +1,10 @@
-import 'package:autojidelna/every_import.dart';
-import 'package:autojidelna/main.dart';
+import 'package:autojidelna/local_imports.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_fetch/background_fetch.dart';
+import 'package:canteenlib/canteenlib.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {

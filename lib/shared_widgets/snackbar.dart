@@ -1,6 +1,6 @@
+import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/foundation.dart';
-
-import './../every_import.dart';
+import 'package:flutter/material.dart';
 
 SnackBar snackbarFunction(String snackBarText) {
   return SnackBar(

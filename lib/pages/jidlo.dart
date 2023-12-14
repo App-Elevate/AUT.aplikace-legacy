@@ -1,4 +1,6 @@
-import 'package:autojidelna/every_import.dart';
+import 'package:autojidelna/local_imports.dart';
+import 'package:canteenlib/canteenlib.dart';
+import 'package:flutter/material.dart';
 
 class JidloDetail extends StatelessWidget {
   const JidloDetail({

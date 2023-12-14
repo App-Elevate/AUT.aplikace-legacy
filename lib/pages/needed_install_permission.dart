@@ -1,4 +1,7 @@
-import 'package:autojidelna/every_import.dart';
+import 'package:autojidelna/local_imports.dart';
+import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NeededInstallPermissionPage extends StatelessWidget {
   const NeededInstallPermissionPage({super.key});

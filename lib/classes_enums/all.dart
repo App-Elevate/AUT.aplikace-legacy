@@ -1,6 +1,8 @@
 import 'dart:async';
 
-import './../every_import.dart';
+import 'package:canteenlib/canteenlib.dart';
+import 'package:flutter/material.dart';
+
 export '../methods_vars/notifications.dart';
 
 ///enum pro výběr stránky v navigačním menu

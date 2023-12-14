@@ -1,8 +1,12 @@
-import 'package:autojidelna/main.dart';
+import 'package:autojidelna/local_imports.dart';
 import 'package:background_fetch/background_fetch.dart';
+import 'package:canteenlib/canteenlib.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import './../every_import.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({

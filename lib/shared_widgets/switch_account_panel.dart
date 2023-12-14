@@ -1,5 +1,5 @@
-import 'package:autojidelna/every_import.dart';
-import 'package:autojidelna/main.dart';
+import 'package:autojidelna/local_imports.dart';
+import 'package:flutter/material.dart';
 
 class SwitchAccountPanel extends StatefulWidget {
   const SwitchAccountPanel({

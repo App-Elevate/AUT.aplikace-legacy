@@ -1,7 +1,11 @@
-import 'package:autojidelna/every_import.dart';
-import 'package:autojidelna/main.dart';
+import 'dart:io';
+
+import 'package:autojidelna/local_imports.dart';
+import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void newUpdateDialog(BuildContext context, {int? tries}) {
   if (tries != null && tries > 5) {

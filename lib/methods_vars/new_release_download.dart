@@ -1,8 +1,11 @@
 import 'package:autojidelna/pages/needed_install_permission.dart';
+import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:install_plugin/install_plugin.dart';
-import 'package:autojidelna/every_import.dart';
+import 'package:autojidelna/local_imports.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// Stáhne novou verzi aplikace a nainstaluje ji
 void networkInstallApk(String fileUrl, BuildContext context) async {

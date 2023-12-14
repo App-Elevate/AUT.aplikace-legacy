@@ -1,4 +1,4 @@
-import 'package:autojidelna/every_import.dart';
+import 'package:autojidelna/local_imports.dart';
 
 DateTime convertIndexToDatetime(int index) {
   DateTime newDate = minimalDate.add(Duration(days: index));

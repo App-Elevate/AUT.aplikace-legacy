@@ -1,4 +1,4 @@
-import 'package:autojidelna/every_import.dart';
+import 'package:flutter/material.dart';
 
 class Themes {
   //theme

@@ -1,4 +1,5 @@
-import './../every_import.dart';
+import 'package:autojidelna/local_imports.dart';
+import 'package:flutter/material.dart';
 
 bool reloading = false;
 
