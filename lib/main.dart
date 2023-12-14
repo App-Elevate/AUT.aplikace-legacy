@@ -24,18 +24,19 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_fetch/background_fetch.dart';
 
 void main() async {
-  //ensure that the app is initialized
+  // Ensure that the app is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  //awesome notifications initialization
+  // Awesome notifications initialization
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String version = packageInfo.version;
   String? lastVersion = await loggedInCanteen.readData('lastVersion');
 
-  /// removing the already set notifications if we updated versions
+  // Removing the already set notifications if we updated versions
   if (lastVersion != version) {
-    //if not, set the new version as the last one
+    // Set the new version
     loggedInCanteen.saveData('lastVersion', version);
+
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
       for (LoggedInUser uzivatel in loginData.users) {
@@ -47,35 +48,41 @@ void main() async {
     }
     await AwesomeNotifications().dispose();
   }
+
+  // Initialize the notifications
   initAwesome();
 
-  //setting listeners for when the app is running
+  // Setting listeners for when the app is running and notification button is clicked
   AwesomeNotifications().setListeners(
       onActionReceivedMethod: NotificationController.onActionReceivedMethod,
       onNotificationCreatedMethod: NotificationController.onNotificationCreatedMethod,
       onNotificationDisplayedMethod: NotificationController.onNotificationDisplayedMethod,
       onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
 
-  // detecting if the app was opened from a notification and handling it if it was
+  // Detecting if the app was opened from a notification and handling it if it was
   ReceivedAction? receivedAction = await AwesomeNotifications().getInitialNotificationAction(removeFromActionEvents: false);
   await handleNotificationAction(receivedAction);
 
-  //initializing the background fetch
+  // Initializing the background fetch
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
-  //check if user has opped out of analytics
+  // Check if user has opped out of analytics
+
   String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
-  // know if this release is debug and disable analytics if it is
+
+  // Know if this release is debug and disable analytics if it is
   if (kDebugMode) {
     analyticsDisabled = '1';
   }
 
-  //initializing firebase if analytics are not disabled
+  // Initializing firebase if analytics are not disabled
   if (analyticsDisabled != '1') {
     analyticsEnabledGlobally = true;
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    // Setting up crashlytics
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
@@ -84,8 +91,11 @@ void main() async {
     analytics = FirebaseAnalytics.instance;
   }
 
-  // setting important settings from prefs
+  // Loading settings from preferences
   skipWeekends = await loggedInCanteen.readData('skipWeekends') == '1' ? true : false;
+
+  // Skipping to next monday if we are currently on saturday or sunday
+  // If not initializing normally
   if (skipWeekends) {
     DateTime initialDate = DateTime.now();
     while (initialDate.weekday == 6 || initialDate.weekday == 7) {
@@ -111,20 +121,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // Key for the navigator
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
+
+  // Handling the back button on android being pressed.
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
     if (SwitchAccountVisible().isVisible()) {
       SwitchAccountVisible().setVisible(false);
       return Future<bool>.value(false);
     }
-    //Checks if current Navigator still has screens on the stack.
+    // Checks if current Navigator still has screens on the stack.
+    // And doesn't exit the app if it does
     if (yourKey.currentState!.canPop()) {
       // 'maybePop' method handles the decision of 'pop' to another WillPopScope if they exist.
-      //If no other WillPopScope exists, it returns true
-      yourKey.currentState!.maybePop();
+      // If no other WillPopScope exists, it returns true
+      yourKey.currentState!.pop();
       return Future<bool>.value(false);
     }
+    // If the current Navigator doesn't have any screens on the stack, it exits the app or shows a toast
+    // setting the value to true so that the user can press the back button again and it exits this time
     canpop.value = true;
+    // 5 second timer for the user to press the back button again.
+    // After it expires the timer resets and user has to press back button twice again
     Future.delayed(const Duration(seconds: 5), () => canpop.value = false);
     Fluttertoast.showToast(
         msg: "Zmáčkněte tlačítko zpět pro ukončení aplikace",
@@ -137,6 +155,7 @@ class _MyAppState extends State<MyApp> {
     return Future<bool>.value(true);
   }
 
+  // function for replacing the route stack and setting a new widget
   void setHomeWidget(Widget widget) {
     Navigator.of(_myAppKey.currentContext!).popUntil((route) => route.isFirst);
     setState(() {
@@ -156,8 +175,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    // Setting the theme
     return FutureBuilder(
-      future: loggedInCanteen.readData("ThemeMode"),
+      future: loggedInCanteen.readData(consts.prefs.theme),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
@@ -169,6 +189,7 @@ class _MyAppState extends State<MyApp> {
             NotifyTheme().setTheme(ThemeMode.system);
           }
         }
+
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
           builder: (context, themeMode, child) {

@@ -165,10 +165,10 @@ class SettingsPage extends StatelessWidget {
                       loggedInCanteen.saveData('ThemeMode', "2");
                       NotifyTheme().setTheme(ThemeMode.dark);
                     } else if (newSelection.first == "1") {
-                      loggedInCanteen.saveData("ThemeMode", "1");
+                      loggedInCanteen.saveData(consts.prefs.theme, "1");
                       NotifyTheme().setTheme(ThemeMode.light);
                     } else {
-                      loggedInCanteen.saveData("ThemeMode", "0");
+                      loggedInCanteen.saveData(consts.prefs.theme, "0");
                       NotifyTheme().setTheme(ThemeMode.system);
                     }
                   },
