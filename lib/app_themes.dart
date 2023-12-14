@@ -107,6 +107,7 @@ class Themes {
 
       // list tiles
       listTileTheme: ListTileThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
         selectedColor: colorScheme.primary,
         iconColor: colorScheme.onBackground,

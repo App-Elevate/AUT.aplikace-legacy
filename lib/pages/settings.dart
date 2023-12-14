@@ -16,6 +16,7 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
   final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(false);
 
   Future<void> setSettings() async {
     username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
@@ -23,6 +24,7 @@ class SettingsPage extends StatelessWidget {
     if (kDebugMode) {
       analyticsDisabled = '1';
     }
+
     if (analyticsDisabled == '1') {
       collectData.value = true;
       analyticsEnabledGlobally = false;
@@ -30,6 +32,21 @@ class SettingsPage extends StatelessWidget {
       collectData.value = false;
       analyticsEnabledGlobally = true;
     }
+
+    String? themeString = await loggedInCanteen.readData('ThemeMode');
+    if (themeString == null || themeString == '') {
+      themeNotifier.value = "0";
+    } else {
+      themeNotifier.value = themeString;
+    }
+
+    String? bigMarkersString = await loggedInCanteen.readData('calendar_big_markers');
+    if (bigMarkersString == "1") {
+      calendarBigMarkersNotifier.value = true;
+    } else {
+      calendarBigMarkersNotifier.value = false;
+    }
+
     String? skipWeekendsString = await loggedInCanteen.readData('skipWeekends');
     if (skipWeekendsString == '1') {
       skipWeekendsNotifier.value = true;
@@ -38,36 +55,19 @@ class SettingsPage extends StatelessWidget {
       skipWeekendsNotifier.value = false;
       skipWeekends = false;
     }
+
     String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo-$username');
     if (jidloNotificationString == '1') {
       jidloNotificationNotifier.value = true;
     } else {
       jidloNotificationNotifier.value = false;
     }
+
     String? jidloNotificationTimeString = await loggedInCanteen.readData('FoodNotificationTime');
     if (jidloNotificationTimeString == null || jidloNotificationTimeString == '') {
       jidloNotificationTime.value = "11:00";
     } else {
       jidloNotificationTime.value = jidloNotificationTimeString;
-    }
-    String? themeString = await loggedInCanteen.readData('ThemeMode');
-    if (themeString == null || themeString == '') {
-      themeNotifier.value = "0";
-    } else {
-      themeNotifier.value = themeString;
-    }
-    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('ignore_objednat_$username');
-    if (nextWeekOrderNotificationNotifierString == '') {
-      nextWeekOrderNotificationNotifier.value = true;
-    } else if (nextWeekOrderNotificationNotifierString == '1') {
-      nextWeekOrderNotificationNotifier.value = false;
-    } else if (nextWeekOrderNotificationNotifierString != null) {
-      DateTime? ignoreDate = DateTime.tryParse(nextWeekOrderNotificationNotifierString);
-      if (ignoreDate != null && ignoreDate.isBefore(DateTime.now())) {
-        nextWeekOrderNotificationNotifier.value = true;
-      } else {
-        nextWeekOrderNotificationNotifier.value = false;
-      }
     }
 
     String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_$username');
@@ -81,6 +81,20 @@ class SettingsPage extends StatelessWidget {
         lowCreditNotificationNotifier.value = true;
       } else {
         lowCreditNotificationNotifier.value = false;
+      }
+    }
+
+    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('ignore_objednat_$username');
+    if (nextWeekOrderNotificationNotifierString == '') {
+      nextWeekOrderNotificationNotifier.value = true;
+    } else if (nextWeekOrderNotificationNotifierString == '1') {
+      nextWeekOrderNotificationNotifier.value = false;
+    } else if (nextWeekOrderNotificationNotifierString != null) {
+      DateTime? ignoreDate = DateTime.tryParse(nextWeekOrderNotificationNotifierString);
+      if (ignoreDate != null && ignoreDate.isBefore(DateTime.now())) {
+        nextWeekOrderNotificationNotifier.value = true;
+      } else {
+        nextWeekOrderNotificationNotifier.value = false;
       }
     }
   }
@@ -100,9 +114,9 @@ class SettingsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (!onlyAnalytics) _graphics(),
-                    _dataUsage(context),
                     if (!onlyAnalytics) _convenience(context),
                     if (!onlyAnalytics) _notifications(context),
+                    _dataUsage(context),
                     if (kDebugMode && !onlyAnalytics) _debug(),
                   ],
                 ),
@@ -112,6 +126,81 @@ class SettingsPage extends StatelessWidget {
             return const SizedBox();
           }
         },
+      ),
+    );
+  }
+
+  Padding _graphics() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text('Vzhled'),
+          ),
+          const Divider(),
+          ValueListenableBuilder(
+            valueListenable: themeNotifier,
+            builder: (context, value, child) {
+              return ListTile(
+                title: SegmentedButton<String>(
+                  showSelectedIcon: false,
+                  selected: <String>{value},
+                  onSelectionChanged: (Set<String> newSelection) {
+                    themeNotifier.value = newSelection.first;
+                    if (newSelection.first == "2") {
+                      loggedInCanteen.saveData('ThemeMode', "2");
+                      NotifyTheme().setTheme(ThemeMode.dark);
+                    } else if (newSelection.first == "1") {
+                      loggedInCanteen.saveData("ThemeMode", "1");
+                      NotifyTheme().setTheme(ThemeMode.light);
+                    } else {
+                      loggedInCanteen.saveData("ThemeMode", "0");
+                      NotifyTheme().setTheme(ThemeMode.system);
+                    }
+                  },
+                  segments: const [
+                    ButtonSegment<String>(
+                      value: "0",
+                      label: Text("Systém"),
+                      enabled: true,
+                    ),
+                    ButtonSegment<String>(
+                      value: "1",
+                      label: Text("Světlý"),
+                    ),
+                    ButtonSegment<String>(
+                      value: "2",
+                      label: Text("Tmavý"),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("Velké ukazatele v kalendáři"),
+            trailing: ValueListenableBuilder(
+              valueListenable: calendarBigMarkersNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: (value) async {
+                    calendarBigMarkersNotifier.value = value;
+                    if (value) {
+                      loggedInCanteen.saveData('calendar_big_markers', '1');
+                    } else {
+                      loggedInCanteen.saveData('calendar_big_markers', '');
+                    }
+                    doNotifications();
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -145,40 +234,6 @@ class SettingsPage extends StatelessWidget {
                   },
                 );
               },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Padding _debug() {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Debug Options'),
-          ),
-          const Divider(),
-          ListTile(
-            title: ElevatedButton(
-              onPressed: () async {
-                doNotifications(force: true);
-              },
-              child: const Text('Force send notifs'),
-            ),
-          ),
-          ListTile(
-            title: ElevatedButton(
-              onPressed: () async {
-                await loggedInCanteen.saveData('lastJidloDneCheck-$username', '2000-00-00');
-                await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
-                doNotifications();
-              },
-              child: const Text('Send notifs'),
             ),
           ),
         ],
@@ -385,7 +440,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Padding _graphics() {
+  Padding _debug() {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -393,47 +448,26 @@ class SettingsPage extends StatelessWidget {
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Vzhled'),
+            child: Text('Debug Options'),
           ),
           const Divider(),
-          ValueListenableBuilder(
-            valueListenable: themeNotifier,
-            builder: (context, value, child) {
-              return ListTile(
-                title: SegmentedButton<String>(
-                  showSelectedIcon: false,
-                  selected: <String>{value},
-                  onSelectionChanged: (Set<String> newSelection) {
-                    themeNotifier.value = newSelection.first;
-                    if (newSelection.first == "2") {
-                      loggedInCanteen.saveData('ThemeMode', "2");
-                      NotifyTheme().setTheme(ThemeMode.dark);
-                    } else if (newSelection.first == "1") {
-                      loggedInCanteen.saveData("ThemeMode", "1");
-                      NotifyTheme().setTheme(ThemeMode.light);
-                    } else {
-                      loggedInCanteen.saveData("ThemeMode", "0");
-                      NotifyTheme().setTheme(ThemeMode.system);
-                    }
-                  },
-                  segments: const [
-                    ButtonSegment<String>(
-                      value: "0",
-                      label: Text("Systém"),
-                      enabled: true,
-                    ),
-                    ButtonSegment<String>(
-                      value: "1",
-                      label: Text("Světlý"),
-                    ),
-                    ButtonSegment<String>(
-                      value: "2",
-                      label: Text("Tmavý"),
-                    ),
-                  ],
-                ),
-              );
-            },
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                doNotifications(force: true);
+              },
+              child: const Text('Force send notifs'),
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: () async {
+                await loggedInCanteen.saveData('lastJidloDneCheck-$username', '2000-00-00');
+                await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
+                doNotifications();
+              },
+              child: const Text('Send notifs'),
+            ),
           ),
         ],
       ),
