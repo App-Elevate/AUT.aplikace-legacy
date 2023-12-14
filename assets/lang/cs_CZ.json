@@ -11,7 +11,12 @@
 
   "logging-in": "Přihlašování...",
 
-  //Account panel
+  // Account panel
   "Switch-account-panel-add-account": "Přidat účet",
-  "Switch-account-title": "Účty"
+  "Switch-account-title": "Účty",
+
+  // Update
+  "update-snackbar-waiting": "Aktualizace - Čeká se na oprávnění",
+  "update-snackbar-error": "Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu",
+  "update-snackbar-try-again": "Zkusit znovu"
 }

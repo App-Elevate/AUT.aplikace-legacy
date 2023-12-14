@@ -20,6 +20,10 @@ class Texts {
 
   final String accPanelAddAccount = 'switch-account-panel-add-account';
   final String accPanelTitle = 'switch-account-panel-title';
+
+  final String updateSnackbarWaiting = 'update-snackbar-waiting';
+  final String updateSnackbarError = 'update-snackbar-error';
+  final String updateSnackbarTryAgain = 'update-snackbar-try-again';
 }
 
 class Consts {
