@@ -37,7 +37,7 @@ SnackBar updateSnackbar(BuildContext context, ValueListenable valueListenable) {
             closeSnackbarAfterDelay(context);
             return updateFinished(context);
           default:
-            return Text('Nová aktualizace se stahuje - ${(value * 100).toInt()}%');
+            return Text(consts.texts.updateSnackbarDownloading.i18n([(value * 100).toInt().toString()]));
         }
       },
     ),
@@ -91,11 +91,11 @@ Row updateFinished(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      const Expanded(
+      Expanded(
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           //light or dark theme
-          child: Text('Aktualizace byla stažena, instalování'),
+          child: Text(consts.texts.updateSnackbarDownloaded.i18n()),
         ),
       ),
       Builder(

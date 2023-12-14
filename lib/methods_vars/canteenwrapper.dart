@@ -521,4 +521,12 @@ class LoggedInCanteen {
     }
     return false;
   }
+
+  Future<bool> isPrefTrue(String sharedPrefenceKey) async {
+    String? bigMarkersString = await readData(sharedPrefenceKey);
+    if (bigMarkersString == "1") {
+      return true;
+    }
+    return false;
+  }
 }
