@@ -17,8 +17,6 @@ import 'firebase_options.dart';
 // Toast for exiting the app
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Notifications
@@ -290,52 +288,34 @@ class LoggingInWidget extends StatelessWidget {
         if (snapshot.hasError) {
           if (snapshot.error == ConnectionErrors.noLogin) {
             return LoginScreen(setHomeWidget: setHomeWidget);
-          } else if (snapshot.error == ConnectionErrors.badPassword) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
-          } else {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.badLogin) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadLogin.i18n(), setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.wrongUrl) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadUrl.i18n(), setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.noInternet) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsNoInternet.i18n(), setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.connectionFailed) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadConnection.i18n(), setHomeWidget));
           }
-          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          // setting the initial date
           if (pageIndex != -1) {
             Future.delayed(Duration.zero, () => changeDateTillSuccess(pageIndex));
           } else {
             setCurrentDate();
           }
+          // checking for updates
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
+          // routing to main app screen (jidelnicek)
           return MainAppScreen(setHomeWidget: setHomeWidget);
-        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data?.success == false) {
-          //test internet connection
-          InternetConnectionChecker().hasConnection.then((value) {
-            if (value) {
-              Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
-              return;
-            }
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-          });
-          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-        } else {
-          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         }
+        return Container(
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
-    );
-  }
-}
-
-class LoadingLoginPage extends StatelessWidget {
-  const LoadingLoginPage({
-    super.key,
-    required this.textWidget,
-  });
-  final Widget? textWidget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 }

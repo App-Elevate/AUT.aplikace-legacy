@@ -13,7 +13,7 @@ enum ConnectionErrors {
   noLogin,
 
   /// user has entered the wrong password/username
-  badPassword,
+  badLogin,
 
   /// user has entered the wrong url
   wrongUrl,
@@ -251,10 +251,4 @@ class NotifyTheme {
   void setTheme(ThemeMode mode) {
     themeNotifier.value = mode;
   }
-}
-
-class LoginStructure {
-  bool success;
-  int id;
-  LoginStructure(this.id, this.success);
 }

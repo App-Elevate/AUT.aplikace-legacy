@@ -1,3 +1,13 @@
 {
-  "toasts-exit": "Zmáčkněte tlačítko zpět pro ukončení aplikace"
+  "toasts-exit": "Zmáčkněte tlačítko zpět pro ukončení aplikace",
+
+  // Errors
+  "errors-bad-login": "Špatné přihlašovací údaje",
+  "errors-bad-url": "Špatné Url",
+  "errors-bad-connection": "Nepodařilo se připojit k serveru icanteen",
+  "errors-no-internet": "Nemáte připojení k internetu",
+
+  // Misc
+
+  "logging-in": "Přihlašování..."
 }

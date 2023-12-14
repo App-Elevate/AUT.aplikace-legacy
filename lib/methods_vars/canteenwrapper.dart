@@ -37,26 +37,30 @@ class LoggedInCanteen {
   CanteenData? _canteenData;
   Canteen? _canteenInstance;
 
+  /// Can throw ConnectionErrors
   Future<Canteen> get canteenInstance async {
     if (_canteenInstance != null && _canteenInstance!.prihlasen) {
       return _canteenInstance!;
     }
-    if ((await loginFromStorage()).success) {
-      return _canteenInstance!;
+    try {
+      await loginFromStorage();
+    } catch (e) {
+      return Future.error(e);
     }
-    //uživatel není přihlášen
-    return Future.error(ConnectionErrors.noLogin);
+    return _canteenInstance!;
   }
 
+  /// Can throw ConnectionErrors
   Future<CanteenData> get canteenData async {
     if (_canteenData != null && _canteenInstance!.prihlasen) {
       return _canteenData!;
     }
-    if ((await loginFromStorage()).success) {
-      return _canteenData!;
+    try {
+      await loginFromStorage();
+    } catch (e) {
+      return Future.error(e);
     }
-    //uživatel není přihlášen
-    return Future.error(ConnectionErrors.noLogin);
+    return _canteenData!;
   }
 
   /// this should be safe to get since we are always logged in and the data is created with the login.
@@ -99,19 +103,19 @@ class LoggedInCanteen {
   /// logs you in if you are already logged in or gets the already existing instance
   /// We don't have to do much of error handling here because we already know that the user has been logged in.
   /// If there is an error it's probably because of the internet connection or change of password. The popup is the best solution.
-  Future<LoginStructure> loginFromStorage() async {
+  Future<int> loginFromStorage() async {
     try {
       LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
       if (loginData.currentlyLoggedIn) {
         _canteenInstance = await _login(loginData.users[loginData.currentlyLoggedInId!].url, loginData.users[loginData.currentlyLoggedInId!].username,
             loginData.users[loginData.currentlyLoggedInId!].password,
             safetyId: (_canteenData?.id ?? 0) + 1);
-        return LoginStructure(loginData.currentlyLoggedInId!, true);
+        return loginData.currentlyLoggedInId!;
       } else {
         return Future.error(ConnectionErrors.noLogin);
       }
     } catch (e) {
-      return LoginStructure(0, false);
+      return Future.error(e);
     }
   }
 
@@ -131,7 +135,7 @@ class LoggedInCanteen {
   ///
   /// [ConnectionErrors.noLogin] - user is not logged in (no username and password in secure storage)
   ///
-  /// [ConnectionErrors.badPassword] - user has entered the wrong password/username
+  /// [ConnectionErrors.badLogin] - user has entered the wrong password/username
   ///
   /// [ConnectionErrors.wrongUrl] - user has entered the wrong url
   ///
@@ -147,8 +151,8 @@ class LoggedInCanteen {
     _canteenInstance = Canteen(url);
     try {
       if (!await _canteenInstance!.login(username, password)) {
-        _loginCompleter!.completeError(ConnectionErrors.badPassword);
-        return Future.error(ConnectionErrors.badPassword);
+        _loginCompleter!.completeError(ConnectionErrors.badLogin);
+        return Future.error(ConnectionErrors.badLogin);
       }
     } catch (e) {
       try {
@@ -243,8 +247,12 @@ class LoggedInCanteen {
   /// in both cases it throws 'no internet'
   Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
     date = DateTime(date.year, date.month, date.day);
-    if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen) && !(await loginFromStorage()).success) {
-      return Future.error(ConnectionErrors.noLogin);
+    if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen)) {
+      try {
+        await loginFromStorage();
+      } catch (e) {
+        return Future.error(e);
+      }
     }
     int id = _canteenData!.id;
     requireNew ??= false;

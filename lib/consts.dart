@@ -8,6 +8,13 @@ class Prefs {
 // Strings shown to the user
 class Texts {
   final String toastsExit = 'toasts-exit';
+
+  final String errorsBadLogin = 'errors-bad-login';
+  final String errorsBadUrl = 'errors-bad-url';
+  final String errorsBadConnection = 'errors-bad-connection';
+  final String errorsNoInternet = 'errors-no-internet';
+
+  final String loggingIn = 'logging-in';
 }
 
 class Consts {
