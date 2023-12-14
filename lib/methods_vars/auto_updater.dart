@@ -1,3 +1,5 @@
+// Soubor pro automatickou aktualizaci aplikace. Tento soubor získá informace z githubu a následně zobrazí popup
+
 import 'dart:convert';
 import 'dart:io';
 

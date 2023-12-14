@@ -1,3 +1,4 @@
+// settings page. Can be called from account drawer or login screen
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';

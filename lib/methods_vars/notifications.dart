@@ -1,8 +1,9 @@
+// File containing all code for notifications. This includes background fetch and awesome notifications.
+
 import 'package:autojidelna/local_imports.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:canteenlib/canteenlib.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -66,8 +67,6 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   BackgroundFetch.finish(taskId);
 }
 
-FirebaseAnalytics? analytics;
-bool analyticsEnabledGlobally = false;
 Future<bool> initAwesome() async {
   LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
   List<NotificationChannelGroup> notificationChannelGroups = [];

@@ -1,3 +1,5 @@
+// Purpose: Contains the themes and color schemes used in the app.
+
 import 'package:flutter/material.dart';
 
 class Themes {

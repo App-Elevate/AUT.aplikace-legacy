@@ -1,3 +1,5 @@
+// Page that opens when the user hasn't granted the permission to install apps from unknown sources
+
 import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';

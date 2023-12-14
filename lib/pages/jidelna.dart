@@ -1,3 +1,5 @@
+// The main page. This is what user sees once he is logged in
+
 import 'package:autojidelna/local_imports.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:canteenlib/canteenlib.dart';

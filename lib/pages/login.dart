@@ -1,3 +1,4 @@
+// Purpose: Login screen for the app
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

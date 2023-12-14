@@ -1,3 +1,5 @@
+// Hlavní soubor ve kterém Jsou indexovány obědy a zároveň je zde vytvořena instance canteenu
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';

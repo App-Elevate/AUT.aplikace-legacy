@@ -1,3 +1,4 @@
+// Snackbar widgets
 import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

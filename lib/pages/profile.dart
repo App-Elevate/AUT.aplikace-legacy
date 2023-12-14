@@ -1,7 +1,8 @@
+// Profile page including just some basic statistics and user info
+
 import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
 
-/*zde se budou nacházet nastavení a možnost zakoupit pro a vidět statistiky profilu Icanteen. Zároveň zde bude systém pro měnění účtů */
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key, required this.setHomeWidget});
   final Function(Widget widget) setHomeWidget;

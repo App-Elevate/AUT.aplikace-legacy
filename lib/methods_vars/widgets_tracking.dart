@@ -1,10 +1,16 @@
+// variables and methods for tracking the widgets and their states
 import 'package:autojidelna/local_imports.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 bool reloading = false;
 
 // snackbar je ze začátku skrytý
 SnackBarShown snackbarshown = SnackBarShown(shown: false);
+
+bool analyticsEnabledGlobally = false;
+
+FirebaseAnalytics? analytics;
 
 late void Function(Widget widget) setHomeWidgetPublic;
 

@@ -1,3 +1,5 @@
+// This is the custom date picker used in the main app screen (jidelna.dart)
+
 import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';

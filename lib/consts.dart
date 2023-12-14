@@ -1,1 +1,1 @@
-// Constants for the project
+// Purpose: stores constants used throughout the app.

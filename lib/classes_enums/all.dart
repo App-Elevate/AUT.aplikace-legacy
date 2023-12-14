@@ -1,3 +1,4 @@
+// Všechny objekty a enumy, které se používají v aplikaci
 import 'dart:async';
 
 import 'package:canteenlib/canteenlib.dart';

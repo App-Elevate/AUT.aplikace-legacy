@@ -1,3 +1,5 @@
+// Includes all popups used in the app.
+
 import 'dart:io';
 
 import 'package:autojidelna/local_imports.dart';

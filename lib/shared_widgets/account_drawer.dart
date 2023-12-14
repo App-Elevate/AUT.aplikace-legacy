@@ -1,3 +1,5 @@
+// account drawer that is called from the main page (top left)
+
 import 'package:flutter/foundation.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,4 @@
+// Code that automatically downloads and installs a new release of the app (once the user has pressed the update button in popup)
 import 'package:autojidelna/pages/needed_install_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
