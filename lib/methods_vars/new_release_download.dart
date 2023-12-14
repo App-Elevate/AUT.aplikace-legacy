@@ -1,11 +1,17 @@
 // Code that automatically downloads and installs a new release of the app (once the user has pressed the update button in popup)
-import 'package:autojidelna/pages/needed_install_permission.dart';
-import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
-import 'package:install_plugin/install_plugin.dart';
+
 import 'package:autojidelna/local_imports.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:package_info_plus/package_info_plus.dart';
+
+import 'package:path_provider/path_provider.dart';
+
+import 'package:dio/dio.dart';
+
+import 'package:install_plugin/install_plugin.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 
 /// Stáhne novou verzi aplikace a nainstaluje ji

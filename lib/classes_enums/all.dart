@@ -2,9 +2,8 @@
 import 'dart:async';
 
 import 'package:canteenlib/canteenlib.dart';
-import 'package:flutter/material.dart';
 
-export '../methods_vars/notifications.dart';
+import 'package:flutter/material.dart';
 
 ///enum pro výběr stránky v navigačním menu
 enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }

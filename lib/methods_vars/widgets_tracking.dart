@@ -1,6 +1,9 @@
 // variables and methods for tracking the widgets and their states
+
 import 'package:autojidelna/local_imports.dart';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
+
 import 'package:flutter/material.dart';
 
 bool reloading = false;

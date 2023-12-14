@@ -1,10 +1,18 @@
 // account drawer that is called from the main page (top left)
 
+// kDebugMode
 import 'package:flutter/foundation.dart';
-import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
+
+import 'package:autojidelna/local_imports.dart';
+
+// Getting current version
 import 'package:package_info_plus/package_info_plus.dart';
+
+// Sharing app using the share button
 import 'package:share_plus/share_plus.dart';
+
+// Opening links in browser
 import 'package:url_launcher/url_launcher.dart';
 
 class MainAccountDrawer extends StatelessWidget {

@@ -1,6 +1,7 @@
 // Profile page including just some basic statistics and user info
 
 import 'package:autojidelna/local_imports.dart';
+
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {

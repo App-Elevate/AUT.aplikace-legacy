@@ -1,12 +1,19 @@
 // Includes all popups used in the app.
 
+// Used for determining platform
 import 'dart:io';
 
-import 'package:autojidelna/local_imports.dart';
+// flutter
 import 'package:flutter/material.dart';
+
+import 'package:autojidelna/local_imports.dart';
+
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+
+// getting the current version of the app
 import 'package:package_info_plus/package_info_plus.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 void newUpdateDialog(BuildContext context, {int? tries}) {

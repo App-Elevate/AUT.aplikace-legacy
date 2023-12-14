@@ -1,14 +1,23 @@
 // Hlavní soubor ve kterém Jsou indexovány obědy a zároveň je zde vytvořena instance canteenu
 
+// completer
 import 'dart:async';
+
+// json encoding and decoding
 import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:canteenlib/canteenlib.dart';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
 import 'package:autojidelna/local_imports.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 ///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
 const int numberOfMaxLunches = 3;

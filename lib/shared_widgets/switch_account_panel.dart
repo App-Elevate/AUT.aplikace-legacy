@@ -1,6 +1,7 @@
 // Contains the panel that shows up when the user clicks on the account icon in the account drawer
 
 import 'package:autojidelna/local_imports.dart';
+
 import 'package:flutter/material.dart';
 
 class SwitchAccountPanel extends StatefulWidget {
