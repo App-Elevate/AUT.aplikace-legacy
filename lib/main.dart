@@ -226,7 +226,7 @@ class _MyAppState extends State<MyApp> {
                   return locale;
                 }
                 // default language
-                return const Locale('en', 'US');
+                return const Locale('cs', 'CZ');
               },
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,

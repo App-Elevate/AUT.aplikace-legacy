@@ -1,7 +1,6 @@
 {
   "toast-exit": "Zmáčkněte tlačítko zpět pro ukončení aplikace",
 
-  // Errors
   "errors-bad-login": "Špatné přihlašovací údaje",
   "errors-bad-url": "Špatné Url",
   "errors-bad-connection": "Nepodařilo se připojit k serveru icanteen",
@@ -10,10 +9,8 @@
   "errors-login-failed-detail": "Při přihlašování došlo k chybě: %s",
   "errors-downloading-app": "Aktualizace aplikace selhala",
   "errors-downloading-app-detail": "Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.",
-
   "errors-load": "Selhalo načítání jídelníčku",
 
-  // Misc
   "try-again": "Zkusit znovu",
   "cancel": "Zrušit",
   "profile": "Profil",
@@ -22,17 +19,14 @@
   "app-name": "Autojídelna",
   "share-description": "Autojídelna (aplikace na objednávání jídla)",
 
-  // Account panel
-  "Switch-account-panel-add-account": "Přidat účet",
-  "Switch-account-title": "Účty",
+  "switch-account-panel-add-account": "Přidat účet",
+  "switch-account-panel-title": "Účty",
 
-  // Update
   "update-snackbar-waiting": "Aktualizace - Čeká se na oprávnění",
   "update-snackbar-error": "Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu",
   "update-snackbar-downloading": "Nová Aktualizace se stahuje - %s%%",
   "update-snackbar-downloaded": "Aktualizace byla stažena, instalování",
 
-  // popups
   "popup-new-version-available": "Nová verze aplikace - %s",
   "popup-new-update-info": "Nová verze přináší: ",
   "popup-changelog-not-available": "Changelog není k dispozici",
