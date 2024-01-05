@@ -181,12 +181,15 @@ class _MyAppState extends State<MyApp> {
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == "2") {
-            NotifyTheme().setTheme(ThemeMode.dark);
-          } else if (snapshot.data == "1") {
-            NotifyTheme().setTheme(ThemeMode.light);
-          } else {
-            NotifyTheme().setTheme(ThemeMode.system);
+          switch (snapshot.data) {
+            case "2":
+              NotifyTheme().setTheme(ThemeMode.dark);
+              break;
+            case "1":
+              NotifyTheme().setTheme(ThemeMode.light);
+              break;
+            default:
+              NotifyTheme().setTheme(ThemeMode.system);
           }
         }
 
