@@ -44,7 +44,7 @@ class SettingsPage extends StatelessWidget {
       analyticsEnabledGlobally = true;
     }
 
-    String? themeString = await loggedInCanteen.readData(consts.prefs.theme);
+    String? themeString = await loggedInCanteen.readData(consts.prefs.themeMode);
     if (themeString == null || themeString == '') {
       themeNotifier.value = "0";
     } else {
@@ -163,15 +163,15 @@ class SettingsPage extends StatelessWidget {
                     themeNotifier.value = newSelection.first;
                     switch (newSelection.first) {
                       case "2":
-                        loggedInCanteen.saveData(consts.prefs.theme, "2");
+                        loggedInCanteen.saveData(consts.prefs.themeMode, "2");
                         NotifyTheme().setTheme(ThemeMode.dark);
                         break;
                       case "1":
-                        loggedInCanteen.saveData(consts.prefs.theme, "1");
+                        loggedInCanteen.saveData(consts.prefs.themeMode, "1");
                         NotifyTheme().setTheme(ThemeMode.light);
                         break;
                       default:
-                        loggedInCanteen.saveData(consts.prefs.theme, "0");
+                        loggedInCanteen.saveData(consts.prefs.themeMode, "0");
                         NotifyTheme().setTheme(ThemeMode.system);
                     }
                   },

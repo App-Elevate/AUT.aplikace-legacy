@@ -177,7 +177,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Setting the theme
     return FutureBuilder(
-      future: loggedInCanteen.readData(consts.prefs.theme),
+      future: loggedInCanteen.readData(consts.prefs.themeMode),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
