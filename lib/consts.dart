@@ -2,8 +2,7 @@
 
 /// Shared Preferences Ids
 class Prefs {
-  final String themeMode = 'themeMode';
-  final String themeStyle = 'themeStyle';
+  final String themeMode = 'theme';
 }
 
 class Texts {
