@@ -197,7 +197,7 @@ class SettingsPage extends StatelessWidget {
           ),
           if (themeModeNotifier.value != "1")
             ListTile(
-              title: const Text("Pure black mode"),
+              title: const Text("Pure black"),
               trailing: ValueListenableBuilder(
                 valueListenable: isPureBlackNotifier,
                 builder: (context, value, child) {
