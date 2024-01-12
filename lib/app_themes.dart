@@ -6,6 +6,10 @@ class Themes {
   //theme
   static ThemeData getTheme(ColorScheme colorScheme) {
     bool dark = false;
+    bool pureBlack = false;
+    if (colorScheme == ColorSchemes.pureBlack) {
+      pureBlack = true;
+    }
     if (colorScheme.brightness == Brightness.dark) {
       dark = true;
     }
@@ -32,7 +36,7 @@ class Themes {
         color: colorScheme.onBackground,
       ),
       appBarTheme: AppBarTheme(
-        elevation: 2,
+        elevation: pureBlack ? 0 : 2,
         backgroundColor: dark ? colorScheme.background : colorScheme.primary,
         foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         iconTheme: IconThemeData(
@@ -42,7 +46,7 @@ class Themes {
           color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
       ),
-      cardTheme: const CardTheme(elevation: 2),
+      cardTheme: CardTheme(elevation: pureBlack ? 0 : 2),
       dividerTheme: DividerThemeData(color: colorScheme.surfaceVariant),
       drawerTheme: DrawerThemeData(
         surfaceTintColor: colorScheme.surfaceTint,
@@ -55,7 +59,7 @@ class Themes {
       //popups
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
-        elevation: 2,
+        elevation: pureBlack ? 0 : 2,
         contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -72,11 +76,11 @@ class Themes {
         headerBackgroundColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
         headerForegroundColor: dark ? colorScheme.onBackground : colorScheme.onSecondary,
         dividerColor: Colors.transparent,
-        elevation: 0,
+        elevation: pureBlack ? 0 : 2,
       ),
       dialogTheme: DialogTheme(
         backgroundColor: colorScheme.background,
-        elevation: 1,
+        elevation: pureBlack ? 3 : 2,
         surfaceTintColor: colorScheme.surfaceTint,
         alignment: Alignment.center,
         iconColor: colorScheme.onBackground,
@@ -93,7 +97,7 @@ class Themes {
       timePickerTheme: TimePickerThemeData(
         backgroundColor: colorScheme.background,
         dialHandColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
-        elevation: 0,
+        elevation: pureBlack ? 3 : 2,
       ),
 
       //inputs
@@ -209,7 +213,7 @@ class ColorSchemes {
     surface: Colors.white,
     onSurface: Colors.black,
     surfaceVariant: Colors.black12,
-    onSurfaceVariant: Colors.black54, //maybe #14?
+    onSurfaceVariant: Colors.black54,
     scrim: Colors.black54,
     surfaceTint: Colors.black,
     inverseSurface: Color(0xFF121212),
@@ -229,8 +233,28 @@ class ColorSchemes {
     surface: Color(0xff121212),
     onSurface: Colors.white,
     surfaceVariant: Colors.white12,
-    onSurfaceVariant: Colors.white54, //maybe #14?
+    onSurfaceVariant: Colors.white54,
     scrim: Colors.black54,
+    surfaceTint: Colors.white,
+    inverseSurface: Color(0xFFdddddd),
+    onInverseSurface: Colors.black,
+  );
+
+  static ColorScheme pureBlack = const ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color(0xffbb86fc),
+    onPrimary: Colors.white,
+    secondary: Color(0xff018786),
+    onSecondary: Colors.white,
+    error: Color(0xFFCF6679),
+    onError: Colors.white,
+    background: Colors.black,
+    onBackground: Colors.white,
+    surface: Color(0xff121212),
+    onSurface: Colors.white,
+    surfaceVariant: Colors.white12,
+    onSurfaceVariant: Colors.white54,
+    scrim: Colors.black87,
     surfaceTint: Colors.white,
     inverseSurface: Color(0xFFdddddd),
     onInverseSurface: Colors.black,

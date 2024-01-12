@@ -26,7 +26,8 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> lowCreditNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
-  final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<String> themeModeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<bool> isPureBlackNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(false);
 
   Future<void> setSettings() async {
@@ -44,11 +45,14 @@ class SettingsPage extends StatelessWidget {
       analyticsEnabledGlobally = true;
     }
 
-    String? themeString = await loggedInCanteen.readData(consts.prefs.theme);
-    if (themeString == null || themeString == '') {
-      themeNotifier.value = "0";
-    } else {
-      themeNotifier.value = themeString;
+    List<String>? themeSettingsList = await loggedInCanteen.readListData(consts.prefs.themeMode);
+    if (themeSettingsList != null) {
+      if (themeSettingsList[0] != "") {
+        themeModeNotifier.value = themeSettingsList[0];
+      }
+      if (themeSettingsList[2] != "") {
+        isPureBlackNotifier.value = themeSettingsList[2] == "1";
+      }
     }
 
     String? bigMarkersString = await loggedInCanteen.readData('calendar_big_markers');
@@ -153,26 +157,23 @@ class SettingsPage extends StatelessWidget {
           ),
           const Divider(),
           ValueListenableBuilder(
-            valueListenable: themeNotifier,
+            valueListenable: themeModeNotifier,
             builder: (context, value, child) {
               return ListTile(
                 title: SegmentedButton<String>(
                   showSelectedIcon: false,
                   selected: <String>{value},
                   onSelectionChanged: (Set<String> newSelection) {
-                    themeNotifier.value = newSelection.first;
+                    themeModeNotifier.value = newSelection.first;
                     switch (newSelection.first) {
                       case "2":
-                        loggedInCanteen.saveData(consts.prefs.theme, "2");
-                        NotifyTheme().setTheme(ThemeMode.dark);
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.dark));
                         break;
                       case "1":
-                        loggedInCanteen.saveData(consts.prefs.theme, "1");
-                        NotifyTheme().setTheme(ThemeMode.light);
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.light));
                         break;
                       default:
-                        loggedInCanteen.saveData(consts.prefs.theme, "0");
-                        NotifyTheme().setTheme(ThemeMode.system);
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
                     }
                   },
                   segments: const [
@@ -194,6 +195,26 @@ class SettingsPage extends StatelessWidget {
               );
             },
           ),
+          if (themeModeNotifier.value != "1")
+            ListTile(
+              title: const Text("Pure black"),
+              trailing: ValueListenableBuilder(
+                valueListenable: isPureBlackNotifier,
+                builder: (context, value, child) {
+                  return Switch.adaptive(
+                    value: value,
+                    onChanged: (value) async {
+                      isPureBlackNotifier.value = value;
+                      if (value) {
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
+                      } else {
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
           ListTile(
             title: const Text("Velké ukazatele v kalendáři"),
             trailing: ValueListenableBuilder(
@@ -208,7 +229,6 @@ class SettingsPage extends StatelessWidget {
                     } else {
                       loggedInCanteen.saveData('calendar_big_markers', '');
                     }
-                    doNotifications();
                   },
                 );
               },

@@ -177,32 +177,50 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Setting the theme
     return FutureBuilder(
-      future: loggedInCanteen.readData(consts.prefs.theme),
+      future: loggedInCanteen.readListData(consts.prefs.themeMode),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          switch (snapshot.data) {
+          List<String> themeSettings = snapshot.data as List<String>;
+
+          // Migration from v1.2.8 and lower
+          loggedInCanteen.readData("ThemeMode").then((value) {
+            if (value != null && value != "") {
+              themeSettings[0] = value;
+              loggedInCanteen.removeData("ThemeMode");
+            }
+          });
+
+          switch (themeSettings[0]) {
             case "2":
-              NotifyTheme().setTheme(ThemeMode.dark);
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.dark));
               break;
             case "1":
-              NotifyTheme().setTheme(ThemeMode.light);
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.light));
               break;
             default:
-              NotifyTheme().setTheme(ThemeMode.system);
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
+          }
+          switch (themeSettings[2]) {
+            case "1":
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
+              break;
+            default:
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
           }
         }
 
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
-          builder: (context, themeMode, child) {
+          builder: (context, themeSettings, child) {
+            bool pureBlack = themeSettings.pureBlack ?? false;
             return MaterialApp(
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
               theme: Themes.getTheme(ColorSchemes.light),
-              darkTheme: Themes.getTheme(ColorSchemes.dark),
-              themeMode: themeMode,
+              darkTheme: Themes.getTheme(pureBlack ? ColorSchemes.pureBlack : ColorSchemes.dark),
+              themeMode: themeSettings.themeMode,
               home: child,
             );
           },

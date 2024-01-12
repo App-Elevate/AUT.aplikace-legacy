@@ -1,6 +1,7 @@
 // Všechny objekty a enumy, které se používají v aplikaci
 import 'dart:async';
 
+import 'package:autojidelna/local_imports.dart';
 import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/material.dart';
@@ -228,11 +229,58 @@ class NotifyTheme {
     return _instance;
   }
 
-  ValueNotifier<ThemeMode> themeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
+  ValueNotifier<ThemeSettings> themeNotifier = ValueNotifier<ThemeSettings>(ThemeSettings());
 
   // Method to update the theme mode and notify listeners.
-  void setTheme(ThemeMode mode) {
-    themeNotifier.value = mode;
+  void setTheme(ThemeSettings mode) {
+    themeNotifier.value = ThemeSettings(
+      themeMode: mode.themeMode,
+      themeStyle: mode.themeStyle,
+      pureBlack: mode.pureBlack,
+    );
+    saveThemeSettings(themeNotifier.value);
+  }
+
+  void saveThemeSettings(ThemeSettings settings) {
+    String themeMode = "0";
+    String themeStyle = "0";
+    String pureBlack = "0";
+    switch (settings.themeMode) {
+      case ThemeMode.dark:
+        themeMode = "2";
+        break;
+      case ThemeMode.light:
+        themeMode = "1";
+        break;
+      default:
+        themeMode = "0";
+    }
+    pureBlack = settings.pureBlack == true ? "1" : "0";
+    loggedInCanteen.saveListData(consts.prefs.themeMode, [themeMode, themeStyle, pureBlack]);
+  }
+}
+
+class ThemeSettings {
+  ThemeMode? themeMode;
+  String? themeStyle;
+  bool? pureBlack;
+
+  ThemeSettings({
+    this.themeMode,
+    this.themeStyle,
+    this.pureBlack,
+  });
+
+  ThemeSettings copyWith({
+    ThemeMode? themeMode,
+    String? themeStyle,
+    bool? pureBlack,
+  }) {
+    return ThemeSettings(
+      themeMode: themeMode ?? this.themeMode,
+      themeStyle: themeStyle ?? this.themeStyle,
+      pureBlack: pureBlack ?? this.pureBlack,
+    );
   }
 }
 
