@@ -36,7 +36,7 @@ dependencies:
   http: ^1.1.0
   flutter_widget_from_html: ^0.14.7
   fluttertoast: ^8.0.8
-  package_info_plus: ^4.2.0
+  package_info_plus: ^5.0.1
   url_launcher: ^6.1.14
   device_info_plus: ^9.0.3
   markdown: ^7.1.1
