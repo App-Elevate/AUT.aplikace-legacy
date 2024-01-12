@@ -52,7 +52,7 @@ class Themes {
         surfaceTintColor: colorScheme.surfaceTint,
         backgroundColor: colorScheme.background,
         scrimColor: colorScheme.scrim,
-        elevation: pureBlack ? 0 : 2,
+        elevation: 2,
         width: 275,
       ),
 
@@ -80,7 +80,7 @@ class Themes {
       ),
       dialogTheme: DialogTheme(
         backgroundColor: colorScheme.background,
-        elevation: pureBlack ? 0 : 2,
+        elevation: pureBlack ? 3 : 2,
         surfaceTintColor: colorScheme.surfaceTint,
         alignment: Alignment.center,
         iconColor: colorScheme.onBackground,
@@ -97,7 +97,7 @@ class Themes {
       timePickerTheme: TimePickerThemeData(
         backgroundColor: colorScheme.background,
         dialHandColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
-        elevation: pureBlack ? 0 : 2,
+        elevation: pureBlack ? 3 : 2,
       ),
 
       //inputs
