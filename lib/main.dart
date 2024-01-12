@@ -182,6 +182,15 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           List<String> themeSettings = snapshot.data as List<String>;
+
+          // Migration from v1.2.8 and lower
+          loggedInCanteen.readData("ThemeMode").then((value) {
+            if (value != null && value != "") {
+              themeSettings[0] = value;
+              loggedInCanteen.removeData("ThemeMode");
+            }
+          });
+
           switch (themeSettings[0]) {
             case "2":
               NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.dark));
