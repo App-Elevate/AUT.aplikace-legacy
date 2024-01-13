@@ -203,9 +203,19 @@ class SettingsPage extends StatelessWidget {
                 valueListenable: themeStyleNotifier,
                 builder: (context, value, child) {
                   return ListView.builder(
+                    itemCount: ThemeStyle.values.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
+                      Map<ThemeStyle, List<Color>> colorStyleList = ColorSchemes().colorStyles;
+
+                      ThemeStyle currentTheme = colorStyleList.keys.toList()[index];
+                      List<Color> currentColors = colorStyleList[currentTheme]!;
+
+                      Color primaryLight = currentColors[0];
+                      Color secondaryLight = currentColors[1];
+                      Color primaryDark = currentColors[2];
+                      Color secondaryDark = currentColors[3];
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
@@ -228,6 +238,9 @@ class SettingsPage extends StatelessWidget {
                                   height: 35,
                                   child: AppBar(
                                     automaticallyImplyLeading: false,
+                                    backgroundColor: Theme.of(context).brightness == Brightness.light
+                                        ? primaryLight
+                                        : Theme.of(context).appBarTheme.backgroundColor,
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(13.0),
@@ -251,7 +264,7 @@ class SettingsPage extends StatelessWidget {
                                       padding: const EdgeInsets.fromLTRB(5, 30, 5, 2),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context).brightness == Brightness.light ? primaryLight : primaryDark,
                                           borderRadius: BorderRadius.circular(12.5),
                                         ),
                                         height: 20,
@@ -273,7 +286,7 @@ class SettingsPage extends StatelessWidget {
                                       padding: const EdgeInsets.fromLTRB(5, 40, 5, 2),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.secondary,
+                                          color: Theme.of(context).brightness == Brightness.light ? secondaryLight : secondaryDark,
                                           borderRadius: BorderRadius.circular(12.5),
                                         ),
                                         height: 20,
