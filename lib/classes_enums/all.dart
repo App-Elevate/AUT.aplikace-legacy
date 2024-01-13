@@ -262,7 +262,7 @@ class NotifyTheme {
 
 class ThemeSettings {
   ThemeMode? themeMode;
-  String? themeStyle;
+  ThemeStyle? themeStyle;
   bool? pureBlack;
 
   ThemeSettings({
@@ -273,7 +273,7 @@ class ThemeSettings {
 
   ThemeSettings copyWith({
     ThemeMode? themeMode,
-    String? themeStyle,
+    ThemeStyle? themeStyle,
     bool? pureBlack,
   }) {
     return ThemeSettings(
@@ -282,6 +282,15 @@ class ThemeSettings {
       pureBlack: pureBlack ?? this.pureBlack,
     );
   }
+}
+
+enum ThemeStyle {
+  defaultStyle,
+  plumBrown,
+  blueMauve,
+  rustOlive,
+  evergreenSlate,
+  crimsonEarth,
 }
 
 class LoginStructure {
