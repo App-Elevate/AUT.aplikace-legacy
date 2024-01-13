@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class Themes {
   //theme
-  static ThemeData getTheme(ColorScheme colorScheme) {
+  static ThemeData getTheme(ColorScheme colorScheme, {bool? isPureBlack}) {
     bool dark = false;
     bool pureBlack = false;
-    if (colorScheme == ColorSchemes.pureBlack) {
+    if (isPureBlack != null && isPureBlack == true) {
       pureBlack = true;
     }
     if (colorScheme.brightness == Brightness.dark) {
@@ -202,7 +202,19 @@ class Themes {
 }
 
 class ColorSchemes {
-  Map<ThemeStyle, List<Color>> colorStyles = {
+  static ColorScheme getColorScheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
+    List<Color> colors = colorStyles[themeStyle]!;
+    switch (isPureBlack) {
+      case true:
+        return pureBlack.copyWith(primary: colors[2], secondary: colors[3]);
+      case false:
+        return dark.copyWith(primary: colors[2], secondary: colors[3]);
+      default:
+        return light.copyWith(primary: colors[0], secondary: colors[1]);
+    }
+  }
+
+  static Map<ThemeStyle, List<Color>> colorStyles = {
     ThemeStyle.defaultStyle: [
       const Color(0xFFE040FB),
       const Color(0x7B009687),

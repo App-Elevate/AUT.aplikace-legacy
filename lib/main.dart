@@ -237,8 +237,9 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(ColorSchemes.light),
-              darkTheme: Themes.getTheme(pureBlack ? ColorSchemes.pureBlack : ColorSchemes.dark),
+              theme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle ?? ThemeStyle.defaultStyle)),
+              darkTheme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle ?? ThemeStyle.defaultStyle, isPureBlack: pureBlack),
+                  isPureBlack: pureBlack),
               themeMode: themeSettings.themeMode,
               home: child,
             );

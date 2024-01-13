@@ -210,7 +210,7 @@ class SettingsPage extends StatelessWidget {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      Map<ThemeStyle, List<Color>> colorStyleList = ColorSchemes().colorStyles;
+                      Map<ThemeStyle, List<Color>> colorStyleList = ColorSchemes.colorStyles;
 
                       ThemeStyle currentTheme = colorStyleList.keys.toList()[index];
                       List<Color> currentColors = colorStyleList[currentTheme]!;
