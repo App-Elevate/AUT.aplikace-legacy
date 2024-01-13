@@ -36,6 +36,7 @@ class Themes {
         color: colorScheme.onBackground,
       ),
       appBarTheme: AppBarTheme(
+        scrolledUnderElevation: pureBlack ? 0 : 2,
         elevation: pureBlack ? 0 : 2,
         backgroundColor: dark ? colorScheme.background : colorScheme.primary,
         foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
@@ -46,7 +47,7 @@ class Themes {
           color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
       ),
-      cardTheme: CardTheme(elevation: pureBlack ? 0 : 2),
+      cardTheme: const CardTheme(elevation: 2),
       dividerTheme: DividerThemeData(color: colorScheme.surfaceVariant),
       drawerTheme: DrawerThemeData(
         surfaceTintColor: colorScheme.surfaceTint,
