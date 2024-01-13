@@ -27,6 +27,7 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
   final ValueNotifier<String> themeModeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<String> themeStyleNotifier = ValueNotifier<String>("0");
   final ValueNotifier<bool> isPureBlackNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(false);
 
@@ -194,6 +195,104 @@ class SettingsPage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+            title: SizedBox(
+              height: 225,
+              child: ValueListenableBuilder(
+                valueListenable: themeStyleNotifier,
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                          onTap: () => themeStyleNotifier.value = index.toString(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  width: 3,
+                                  color: themeStyleNotifier.value == index.toString()
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                                color: Theme.of(context).colorScheme.background),
+                            height: 250,
+                            width: 125,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 35,
+                                  child: AppBar(
+                                    automaticallyImplyLeading: false,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(13.0),
+                                        topRight: Radius.circular(13.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Divider(
+                                  color: Colors.transparent,
+                                ),
+                                ListTile(
+                                  dense: true,
+                                  enabled: false,
+                                  minVerticalPadding: 0,
+                                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  title: Card(
+                                    margin: EdgeInsets.zero,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(5, 30, 5, 2),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          borderRadius: BorderRadius.circular(12.5),
+                                        ),
+                                        height: 20,
+                                        width: 100,
+                                        margin: const EdgeInsets.only(bottom: 5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  dense: true,
+                                  enabled: false,
+                                  minVerticalPadding: 0,
+                                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  title: Card(
+                                    margin: EdgeInsets.zero,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(5, 40, 5, 2),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.secondary,
+                                          borderRadius: BorderRadius.circular(12.5),
+                                        ),
+                                        height: 20,
+                                        width: 100,
+                                        margin: const EdgeInsets.only(bottom: 5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ),
           if (themeModeNotifier.value != "1")
             ListTile(
