@@ -201,6 +201,25 @@ class _MyAppState extends State<MyApp> {
             default:
               NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
           }
+          switch (themeSettings[1]) {
+            case "5":
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.crimsonEarth));
+              break;
+            case "4":
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.evergreenSlate));
+              break;
+            case "3":
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.rustOlive));
+              break;
+            case "2":
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.blueMauve));
+              break;
+            case "1":
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.plumBrown));
+              break;
+            default:
+              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.defaultStyle));
+          }
           switch (themeSettings[2]) {
             case "1":
               NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
