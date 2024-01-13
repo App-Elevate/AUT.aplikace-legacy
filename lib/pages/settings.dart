@@ -51,6 +51,9 @@ class SettingsPage extends StatelessWidget {
       if (themeSettingsList[0] != "") {
         themeModeNotifier.value = themeSettingsList[0];
       }
+      if (themeSettingsList[1] != "") {
+        themeStyleNotifier.value = themeSettingsList[1];
+      }
       if (themeSettingsList[2] != "") {
         isPureBlackNotifier.value = themeSettingsList[2] == "1";
       }
@@ -219,7 +222,10 @@ class SettingsPage extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
-                          onTap: () => themeStyleNotifier.value = index.toString(),
+                          onTap: () {
+                            themeStyleNotifier.value = index.toString();
+                            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: currentTheme));
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),

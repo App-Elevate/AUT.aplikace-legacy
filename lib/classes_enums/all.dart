@@ -255,6 +255,25 @@ class NotifyTheme {
       default:
         themeMode = "0";
     }
+    switch (settings.themeStyle) {
+      case ThemeStyle.crimsonEarth:
+        themeStyle = "5";
+        break;
+      case ThemeStyle.evergreenSlate:
+        themeStyle = "4";
+        break;
+      case ThemeStyle.rustOlive:
+        themeStyle = "3";
+        break;
+      case ThemeStyle.blueMauve:
+        themeStyle = "2";
+        break;
+      case ThemeStyle.plumBrown:
+        themeStyle = "1";
+        break;
+      default:
+        themeStyle = "0";
+    }
     pureBlack = settings.pureBlack == true ? "1" : "0";
     loggedInCanteen.saveListData(consts.prefs.themeMode, [themeMode, themeStyle, pureBlack]);
   }
