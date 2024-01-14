@@ -232,14 +232,13 @@ class _MyAppState extends State<MyApp> {
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
           builder: (context, themeSettings, child) {
-            bool pureBlack = themeSettings.pureBlack ?? false;
+            bool pureBlack = themeSettings.pureBlack;
             return MaterialApp(
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle ?? ThemeStyle.defaultStyle)),
-              darkTheme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle ?? ThemeStyle.defaultStyle, isPureBlack: pureBlack),
-                  isPureBlack: pureBlack),
+              theme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle)),
+              darkTheme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle, isPureBlack: pureBlack), isPureBlack: pureBlack),
               themeMode: themeSettings.themeMode,
               home: child,
             );

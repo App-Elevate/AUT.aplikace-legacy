@@ -280,14 +280,14 @@ class NotifyTheme {
 }
 
 class ThemeSettings {
-  ThemeMode? themeMode;
-  ThemeStyle? themeStyle;
-  bool? pureBlack;
+  ThemeMode themeMode;
+  ThemeStyle themeStyle;
+  bool pureBlack;
 
   ThemeSettings({
-    this.themeMode,
-    this.themeStyle,
-    this.pureBlack,
+    this.themeMode = ThemeMode.system,
+    this.themeStyle = ThemeStyle.defaultStyle,
+    this.pureBlack = false,
   });
 
   ThemeSettings copyWith({
