@@ -182,6 +182,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           List<String> themeSettings = snapshot.data as List<String>;
+          ThemeMode themeMode;
+          ThemeStyle themeStyle;
+          bool pureBlack;
 
           // Migration from v1.2.8 and lower
           loggedInCanteen.readData("ThemeMode").then((value) {
@@ -193,40 +196,41 @@ class _MyAppState extends State<MyApp> {
 
           switch (themeSettings[0]) {
             case "2":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.dark));
+              themeMode = ThemeMode.dark;
               break;
             case "1":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.light));
+              themeMode = ThemeMode.light;
               break;
             default:
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
+              themeMode = ThemeMode.system;
           }
           switch (themeSettings[1]) {
             case "5":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.crimsonEarth));
+              themeStyle = ThemeStyle.crimsonEarth;
               break;
             case "4":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.evergreenSlate));
+              themeStyle = ThemeStyle.evergreenSlate;
               break;
             case "3":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.rustOlive));
+              themeStyle = ThemeStyle.rustOlive;
               break;
             case "2":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.blueMauve));
+              themeStyle = ThemeStyle.blueMauve;
               break;
             case "1":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.plumBrown));
+              themeStyle = ThemeStyle.plumBrown;
               break;
             default:
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: ThemeStyle.defaultStyle));
+              themeStyle = ThemeStyle.defaultStyle;
           }
           switch (themeSettings[2]) {
             case "1":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
+              pureBlack = true;
               break;
             default:
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
+              pureBlack = false;
           }
+          NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
         }
 
         return ValueListenableBuilder(
