@@ -160,11 +160,11 @@ class SettingsPage extends StatelessWidget {
             child: Text('Vzhled'),
           ),
           const Divider(),
-          ValueListenableBuilder(
-            valueListenable: themeModeNotifier,
-            builder: (context, value, child) {
-              return ListTile(
-                title: SegmentedButton<String>(
+          ListTile(
+            title: ValueListenableBuilder(
+              valueListenable: themeModeNotifier,
+              builder: (context, value, child) {
+                return SegmentedButton<String>(
                   showSelectedIcon: false,
                   selected: <String>{value},
                   onSelectionChanged: (Set<String> newSelection) {
@@ -195,9 +195,9 @@ class SettingsPage extends StatelessWidget {
                       label: Text("Tmavý"),
                     ),
                   ],
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           ListTile(
             title: SizedBox(
@@ -211,14 +211,9 @@ class SettingsPage extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       Map<ThemeStyle, List<Color>> colorStyleList = ColorSchemes.colorStyles;
-
                       ThemeStyle currentTheme = colorStyleList.keys.toList()[index];
                       List<Color> currentColors = colorStyleList[currentTheme]!;
 
-                      Color primaryLight = currentColors[0];
-                      Color secondaryLight = currentColors[1];
-                      Color primaryDark = currentColors[2];
-                      Color secondaryDark = currentColors[3];
                       return Padding(
                         padding: const EdgeInsets.all(5),
                         child: GestureDetector(
@@ -245,7 +240,7 @@ class SettingsPage extends StatelessWidget {
                                   child: AppBar(
                                     automaticallyImplyLeading: false,
                                     backgroundColor: Theme.of(context).brightness == Brightness.light
-                                        ? primaryLight
+                                        ? currentColors[1]
                                         : Theme.of(context).appBarTheme.backgroundColor,
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
@@ -270,7 +265,7 @@ class SettingsPage extends StatelessWidget {
                                       padding: const EdgeInsets.fromLTRB(5, 30, 5, 2),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).brightness == Brightness.light ? primaryLight : primaryDark,
+                                          color: Theme.of(context).brightness == Brightness.light ? currentColors[0] : currentColors[2],
                                           borderRadius: BorderRadius.circular(12.5),
                                         ),
                                         height: 20,
@@ -292,7 +287,7 @@ class SettingsPage extends StatelessWidget {
                                       padding: const EdgeInsets.fromLTRB(5, 40, 5, 2),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).brightness == Brightness.light ? secondaryLight : secondaryDark,
+                                          color: Theme.of(context).brightness == Brightness.light ? currentColors[1] : currentColors[3],
                                           borderRadius: BorderRadius.circular(12.5),
                                         ),
                                         height: 20,
