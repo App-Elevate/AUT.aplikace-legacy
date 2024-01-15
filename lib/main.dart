@@ -223,13 +223,7 @@ class _MyAppState extends State<MyApp> {
             default:
               themeStyle = ThemeStyle.defaultStyle;
           }
-          switch (themeSettings[2]) {
-            case "1":
-              pureBlack = true;
-              break;
-            default:
-              pureBlack = false;
-          }
+          pureBlack = themeSettings[2] == "1";
           NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
         }
 

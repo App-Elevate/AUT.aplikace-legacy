@@ -275,7 +275,7 @@ class NotifyTheme {
       default:
         themeStyle = "0";
     }
-    pureBlack = settings.pureBlack == true ? "1" : "0";
+    pureBlack = settings.pureBlack ? "1" : "0";
     loggedInCanteen.saveListData(consts.prefs.themeMode, [themeMode, themeStyle, pureBlack]);
   }
 }
