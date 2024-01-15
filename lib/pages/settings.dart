@@ -132,7 +132,7 @@ class SettingsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (!onlyAnalytics) _graphics(),
+                    if (!onlyAnalytics) _graphics(context),
                     if (!onlyAnalytics) _convenience(context),
                     if (!onlyAnalytics) _notifications(context),
                     _dataUsage(context),
@@ -149,7 +149,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Padding _graphics() {
+  Padding _graphics(context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -308,26 +308,28 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
-          if (themeModeNotifier.value != "1")
-            ListTile(
-              title: const Text("Pure black"),
-              trailing: ValueListenableBuilder(
-                valueListenable: isPureBlackNotifier,
-                builder: (context, value, child) {
-                  return Switch.adaptive(
-                    value: value,
-                    onChanged: (value) async {
-                      isPureBlackNotifier.value = value;
-                      if (value) {
-                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
-                      } else {
-                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
-                      }
-                    },
-                  );
-                },
-              ),
+          ListTile(
+            enabled: Theme.of(context).brightness == Brightness.dark,
+            title: const Text("Pure black"),
+            trailing: ValueListenableBuilder(
+              valueListenable: isPureBlackNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: Theme.of(context).brightness == Brightness.dark
+                      ? (value) async {
+                          isPureBlackNotifier.value = value;
+                          if (value) {
+                            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
+                          } else {
+                            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
+                          }
+                        }
+                      : null,
+                );
+              },
             ),
+          ),
           ListTile(
             title: const Text("Velké ukazatele v kalendáři"),
             trailing: ValueListenableBuilder(
