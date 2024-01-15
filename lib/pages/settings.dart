@@ -240,7 +240,7 @@ class SettingsPage extends StatelessWidget {
                                   child: AppBar(
                                     automaticallyImplyLeading: false,
                                     backgroundColor: Theme.of(context).brightness == Brightness.light
-                                        ? currentColors[1]
+                                        ? currentColors[0]
                                         : Theme.of(context).appBarTheme.backgroundColor,
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
