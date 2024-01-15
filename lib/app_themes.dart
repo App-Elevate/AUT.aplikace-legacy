@@ -4,7 +4,7 @@ import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
 
 class Themes {
-  //theme
+  /// Gets themeData
   static ThemeData getTheme(ColorScheme colorScheme, {bool? isPureBlack}) {
     bool dark = false;
     bool pureBlack = false;
@@ -15,13 +15,13 @@ class Themes {
       dark = true;
     }
     return ThemeData(
-      //misc
+      // Misc
       useMaterial3: true,
       applyElevationOverlayColor: true,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.adaptivePlatformDensity,
 
-      //colors
+      // Colors
       colorScheme: colorScheme,
       canvasColor: colorScheme.background,
       disabledColor: colorScheme.surfaceVariant,
@@ -31,7 +31,7 @@ class Themes {
       splashFactory: NoSplash.splashFactory,
       typography: Typography.material2021(),
 
-      //main
+      // Main
       iconTheme: IconThemeData(
         size: 30,
         color: colorScheme.onBackground,
@@ -58,7 +58,7 @@ class Themes {
         width: 275,
       ),
 
-      //popups
+      // Popups
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
         elevation: pureBlack ? 0 : 2,
@@ -102,7 +102,7 @@ class Themes {
         elevation: pureBlack ? 3 : 2,
       ),
 
-      //inputs
+      // Inputs
       inputDecorationTheme: const InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
@@ -113,7 +113,7 @@ class Themes {
         helperStyle: TextStyle(),
       ),
 
-      // list tiles
+      // List tiles
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
@@ -136,7 +136,7 @@ class Themes {
         childrenPadding: const EdgeInsets.only(bottom: 8),
       ),
 
-      //buttons
+      // Buttons
       switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -202,6 +202,7 @@ class Themes {
 }
 
 class ColorSchemes {
+  /// Gets a colorscheme based on arguments
   static ColorScheme getColorScheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
     List<Color> colors = colorStyles[themeStyle]!;
     switch (isPureBlack) {
@@ -214,6 +215,9 @@ class ColorSchemes {
     }
   }
 
+  /// Map of color combinations used by the app for theme style
+  ///
+  /// Colors are saved as a List<Color> = [primaryLight, secondaryLight, primaryDark, secondaryDark]
   static Map<ThemeStyle, List<Color>> colorStyles = {
     ThemeStyle.defaultStyle: [
       const Color(0xFFE040FB),

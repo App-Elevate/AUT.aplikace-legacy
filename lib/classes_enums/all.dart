@@ -231,7 +231,7 @@ class NotifyTheme {
 
   ValueNotifier<ThemeSettings> themeNotifier = ValueNotifier<ThemeSettings>(ThemeSettings());
 
-  // Method to update the theme mode and notify listeners.
+  /// Method to update and save the theme and notify listeners.
   void setTheme(ThemeSettings mode) {
     themeNotifier.value = ThemeSettings(
       themeMode: mode.themeMode,
@@ -241,6 +241,7 @@ class NotifyTheme {
     saveThemeSettings(themeNotifier.value);
   }
 
+  /// Saves theme settings to shared preferences
   void saveThemeSettings(ThemeSettings settings) {
     String themeMode = "0";
     String themeStyle = "0";
@@ -279,6 +280,7 @@ class NotifyTheme {
   }
 }
 
+/// Represents the configuration settings for the theme
 class ThemeSettings {
   ThemeMode themeMode;
   ThemeStyle themeStyle;
@@ -290,6 +292,7 @@ class ThemeSettings {
     this.pureBlack = false,
   });
 
+  /// Creates a copy of theme settings but with the given fields replaced with the new values.
   ThemeSettings copyWith({
     ThemeMode? themeMode,
     ThemeStyle? themeStyle,
@@ -303,6 +306,7 @@ class ThemeSettings {
   }
 }
 
+/// Describes what colors will be used by the app
 enum ThemeStyle {
   defaultStyle,
   plumBrown,
