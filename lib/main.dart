@@ -241,8 +241,8 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle)),
-              darkTheme: Themes.getTheme(ColorSchemes.getColorScheme(themeSettings.themeStyle, isPureBlack: pureBlack), isPureBlack: pureBlack),
+              theme: Themes.getTheme(themeSettings.themeStyle),
+              darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
               themeMode: themeSettings.themeMode,
               home: child,
             );

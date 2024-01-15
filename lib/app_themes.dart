@@ -5,15 +5,11 @@ import 'package:flutter/material.dart';
 
 class Themes {
   /// Gets themeData
-  static ThemeData getTheme(ColorScheme colorScheme, {bool? isPureBlack}) {
-    bool dark = false;
-    bool pureBlack = false;
-    if (isPureBlack != null && isPureBlack == true) {
-      pureBlack = true;
-    }
-    if (colorScheme.brightness == Brightness.dark) {
-      dark = true;
-    }
+  static ThemeData getTheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
+    ColorScheme colorScheme = ColorSchemes.getColorScheme(themeStyle, isPureBlack: isPureBlack);
+    bool dark = colorScheme.brightness == Brightness.dark;
+    bool pureBlack = isPureBlack ?? false;
+
     return ThemeData(
       // Misc
       useMaterial3: true,
@@ -204,7 +200,7 @@ class Themes {
 class ColorSchemes {
   /// Gets a colorscheme based on arguments
   static ColorScheme getColorScheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
-    List<Color> colors = colorStyles[themeStyle]!;
+    List<Color> colors = colorStyles[themeStyle] ?? colorStyles.values.first;
     switch (isPureBlack) {
       case true:
         return pureBlack.copyWith(primary: colors[2], secondary: colors[3]);
