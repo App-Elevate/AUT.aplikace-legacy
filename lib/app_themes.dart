@@ -224,31 +224,31 @@ class ColorSchemes {
     ThemeStyle.plumBrown: [
       const Color(0xFFAC009E),
       const Color(0xFF815342),
-      const Color(0xFF7D0C74),
+      const Color(0xFFA03998),
       const Color(0xFF7F2A0B),
     ],
     ThemeStyle.blueMauve: [
       const Color(0xFF3741F7),
       const Color(0xFFA3385F),
-      const Color(0xFF4B4ED6),
+      const Color(0xFF6264D7),
       const Color(0xFF6F354E),
     ],
     ThemeStyle.rustOlive: [
       const Color(0xFFAB4D00),
       const Color(0xFF6D692B),
-      const Color(0xFF7A3100),
+      const Color(0xFFC54F00),
       const Color(0xFF53500C),
     ],
     ThemeStyle.evergreenSlate: [
       const Color(0xFF306b1e),
       const Color(0xFF54624d),
-      const Color(0xFF093900),
+      const Color(0xBC19A400),
       const Color(0xFF273421),
     ],
     ThemeStyle.crimsonEarth: [
       const Color(0xFFbe0f00),
       const Color(0xFF775651),
-      const Color(0xFF670400),
+      const Color(0xFFC8423D),
       const Color(0xFF442925),
     ]
   };
