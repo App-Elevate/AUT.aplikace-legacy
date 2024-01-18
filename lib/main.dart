@@ -182,6 +182,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           List<String> themeSettings = snapshot.data as List<String>;
+          ThemeMode themeMode;
+          ThemeStyle themeStyle;
+          bool pureBlack;
 
           // Migration from v1.2.8 and lower
           loggedInCanteen.readData("ThemeMode").then((value) {
@@ -193,33 +196,47 @@ class _MyAppState extends State<MyApp> {
 
           switch (themeSettings[0]) {
             case "2":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.dark));
+              themeMode = ThemeMode.dark;
               break;
             case "1":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.light));
+              themeMode = ThemeMode.light;
               break;
             default:
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
+              themeMode = ThemeMode.system;
           }
-          switch (themeSettings[2]) {
+          switch (themeSettings[1]) {
+            case "5":
+              themeStyle = ThemeStyle.crimsonEarth;
+              break;
+            case "4":
+              themeStyle = ThemeStyle.evergreenSlate;
+              break;
+            case "3":
+              themeStyle = ThemeStyle.rustOlive;
+              break;
+            case "2":
+              themeStyle = ThemeStyle.blueMauve;
+              break;
             case "1":
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
+              themeStyle = ThemeStyle.plumBrown;
               break;
             default:
-              NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
+              themeStyle = ThemeStyle.defaultStyle;
           }
+          pureBlack = themeSettings[2] == "1";
+          NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
         }
 
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
           builder: (context, themeSettings, child) {
-            bool pureBlack = themeSettings.pureBlack ?? false;
+            bool pureBlack = themeSettings.pureBlack;
             return MaterialApp(
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(ColorSchemes.light),
-              darkTheme: Themes.getTheme(pureBlack ? ColorSchemes.pureBlack : ColorSchemes.dark),
+              theme: Themes.getTheme(themeSettings.themeStyle),
+              darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
               themeMode: themeSettings.themeMode,
               home: child,
             );

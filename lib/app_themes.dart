@@ -1,26 +1,23 @@
 // Purpose: Contains the themes and color schemes used in the app.
 
+import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
 
 class Themes {
-  //theme
-  static ThemeData getTheme(ColorScheme colorScheme) {
-    bool dark = false;
-    bool pureBlack = false;
-    if (colorScheme == ColorSchemes.pureBlack) {
-      pureBlack = true;
-    }
-    if (colorScheme.brightness == Brightness.dark) {
-      dark = true;
-    }
+  /// Gets themeData
+  static ThemeData getTheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
+    ColorScheme colorScheme = ColorSchemes.getColorScheme(themeStyle, isPureBlack: isPureBlack);
+    bool dark = colorScheme.brightness == Brightness.dark;
+    bool pureBlack = isPureBlack ?? false;
+
     return ThemeData(
-      //misc
+      // Misc
       useMaterial3: true,
       applyElevationOverlayColor: true,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.adaptivePlatformDensity,
 
-      //colors
+      // Colors
       colorScheme: colorScheme,
       canvasColor: colorScheme.background,
       disabledColor: colorScheme.surfaceVariant,
@@ -30,12 +27,13 @@ class Themes {
       splashFactory: NoSplash.splashFactory,
       typography: Typography.material2021(),
 
-      //main
+      // Main
       iconTheme: IconThemeData(
         size: 30,
         color: colorScheme.onBackground,
       ),
       appBarTheme: AppBarTheme(
+        scrolledUnderElevation: pureBlack ? 0 : 2,
         elevation: pureBlack ? 0 : 2,
         backgroundColor: dark ? colorScheme.background : colorScheme.primary,
         foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
@@ -46,7 +44,7 @@ class Themes {
           color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         ),
       ),
-      cardTheme: CardTheme(elevation: pureBlack ? 0 : 2),
+      cardTheme: const CardTheme(elevation: 2),
       dividerTheme: DividerThemeData(color: colorScheme.surfaceVariant),
       drawerTheme: DrawerThemeData(
         surfaceTintColor: colorScheme.surfaceTint,
@@ -56,7 +54,7 @@ class Themes {
         width: 275,
       ),
 
-      //popups
+      // Popups
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
         elevation: pureBlack ? 0 : 2,
@@ -100,7 +98,7 @@ class Themes {
         elevation: pureBlack ? 3 : 2,
       ),
 
-      //inputs
+      // Inputs
       inputDecorationTheme: const InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
@@ -111,7 +109,7 @@ class Themes {
         helperStyle: TextStyle(),
       ),
 
-      // list tiles
+      // List tiles
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
@@ -134,7 +132,7 @@ class Themes {
         childrenPadding: const EdgeInsets.only(bottom: 8),
       ),
 
-      //buttons
+      // Buttons
       switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -200,6 +198,61 @@ class Themes {
 }
 
 class ColorSchemes {
+  /// Gets a colorscheme based on arguments
+  static ColorScheme getColorScheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
+    List<Color> colors = colorStyles[themeStyle] ?? colorStyles.values.first;
+    switch (isPureBlack) {
+      case true:
+        return pureBlack.copyWith(primary: colors[2], secondary: colors[3]);
+      case false:
+        return dark.copyWith(primary: colors[2], secondary: colors[3]);
+      default:
+        return light.copyWith(primary: colors[0], secondary: colors[1]);
+    }
+  }
+
+  /// Map of color combinations used by the app for theme style
+  ///
+  /// Colors are saved as a List<Color> = [primaryLight, secondaryLight, primaryDark, secondaryDark]
+  static Map<ThemeStyle, List<Color>> colorStyles = {
+    ThemeStyle.defaultStyle: [
+      const Color(0xFFE040FB),
+      const Color(0x7B009687),
+      const Color(0xffbb86fc),
+      const Color(0xff018786),
+    ],
+    ThemeStyle.plumBrown: [
+      const Color(0xFFAC009E),
+      const Color(0xFF815342),
+      const Color(0xFFA03998),
+      const Color(0xFF7F2A0B),
+    ],
+    ThemeStyle.blueMauve: [
+      const Color(0xFF3741F7),
+      const Color(0xFFA3385F),
+      const Color(0xFF6264D7),
+      const Color(0xFF6F354E),
+    ],
+    ThemeStyle.rustOlive: [
+      const Color(0xFFAB4D00),
+      const Color(0xFF6D692B),
+      const Color(0xFFC54F00),
+      const Color(0xFF53500C),
+    ],
+    ThemeStyle.evergreenSlate: [
+      const Color(0xFF306b1e),
+      const Color(0xFF54624d),
+      const Color(0xBC19A400),
+      const Color(0xFF273421),
+    ],
+    ThemeStyle.crimsonEarth: [
+      const Color(0xFFbe0f00),
+      const Color(0xFF775651),
+      const Color(0xFFC8423D),
+      const Color(0xFF442925),
+    ]
+  };
+
   static ColorScheme light = const ColorScheme(
     brightness: Brightness.light,
     primary: Colors.purpleAccent,

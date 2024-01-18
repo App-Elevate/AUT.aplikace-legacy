@@ -231,7 +231,7 @@ class NotifyTheme {
 
   ValueNotifier<ThemeSettings> themeNotifier = ValueNotifier<ThemeSettings>(ThemeSettings());
 
-  // Method to update the theme mode and notify listeners.
+  /// Method to update and save the theme and notify listeners.
   void setTheme(ThemeSettings mode) {
     themeNotifier.value = ThemeSettings(
       themeMode: mode.themeMode,
@@ -241,6 +241,7 @@ class NotifyTheme {
     saveThemeSettings(themeNotifier.value);
   }
 
+  /// Saves theme settings to shared preferences
   void saveThemeSettings(ThemeSettings settings) {
     String themeMode = "0";
     String themeStyle = "0";
@@ -255,25 +256,46 @@ class NotifyTheme {
       default:
         themeMode = "0";
     }
-    pureBlack = settings.pureBlack == true ? "1" : "0";
+    switch (settings.themeStyle) {
+      case ThemeStyle.crimsonEarth:
+        themeStyle = "5";
+        break;
+      case ThemeStyle.evergreenSlate:
+        themeStyle = "4";
+        break;
+      case ThemeStyle.rustOlive:
+        themeStyle = "3";
+        break;
+      case ThemeStyle.blueMauve:
+        themeStyle = "2";
+        break;
+      case ThemeStyle.plumBrown:
+        themeStyle = "1";
+        break;
+      default:
+        themeStyle = "0";
+    }
+    pureBlack = settings.pureBlack ? "1" : "0";
     loggedInCanteen.saveListData(consts.prefs.themeMode, [themeMode, themeStyle, pureBlack]);
   }
 }
 
+/// Represents the configuration settings for the theme
 class ThemeSettings {
-  ThemeMode? themeMode;
-  String? themeStyle;
-  bool? pureBlack;
+  ThemeMode themeMode;
+  ThemeStyle themeStyle;
+  bool pureBlack;
 
   ThemeSettings({
-    this.themeMode,
-    this.themeStyle,
-    this.pureBlack,
+    this.themeMode = ThemeMode.system,
+    this.themeStyle = ThemeStyle.defaultStyle,
+    this.pureBlack = false,
   });
 
+  /// Creates a copy of theme settings but with the given fields replaced with the new values.
   ThemeSettings copyWith({
     ThemeMode? themeMode,
-    String? themeStyle,
+    ThemeStyle? themeStyle,
     bool? pureBlack,
   }) {
     return ThemeSettings(
@@ -282,6 +304,16 @@ class ThemeSettings {
       pureBlack: pureBlack ?? this.pureBlack,
     );
   }
+}
+
+/// Describes what colors will be used by the app
+enum ThemeStyle {
+  defaultStyle,
+  plumBrown,
+  blueMauve,
+  rustOlive,
+  evergreenSlate,
+  crimsonEarth,
 }
 
 class LoginStructure {
