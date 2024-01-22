@@ -48,9 +48,9 @@ class SettingsPage extends StatelessWidget {
     if (kDebugMode) {
       analyticsDisabled = true;
     }
-    collectData.value = analyticsDisabled;
+    disableAnalyticsNotifier.value = analyticsDisabled;
     analyticsEnabledGlobally = !analyticsDisabled;
-    
+
     List<String>? themeSettingsList = await loggedInCanteen.readListData(consts.prefs.theme);
     if (themeSettingsList != null) {
       if (themeSettingsList[0] != "") {
