@@ -57,7 +57,9 @@ class JidloDetail extends StatelessWidget {
           for (Alergen alergen in jidlo.alergeny) {
             alergeny += '${alergen.nazev}, ';
           }
-          alergeny = alergeny.substring(0, alergeny.length - 2);
+          if (alergeny.length > 2) {
+            alergeny = alergeny.substring(0, alergeny.length - 2);
+          }
           JidloKategorizovano jidloString = jidlo.kategorizovano!;
           List<Widget> jidloWidgets = [];
           //Soup
