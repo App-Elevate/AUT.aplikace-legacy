@@ -1,6 +1,7 @@
 // Detail jídla
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/shared_widgets/jidlo_widget.dart';
 
 import 'package:canteenlib/canteenlib.dart';
 
