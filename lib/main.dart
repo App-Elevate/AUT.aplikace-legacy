@@ -186,7 +186,13 @@ class _MyAppState extends State<MyApp> {
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          List<String> themeSettings = snapshot.data as List<String>;
+          List<String> themeSettings;
+          if (snapshot.data == null) {
+            loggedInCanteen.saveListData(consts.prefs.theme, ["0", "0", "0"]);
+            themeSettings = ["0", "0", "0"];
+          } else {
+            themeSettings = snapshot.data as List<String>;
+          }
           ThemeMode themeMode;
           ThemeStyle themeStyle;
           bool pureBlack;
