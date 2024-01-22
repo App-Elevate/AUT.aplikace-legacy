@@ -3,6 +3,7 @@
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 
@@ -13,12 +14,7 @@ class CustomDatePicker {
     bool bigMarkersEnabled = false;
 
     Future<void> setConfig() async {
-      String? bigMarkersString = await loggedInCanteen.readData("calendar_big_markers");
-      if (bigMarkersString == "1") {
-        bigMarkersEnabled = true;
-      } else {
-        bigMarkersEnabled = false;
-      }
+      bigMarkersEnabled = await loggedInCanteen.isPrefTrue(consts.prefs.calendarBigMarkers);
     }
 
     return showDialog<DateTime?>(
@@ -173,9 +169,9 @@ class CustomDatePicker {
                         children: [
                           TextButton(
                             onPressed: () {
-                              Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
+                              Navigator.maybeOf(context)?.popUntil((route) => route.isFirst);
                             },
-                            child: const Text('Zrušit'),
+                            child: Text(consts.texts.datePickerCancel.i18n()),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 10.0),
@@ -183,7 +179,7 @@ class CustomDatePicker {
                               onPressed: () {
                                 Navigator.of(context).pop(focusedDateNotifier.value);
                               },
-                              child: const Text('OK'),
+                              child: Text(consts.texts.datePickerOk.i18n()),
                             ),
                           ),
                         ],

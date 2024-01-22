@@ -3,6 +3,7 @@
 *.log
 *.pyc
 *.swp
+hidden_testing
 .vscode/
 .DS_Store
 .atom/

@@ -30,7 +30,7 @@ Future<ReleaseInfo> getLatestRelease() async {
     if (Platform.isAndroid) {
       isAndroid = true;
     }
-    Uri url = Uri.parse('https://api.github.com/repos/tpkowastaken/autojidelna/releases/latest');
+    Uri url = Uri.parse('https://api.github.com/repos/Autojidelna/autojidelna/releases/latest');
     const Map<String, String> headers = {
       'Accept': 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',

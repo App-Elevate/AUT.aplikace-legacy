@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:localization/localization.dart';
 
 // used to get the version of the app
 import 'package:package_info_plus/package_info_plus.dart';
@@ -20,7 +21,7 @@ class SettingsPage extends StatelessWidget {
   final bool onlyAnalytics;
   late final String username;
 
-  final ValueNotifier<bool> collectData = ValueNotifier<bool>(!analyticsEnabledGlobally);
+  final ValueNotifier<bool> disableAnalyticsNotifier = ValueNotifier<bool>(!analyticsEnabledGlobally);
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
   final ValueNotifier<bool> jidloNotificationNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<bool> lowCreditNotificationNotifier = ValueNotifier<bool>(true);
@@ -31,22 +32,26 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> isPureBlackNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(false);
 
+  Future<void> resetAndDoNotifications() async {
+    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+    for (LoggedInUser uzivatel in loginData.users) {
+      await loggedInCanteen.saveData(consts.prefs.lastJidloDneCheck + uzivatel.username, '');
+      await loggedInCanteen.saveData(consts.prefs.lastNotificationCheck + uzivatel.username, '');
+    }
+    await doNotifications();
+  }
+
   Future<void> setSettings() async {
     username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
-    String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
+    // analytics
+    bool analyticsDisabled = await loggedInCanteen.isPrefTrue(consts.prefs.disableAnalytics);
     if (kDebugMode) {
-      analyticsDisabled = '1';
+      analyticsDisabled = true;
     }
-
-    if (analyticsDisabled == '1') {
-      collectData.value = true;
-      analyticsEnabledGlobally = false;
-    } else {
-      collectData.value = false;
-      analyticsEnabledGlobally = true;
-    }
-
-    List<String>? themeSettingsList = await loggedInCanteen.readListData(consts.prefs.themeMode);
+    collectData.value = analyticsDisabled;
+    analyticsEnabledGlobally = !analyticsDisabled;
+    
+    List<String>? themeSettingsList = await loggedInCanteen.readListData(consts.prefs.theme);
     if (themeSettingsList != null) {
       if (themeSettingsList[0] != "") {
         themeModeNotifier.value = themeSettingsList[0];
@@ -59,42 +64,27 @@ class SettingsPage extends StatelessWidget {
       }
     }
 
-    String? bigMarkersString = await loggedInCanteen.readData('calendar_big_markers');
-    if (bigMarkersString == "1") {
-      calendarBigMarkersNotifier.value = true;
-    } else {
-      calendarBigMarkersNotifier.value = false;
-    }
+    calendarBigMarkersNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.calendarBigMarkers);
 
-    String? skipWeekendsString = await loggedInCanteen.readData('skipWeekends');
-    if (skipWeekendsString == '1') {
-      skipWeekendsNotifier.value = true;
-      skipWeekends = true;
-    } else {
-      skipWeekendsNotifier.value = false;
-      skipWeekends = false;
-    }
+    skipWeekendsNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.skipWeekends);
+    skipWeekends = skipWeekendsNotifier.value;
 
-    String? jidloNotificationString = await loggedInCanteen.readData('sendFoodInfo-$username');
-    if (jidloNotificationString == '1') {
-      jidloNotificationNotifier.value = true;
-    } else {
-      jidloNotificationNotifier.value = false;
-    }
+    jidloNotificationNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.dailyFoodInfo + username);
 
-    String? jidloNotificationTimeString = await loggedInCanteen.readData('FoodNotificationTime');
-    if (jidloNotificationTimeString == null || jidloNotificationTimeString == '') {
-      jidloNotificationTime.value = "11:00";
-    } else {
+    String? jidloNotificationTimeString = await loggedInCanteen.readData(consts.prefs.foodNotifTime);
+    if (jidloNotificationTimeString != null && jidloNotificationTimeString != '') {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
 
-    String? lowCreditNotificationString = await loggedInCanteen.readData('ignore_kredit_$username');
+    String? lowCreditNotificationString = await loggedInCanteen.readData(consts.prefs.kreditNotifications + username);
     if (lowCreditNotificationString == '') {
+      //notifications allowed
       lowCreditNotificationNotifier.value = true;
     } else if (lowCreditNotificationString == '1') {
+      //notifications blocked
       lowCreditNotificationNotifier.value = false;
     } else if (lowCreditNotificationString != null) {
+      // Notifications blocked till a date
       DateTime? ignoreDate = DateTime.tryParse(lowCreditNotificationString);
       if (ignoreDate != null && ignoreDate.isBefore(DateTime.now())) {
         lowCreditNotificationNotifier.value = true;
@@ -103,12 +93,15 @@ class SettingsPage extends StatelessWidget {
       }
     }
 
-    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('ignore_objednat_$username');
+    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData(consts.prefs.nemateObjednanoNotifications + username);
     if (nextWeekOrderNotificationNotifierString == '') {
+      //notifications allowed
       nextWeekOrderNotificationNotifier.value = true;
     } else if (nextWeekOrderNotificationNotifierString == '1') {
+      //notifications blocked
       nextWeekOrderNotificationNotifier.value = false;
     } else if (nextWeekOrderNotificationNotifierString != null) {
+      // Notifications blocked till a date
       DateTime? ignoreDate = DateTime.tryParse(nextWeekOrderNotificationNotifierString);
       if (ignoreDate != null && ignoreDate.isBefore(DateTime.now())) {
         nextWeekOrderNotificationNotifier.value = true;
@@ -121,7 +114,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Nastavení")),
+      appBar: AppBar(title: Text(consts.texts.settingsTitle)),
       body: FutureBuilder(
         future: setSettings(),
         builder: (context, snapshot) {
@@ -155,9 +148,9 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Vzhled'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(consts.texts.settingsAppearence.i18n()),
           ),
           const Divider(),
           ListTile(
@@ -180,19 +173,19 @@ class SettingsPage extends StatelessWidget {
                         NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
                     }
                   },
-                  segments: const [
+                  segments: [
                     ButtonSegment<String>(
                       value: "0",
-                      label: Text("Systém"),
+                      label: Text(consts.texts.settingsLabelSystem.i18n()),
                       enabled: true,
                     ),
                     ButtonSegment<String>(
                       value: "1",
-                      label: Text("Světlý"),
+                      label: Text(consts.texts.settingsLabelLight.i18n()),
                     ),
                     ButtonSegment<String>(
                       value: "2",
-                      label: Text("Tmavý"),
+                      label: Text(consts.texts.settingsLabelDark.i18n()),
                     ),
                   ],
                 );
@@ -331,7 +324,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text("Velké ukazatele v kalendáři"),
+            title: Text(consts.texts.settingsCalendarBigMarkers.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: calendarBigMarkersNotifier,
               builder: (context, value, child) {
@@ -340,9 +333,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     calendarBigMarkersNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('calendar_big_markers', '1');
+                      loggedInCanteen.saveData(consts.prefs.calendarBigMarkers, '1');
                     } else {
-                      loggedInCanteen.saveData('calendar_big_markers', '');
+                      loggedInCanteen.saveData(consts.prefs.calendarBigMarkers, '');
                     }
                   },
                 );
@@ -360,13 +353,13 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Jídelníček'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(consts.texts.settingsConvenienceTitle.i18n()),
           ),
           const Divider(),
           ListTile(
-            title: const Text("Přeskakovat víkendy při procházení jídelníčku"),
+            title: Text(consts.texts.settingsSkipWeekends.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: skipWeekendsNotifier,
               builder: (context, value, child) {
@@ -376,9 +369,9 @@ class SettingsPage extends StatelessWidget {
                     skipWeekendsNotifier.value = value;
                     skipWeekends = value;
                     if (value) {
-                      loggedInCanteen.saveData('skipWeekends', '1');
+                      loggedInCanteen.saveData(consts.prefs.skipWeekends, '1');
                     } else {
-                      loggedInCanteen.saveData('skipWeekends', '');
+                      loggedInCanteen.saveData(consts.prefs.skipWeekends, '');
                     }
                   },
                 );
@@ -398,11 +391,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Oznámení pro $username'),
+            child: Text(consts.texts.settingsNotificationFor.i18n() + username),
           ),
           const Divider(),
           ExpansionTile(
-            title: const Text("Dnešní jídlo"),
+            title: Text(consts.texts.settingsTitleTodaysFood.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: jidloNotificationNotifier,
               builder: (context, value, child) {
@@ -411,11 +404,11 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     jidloNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('sendFoodInfo-$username', '1');
+                      loggedInCanteen.saveData(consts.prefs.dailyFoodInfo + username, '1');
                     } else {
-                      loggedInCanteen.saveData('sendFoodInfo-$username', '');
+                      loggedInCanteen.saveData(consts.prefs.dailyFoodInfo + username, '');
                     }
-                    doNotifications();
+                    resetAndDoNotifications();
                   },
                 );
               },
@@ -429,7 +422,7 @@ class SettingsPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Čas oznámení: "),
+                    Text(consts.texts.settingsNotificationTime.i18n()),
                     ValueListenableBuilder(
                       valueListenable: jidloNotificationTime,
                       builder: (context, value, child) {
@@ -440,12 +433,8 @@ class SettingsPage extends StatelessWidget {
                                 initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
                             if (timeOfDay != null && context.mounted) {
                               jidloNotificationTime.value = timeOfDay.format(context);
-                              loggedInCanteen.saveData("FoodNotificationTime", timeOfDay.format(context));
-                              LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-                              for (LoggedInUser uzivatel in loginData.users) {
-                                await loggedInCanteen.saveData("lastJidloDneCheck-${uzivatel.username}", '');
-                              }
-                              doNotifications();
+                              await loggedInCanteen.saveData(consts.prefs.foodNotifTime, timeOfDay.format(context));
+                              resetAndDoNotifications();
                             }
                           },
                           child: Text(value),
@@ -458,7 +447,7 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           ListTile(
-            title: const Text("Nízký credit"),
+            title: Text(consts.texts.settingsTitleKredit.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: lowCreditNotificationNotifier,
               builder: (context, value, child) {
@@ -467,18 +456,18 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     lowCreditNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('ignore_kredit_$username', '');
+                      loggedInCanteen.saveData(consts.prefs.kreditNotifications + username, '');
                     } else {
-                      loggedInCanteen.saveData('ignore_kredit_$username', '1');
+                      loggedInCanteen.saveData(consts.prefs.kreditNotifications + username, '1');
                     }
-                    doNotifications();
+                    resetAndDoNotifications();
                   },
                 );
               },
             ),
           ),
           ListTile(
-            title: const Text("Nemáte objednáno na příští týden"),
+            title: Text(consts.texts.settingsNemateObjednano.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: nextWeekOrderNotificationNotifier,
               builder: (context, value, child) {
@@ -487,11 +476,11 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     nextWeekOrderNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('ignore_objednat_$username', '');
+                      loggedInCanteen.saveData(consts.prefs.nemateObjednanoNotifications + username, '');
                     } else {
-                      loggedInCanteen.saveData('ignore_objednat_$username', '1');
+                      loggedInCanteen.saveData(consts.prefs.nemateObjednanoNotifications + username, '1');
                     }
-                    doNotifications();
+                    resetAndDoNotifications();
                   },
                 );
               },
@@ -500,7 +489,7 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: RichText(
               text: TextSpan(
-                text: 'Další možnosti v nastavení systému...',
+                text: consts.texts.settingsAnotherOptions.i18n(),
                 style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
@@ -520,20 +509,20 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Shromažďování údajů'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(consts.texts.settingsDataCollection),
           ),
           const Divider(),
           ExpansionTile(
-            title: const Text("Zastavit sledování analytických služeb"),
+            title: Text(consts.texts.settingsStopDataCollection),
             trailing: ValueListenableBuilder(
-              valueListenable: collectData,
+              valueListenable: disableAnalyticsNotifier,
               builder: (context, value, child) {
                 return Switch.adaptive(
                   value: value,
                   onChanged: (value) async {
-                    collectData.value = value;
+                    disableAnalyticsNotifier.value = value;
                     analyticsEnabledGlobally = !value;
                     if (value) {
                       loggedInCanteen.saveData('disableAnalytics', '1');
@@ -611,9 +600,7 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: ElevatedButton(
               onPressed: () async {
-                await loggedInCanteen.saveData('lastJidloDneCheck-$username', '2000-00-00');
-                await loggedInCanteen.saveData('lastCheck-$username', '2000-00-00');
-                doNotifications();
+                resetAndDoNotifications();
               },
               child: const Text('Send notifs'),
             ),

@@ -31,7 +31,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "Ta může vypadat takto:",
+                  'Ta může vypadat takto:',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
@@ -75,7 +75,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
                             Navigator.of(context).pop();
                             ReleaseInfo? localReleaseInfo = releaseInfo;
                             localReleaseInfo ??= await getLatestRelease();
-                            launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${localReleaseInfo.latestVersion}"),
+                            launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/releases/tag/v${localReleaseInfo.latestVersion}'),
                                 mode: LaunchMode.externalApplication);
                           },
                         ),

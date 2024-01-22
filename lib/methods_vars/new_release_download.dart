@@ -34,10 +34,7 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
     status = await Permission.requestInstallPackages.status;
   }
   if (context.mounted && !snackbarshown.shown) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(dynamicSnackbarFunction('aktualizace', context, valueNotifier))
-        .closed
-        .then((SnackBarClosedReason reason) {
+    ScaffoldMessenger.of(context).showSnackBar(updateSnackbar(context, valueNotifier)).closed.then((SnackBarClosedReason reason) {
       snackbarshown.shown = false;
     });
   }

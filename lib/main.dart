@@ -5,6 +5,8 @@ import 'package:autojidelna/local_imports.dart';
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:localization/localization.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -14,8 +16,6 @@ import 'firebase_options.dart';
 
 // Toast for exiting the app
 import 'package:fluttertoast/fluttertoast.dart';
-
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -124,6 +124,12 @@ class _MyAppState extends State<MyApp> {
   // Key for the navigator
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
 
+  // ValueNotifier for the back button
+  ValueNotifier<bool> canpop = ValueNotifier<bool>(false);
+
+  // root widget of the app
+  late Widget homeWidget;
+
   // Handling the back button on android being pressed.
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
     if (SwitchAccountVisible().isVisible()) {
@@ -145,7 +151,7 @@ class _MyAppState extends State<MyApp> {
     // After it expires the timer resets and user has to press back button twice again
     Future.delayed(const Duration(seconds: 5), () => canpop.value = false);
     Fluttertoast.showToast(
-        msg: "Zmáčkněte tlačítko zpět pro ukončení aplikace",
+        msg: consts.texts.toastsExit.i18n(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -163,7 +169,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  late Widget homeWidget;
   @override
   void initState() {
     getLatestRelease();
@@ -177,7 +182,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Setting the theme
     return FutureBuilder(
-      future: loggedInCanteen.readListData(consts.prefs.themeMode),
+      future: loggedInCanteen.readListData(consts.prefs.theme),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
@@ -227,11 +232,36 @@ class _MyAppState extends State<MyApp> {
           NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
         }
 
+        LocalJsonLocalization.delegate.directories = ['assets/lang'];
+
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
           builder: (context, themeSettings, child) {
             bool pureBlack = themeSettings.pureBlack;
             return MaterialApp(
+              localizationsDelegates: [
+                // delegate from flutter_localization
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+
+                // delegate from localization package.
+                //json-file
+                LocalJsonLocalization.delegate,
+                //or map
+                MapLocalization.delegate,
+              ],
+              supportedLocales: const [
+                Locale('cs', 'cz'),
+                //Locale('en', 'US'),
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (supportedLocales.contains(locale)) {
+                  return locale;
+                }
+                // default language
+                return const Locale('cs', 'CZ');
+              },
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
@@ -246,8 +276,6 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-
-  ValueNotifier<bool> canpop = ValueNotifier<bool>(false);
 
   ValueListenableBuilder _pop() {
     return ValueListenableBuilder(
@@ -278,76 +306,50 @@ class LoggingInWidget extends StatelessWidget {
   const LoggingInWidget({
     super.key,
     required this.setHomeWidget,
-    this.index = -1,
+    this.pageIndex = -1,
   });
-  final int index;
+  // index aktualniho dne - pro refresh button v pravo nahoře
+  final int pageIndex;
 
   final Function(Widget widget) setHomeWidget;
+
   @override
   Widget build(BuildContext context) {
+    // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
       future: loggedInCanteen.loginFromStorage(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          if (snapshot.error == 'no login') {
+          if (snapshot.error == ConnectionErrors.noLogin) {
             return LoginScreen(setHomeWidget: setHomeWidget);
+          } else if (snapshot.error == ConnectionErrors.badLogin) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadLogin.i18n(), setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.wrongUrl) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadUrl.i18n(), setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.noInternet) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsNoInternet.i18n(), setHomeWidget));
+          } else if (snapshot.error == ConnectionErrors.connectionFailed) {
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadConnection.i18n(), setHomeWidget));
           }
-          if (snapshot.error == 'bad url or connection') {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-          } else if (snapshot.error == 'Špatné heslo') {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          // setting the initial date
+          if (pageIndex != -1) {
+            Future.delayed(Duration.zero, () => changeDateTillSuccess(pageIndex));
           } else {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
+            setCurrentDate();
           }
-          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data != null && snapshot.data!.success == true) {
-          if (index != -1) {
-            try {
-              Future.delayed(Duration.zero, () => changeDateTillSuccess(index));
-            } catch (e) {
-              //do nothing
-            }
-          } else {
-            try {
-              setCurrentDate();
-            } catch (e) {
-              //do nothing
-            }
-          }
+          // checking for updates
           Future.delayed(Duration.zero, () => newUpdateDialog(context));
+          // routing to main app screen (jidelnicek)
           return MainAppScreen(setHomeWidget: setHomeWidget);
-        } else if (snapshot.connectionState == ConnectionState.done && snapshot.data?.success == false) {
-          //test internet connection
-          InternetConnectionChecker().hasConnection.then((value) {
-            if (value) {
-              Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Špatné přihlašovací údaje', setHomeWidget));
-              return;
-            }
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, 'Nemáte připojení k internetu', setHomeWidget));
-          });
-          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
-        } else {
-          return const LoadingLoginPage(textWidget: Text('Přihlašování'));
         }
+        return Container(
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
-    );
-  }
-}
-
-class LoadingLoginPage extends StatelessWidget {
-  const LoadingLoginPage({
-    super.key,
-    required this.textWidget,
-  });
-  final Widget? textWidget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 }
