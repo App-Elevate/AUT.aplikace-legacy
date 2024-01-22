@@ -16,11 +16,13 @@ class JidloDetail extends StatelessWidget {
     required this.indexDne,
     required this.refreshButtons,
     required this.jidelnicekListener,
+    required this.ordering,
   });
   final DateTime datumJidla;
   final int indexDne;
   final Function(BuildContext context) refreshButtons;
   final ValueNotifier<Jidelnicek> jidelnicekListener;
+  final ValueNotifier<bool> ordering;
 
   /// index jídla v jídelníčku dne (0 - první jídlo dne datumJidla)
   final int indexJidlaVeDni;
@@ -40,6 +42,7 @@ class JidloDetail extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return JidloDetail(
+                        ordering: ordering,
                         datumJidla: datumJidla,
                         indexJidlaVeDni: indexJidlaVeDni,
                         indexDne: indexDne,
@@ -229,6 +232,7 @@ class JidloDetail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
               child: ObjednatJidloTlacitko(
+                ordering: ordering,
                 indexJidlaVeDni: indexJidlaVeDni,
                 indexDne: indexDne,
                 jidelnicekListener: jidelnicekListener,

@@ -1,5 +1,3 @@
-// The main page. This is what user sees once he is logged in
-
 import 'package:autojidelna/local_imports.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -14,7 +12,10 @@ class JidloWidget extends StatelessWidget {
     required this.portableSoftRefresh,
     required this.jidelnicekListener,
     required this.index,
+    required this.ordering,
   });
+
+  final ValueNotifier<bool> ordering;
 
   final int index;
   final int indexDne;
@@ -29,6 +30,7 @@ class JidloWidget extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => JidloDetail(
+              ordering: ordering,
               indexDne: indexDne,
               refreshButtons: portableSoftRefresh,
               jidelnicekListener: jidelnicekListener,
@@ -58,6 +60,7 @@ class JidloWidget extends StatelessWidget {
                 }),
                 const SizedBox(height: 16),
                 ObjednatJidloTlacitko(
+                  ordering: ordering,
                   indexDne: indexDne,
                   jidelnicekListener: jidelnicekListener,
                   indexJidlaVeDni: index,
@@ -77,51 +80,18 @@ class ObjednatJidloTlacitko extends StatefulWidget {
     required this.indexJidlaVeDni,
     required this.jidelnicekListener,
     required this.indexDne,
+    required this.ordering,
   });
   final ValueNotifier<Jidelnicek> jidelnicekListener;
   final int indexDne;
   final int indexJidlaVeDni;
+  final ValueNotifier<bool> ordering;
 
   @override
   State<ObjednatJidloTlacitko> createState() => _ObjednatJidloTlacitkoState();
 }
 
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
-  bool ordering = false;
-  Future<void> refreshButtons({int? indexJidlaKdeProbehlaZmena}) async {
-    try {
-      Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(convertIndexToDatetime(widget.indexDne), requireNew: true);
-      bool probehlaZmena = false;
-      if (indexJidlaKdeProbehlaZmena != null) {
-        if (jidelnicek.jidla[indexJidlaKdeProbehlaZmena].objednano != widget.jidelnicekListener.value.jidla[indexJidlaKdeProbehlaZmena].objednano) {
-          probehlaZmena = true;
-        }
-        if (jidelnicek.jidla[indexJidlaKdeProbehlaZmena].naBurze != widget.jidelnicekListener.value.jidla[indexJidlaKdeProbehlaZmena].naBurze) {
-          probehlaZmena = true;
-        }
-      }
-      while (indexJidlaKdeProbehlaZmena != null && !probehlaZmena) {
-        jidelnicek = await loggedInCanteen.getLunchesForDay(convertIndexToDatetime(widget.indexDne), requireNew: true);
-        await Future.delayed(const Duration(milliseconds: 200));
-        if (jidelnicek.jidla[indexJidlaKdeProbehlaZmena].objednano != widget.jidelnicekListener.value.jidla[indexJidlaKdeProbehlaZmena].objednano) {
-          probehlaZmena = true;
-        }
-        if (jidelnicek.jidla[indexJidlaKdeProbehlaZmena].naBurze != widget.jidelnicekListener.value.jidla[indexJidlaKdeProbehlaZmena].naBurze) {
-          probehlaZmena = true;
-        }
-      }
-      ordering = false;
-      widget.jidelnicekListener.value = jidelnicek;
-      setState(() {});
-    } catch (e) {
-      if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(Texts.errorsUpdatingData.i18n())).closed.then((SnackBarClosedReason reason) {
-          snackbarshown.shown = false;
-        });
-      }
-    }
-  }
-
   Widget? icon;
   Jidlo? jidlo;
   //fix for api returning garbage when switching orders
@@ -250,7 +220,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             obedText = Texts.obedTextOdebratZBurzy.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
         }
-        if (!ordering) {
+        if (!widget.ordering.value) {
           switch (stavJidla) {
             case StavJidla.objednano:
               icon = const Icon(Icons.check);
@@ -288,7 +258,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
             backgroundColor: MaterialStatePropertyAll(buttonColor),
             foregroundColor: MaterialStatePropertyAll(textColor),
           ),
-          onPressed: isButtonDisabled
+          onPressed: isButtonDisabled || widget.ordering.value
               ? null
               : () async {
                   void snackBarMessage(String message) {
@@ -306,15 +276,13 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     }
                   }
 
+                  if (widget.ordering.value) return;
                   if (!await InternetConnectionChecker().hasConnection) {
                     snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     return;
                   }
 
-                  if (ordering) {
-                    return;
-                  }
-                  ordering = true;
+                  widget.ordering.value = true;
                   setState(() {
                     icon = SizedBox(
                       height: 20,
@@ -332,27 +300,13 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     return;
                   }
-                  Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
-                  if (jidelnicek.jidla.length <= index) {
-                    try {
-                      jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
-                    } catch (e) {
-                      snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
-                    }
-                  }
-                  if (jidelnicek.jidla.length <= index) {
-                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
-                    return;
-                  }
-                  Jidlo jidlo = jidelnicek.jidla[index];
-                  bool hasAnythingChanged = false;
+                  Jidlo jidloSafe = jidlo!;
                   switch (stavJidla) {
                     case StavJidla.neobjednano:
                       {
                         try {
-                          await canteen.objednat(jidlo);
+                          widget.jidelnicekListener.value = await canteen.objednat(jidloSafe);
                           loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
-                          hasAnythingChanged = true;
                         } catch (e) {
                           snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                         }
@@ -361,15 +315,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.dostupneNaBurze:
                       {
                         try {
-                          String varianta = jidlo.varianta;
-                          DateTime den = jidlo.den;
+                          String varianta = jidloSafe.varianta;
+                          DateTime den = jidloSafe.den;
                           bool nalezenoJidloNaBurze = false;
                           for (var jidloNaBurze in (await loggedInCanteen.canteenData).jidlaNaBurze) {
                             if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
                               try {
-                                await canteen.objednatZBurzy(jidloNaBurze);
+                                widget.jidelnicekListener.value = await canteen.objednatZBurzy(jidloNaBurze);
                                 loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
-                                hasAnythingChanged = true;
                               } catch (e) {
                                 snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                               }
@@ -391,8 +344,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.objednanoNelzeOdebrat:
                       {
                         try {
-                          await canteen.doBurzy(jidlo);
-                          hasAnythingChanged = true;
+                          widget.jidelnicekListener.value = await canteen.doBurzy(jidloSafe);
                         } catch (e) {
                           snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                         }
@@ -405,7 +357,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           break;
                         }
                         try {
-                          if (loggedInCanteen.uzivatel!.kredit < jidlo.cena!) {
+                          if (loggedInCanteen.uzivatel!.kredit < jidloSafe.cena!) {
                             snackBarMessage(Texts.errorsNelzeObjednatKredit.i18n());
                             break;
                           }
@@ -418,8 +370,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.objednano:
                       {
                         try {
-                          await canteen.objednat(jidlo);
-                          hasAnythingChanged = true;
+                          widget.jidelnicekListener.value = await canteen.objednat(jidloSafe);
                         } catch (e) {
                           snackBarMessage(Texts.errorsChybaPriRuseni.i18n());
                         }
@@ -428,17 +379,16 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     case StavJidla.naBurze:
                       {
                         try {
-                          await canteen.doBurzy(jidlo);
-                          hasAnythingChanged = true;
+                          widget.jidelnicekListener.value = await canteen.doBurzy(jidloSafe);
                         } catch (e) {
                           snackBarMessage(Texts.errorsChybaPriDavaniNaBurzu.i18n());
                         }
                       }
                       break;
                   }
-                  refreshButtons(indexJidlaKdeProbehlaZmena: hasAnythingChanged ? index : null);
                   if (context.mounted) {
                     setState(() {
+                      widget.ordering.value = false;
                       icon = null;
                     });
                   }

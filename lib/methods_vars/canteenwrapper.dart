@@ -214,10 +214,23 @@ class LoggedInCanteen {
       return Future.error(ConnectionErrors.connectionFailed);
     }
     if (indexLunches) {
+      await _indexLunchesMonth();
       smartPreIndexing(DateTime.now());
     }
     _loginCompleter!.complete(_canteenInstance!);
     return canteenInstance;
+  }
+
+  Future<void> _indexLunchesMonth() async {
+    try {
+      List<Jidelnicek> jidelnicky = await (await canteenInstance).jidelnicekMesic();
+      for (Jidelnicek jidelnicek in jidelnicky) {
+        _canteenData!.jidelnicky[jidelnicek.den] = jidelnicek;
+        _canteenData!.pocetJidel[jidelnicek.den] = jidelnicek.jidla.length;
+      }
+    } catch (e) {
+      //indexing can be done later
+    }
   }
 
   ///získá Jídelníček pro den [den]
