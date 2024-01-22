@@ -27,7 +27,9 @@ class SettingsPage extends StatelessWidget {
   final ValueNotifier<bool> lowCreditNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<bool> nextWeekOrderNotificationNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<String> jidloNotificationTime = ValueNotifier<String>("11:00");
-  final ValueNotifier<String> themeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<String> themeModeNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<String> themeStyleNotifier = ValueNotifier<String>("0");
+  final ValueNotifier<bool> isPureBlackNotifier = ValueNotifier<bool>(false);
   final ValueNotifier<bool> calendarBigMarkersNotifier = ValueNotifier<bool>(false);
 
   Future<void> resetAndDoNotifications() async {
@@ -46,13 +48,20 @@ class SettingsPage extends StatelessWidget {
     if (kDebugMode) {
       analyticsDisabled = true;
     }
-    disableAnalyticsNotifier.value = analyticsDisabled;
-
-    String? themeString = await loggedInCanteen.readData(consts.prefs.theme);
-    if (themeString == null || themeString == '') {
-      themeNotifier.value = "0";
-    } else {
-      themeNotifier.value = themeString;
+    collectData.value = analyticsDisabled;
+    analyticsEnabledGlobally = !analyticsDisabled;
+    
+    List<String>? themeSettingsList = await loggedInCanteen.readListData(consts.prefs.theme);
+    if (themeSettingsList != null) {
+      if (themeSettingsList[0] != "") {
+        themeModeNotifier.value = themeSettingsList[0];
+      }
+      if (themeSettingsList[1] != "") {
+        themeStyleNotifier.value = themeSettingsList[1];
+      }
+      if (themeSettingsList[2] != "") {
+        isPureBlackNotifier.value = themeSettingsList[2] == "1";
+      }
     }
 
     calendarBigMarkersNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.calendarBigMarkers);
@@ -116,7 +125,7 @@ class SettingsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (!onlyAnalytics) _graphics(),
+                    if (!onlyAnalytics) _graphics(context),
                     if (!onlyAnalytics) _convenience(context),
                     if (!onlyAnalytics) _notifications(context),
                     _dataUsage(context),
@@ -133,7 +142,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Padding _graphics() {
+  Padding _graphics(context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -144,24 +153,24 @@ class SettingsPage extends StatelessWidget {
             child: Text(consts.texts.settingsAppearence.i18n()),
           ),
           const Divider(),
-          ValueListenableBuilder(
-            valueListenable: themeNotifier,
-            builder: (context, value, child) {
-              return ListTile(
-                title: SegmentedButton<String>(
+          ListTile(
+            title: ValueListenableBuilder(
+              valueListenable: themeModeNotifier,
+              builder: (context, value, child) {
+                return SegmentedButton<String>(
                   showSelectedIcon: false,
                   selected: <String>{value},
                   onSelectionChanged: (Set<String> newSelection) {
-                    themeNotifier.value = newSelection.first;
-                    if (newSelection.first == "2") {
-                      loggedInCanteen.saveData(consts.prefs.theme, "2");
-                      NotifyTheme().setTheme(ThemeMode.dark);
-                    } else if (newSelection.first == "1") {
-                      loggedInCanteen.saveData(consts.prefs.theme, "1");
-                      NotifyTheme().setTheme(ThemeMode.light);
-                    } else {
-                      loggedInCanteen.saveData(consts.prefs.theme, "0");
-                      NotifyTheme().setTheme(ThemeMode.system);
+                    themeModeNotifier.value = newSelection.first;
+                    switch (newSelection.first) {
+                      case "2":
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.dark));
+                        break;
+                      case "1":
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.light));
+                        break;
+                      default:
+                        NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: ThemeMode.system));
                     }
                   },
                   segments: [
@@ -179,9 +188,140 @@ class SettingsPage extends StatelessWidget {
                       label: Text(consts.texts.settingsLabelDark.i18n()),
                     ),
                   ],
-                ),
-              );
-            },
+                );
+              },
+            ),
+          ),
+          ListTile(
+            title: SizedBox(
+              height: 225,
+              child: ValueListenableBuilder(
+                valueListenable: themeStyleNotifier,
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    itemCount: ThemeStyle.values.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      Map<ThemeStyle, List<Color>> colorStyleList = ColorSchemes.colorStyles;
+                      ThemeStyle currentTheme = colorStyleList.keys.toList()[index];
+                      List<Color> currentColors = colorStyleList[currentTheme]!;
+
+                      return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: GestureDetector(
+                          onTap: () {
+                            themeStyleNotifier.value = index.toString();
+                            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeStyle: currentTheme));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  width: 3,
+                                  color: themeStyleNotifier.value == index.toString()
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                                color: Theme.of(context).colorScheme.background),
+                            height: 250,
+                            width: 125,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 35,
+                                  child: AppBar(
+                                    automaticallyImplyLeading: false,
+                                    backgroundColor: Theme.of(context).brightness == Brightness.light
+                                        ? currentColors[0]
+                                        : Theme.of(context).appBarTheme.backgroundColor,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(13.0),
+                                        topRight: Radius.circular(13.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Divider(
+                                  color: Colors.transparent,
+                                ),
+                                ListTile(
+                                  dense: true,
+                                  enabled: false,
+                                  minVerticalPadding: 0,
+                                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  title: Card(
+                                    margin: EdgeInsets.zero,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(5, 30, 5, 2),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).brightness == Brightness.light ? currentColors[0] : currentColors[2],
+                                          borderRadius: BorderRadius.circular(12.5),
+                                        ),
+                                        height: 20,
+                                        width: 100,
+                                        margin: const EdgeInsets.only(bottom: 5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  dense: true,
+                                  enabled: false,
+                                  minVerticalPadding: 0,
+                                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  title: Card(
+                                    margin: EdgeInsets.zero,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(5, 40, 5, 2),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).brightness == Brightness.light ? currentColors[1] : currentColors[3],
+                                          borderRadius: BorderRadius.circular(12.5),
+                                        ),
+                                        height: 20,
+                                        width: 100,
+                                        margin: const EdgeInsets.only(bottom: 5),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            enabled: Theme.of(context).brightness == Brightness.dark,
+            title: const Text("Pure black"),
+            trailing: ValueListenableBuilder(
+              valueListenable: isPureBlackNotifier,
+              builder: (context, value, child) {
+                return Switch.adaptive(
+                  value: value,
+                  onChanged: Theme.of(context).brightness == Brightness.dark
+                      ? (value) async {
+                          isPureBlackNotifier.value = value;
+                          if (value) {
+                            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: true));
+                          } else {
+                            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(pureBlack: false));
+                          }
+                        }
+                      : null,
+                );
+              },
+            ),
           ),
           ListTile(
             title: Text(consts.texts.settingsCalendarBigMarkers.i18n()),
@@ -197,7 +337,6 @@ class SettingsPage extends StatelessWidget {
                     } else {
                       loggedInCanteen.saveData(consts.prefs.calendarBigMarkers, '');
                     }
-                    resetAndDoNotifications();
                   },
                 );
               },

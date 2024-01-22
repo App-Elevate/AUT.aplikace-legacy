@@ -1,7 +1,8 @@
 ## 1.2.9
 
 - Předělaný kalendář
-- Opraveno chování androidu, kdy se proces aplikace nespoštěl, tudíž nechodily notifikace
+- Opraveno chování androidu, kdy se proces aplikace nespouštěl, tudíž nechodily notifikace
+- Přidán Pure black dark mode
 
 ## 1.2.8
 

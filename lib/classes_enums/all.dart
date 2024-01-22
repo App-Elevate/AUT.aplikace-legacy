@@ -1,6 +1,7 @@
 // Všechny objekty a enumy, které se používají v aplikaci
 import 'dart:async';
 
+import 'package:autojidelna/local_imports.dart';
 import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/material.dart';
@@ -245,10 +246,89 @@ class NotifyTheme {
     return _instance;
   }
 
-  ValueNotifier<ThemeMode> themeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
+  ValueNotifier<ThemeSettings> themeNotifier = ValueNotifier<ThemeSettings>(ThemeSettings());
 
-  // Method to update the theme mode and notify listeners.
-  void setTheme(ThemeMode mode) {
-    themeNotifier.value = mode;
+  /// Method to update and save the theme and notify listeners.
+  void setTheme(ThemeSettings mode) {
+    themeNotifier.value = ThemeSettings(
+      themeMode: mode.themeMode,
+      themeStyle: mode.themeStyle,
+      pureBlack: mode.pureBlack,
+    );
+    saveThemeSettings(themeNotifier.value);
   }
+
+  /// Saves theme settings to shared preferences
+  void saveThemeSettings(ThemeSettings settings) {
+    String themeMode = "0";
+    String themeStyle = "0";
+    String pureBlack = "0";
+    switch (settings.themeMode) {
+      case ThemeMode.dark:
+        themeMode = "2";
+        break;
+      case ThemeMode.light:
+        themeMode = "1";
+        break;
+      default:
+        themeMode = "0";
+    }
+    switch (settings.themeStyle) {
+      case ThemeStyle.crimsonEarth:
+        themeStyle = "5";
+        break;
+      case ThemeStyle.evergreenSlate:
+        themeStyle = "4";
+        break;
+      case ThemeStyle.rustOlive:
+        themeStyle = "3";
+        break;
+      case ThemeStyle.blueMauve:
+        themeStyle = "2";
+        break;
+      case ThemeStyle.plumBrown:
+        themeStyle = "1";
+        break;
+      default:
+        themeStyle = "0";
+    }
+    pureBlack = settings.pureBlack ? "1" : "0";
+    loggedInCanteen.saveListData(consts.prefs.themeMode, [themeMode, themeStyle, pureBlack]);
+  }
+}
+
+/// Represents the configuration settings for the theme
+class ThemeSettings {
+  ThemeMode themeMode;
+  ThemeStyle themeStyle;
+  bool pureBlack;
+
+  ThemeSettings({
+    this.themeMode = ThemeMode.system,
+    this.themeStyle = ThemeStyle.defaultStyle,
+    this.pureBlack = false,
+  });
+
+  /// Creates a copy of theme settings but with the given fields replaced with the new values.
+  ThemeSettings copyWith({
+    ThemeMode? themeMode,
+    ThemeStyle? themeStyle,
+    bool? pureBlack,
+  }) {
+    return ThemeSettings(
+      themeMode: themeMode ?? this.themeMode,
+      themeStyle: themeStyle ?? this.themeStyle,
+      pureBlack: pureBlack ?? this.pureBlack,
+    );
+  }
+}
+
+/// Describes what colors will be used by the app
+enum ThemeStyle {
+  defaultStyle,
+  plumBrown,
+  blueMauve,
+  rustOlive,
+  evergreenSlate,
+  crimsonEarth,
 }

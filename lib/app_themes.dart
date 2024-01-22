@@ -1,22 +1,23 @@
 // Purpose: Contains the themes and color schemes used in the app.
 
+import 'package:autojidelna/local_imports.dart';
 import 'package:flutter/material.dart';
 
 class Themes {
-  //theme
-  static ThemeData getTheme(ColorScheme colorScheme) {
-    bool dark = false;
-    if (colorScheme.brightness == Brightness.dark) {
-      dark = true;
-    }
+  /// Gets themeData
+  static ThemeData getTheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
+    ColorScheme colorScheme = ColorSchemes.getColorScheme(themeStyle, isPureBlack: isPureBlack);
+    bool dark = colorScheme.brightness == Brightness.dark;
+    bool pureBlack = isPureBlack ?? false;
+
     return ThemeData(
-      //misc
+      // Misc
       useMaterial3: true,
       applyElevationOverlayColor: true,
       materialTapTargetSize: MaterialTapTargetSize.padded,
       visualDensity: VisualDensity.adaptivePlatformDensity,
 
-      //colors
+      // Colors
       colorScheme: colorScheme,
       canvasColor: colorScheme.background,
       disabledColor: colorScheme.surfaceVariant,
@@ -26,13 +27,14 @@ class Themes {
       splashFactory: NoSplash.splashFactory,
       typography: Typography.material2021(),
 
-      //main
+      // Main
       iconTheme: IconThemeData(
         size: 30,
         color: colorScheme.onBackground,
       ),
       appBarTheme: AppBarTheme(
-        elevation: 2,
+        scrolledUnderElevation: pureBlack ? 0 : 2,
+        elevation: pureBlack ? 0 : 2,
         backgroundColor: dark ? colorScheme.background : colorScheme.primary,
         foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
         iconTheme: IconThemeData(
@@ -52,10 +54,10 @@ class Themes {
         width: 275,
       ),
 
-      //popups
+      // Popups
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
-        elevation: 2,
+        elevation: pureBlack ? 0 : 2,
         contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -72,11 +74,11 @@ class Themes {
         headerBackgroundColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
         headerForegroundColor: dark ? colorScheme.onBackground : colorScheme.onSecondary,
         dividerColor: Colors.transparent,
-        elevation: 0,
+        elevation: pureBlack ? 0 : 2,
       ),
       dialogTheme: DialogTheme(
         backgroundColor: colorScheme.background,
-        elevation: 1,
+        elevation: pureBlack ? 3 : 2,
         surfaceTintColor: colorScheme.surfaceTint,
         alignment: Alignment.center,
         iconColor: colorScheme.onBackground,
@@ -93,10 +95,10 @@ class Themes {
       timePickerTheme: TimePickerThemeData(
         backgroundColor: colorScheme.background,
         dialHandColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
-        elevation: 0,
+        elevation: pureBlack ? 3 : 2,
       ),
 
-      //inputs
+      // Inputs
       inputDecorationTheme: const InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
@@ -107,7 +109,7 @@ class Themes {
         helperStyle: TextStyle(),
       ),
 
-      // list tiles
+      // List tiles
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
@@ -130,7 +132,7 @@ class Themes {
         childrenPadding: const EdgeInsets.only(bottom: 8),
       ),
 
-      //buttons
+      // Buttons
       switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -196,6 +198,61 @@ class Themes {
 }
 
 class ColorSchemes {
+  /// Gets a colorscheme based on arguments
+  static ColorScheme getColorScheme(ThemeStyle themeStyle, {bool? isPureBlack}) {
+    List<Color> colors = colorStyles[themeStyle] ?? colorStyles.values.first;
+    switch (isPureBlack) {
+      case true:
+        return pureBlack.copyWith(primary: colors[2], secondary: colors[3]);
+      case false:
+        return dark.copyWith(primary: colors[2], secondary: colors[3]);
+      default:
+        return light.copyWith(primary: colors[0], secondary: colors[1]);
+    }
+  }
+
+  /// Map of color combinations used by the app for theme style
+  ///
+  /// Colors are saved as a List<Color> = [primaryLight, secondaryLight, primaryDark, secondaryDark]
+  static Map<ThemeStyle, List<Color>> colorStyles = {
+    ThemeStyle.defaultStyle: [
+      const Color(0xFFE040FB),
+      const Color(0x7B009687),
+      const Color(0xffbb86fc),
+      const Color(0xff018786),
+    ],
+    ThemeStyle.plumBrown: [
+      const Color(0xFFAC009E),
+      const Color(0xFF815342),
+      const Color(0xFFA03998),
+      const Color(0xFF7F2A0B),
+    ],
+    ThemeStyle.blueMauve: [
+      const Color(0xFF3741F7),
+      const Color(0xFFA3385F),
+      const Color(0xFF6264D7),
+      const Color(0xFF6F354E),
+    ],
+    ThemeStyle.rustOlive: [
+      const Color(0xFFAB4D00),
+      const Color(0xFF6D692B),
+      const Color(0xFFC54F00),
+      const Color(0xFF53500C),
+    ],
+    ThemeStyle.evergreenSlate: [
+      const Color(0xFF306b1e),
+      const Color(0xFF54624d),
+      const Color(0xBC19A400),
+      const Color(0xFF273421),
+    ],
+    ThemeStyle.crimsonEarth: [
+      const Color(0xFFbe0f00),
+      const Color(0xFF775651),
+      const Color(0xFFC8423D),
+      const Color(0xFF442925),
+    ]
+  };
+
   static ColorScheme light = const ColorScheme(
     brightness: Brightness.light,
     primary: Colors.purpleAccent,
@@ -209,7 +266,7 @@ class ColorSchemes {
     surface: Colors.white,
     onSurface: Colors.black,
     surfaceVariant: Colors.black12,
-    onSurfaceVariant: Colors.black54, //maybe #14?
+    onSurfaceVariant: Colors.black54,
     scrim: Colors.black54,
     surfaceTint: Colors.black,
     inverseSurface: Color(0xFF121212),
@@ -229,8 +286,28 @@ class ColorSchemes {
     surface: Color(0xff121212),
     onSurface: Colors.white,
     surfaceVariant: Colors.white12,
-    onSurfaceVariant: Colors.white54, //maybe #14?
+    onSurfaceVariant: Colors.white54,
     scrim: Colors.black54,
+    surfaceTint: Colors.white,
+    inverseSurface: Color(0xFFdddddd),
+    onInverseSurface: Colors.black,
+  );
+
+  static ColorScheme pureBlack = const ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color(0xffbb86fc),
+    onPrimary: Colors.white,
+    secondary: Color(0xff018786),
+    onSecondary: Colors.white,
+    error: Color(0xFFCF6679),
+    onError: Colors.white,
+    background: Colors.black,
+    onBackground: Colors.white,
+    surface: Color(0xff121212),
+    onSurface: Colors.white,
+    surfaceVariant: Colors.white12,
+    onSurfaceVariant: Colors.white54,
+    scrim: Colors.black87,
     surfaceTint: Colors.white,
     inverseSurface: Color(0xFFdddddd),
     onInverseSurface: Colors.black,

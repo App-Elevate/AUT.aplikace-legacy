@@ -380,6 +380,24 @@ class LoggedInCanteen {
     return prefs.getString(key);
   }
 
+  /// save data to shared preferences used for storing url, statistics and settings in a list
+  Future<void> saveListData(String key, List<String> value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(key, value);
+  }
+
+  /// get data from shared preferences used for storing url, statistics and settings in a list
+  Future<List<String>?> readListData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList(key);
+  }
+
+  /// removes entry from shared preferences
+  Future<void> removeData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(key);
+  }
+
   ///logs out a user with [id].
   ///if [id] is null it will log out currently logged in user
   Future<void> logout({int? id}) async {

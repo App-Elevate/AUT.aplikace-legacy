@@ -182,28 +182,62 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Setting the theme
     return FutureBuilder(
-      future: loggedInCanteen.readData(consts.prefs.theme),
+      future: loggedInCanteen.readListData(consts.prefs.theme),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          switch (snapshot.data) {
-            case '1':
-              NotifyTheme().setTheme(ThemeMode.light);
+          List<String> themeSettings = snapshot.data as List<String>;
+          ThemeMode themeMode;
+          ThemeStyle themeStyle;
+          bool pureBlack;
+
+          // Migration from v1.2.8 and lower
+          loggedInCanteen.readData("ThemeMode").then((value) {
+            if (value != null && value != "") {
+              themeSettings[0] = value;
+              loggedInCanteen.removeData("ThemeMode");
+            }
+          });
+
+          switch (themeSettings[0]) {
+            case "2":
+              themeMode = ThemeMode.dark;
               break;
-            case '2':
-              NotifyTheme().setTheme(ThemeMode.dark);
+            case "1":
+              themeMode = ThemeMode.light;
               break;
             default:
-              NotifyTheme().setTheme(ThemeMode.system);
-              break;
+              themeMode = ThemeMode.system;
           }
+          switch (themeSettings[1]) {
+            case "5":
+              themeStyle = ThemeStyle.crimsonEarth;
+              break;
+            case "4":
+              themeStyle = ThemeStyle.evergreenSlate;
+              break;
+            case "3":
+              themeStyle = ThemeStyle.rustOlive;
+              break;
+            case "2":
+              themeStyle = ThemeStyle.blueMauve;
+              break;
+            case "1":
+              themeStyle = ThemeStyle.plumBrown;
+              break;
+            default:
+              themeStyle = ThemeStyle.defaultStyle;
+          }
+          pureBlack = themeSettings[2] == "1";
+          NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
         }
 
         LocalJsonLocalization.delegate.directories = ['assets/lang'];
 
         return ValueListenableBuilder(
           valueListenable: NotifyTheme().themeNotifier,
-          builder: (context, themeMode, child) {
+          builder: (context, themeSettings, child) {
+            bool pureBlack = themeSettings.pureBlack;
             return MaterialApp(
               localizationsDelegates: [
                 // delegate from flutter_localization
@@ -231,9 +265,9 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(ColorSchemes.light),
-              darkTheme: Themes.getTheme(ColorSchemes.dark),
-              themeMode: themeMode,
+              theme: Themes.getTheme(themeSettings.themeStyle),
+              darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
+              themeMode: themeSettings.themeMode,
               home: child,
             );
           },

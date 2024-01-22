@@ -2,7 +2,7 @@
 
 /// Shared Preferences Ids
 class Prefs {
-  final String theme = 'themeMode';
+  final String theme = 'theme';
   final String calendarBigMarkers = 'calendar_big_markers';
   final String disableAnalytics = 'analytics';
   final String skipWeekends = 'skipWeekends';
