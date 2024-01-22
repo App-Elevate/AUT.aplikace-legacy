@@ -15,6 +15,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:localization/localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -100,6 +101,31 @@ class LoggedInCanteen {
     }
   }
 
+  Future<dynamic> runWithSafety(Future f) async {
+    try {
+      return await f;
+    } catch (e) {
+      handleError(e);
+      return Future.error(e);
+    }
+  }
+
+  void handleError(dynamic e) {
+    if (e == ConnectionErrors.badLogin) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadLogin.i18n(), setHomeWidgetPublic));
+    } else if (e == ConnectionErrors.wrongUrl) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadUrl.i18n(), setHomeWidgetPublic));
+    } else if (e == ConnectionErrors.noInternet) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsNoInternet.i18n(), setHomeWidgetPublic));
+    } else if (e == ConnectionErrors.connectionFailed) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadConnection.i18n(), setHomeWidgetPublic));
+    }
+  }
+
   /// logs you in if you are already logged in or gets the already existing instance
   /// We don't have to do much of error handling here because we already know that the user has been logged in.
   /// If there is an error it's probably because of the internet connection or change of password. The popup is the best solution.
@@ -159,6 +185,7 @@ class LoggedInCanteen {
         await _canteenInstance!.login(username, password); //second try's the charm
       } catch (e) {
         bool connected = await InternetConnectionChecker().hasConnection;
+        _loginCompleter!.completeError(ConnectionErrors.noInternet);
         if (!connected) return Future.error(ConnectionErrors.noInternet);
         try {
           await http.get(Uri.parse(url));

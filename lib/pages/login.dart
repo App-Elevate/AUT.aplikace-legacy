@@ -279,9 +279,9 @@ class LoginScreen extends StatelessWidget {
             try {
               url = url.replaceAll('https://', 'http://');
               await http.get(Uri.parse('http://$url'));
-              _setErrorText(Texts.errorsBadConnection, LoginFormErrorField.url);
+              _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
             } catch (e) {
-              _setErrorText(Texts.errorsBadUrl, LoginFormErrorField.url);
+              _setErrorText(Texts.errorsBadUrl.i18n(), LoginFormErrorField.url);
             }
           }
         }

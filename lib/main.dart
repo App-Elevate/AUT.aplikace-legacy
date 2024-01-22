@@ -337,19 +337,11 @@ class LoggingInWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
-      future: loggedInCanteen.loginFromStorage(),
+      future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           if (snapshot.error == ConnectionErrors.noLogin) {
             return LoginScreen(setHomeWidget: setHomeWidget);
-          } else if (snapshot.error == ConnectionErrors.badLogin) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadLogin.i18n(), setHomeWidget));
-          } else if (snapshot.error == ConnectionErrors.wrongUrl) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadUrl.i18n(), setHomeWidget));
-          } else if (snapshot.error == ConnectionErrors.noInternet) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsNoInternet.i18n(), setHomeWidget));
-          } else if (snapshot.error == ConnectionErrors.connectionFailed) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadConnection.i18n(), setHomeWidget));
           }
         } else if (snapshot.connectionState == ConnectionState.done) {
           // setting the initial date
