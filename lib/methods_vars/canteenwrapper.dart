@@ -204,16 +204,21 @@ class LoggedInCanteen {
         pocetJidel: {},
         username: username,
         url: url,
-        uzivatel: await _canteenInstance!.ziskejUzivatele(),
-        jidlaNaBurze: await _canteenInstance!.ziskatBurzu(),
+        uzivatel: _canteenInstance!.missingFeatures.contains(Features.ziskatUzivatele)
+            ? Uzivatel(uzivatelskeJmeno: username)
+            : await _canteenInstance!.ziskejUzivatele(),
+        jidlaNaBurze: _canteenInstance!.missingFeatures.contains(Features.burza) ? const [] : await _canteenInstance!.ziskatBurzu(),
         currentlyLoading: {},
         jidelnicky: {},
+        vydejny: (await _canteenInstance!.jidelnicekDen()).vydejny,
       );
     } catch (e) {
       _loginCompleter!.completeError(ConnectionErrors.connectionFailed);
       return Future.error(ConnectionErrors.connectionFailed);
     }
     if (indexLunches) {
+      int vydejna = (await readIntData(Prefs.location + username) ?? 0) + 1;
+      (await canteenInstance).vydejna = vydejna;
       await _indexLunchesMonth();
       smartPreIndexing(DateTime.now());
     }
@@ -223,6 +228,7 @@ class LoggedInCanteen {
 
   Future<void> _indexLunchesMonth() async {
     try {
+      if (_canteenInstance!.missingFeatures.contains(Features.jidelnicekMesic)) return;
       List<Jidelnicek> jidelnicky = await (await canteenInstance).jidelnicekMesic();
       for (Jidelnicek jidelnicek in jidelnicky) {
         _canteenData!.jidelnicky[jidelnicek.den] = jidelnicek;
@@ -231,6 +237,15 @@ class LoggedInCanteen {
     } catch (e) {
       //indexing can be done later
     }
+  }
+
+  void zmenitVydejnu(int vydejna) async {
+    (await canteenInstance).vydejna = vydejna;
+    _canteenData!.id++;
+    _canteenData!.jidelnicky.clear();
+    _canteenData!.pocetJidel.clear();
+    await _indexLunchesMonth();
+    smartPreIndexing(DateTime.now());
   }
 
   ///získá Jídelníček pro den [den]
@@ -426,6 +441,11 @@ class LoggedInCanteen {
   Future<String?> readData(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
+  }
+
+  Future<int?> readIntData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(key);
   }
 
   /// save data to shared preferences used for storing url, statistics and settings in a list
