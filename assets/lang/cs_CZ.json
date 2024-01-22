@@ -18,6 +18,8 @@
   "currency": "Kč",
   "app-name": "Autojídelna",
   "share-description": "Autojídelna (aplikace na objednávání jídla)",
+  "settings": "Nastavení",
+  "menu": "Jídelníček",
 
   "switch-account-panel-add-account": "Přidat účet",
   "switch-account-panel-title": "Účty",
@@ -39,7 +41,6 @@
 
   "account-drawer-locations-unknown": "Neznámá lokalita",
   "account-drawer-profile": "Profil",
-  "account-drawer-settings": "Nastavení",
   "account-drawer-share-app": "Sdílet aplikaci",
   "account-drawer-pick-location": "Vyberte lokaci: ",
 
@@ -47,5 +48,20 @@
   "about-copy-right": "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
   "about-source-code": "Zdrojový kód",
   "about-latest-version": "Aktuálně jste na nejnovější verzi aplikace 👍",
-  "about-check-for-updates": "Zkontrolovat aktualizace"
+  "about-check-for-updates": "Zkontrolovat aktualizace",
+
+  "settings-appearence": "Vzhled",
+  "settings-label-light": "Světlý",
+  "settings-label-dark": "Tmavý",
+  "settings-label-system": "Systém",
+  "settings-calendar-big-markers": "Velké ukazatele v kalendái",
+  "settings-skip-weekends": "Přeskakovat víkendy při procházení jídelníčku",
+  "settings-notification-for": "Oznámení pro ",
+  "settings-title-todays-food": "Dnešní jídlo",
+  "settings-title-kredit": "Nízký credit",
+  "settings-notification-time": "Čas oznámení: ",
+  "settings-nemate-objednano": "Nemáte objednáno na příští týden",
+  "settings-another-options": "Další možnosti v nastavení systému...",
+  "settings-data-collection": "Shromažďování údajů",
+  "setttings-stop-data-collection": "Zastavit sledování analytických služeb"
 }

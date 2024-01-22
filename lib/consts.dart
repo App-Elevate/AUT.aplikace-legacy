@@ -4,6 +4,14 @@
 class Prefs {
   final String theme = 'themeMode';
   final String calendarBigMarkers = 'calendar_big_markers';
+  final String disableAnalytics = 'analytics';
+  final String skipWeekends = 'skipWeekends';
+  final String dailyFoodInfo = 'sendFoodInfo-';
+  final String foodNotifTime = 'FoodNotificationTime';
+  final String kreditNotifications = 'ignore_kredit_';
+  final String nemateObjednanoNotifications = 'ignore_objednat_';
+  final String lastJidloDneCheck = 'lastJidloDneCheck-';
+  final String lastNotificationCheck = 'lastCheck-';
 }
 
 class Nums {
@@ -60,7 +68,7 @@ class Texts {
   final String accountDrawerLocationsUnknown = 'account-drawer-locations-unknown';
   final String accountDrawercurrency = 'currency';
   final String accountDrawerprofile = 'account-drawer-profile';
-  final String accountDrawerSettings = 'account-drawer-settings';
+  final String accountDrawerSettings = 'settings';
   final String accountDrawerShareApp = 'account-drawer-share-app';
   final String shareDescription = 'share-description';
   final String accountDrawerPickLocation = 'account-drawer-pick-location';
@@ -71,6 +79,23 @@ class Texts {
   final String aboutSourceCode = 'about-source-code';
   final String aboutLatestVersion = 'about-latest-version';
   final String aboutCheckForUpdates = 'about-check-for-updates';
+
+  final String settingsTitle = 'settings';
+  final String settingsAppearence = 'settings-appearence';
+  final String settingsLabelLight = 'settings-label-light';
+  final String settingsLabelDark = 'settings-label-dark';
+  final String settingsLabelSystem = 'settings-label-system';
+  final String settingsCalendarBigMarkers = 'settings-calendar-big-markers';
+  final String settingsConvenienceTitle = 'menu';
+  final String settingsSkipWeekends = 'settings-skip-weekends';
+  final String settingsNotificationFor = 'settings-notification-for';
+  final String settingsTitleTodaysFood = 'settings-title-todays-food';
+  final String settingsTitleKredit = 'settings-title-kredit';
+  final String settingsNotificationTime = 'settings-notification-time';
+  final String settingsNemateObjednano = 'settings-nemate-objednano';
+  final String settingsAnotherOptions = 'settings-another-options';
+  final String settingsDataCollection = 'settings-data-collection';
+  final String settingsStopDataCollection = 'settings-stop-data-collection';
 }
 
 class Links {
