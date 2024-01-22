@@ -3,6 +3,7 @@
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
@@ -15,7 +16,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Potřebné oprávnění'),
+        title: Text(Texts.neededPermission.i18n()),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -25,13 +26,13 @@ class NeededInstallPermissionPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Pro automatickou instalaci aktualizace je potřeba povolit oprávnění pro instalaci aplikací z neznámých zdrojů.',
+                Texts.neededPermissionDescription1.i18n(),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  "Ta může vypadat takto:",
+                  Texts.neededPermissionDescription2.i18n(),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
@@ -45,7 +46,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
                 ),
               ),
               Text(
-                'Toto oprávnění používáme pouze k aktualizaci aplikace. Pokud si nepřejete oprávnění povolit můžete stále stáhnout apk z githubu.',
+                Texts.neededPermissionDescription3.i18n(),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               Padding(
@@ -57,7 +58,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
                       child: SizedBox(
                         width: 550,
                         child: ElevatedButton(
-                          child: const Text('Udělit Opravnění'),
+                          child: Text(Texts.allowPermission.i18n()),
                           onPressed: () {
                             Navigator.of(context).pop();
                             Permission.requestInstallPackages.request();
@@ -70,13 +71,10 @@ class NeededInstallPermissionPage extends StatelessWidget {
                       child: SizedBox(
                         width: 550,
                         child: ElevatedButton(
-                          child: const Text('Zobrazit na githubu'),
+                          child: Text(Texts.popupShowOnGithub.i18n()),
                           onPressed: () async {
                             Navigator.of(context).pop();
-                            ReleaseInfo? localReleaseInfo = releaseInfo;
-                            localReleaseInfo ??= await getLatestRelease();
-                            launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${localReleaseInfo.latestVersion}"),
-                                mode: LaunchMode.externalApplication);
+                            launchUrl(Uri.parse(Links.latestRelease), mode: LaunchMode.externalApplication);
                           },
                         ),
                       ),

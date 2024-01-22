@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:localization/localization.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({
@@ -50,9 +51,9 @@ class LoginScreen extends StatelessWidget {
           Container(
             alignment: Alignment.topCenter,
             height: 85,
-            child: const Text(
-              'Autojídelna',
-              style: TextStyle(fontSize: 60),
+            child: Text(
+              Texts.aboutAppName.i18n(),
+              style: const TextStyle(fontSize: 60),
             ),
           ),
           loginForm(),
@@ -75,7 +76,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void setLastUrl() async {
-    String? lastUrl = await loggedInCanteen.readData('url');
+    String? lastUrl = await loggedInCanteen.readData(Prefs.url);
     if (lastUrl != null) {
       _urlController.text = lastUrl;
     }
@@ -97,13 +98,13 @@ class LoginScreen extends StatelessWidget {
                       controller: _urlController,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        labelText: 'Url stránky icanteen  - např. jidelna.trebesin.cz',
+                        labelText: Texts.loginUrlFieldLabel.i18n(),
                         border: const OutlineInputBorder(),
                         errorText: value,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
+                          return Texts.loginUrlFieldHint.i18n();
                         }
                         return null;
                       },
@@ -120,13 +121,13 @@ class LoginScreen extends StatelessWidget {
                       controller: _usernameController,
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
-                      decoration: const InputDecoration(
-                        labelText: 'Uživatelské jméno',
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: Texts.loginUserFieldLabel.i18n(),
+                        border: const OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Zadejte prosím své uživatelské jméno';
+                          return Texts.loginUserFieldHint.i18n();
                         }
                         return null;
                       },
@@ -144,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                             obscureText: value[1] ? false : true,
                             autocorrect: false,
                             decoration: InputDecoration(
-                              labelText: 'Heslo',
+                              labelText: Texts.loginPasswordFieldLabel.i18n(),
                               border: const OutlineInputBorder(),
                               errorText: value[0],
                               suffixIcon: IconButton(
@@ -156,7 +157,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Zadejte prosím své heslo';
+                                return Texts.loginPasswordFieldHint.i18n();
                               }
                               return null;
                             },
@@ -170,11 +171,11 @@ class LoginScreen extends StatelessWidget {
             Builder(builder: (context) {
               return RichText(
                 text: TextSpan(
-                  text: 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ',
+                  text: Texts.dataCollectionAgreement.i18n(),
                   style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                   children: [
                     TextSpan(
-                      text: 'Více informací',
+                      text: Texts.moreInfo.i18n(),
                       style: const TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,
@@ -226,7 +227,7 @@ class LoginScreen extends StatelessWidget {
                     height: 60,
                     child: Center(
                       child: Text(
-                        'Přihlásit se',
+                        Texts.loginButton.i18n(),
                         style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                       ),
                     ),
@@ -249,7 +250,7 @@ class LoginScreen extends StatelessWidget {
       try {
         bool login = await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
         if (login) {
-          loggedInCanteen.saveData('url', url);
+          loggedInCanteen.saveData(Prefs.url, url);
           try {
             changeDate(newDate: DateTime.now());
             if (context.mounted) {
@@ -260,12 +261,12 @@ class LoginScreen extends StatelessWidget {
           }
           setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
         } else {
-          _setErrorText('Špatné heslo nebo uživatelské jméno', LoginFormErrorField.password);
+          _setErrorText(Texts.errorsBadPassword.i18n(), LoginFormErrorField.password);
         }
       } catch (e) {
         bool connected = await InternetConnectionChecker().hasConnection;
         if (!connected) {
-          _setErrorText('Nejste připojeni k internetu', LoginFormErrorField.url);
+          _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
         } else {
           try {
             //make a get request to the server to see if it is reachable
@@ -273,14 +274,14 @@ class LoginScreen extends StatelessWidget {
             url = url.replaceAll('http://', '');
             url = url.split('/')[0];
             await http.get(Uri.parse('https://$url'));
-            _setErrorText('Připojení k serveru selhalo. Zkuste to znovu.', LoginFormErrorField.url);
+            _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
           } catch (e) {
             try {
               url = url.replaceAll('https://', 'http://');
               await http.get(Uri.parse('http://$url'));
-              _setErrorText('Připojení k serveru selhalo. Zkuste to znovu', LoginFormErrorField.url);
+              _setErrorText(Texts.errorsBadConnection, LoginFormErrorField.url);
             } catch (e) {
-              _setErrorText('Nesprávné url', LoginFormErrorField.url);
+              _setErrorText(Texts.errorsBadUrl, LoginFormErrorField.url);
             }
           }
         }

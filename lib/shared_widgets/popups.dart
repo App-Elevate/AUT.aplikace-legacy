@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:localization/localization.dart';
 
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -37,7 +38,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Nová verze aplikace - ${releaseInfo!.latestVersion}'),
+        title: Text(Texts.popupNewVersion.i18n([releaseInfo!.latestVersion.toString()])),
         content: SizedBox(
           height: 200,
           child: Scrollbar(
@@ -49,7 +50,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Text(
-                      'Nová aktualizace přináší:',
+                      Texts.popupNewUpdateInfo.i18n(),
                       style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                     ),
                   ),
@@ -57,7 +58,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                     padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
                     child: HtmlWidget(
                       textStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                      md.markdownToHtml(releaseInfo!.changelog ?? 'Changelog není k dispozici'),
+                      md.markdownToHtml(releaseInfo!.changelog ?? Texts.popupChangeLogNotAvailable.i18n()),
                     ),
                   ),
                 ],
@@ -80,7 +81,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      child: const Text('Aktualizovat'),
+                      child: Text(Texts.popupUpdate.i18n()),
                       onPressed: () {
                         if (Platform.isAndroid && (releaseInfo?.isOnGooglePlay ?? false)) {
                           launchUrl(Uri.parse(releaseInfo!.googlePlayUrl!), mode: LaunchMode.externalApplication);
@@ -95,8 +96,11 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                           (value) {
                             if (analyticsEnabledGlobally && analytics != null) {
                               analytics!.logEvent(
-                                name: 'updateButtonClicked',
-                                parameters: {'oldVersion': value.version, 'newVersion': releaseInfo!.currentlyLatestVersion.toString()},
+                                name: AnalyticsEventIds.updateButtonClicked,
+                                parameters: {
+                                  AnalyticsEventIds.oldVer: value.version,
+                                  AnalyticsEventIds.newVer: releaseInfo!.currentlyLatestVersion.toString()
+                                },
                               );
                             }
                           },
@@ -110,10 +114,8 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   child: SizedBox(
                     width: 500,
                     child: ElevatedButton(
-                      onPressed: (() => launchUrl(
-                          Uri.parse("https://github.com/tpkowastaken/autojidelna/releases/tag/v${releaseInfo!.latestVersion}"),
-                          mode: LaunchMode.externalApplication)),
-                      child: const Text('Zobrazit na githubu'),
+                      onPressed: (() => launchUrl(Uri.parse(Links.latestRelease), mode: LaunchMode.externalApplication)),
+                      child: Text(Texts.popupShowOnGithub.i18n()),
                     ),
                   ),
                 ),
@@ -122,7 +124,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   child: SizedBox(
                     width: 500,
                     child: ElevatedButton(
-                      child: const Text('Teď ne'),
+                      child: Text(Texts.popupNotNow.i18n()),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -140,7 +142,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
 
 Widget logoutDialog(BuildContext context) {
   return AlertDialog(
-    title: const Text('Opravdu se chcete odhlásit?'),
+    title: Text(Texts.logoutUSure.i18n()),
     actionsAlignment: MainAxisAlignment.spaceBetween,
     alignment: Alignment.bottomCenter,
     actions: <Widget>[
@@ -148,14 +150,14 @@ Widget logoutDialog(BuildContext context) {
         onPressed: () {
           Navigator.of(context).pop(true);
         },
-        child: const Text('Odhlásit se'),
+        child: Text(Texts.logoutConfirm.i18n()),
       ),
       TextButton(
         onPressed: () {
           Navigator.of(context).pop(false);
         },
         style: Theme.of(context).textButtonTheme.style!.copyWith(foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary)),
-        child: const Text('Zrušit'),
+        child: Text(Texts.logoutCancel.i18n()),
       ),
     ],
   );
@@ -167,7 +169,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Selhalo načítání jídelníčku'),
+        title: Text(Texts.errorsLoad.i18n()),
         content: Text(message),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
@@ -177,7 +179,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
             },
-            child: const Text('Zkusit znovu'),
+            child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
           TextButton(
             onPressed: () {
@@ -185,7 +187,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
             },
-            child: const Text('Odhlásit se'),
+            child: Text(Texts.failedDialogLogOut.i18n()),
           ),
         ],
       );
@@ -199,8 +201,8 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Přihlašování selhalo'),
-        content: Text('Při přihlašování došlo k chybě: $message'),
+        title: Text(Texts.failedDialogLoginFailed.i18n()),
+        content: Text(Texts.failedDialogLoginDetail.i18n([message])),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
         actions: <Widget>[
@@ -209,7 +211,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
             },
-            child: const Text('Zkusit znovu'),
+            child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
           TextButton(
             onPressed: () {
@@ -217,7 +219,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
             },
-            child: const Text('Odhlásit se'),
+            child: Text(Texts.failedDialogLogOut.i18n()),
           ),
         ],
       );
@@ -246,8 +248,8 @@ void failedDownload(BuildContext context, {int? tries}) async {
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Aktualizace aplikace selhala'),
-        content: const Text('Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.'),
+        title: Text(Texts.failedDialogDownload.i18n()),
+        content: Text(Texts.failedDialogDownloadDetail.i18n()),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -257,13 +259,13 @@ void failedDownload(BuildContext context, {int? tries}) async {
               networkInstallApk(releaseInfo!.downloadUrl!, context);
               Navigator.of(context).pop();
             },
-            child: const Text('Zkusit znovu'),
+            child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Zrušit'),
+            child: Text(Texts.faliedDialogCancel.i18n()),
           ),
         ],
       );

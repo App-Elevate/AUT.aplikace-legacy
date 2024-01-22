@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:localization/localization.dart';
 
 // Getting current version
 import 'package:package_info_plus/package_info_plus.dart';
@@ -23,13 +24,8 @@ class MainAccountDrawer extends StatelessWidget {
   });
   final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
-  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>("Neznámá lokace");
+  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>(Texts.accountDrawerLocationsUnknown.i18n());
   final List locations = [];
-
-  Future<void> getLocation() async {
-    String? pickedLocationString = await loggedInCanteen.readData('location');
-    pickedLocationNotifier.value = pickedLocationString!;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,10 +94,10 @@ class MainAccountDrawer extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${loggedInCanteen.uzivatel!.kredit.toInt()}',
+                                        loggedInCanteen.uzivatel!.kredit.toInt().toString(),
                                         style: const TextStyle(fontSize: 20),
                                       ),
-                                      const Text('Kč'),
+                                      Text(Texts.accountDrawercurrency.i18n()),
                                     ],
                                   ),
                                 )
@@ -110,6 +106,8 @@ class MainAccountDrawer extends StatelessWidget {
                           ),
                           const VerticalDivider(),
                           //location
+                          //TODO: implement location picker
+                          /*
                           if (locations.isNotEmpty)
                             FutureBuilder(
                               future: getLocation(),
@@ -123,7 +121,7 @@ class MainAccountDrawer extends StatelessWidget {
                                   return const SizedBox(width: 100);
                                 }
                               },
-                            ),
+                            ),*/
                           if (locations.isEmpty) const SizedBox(width: 100),
                         ],
                       ),
@@ -135,7 +133,7 @@ class MainAccountDrawer extends StatelessWidget {
               //navigation buttons
               //profile
               ListTile(
-                title: const Text('Profil'),
+                title: Text(Texts.accountDrawerprofile.i18n()),
                 leading: const Icon(Icons.account_circle),
                 onTap: () {
                   Navigator.push(
@@ -150,7 +148,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //settings
               ListTile(
-                title: const Text('Nastavení'),
+                title: Text(Texts.accountDrawerSettings.i18n()),
                 leading: const Icon(Icons.settings),
                 onTap: () {
                   Navigator.push(
@@ -163,7 +161,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //about app
               ListTile(
-                title: const Text('O Aplikaci'),
+                title: Text(Texts.about.i18n()),
                 leading: const Icon(Icons.info_rounded),
                 onTap: () async {
                   if (!context.mounted) return;
@@ -174,16 +172,15 @@ class MainAccountDrawer extends StatelessWidget {
                   if (!context.mounted) return;
                   showAboutDialog(
                     context: context,
-                    applicationName: "Autojidelna",
-                    applicationLegalese: "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
+                    applicationName: Texts.aboutAppName.i18n(),
+                    applicationLegalese: Texts.aboutCopyRight.i18n(),
                     applicationVersion: '${packageInfo.version} - ${kDebugMode ? "Debug" : "Release"}',
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                         child: ElevatedButton(
-                          onPressed: (() =>
-                              launchUrl(Uri.parse("https://github.com/tpkowastaken/autojidelna"), mode: LaunchMode.externalApplication)),
-                          child: const Text('Zdrojový kód'),
+                          onPressed: (() => launchUrl(Uri.parse(Links.repo), mode: LaunchMode.externalApplication)),
+                          child: Text(Texts.aboutSourceCode.i18n()),
                         ),
                       ),
                       Builder(
@@ -196,7 +193,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 if (localReleaseInfo.currentlyLatestVersion && context.mounted) {
                                   Navigator.of(context).pop();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackbarFunction('Aktuálně jste na nejnovější verzi aplikace 👍'))
+                                      .showSnackBar(snackbarFunction(Texts.aboutLatestVersion.i18n()))
                                       .closed
                                       .then((SnackBarClosedReason reason) {
                                     snackbarshown.shown = false;
@@ -205,7 +202,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 }
                                 Future.delayed(Duration.zero, () => newUpdateDialog(context));
                               },
-                              child: const Text('Zkontrolovat aktualizace', textAlign: TextAlign.center),
+                              child: Text(Texts.aboutCheckForUpdates.i18n(), textAlign: TextAlign.center),
                             ),
                           );
                         },
@@ -216,12 +213,12 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               // share app
               ListTile(
-                title: const Text('Sdílet Aplikaci'),
+                title: Text(Texts.accountDrawerShareApp.i18n()),
                 leading: const Icon(Icons.share),
                 onTap: () async {
                   final RenderBox? box = context.findRenderObject() as RenderBox?;
-                  String text = 'https://autojidelna.tomprotiva.com';
-                  String subject = 'Autojídelna (aplikace na objednávání jídla)';
+                  String text = Links.autojidelna;
+                  String subject = Texts.shareDescription.i18n();
                   await Share.share(
                     text,
                     subject: subject,
@@ -262,9 +259,9 @@ class MainAccountDrawer extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
-                              child: Row(children: [Text("Vyberte lokaci:")]),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
+                              child: Row(children: [Text(Texts.accountDrawerPickLocation.i18n())]),
                             ),
                             const Divider(height: 0, indent: 10, endIndent: 10),
                             ListView.builder(
@@ -277,7 +274,6 @@ class MainAccountDrawer extends StatelessWidget {
                                   splashColor: Colors.transparent,
                                   onPressed: () {
                                     pickedLocationNotifier.value = locations[value];
-                                    loggedInCanteen.saveData("location", locations[value]);
                                     Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
                                   },
                                   child: ListTile(

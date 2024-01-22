@@ -34,10 +34,7 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
     status = await Permission.requestInstallPackages.status;
   }
   if (context.mounted && !snackbarshown.shown) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(dynamicSnackbarFunction('aktualizace', context, valueNotifier))
-        .closed
-        .then((SnackBarClosedReason reason) {
+    ScaffoldMessenger.of(context).showSnackBar(updateSnackbar(context, valueNotifier)).closed.then((SnackBarClosedReason reason) {
       snackbarshown.shown = false;
     });
   }
@@ -63,7 +60,8 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   try {
     if (analyticsEnabledGlobally && analytics != null) {
       analytics!.logEvent(
-          name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo!.currentlyLatestVersion.toString()});
+          name: AnalyticsEventIds.updateDownloaded,
+          parameters: {AnalyticsEventIds.oldVer: value.version, AnalyticsEventIds.newVer: releaseInfo!.currentlyLatestVersion.toString()});
     }
   } catch (e) {
     //this shouldn't crash but we'll just ignore it if it does. Analytics isn't that important

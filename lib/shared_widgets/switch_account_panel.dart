@@ -3,6 +3,7 @@
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 class SwitchAccountPanel extends StatefulWidget {
   const SwitchAccountPanel({
@@ -16,13 +17,13 @@ class SwitchAccountPanel extends StatefulWidget {
 }
 
 class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
+  // used for dynamic updating of the account panel in case an account is removed or added
   final ValueNotifier<LoggedAccountsInAccountPanel> loggedAccounts =
       ValueNotifier<LoggedAccountsInAccountPanel>(LoggedAccountsInAccountPanel(usernames: [], loggedInID: null));
-  BorderRadiusGeometry radius = const BorderRadius.only(
-    topLeft: Radius.circular(16.0),
-    topRight: Radius.circular(16.0),
-  );
-  void updateAccountPanel(LoginDataAutojidelna loginData) {
+
+  // updating the value notifier based on secure storage
+  Future<void> updateAccountPanel() async {
+    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     loggedAccounts.value.usernames.clear();
     for (int i = 0; i < loginData.users.length; i++) {
       loggedAccounts.value.usernames.add(loginData.users[i].username);
@@ -33,54 +34,34 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: radius,
+      borderRadius: autojidelnaStyles.accountPanelRadius,
       elevation: 4,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: radius,
+          borderRadius: autojidelnaStyles.accountPanelRadius,
           color: Theme.of(context).colorScheme.surface,
         ),
         child: FutureBuilder(
-            future: loggedInCanteen.getLoginDataFromSecureStorage(),
+            future: updateAccountPanel(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                final loginData = snapshot.data as LoginDataAutojidelna;
-                updateAccountPanel(loginData);
                 return ValueListenableBuilder(
                     valueListenable: loggedAccounts,
                     builder: (ctx, value, child) {
                       List<Widget> accounts = [];
+
                       for (int i = 0; i < value.usernames.length; i++) {
                         accounts.add(accountRow(context, value.usernames[i], i == value.loggedInID, i));
                       }
-                      Widget addAccountButton = TextButton(
-                        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                        onPressed: () async {
-                          //close before going to the page
-                          SwitchAccountVisible().setVisible(false);
-                          await Future.delayed(const Duration(milliseconds: 300));
-                          if (mounted) {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(Icons.add),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                "Přidat účet",
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      // We want to have the add account button at the bottom.
+                      // If there are more than 4 accounts we flip the list
+                      // therefore we need to insert the button at the beginning
+                      // otherwise we put it at the end
+                      // This is so that the scrolling starts at the top
                       if (accounts.length > 4) {
-                        accounts.insert(0, addAccountButton);
+                        accounts.insert(0, addAccountButton(context));
                       } else {
-                        accounts.add(addAccountButton);
+                        accounts.add(addAccountButton(context));
                       }
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -88,12 +69,13 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Text("Účty"),
+                            Text(Texts.accPanelTitle.i18n()),
                             const Divider(),
                             Expanded(
                               child: ListView.builder(
                                 padding: EdgeInsets.zero,
                                 addRepaintBoundaries: false,
+                                // Here is the flipping of the list
                                 reverse: accounts.length > 5 ? true : false,
                                 itemCount: accounts.length,
                                 itemBuilder: (context, index) => accounts[index],
@@ -104,12 +86,38 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                       );
                     });
               } else {
-                return const SizedBox(
-                  height: 0,
-                  width: 0,
-                );
+                return const SizedBox();
               }
             }),
+      ),
+    );
+  }
+
+  TextButton addAccountButton(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+      onPressed: () async {
+        //close before going to the page
+        SwitchAccountVisible().setVisible(false);
+        // wait for the animation to finish
+        await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
+        // pushing loginPage
+        if (mounted) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Icon(Icons.add),
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Text(
+              Texts.accPanelAddAccount.i18n(),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -123,10 +131,13 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             onTap: () async {
               if (!currentAccount) {
                 SwitchAccountVisible().setVisible(false);
-                loggedInCanteen.switchAccount(id);
-                await Future.delayed(const Duration(milliseconds: 300));
+                await loggedInCanteen.switchAccount(id);
+                // wait for the animation to finish
+                await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
                 widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
               } else {
+                // if the user clicks on the account that is already logged in
+                // we don't have to do any changes so we just close it
                 SwitchAccountVisible().setVisible(false);
               }
             },
@@ -158,21 +169,25 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             color: Theme.of(context).colorScheme.onBackground,
           ),
           onPressed: () async {
+            // popup asking the user if they are sure they want to logout
             try {
-              if (!((await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) ==
-                  true))) {
+              bool confirmation =
+                  await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) == true;
+              if (!confirmation) {
                 return;
               }
             } catch (e) {
               return;
             }
             await loggedInCanteen.logout(id: id);
+            // if the account is current it has to reload the main app screen
             if (currentAccount) {
               SwitchAccountVisible().setVisible(false);
-              await Future.delayed(const Duration(milliseconds: 500));
+              // wait for the animation to finish
+              await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
               widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
             }
-            updateAccountPanel(await loggedInCanteen.getLoginDataFromSecureStorage());
+            updateAccountPanel();
           },
         ),
       ],

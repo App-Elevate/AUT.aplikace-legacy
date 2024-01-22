@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  localization: ^2.1.1
   shared_preferences: ^2.0.0
   flutter_secure_storage: ^9.0.0
   canteenlib: ^3.0.6
@@ -81,6 +84,7 @@ flutter_launcher_icons:
 flutter:
   assets:
     - assets/images/
+    - assets/lang/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

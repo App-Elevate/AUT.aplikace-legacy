@@ -10,6 +10,7 @@ import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {
@@ -79,39 +80,39 @@ Future<bool> initAwesome() async {
     LoggedInUser user = loginData.users[i];
     notificationChannelGroups.add(
       NotificationChannelGroup(
-        channelGroupKey: 'channel_group_${user.username}',
-        channelGroupName: 'Notifikace pro ${user.username}',
+        channelGroupKey: NotificationIds.channelGroup + user.username,
+        channelGroupName: Texts.notificationsFor.i18n([user.username]),
       ),
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: 'channel_group_${user.username}',
-        channelKey: 'jidlo_channel_${user.username}',
-        channelName: 'Dnešní jídlo',
+        channelGroupKey: NotificationIds.channelGroup + user.username,
+        channelKey: NotificationIds.dnesniJidloChannel + user.username,
+        channelName: Texts.jidloChannelName.i18n(),
         channelShowBadge: true,
-        channelDescription: 'Notifikace každý den o tom jaké je dnes jídlo pro ${user.username}',
+        channelDescription: Texts.jidloChannelDescription.i18n([user.username]),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: 'channel_group_${user.username}',
-        channelKey: 'kredit_channel_${user.username}',
-        channelName: 'Docházející kredit',
+        channelGroupKey: NotificationIds.channelGroup + user.username,
+        channelKey: NotificationIds.kreditChannel + user.username,
+        channelName: Texts.dochazejiciKreditChannelName.i18n(),
         channelShowBadge: true,
-        channelDescription: 'Notifikace o tom, zda vám dochází kredit týden dopředu pro ${user.username}',
+        channelDescription: Texts.dochazejiciKreditChannelDescription.i18n([user.username]),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: 'channel_group_${user.username}',
-        channelKey: 'objednano_channel_${user.username}',
-        channelName: 'Objednáno?',
+        channelGroupKey: NotificationIds.channelGroup + user.username,
+        channelKey: NotificationIds.objednanoChannel + user.username,
+        channelName: Texts.objednanoChannelName.i18n(),
         channelShowBadge: true,
-        channelDescription: 'Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden pro ${user.username}',
+        channelDescription: Texts.objednanoChannelDescription.i18n([user.username]),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -119,15 +120,16 @@ Future<bool> initAwesome() async {
   }
   notificationChannelGroups.add(
     NotificationChannelGroup(
-      channelGroupKey: 'channel_group_else',
-      channelGroupName: 'Ostatní',
+      channelGroupKey: NotificationIds.channelGroupElse,
+      channelGroupName: Texts.other.i18n(),
     ),
   );
   notificationChannels.add(
     NotificationChannel(
-      channelKey: 'else_channel',
-      channelName: 'Ostatní',
-      channelDescription: 'Ostatní notifikace, např. chybové hlášky...',
+      channelGroupKey: NotificationIds.channelGroupElse,
+      channelKey: NotificationIds.channelElse,
+      channelName: Texts.other.i18n(),
+      channelDescription: Texts.channelDescriptionOstatni.i18n(),
       importance: NotificationImportance.Min,
       playSound: false,
     ),
@@ -151,9 +153,9 @@ Future<void> doNotifications({bool force = false}) async {
       content: NotificationContent(
     id: 588,
     locked: true,
-    channelKey: 'else_channel',
+    channelKey: NotificationIds.channelElse,
     actionType: ActionType.Default,
-    title: 'Získávám data pro notifikace...',
+    title: Texts.gettingDataNotifications.i18n(),
   ));
   // Don't send notifications before 9 and after 22
   for (int i = 0; i < loginData.users.length && !((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force); i++) {
@@ -164,7 +166,7 @@ Future<void> doNotifications({bool force = false}) async {
     DateTime now = DateTime.now();
     String nowString = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
-    String? timeOfDayFoodNotification = await loggedInCanteen.readData('FoodNotificationTime');
+    String? timeOfDayFoodNotification = await loggedInCanteen.readData(Prefs.foodNotifTime);
     timeOfDayFoodNotification ??= '11:00';
     TimeOfDay timeOfDay =
         TimeOfDay(hour: int.parse(timeOfDayFoodNotification.split(':')[0]), minute: int.parse(timeOfDayFoodNotification.split(':')[1]));
@@ -172,25 +174,25 @@ Future<void> doNotifications({bool force = false}) async {
     int difference = time.difference(now).inMinutes;
     //difference from time of day to now
 
-    if ((await loggedInCanteen.readData('lastJidloDneCheck-${loginData.users[i].username}') == nowString ||
-            await loggedInCanteen.readData('sendFoodInfo-${loginData.users[i].username}') != '1' ||
+    if ((await loggedInCanteen.readData(Prefs.lastJidloDneCheck + loginData.users[i].username) == nowString ||
+            await loggedInCanteen.readData(Prefs.dailyFoodInfo + loginData.users[i].username) != '1' ||
             difference > 120 ||
             difference < -120) &&
         !force) {
       jidloDne = false;
     } else {
-      await loggedInCanteen.saveData('lastJidloDneCheck-${loginData.users[i].username}', nowString);
+      await loggedInCanteen.saveData(Prefs.lastJidloDneCheck + loginData.users[i].username, nowString);
     }
 
-    if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !force) {
+    if (await loggedInCanteen.readData(Prefs.lastNotificationCheck + loginData.users[i].username) == nowString && !force) {
       kredit = false;
     }
 
-    if (await loggedInCanteen.readData('lastCheck-${loginData.users[i].username}') == nowString && !force) {
+    if (await loggedInCanteen.readData(Prefs.lastNotificationCheck + loginData.users[i].username) == nowString && !force) {
       objednavka = false;
     }
+    /*
     if (kDebugMode) {
-      /*
       AwesomeNotifications().createNotification(
           content: NotificationContent(
         id: -1,
@@ -198,12 +200,12 @@ Future<void> doNotifications({bool force = false}) async {
         actionType: ActionType.Default,
         title: 'Notifikace Info',
         body: 'jidloDne: $jidloDne, kredit: $kredit, objednavka: $objednavka',
-      ));*/
-    }
+      ));
+    }*/
     if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
-    loggedInCanteen.saveData('lastCheck-${loginData.users[i].username}', nowString);
+    loggedInCanteen.saveData(Prefs.lastNotificationCheck + loginData.users[i].username, nowString);
 
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
@@ -218,13 +220,13 @@ Future<void> doNotifications({bool force = false}) async {
               AwesomeNotifications().createNotification(
                   content: NotificationContent(
                     id: 1024 - i,
-                    channelKey: 'jidlo_channel_${loginData.users[i].username}',
+                    channelKey: NotificationIds.dnesniJidloChannel + loginData.users[i].username,
                     actionType: ActionType.Default,
-                    title: 'Dnešní jídlo',
+                    title: Texts.jidloChannelName.i18n(),
                     payload: {
-                      'user': loginData.users[i].username,
-                      'index': k.toString(),
-                      'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(),
+                      NotificationIds.payloadUser: loginData.users[i].username,
+                      NotificationIds.payloadIndex: k.toString(),
+                      NotificationIds.payloadIndexDne: jidelnicek.den.difference(minimalDate).inDays.toString(),
                     },
                     body: jidelnicek.jidla[0].nazev,
                   ),
@@ -234,13 +236,13 @@ Future<void> doNotifications({bool force = false}) async {
             AwesomeNotifications().createNotification(
               content: NotificationContent(
                 id: 1024 - i,
-                channelKey: 'jidlo_channel_${loginData.users[i].username}',
+                channelKey: NotificationIds.dnesniJidloChannel + loginData.users[i].username,
                 actionType: ActionType.Default,
-                title: 'Dnešní jídlo',
+                title: Texts.jidloChannelName.i18n(),
                 payload: {
-                  'user': loginData.users[i].username,
-                  'index': k.toString(),
-                  'indexDne': jidelnicek.den.difference(minimalDate).inDays.toString(),
+                  NotificationIds.payloadUser: loginData.users[i].username,
+                  NotificationIds.payloadIndex: k.toString(),
+                  NotificationIds.payloadIndexDne: jidelnicek.den.difference(minimalDate).inDays.toString(),
                 },
                 body: jidelnicek.jidla[0].nazev,
               ),
@@ -251,13 +253,13 @@ Future<void> doNotifications({bool force = false}) async {
           AwesomeNotifications().createNotification(
             content: NotificationContent(
               id: 1024,
-              channelKey: 'jidlo_channel_${loginData.users[i].username}',
+              channelKey: NotificationIds.dnesniJidloChannel + loginData.users[i].username,
               actionType: ActionType.Default,
-              title: 'Dnešní jídlo',
+              title: Texts.jidloChannelName.i18n(),
               payload: {
-                'user': loginData.users[i].username,
+                NotificationIds.payloadUser: loginData.users[i].username,
               },
-              body: 'Žádné jídlo není',
+              body: Texts.noFood.i18n(),
             ),
           );
         } else {
@@ -290,7 +292,7 @@ Future<void> doNotifications({bool force = false}) async {
         }
       }
       //parse ignore date to DateTime
-      String? ignoreDateStr = await loggedInCanteen.readData('ignore_kredit_${loginData.users[i].username}');
+      String? ignoreDateStr = await loggedInCanteen.readData(Prefs.kreditNotifications + loginData.users[i].username);
       DateTime ignoreDate;
       switch (ignoreDateStr) {
         //not ignored
@@ -311,16 +313,16 @@ Future<void> doNotifications({bool force = false}) async {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: 512 - i,
-            channelKey: 'kredit_channel_${loginData.users[i].username}',
+            channelKey: NotificationIds.kreditChannel + loginData.users[i].username,
             actionType: ActionType.Default,
-            title: 'Dochází vám kredit!',
-            payload: {'user': loginData.users[i].username},
-            body: 'Kredit pro ${uzivatel.jmeno} ${uzivatel.prijmeni}: ${uzivatel.kredit.toInt()} kč',
+            title: Texts.notificationDochaziVamKredit.i18n(),
+            payload: {NotificationIds.payloadUser: loginData.users[i].username},
+            body: Texts.notificationKreditPro.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', cena.toString()]),
           ),
           actionButtons: [
             NotificationActionButton(
-              key: 'ignore_kredit_${loginData.users[i].username}',
-              label: 'Ztlumit na týden',
+              key: NotificationIds.kreditChannel + loginData.users[i].username,
+              label: Texts.notificationZtlumit.i18n(),
               actionType: ActionType.Default,
               enabled: true,
             ),
@@ -329,7 +331,7 @@ Future<void> doNotifications({bool force = false}) async {
       }
       //pokud chybí aspoň 3 obědy z příštích 10 dní
       //parse ignore date to DateTime
-      String? ignoreDateStrObjednano = await loggedInCanteen.readData('ignore_objednat_${loginData.users[i].username}');
+      String? ignoreDateStrObjednano = await loggedInCanteen.readData(Prefs.nemateObjednanoNotifications + loginData.users[i].username);
       DateTime ignoreDateObjednano;
       switch (ignoreDateStrObjednano) {
         //not ignored
@@ -350,23 +352,23 @@ Future<void> doNotifications({bool force = false}) async {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: i,
-            channelKey: 'objednano_channel_${loginData.users[i].username}',
+            channelKey: NotificationIds.objednanoChannel + loginData.users[i].username,
             actionType: ActionType.Default,
-            title: 'Objednejte si na příští týden',
-            payload: {'user': loginData.users[i].username},
-            body: 'Uživatel ${uzivatel.jmeno} ${uzivatel.prijmeni} si stále ještě neobjednal jídlo na příští týden',
+            title: Texts.notificationObjednejteSi.i18n(),
+            payload: {NotificationIds.payloadUser: loginData.users[i].username},
+            body: Texts.notificationObjednejteSiDetail.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '']),
           ),
           actionButtons: [
             NotificationActionButton(
-              key: 'objednat_${loginData.users[i].username}',
-              label: 'Objednat vždy 1.',
-              isDangerousOption: true,
+              key: NotificationIds.objednatButton + loginData.users[i].username,
+              label: Texts.objednatAction.i18n(),
+              isDangerousOption: false,
               actionType: ActionType.Default,
               enabled: true,
             ),
             NotificationActionButton(
-              key: 'ignore_objednat_${loginData.users[i].username}',
-              label: 'Ztlumit na týden',
+              key: NotificationIds.objednanoChannel + loginData.users[i].username,
+              label: Texts.notificationZtlumit.i18n(),
               actionType: ActionType.Default,
               enabled: true,
             ),
@@ -380,9 +382,9 @@ Future<void> doNotifications({bool force = false}) async {
         AwesomeNotifications().createNotification(
             content: NotificationContent(
           id: 10,
-          channelKey: 'else_channel',
+          channelKey: NotificationIds.channelElse,
           actionType: ActionType.Default,
-          title: 'Nastala Chyba',
+          title: Texts.errorsUndefined.i18n(),
           body: e.toString(),
         ));
       }
@@ -393,39 +395,40 @@ Future<void> doNotifications({bool force = false}) async {
   return;
 }
 
-Future<void> handleNotificationAction(ReceivedAction? receivedAction) async {
-  //tlačítka ztlumení a objednání prvního oběda
-  if (receivedAction?.buttonKeyPressed != null && receivedAction?.buttonKeyPressed != '') {
-    if (receivedAction!.buttonKeyPressed.substring(0, 16) == 'ignore_objednat_') {
-      DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-      await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
-          '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-    } else if (receivedAction.buttonKeyPressed.substring(0, 14) == 'ignore_kredit_') {
-      DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-      await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
-          '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-    } else if (receivedAction.buttonKeyPressed.substring(0, 9) == 'objednat_') {
-      LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
-      await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9));
-    }
-  }
-  //přepnutí účtu, když uživatel klikne na notifikaci
-  if (receivedAction?.payload?['user'] != null) {
-    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-    for (LoggedInUser uzivatel in loginData.users) {
-      if (uzivatel.username == receivedAction?.payload?['user']) {
-        await loggedInCanteen.switchAccount(loginData.users.indexOf(uzivatel));
-        break;
+class NotificationController {
+  @pragma("vm:entry-point")
+  static Future<void> handleNotificationAction(ReceivedAction? receivedAction) async {
+    //tlačítka ztlumení a objednání prvního oběda
+    if (receivedAction?.buttonKeyPressed != null && receivedAction?.buttonKeyPressed != '') {
+      if (receivedAction!.buttonKeyPressed.substring(0, 16) == Prefs.nemateObjednanoNotifications) {
+        DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
+        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
+            '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
+      } else if (receivedAction.buttonKeyPressed.substring(0, 14) == Prefs.kreditNotifications) {
+        DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
+        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
+            '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
+      } else if (receivedAction.buttonKeyPressed.substring(0, 9) == NotificationIds.objednatButton) {
+        LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
+        await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9));
       }
     }
+    //přepnutí účtu, když uživatel klikne na notifikaci
+    if (receivedAction?.payload?[NotificationIds.payloadUser] != null) {
+      LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+      for (LoggedInUser uzivatel in loginData.users) {
+        if (uzivatel.username == receivedAction?.payload?[NotificationIds.payloadUser]) {
+          await loggedInCanteen.switchAccount(loginData.users.indexOf(uzivatel));
+          break;
+        }
+      }
+    }
+    if (receivedAction?.payload?[NotificationIds.payloadIndex] != null) {
+      indexJidlaKtereMaBytZobrazeno = int.parse(receivedAction!.payload![NotificationIds.payloadIndex]!);
+      indexJidlaCoMaBytZobrazeno = int.parse(receivedAction.payload![NotificationIds.payloadIndexDne]!);
+    }
   }
-  if (receivedAction?.payload?['index'] != null) {
-    indexJidlaKtereMaBytZobrazeno = int.parse(receivedAction!.payload!['index']!);
-    indexJidlaCoMaBytZobrazeno = int.parse(receivedAction.payload!['indexDne']!);
-  }
-}
 
-class NotificationController {
   /// Use this method to detect when a new notification or a schedule is created
   @pragma("vm:entry-point")
   static Future<void> onNotificationCreatedMethod(ReceivedNotification receivedNotification) async {
@@ -441,57 +444,12 @@ class NotificationController {
   /// Use this method to detect if the user dismissed a notification
   @pragma("vm:entry-point")
   static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
-    /*
-    if (receivedAction.buttonKeyPressed != '') {
-      if (receivedAction.buttonKeyPressed.substring(0, 16) == 'ignore_objednat_') {
-        DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
-            '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-      } else if (receivedAction.buttonKeyPressed.substring(0, 14) == 'ignore_kredit_') {
-        DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
-            '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-      } else if (receivedAction.buttonKeyPressed.substring(0, 9) == 'objednat_') {
-        LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
-        await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9));
-      }
-    }*/
+    handleNotificationAction(receivedAction);
   }
 
   /// This method is used to detect when an action button or notification is pressed when the application is open.
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
-    if (receivedAction.buttonKeyPressed != '') {
-      if (receivedAction.buttonKeyPressed.substring(0, 16) == 'ignore_objednat_') {
-        DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
-            '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-      } else if (receivedAction.buttonKeyPressed.substring(0, 14) == 'ignore_kredit_') {
-        DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
-            '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-      } else if (receivedAction.buttonKeyPressed.substring(0, 9) == 'objednat_') {
-        LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
-        await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9));
-      }
-    }
-    if (receivedAction.payload != {} && receivedAction.payload != null && receivedAction.payload!['user'] != null) {
-      LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-      for (LoggedInUser uzivatel in loginData.users) {
-        if (uzivatel.username == receivedAction.payload!['user']) {
-          await loggedInCanteen.switchAccount(loginData.users.indexOf(uzivatel));
-          try {
-            setHomeWidgetPublic(LoggingInWidget(setHomeWidget: setHomeWidgetPublic));
-          } catch (e) {
-            //nothing
-          }
-          break;
-        }
-      }
-    }
-    if (receivedAction.payload?['index'] != null) {
-      indexJidlaKtereMaBytZobrazeno = int.parse(receivedAction.payload!['index']!);
-      indexJidlaCoMaBytZobrazeno = int.parse(receivedAction.payload!['indexDne']!);
-    }
+    handleNotificationAction(receivedAction);
   }
 }
