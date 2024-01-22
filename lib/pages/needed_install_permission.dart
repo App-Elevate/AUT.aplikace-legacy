@@ -26,7 +26,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                Texts.neededPermissionDescription.i18n(),
+                Texts.neededPermissionDescription1.i18n(),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               Padding(

@@ -536,7 +536,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                  text: Texts.settingsDataCollectionDescription.i18n(),
+                  text: Texts.settingsDataCollectionDescription1.i18n(),
                   style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                   children: [
                     TextSpan(
