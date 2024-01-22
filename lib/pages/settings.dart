@@ -35,8 +35,8 @@ class SettingsPage extends StatelessWidget {
   Future<void> resetAndDoNotifications() async {
     LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     for (LoggedInUser uzivatel in loginData.users) {
-      await loggedInCanteen.saveData(Prefs.lastJidloDneCheck + uzivatel.username, '');
-      await loggedInCanteen.saveData(Prefs.lastNotificationCheck + uzivatel.username, '');
+      await loggedInCanteen.removeData(Prefs.lastJidloDneCheck + uzivatel.username);
+      await loggedInCanteen.removeData(Prefs.lastNotificationCheck + uzivatel.username);
     }
     await doNotifications();
   }
@@ -525,9 +525,9 @@ class SettingsPage extends StatelessWidget {
                     disableAnalyticsNotifier.value = value;
                     analyticsEnabledGlobally = !value;
                     if (value) {
-                      loggedInCanteen.saveData('disableAnalytics', '1');
+                      loggedInCanteen.saveData(Prefs.disableAnalytics, '1');
                     } else {
-                      loggedInCanteen.saveData('disableAnalytics', '');
+                      loggedInCanteen.saveData(Prefs.disableAnalytics, '');
                     }
                   },
                 );
@@ -536,12 +536,11 @@ class SettingsPage extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                  text:
-                      'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve ',
+                  text: Texts.settingsDataCollectionDescription.i18n(),
                   style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                   children: [
                     TextSpan(
-                      text: 'Zdrojovém kódu',
+                      text: Texts.settingsDataCollectionDescription2.i18n(),
                       style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
@@ -549,14 +548,14 @@ class SettingsPage extends StatelessWidget {
 
                           PackageInfo packageInfo = await PackageInfo.fromPlatform();
                           String appVersion = packageInfo.version;
-                          launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion'), mode: LaunchMode.externalApplication);
+                          launchUrl(Uri.parse(Links.currentVersionCode(appVersion)), mode: LaunchMode.externalApplication);
                         },
                     ),
-                    const TextSpan(
-                      text: ' nebo na ',
+                    TextSpan(
+                      text: Texts.settingsDataCollectionDescription3.i18n(),
                     ),
                     TextSpan(
-                      text: 'seznamu sbíraných dat',
+                      text: Texts.settingsDataCollectionDescription4.i18n(),
                       style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
@@ -564,8 +563,7 @@ class SettingsPage extends StatelessWidget {
 
                           PackageInfo packageInfo = await PackageInfo.fromPlatform();
                           String appVersion = packageInfo.version;
-                          launchUrl(Uri.parse('https://github.com/tpkowastaken/autojidelna/blob/v$appVersion/listSbiranychDat.md'),
-                              mode: LaunchMode.externalApplication);
+                          launchUrl(Uri.parse(Links.listSbiranychDat(appVersion)), mode: LaunchMode.externalApplication);
                         },
                     ),
                   ],
@@ -584,9 +582,9 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Debug Options'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(Texts.settingsDebugOptions.i18n()),
           ),
           const Divider(),
           ListTile(
@@ -594,7 +592,7 @@ class SettingsPage extends StatelessWidget {
               onPressed: () async {
                 doNotifications(force: true);
               },
-              child: const Text('Force send notifs'),
+              child: Text(Texts.settingsDebugForceNotifications.i18n()),
             ),
           ),
           ListTile(
@@ -602,7 +600,7 @@ class SettingsPage extends StatelessWidget {
               onPressed: () async {
                 resetAndDoNotifications();
               },
-              child: const Text('Send notifs'),
+              child: Text(Texts.settingsDebugNotifications.i18n()),
             ),
           ),
         ],

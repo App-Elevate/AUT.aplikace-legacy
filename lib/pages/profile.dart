@@ -3,6 +3,7 @@
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key, required this.setHomeWidget});
@@ -12,7 +13,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: Text(Texts.profile.i18n()),
         actions: [
           _appBarLogoutButton(context),
         ],
@@ -94,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
-                        'Kredit: ${loggedInCanteen.uzivatel!.kredit.toInt()} kč',
+                        Texts.kredit.i18n([loggedInCanteen.uzivatel!.kredit.toInt().toString()]),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
@@ -114,9 +115,9 @@ class ProfilePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text('Osobní Údaje'),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(Texts.personalInfo.i18n()),
           ),
           const Divider(),
           Padding(
@@ -128,7 +129,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.jmeno != null || loggedInCanteen.uzivatel!.prijmeni != null) {
                       return Text(
-                        'Jméno: ${loggedInCanteen.uzivatel!.jmeno ?? ''} ${loggedInCanteen.uzivatel!.prijmeni}',
+                        Texts.name.i18n([loggedInCanteen.uzivatel!.jmeno ?? '', loggedInCanteen.uzivatel!.prijmeni ?? '']),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -140,7 +141,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.kategorie != null) {
                       return Text(
-                        'Kategorie: ${loggedInCanteen.uzivatel!.kategorie!}',
+                        Texts.category.i18n([loggedInCanteen.uzivatel!.kategorie ?? '']),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -162,9 +163,9 @@ class ProfilePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Platební Údaje'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(Texts.paymentInfo.i18n()),
           ),
           const Divider(),
           Padding(
@@ -176,7 +177,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.ucetProPlatby != null && loggedInCanteen.uzivatel!.ucetProPlatby != '') {
                       return Text(
-                        'Číslo účtu: ${loggedInCanteen.uzivatel!.ucetProPlatby}',
+                        Texts.paymentAccountNumber.i18n([loggedInCanteen.uzivatel!.ucetProPlatby ?? '']),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -188,7 +189,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.specSymbol != null && loggedInCanteen.uzivatel!.specSymbol != '') {
                       return Text(
-                        'Specifický Symbol: ${loggedInCanteen.uzivatel!.specSymbol}',
+                        Texts.specificSymbol.i18n([loggedInCanteen.uzivatel!.specSymbol ?? '']),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -201,7 +202,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.varSymbol != null && loggedInCanteen.uzivatel!.varSymbol != '') {
                       return Text(
-                        'Variabilní Symbol: ${loggedInCanteen.uzivatel!.varSymbol}',
+                        Texts.variableSymbol.i18n([loggedInCanteen.uzivatel!.varSymbol ?? '']),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -223,44 +224,30 @@ class ProfilePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Autojídelna'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Text(Texts.aboutAppName.i18n()),
           ),
           const Divider(),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: FutureBuilder(
-              future: loggedInCanteen.readData('statistika:objednavka'),
+              future: loggedInCanteen.readData(Prefs.statistikaObjednavka),
               builder: (context, snapshot) {
-                if (snapshot.hasError) {
+                if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                   return Text(
-                    'Objednávky s autojídelnou: chyba při načítání dat',
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
-                  );
-                } else if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                  return Text(
-                    'Objednávky s autojídelnou: ${snapshot.data}',
+                    Texts.ordersWithAutojidelna.i18n([snapshot.data.toString()]),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 } else {
                   return Text(
-                    'Objednávky s autojídelnou: 0',
+                    Texts.ordersWithAutojidelna.i18n(['0']),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 }
               },
             ),
           ),
-          // const Text('Počet automatických objenávek: 0'),
-          // const Text('Počet objednávek chycených burza Catcherem: 0'),
-          // const Padding(
-          //   padding: EdgeInsets.only(top: 5.0),
-          //   child: Text('Pro verze: není dostupná'),
-          // ),
-          //const Divider(),
-          // ElevatedButton(onPressed: () {}, child: const Text('Zakoupit Pro')),
         ],
       ),
     );

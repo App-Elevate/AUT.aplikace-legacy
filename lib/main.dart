@@ -30,18 +30,32 @@ void main() async {
   // Awesome notifications initialization
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String version = packageInfo.version;
-  String? lastVersion = await loggedInCanteen.readData('lastVersion');
+  String? lastVersion = await loggedInCanteen.readData(Prefs.lastVersion);
 
   // Removing the already set notifications if we updated versions
   if (lastVersion != version) {
     // Set the new version
-    loggedInCanteen.saveData('lastVersion', version);
+    loggedInCanteen.saveData(Prefs.lastVersion, version);
+
+    // PREFS ID CHANGES
+    await loggedInCanteen.readData(OldPrefs.theme).then((value) {
+      if (value != null) {
+        loggedInCanteen.saveData(Prefs.theme, value);
+        loggedInCanteen.removeData(OldPrefs.theme);
+      }
+    });
+    await loggedInCanteen.readData(OldPrefs.disableAnalytics).then((value) {
+      if (value != null) {
+        loggedInCanteen.saveData(Prefs.disableAnalytics, value);
+        loggedInCanteen.removeData(OldPrefs.disableAnalytics);
+      }
+    });
 
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
       for (LoggedInUser uzivatel in loginData.users) {
-        AwesomeNotifications().removeChannel('kredit_channel_${uzivatel.username}');
-        await AwesomeNotifications().removeChannel('objednano_channel_${uzivatel.username}');
+        AwesomeNotifications().removeChannel(NotificationIds.kreditChannel + uzivatel.username);
+        await AwesomeNotifications().removeChannel(NotificationIds.objednanoChannel + uzivatel.username);
       }
     } catch (e) {
       //do nothing
@@ -61,14 +75,14 @@ void main() async {
 
   // Detecting if the app was opened from a notification and handling it if it was
   ReceivedAction? receivedAction = await AwesomeNotifications().getInitialNotificationAction(removeFromActionEvents: false);
-  await handleNotificationAction(receivedAction);
+  await NotificationController.handleNotificationAction(receivedAction);
 
   // Initializing the background fetch
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
   // Check if user has opped out of analytics
 
-  String? analyticsDisabled = await loggedInCanteen.readData('disableAnalytics');
+  String? analyticsDisabled = await loggedInCanteen.readData(Prefs.disableAnalytics);
 
   // Know if this release is debug and disable analytics if it is
   if (kDebugMode) {
@@ -92,7 +106,7 @@ void main() async {
   }
 
   // Loading settings from preferences
-  skipWeekends = await loggedInCanteen.readData('skipWeekends') == '1' ? true : false;
+  skipWeekends = await loggedInCanteen.isPrefTrue(Prefs.skipWeekends);
 
   // Skipping to next monday if we are currently on saturday or sunday
   // If not initializing normally

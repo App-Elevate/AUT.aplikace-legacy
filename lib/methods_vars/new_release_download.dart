@@ -60,7 +60,8 @@ void networkInstallApk(String fileUrl, BuildContext context) async {
   try {
     if (analyticsEnabledGlobally && analytics != null) {
       analytics!.logEvent(
-          name: 'updateDownloaded', parameters: {'oldVersion': value.version, 'newVersion': releaseInfo!.currentlyLatestVersion.toString()});
+          name: AnalyticsEventIds.updateDownloaded,
+          parameters: {AnalyticsEventIds.oldVer: value.version, AnalyticsEventIds.newVer: releaseInfo!.currentlyLatestVersion.toString()});
     }
   } catch (e) {
     //this shouldn't crash but we'll just ignore it if it does. Analytics isn't that important

@@ -5,6 +5,7 @@ import 'package:autojidelna/local_imports.dart';
 import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 
 class JidloDetail extends StatelessWidget {
   const JidloDetail({
@@ -53,17 +54,6 @@ class JidloDetail extends StatelessWidget {
             alergeny += '${alergen.nazev}, ';
           }
           alergeny = alergeny.substring(0, alergeny.length - 2);
-          if (jidlo.kategorizovano == null) {
-            return Column(
-              children: [
-                Text(jidlo.nazev),
-                const Divider(),
-                Text(alergeny),
-                const Text(
-                    'používáte záložní rozhraní, které je pouze v nouzi. Pokud tento text vidíte prosím kontaktujte vývojáře - github v "O Aplikaci" - díky!')
-              ],
-            );
-          }
           JidloKategorizovano jidloString = jidlo.kategorizovano!;
           List<Widget> jidloWidgets = [];
           //Soup
@@ -77,7 +67,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Polévka',
+                        Texts.soup,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -105,7 +95,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Hlavní chod',
+                        Texts.mainCourse.i18n(),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -133,7 +123,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Pití',
+                        Texts.drinks.i18n(),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -161,7 +151,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Přílohy',
+                        Texts.sideDish.i18n(),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -189,7 +179,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Ostatní',
+                        Texts.other.i18n(),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -217,7 +207,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Alergeny',
+                        Texts.allergens.i18n(),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),

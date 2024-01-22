@@ -10,6 +10,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:localization/localization.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -30,15 +31,20 @@ Future<ReleaseInfo> getLatestRelease() async {
     if (Platform.isAndroid) {
       isAndroid = true;
     }
-    Uri url = Uri.parse('https://api.github.com/repos/Autojidelna/autojidelna/releases/latest');
+    Uri url = Uri.parse(Links.latestVersionApi);
     const Map<String, String> headers = {
       'Accept': 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
     };
     final response = await http.get(url, headers: headers);
-    final isOnAppstore = await http.get(Uri.parse('https://autojidelna.tomprotiva.com/release/appStore.json'));
-    //decode isOnAppstore as json
-    final isOnAppstoreJson = jsonDecode(isOnAppstore.body);
+    dynamic isOnAppstoreJson;
+    try {
+      final isOnAppstore = await http.get(Uri.parse(Links.appStore));
+      //decode isOnAppstore as json
+      isOnAppstoreJson = jsonDecode(isOnAppstore.body);
+    } catch (e) {
+      // just ignore it
+    }
     var json = jsonDecode(response.body);
     String version = json['tag_name'].replaceAll('v', '');
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -52,15 +58,14 @@ Future<ReleaseInfo> getLatestRelease() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     try {
-      patchNotes =
-          utf8.decode((await http.get(Uri.parse('https://raw.githubusercontent.com/tpkowastaken/autojidelna/v$version/CHANGELOG.md'))).bodyBytes);
+      patchNotes = utf8.decode((await http.get(Uri.parse(Links.currentChangelog(version)))).bodyBytes);
       patchNotes = patchNotes.split('## $appVersion')[0];
       patchNotes = patchNotes.trim();
     } catch (e) {
-      patchNotes = 'Nepodařilo se získat změny :/';
+      patchNotes = Texts.errorsChangelog.i18n();
     }
     if (patchNotes == '404: Not Found') {
-      patchNotes = 'Nepodařilo se získat změny :/';
+      patchNotes = Texts.errorsChangelog.i18n();
     }
 
     for (int i = 0; i < json['assets'].length; i++) {

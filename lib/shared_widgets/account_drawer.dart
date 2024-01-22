@@ -94,7 +94,7 @@ class MainAccountDrawer extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${loggedInCanteen.uzivatel!.kredit.toInt()}',
+                                        loggedInCanteen.uzivatel!.kredit.toInt().toString(),
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                       Text(Texts.accountDrawercurrency.i18n()),

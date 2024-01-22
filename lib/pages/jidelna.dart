@@ -11,6 +11,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -49,10 +50,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       // Find the ScaffoldMessenger in the widget tree
       // and use it to show a SnackBar.
       if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu.'))
-            .closed
-            .then((SnackBarClosedReason reason) {
+        ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(Texts.errorsUpdatingData.i18n())).closed.then((SnackBarClosedReason reason) {
           snackbarshown.shown = false;
         });
       }
@@ -62,11 +60,13 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   @override
   initState() {
-    loggedInCanteen.readData('firstTime').then((value) {
+    loggedInCanteen.readData(Prefs.firstTime).then((value) {
       if (value != '1') {
         initPlatformState().then((value) async {
           await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
             if (!isAllowed) {
+              //TODO: less annoying popup for notifications
+
               // This is just a basic example. For real apps, you must show some
               // friendly dialog box before call the request method.
               // This is very important to not harm the user experience
@@ -86,7 +86,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       } else {
         initPlatformState();
       }
-      loggedInCanteen.saveData('firstTime', '1');
+      loggedInCanteen.saveData(Prefs.firstTime, '1');
     });
     super.initState();
   }
@@ -130,7 +130,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       body: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Autojídelna'),
+          title: Text(Texts.aboutAppName.i18n()),
           actions: [
             //refresh button
             IconButton(
@@ -315,7 +315,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                           SizedBox(
                             width: MediaQuery.sizeOf(context).width * 0.75,
                             child: Text(
-                              'Nepodařilo se načíst obědy, obnovte stránku nebo to zkuste prosím později.',
+                              Texts.errorsLoadingData.i18n(),
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -412,10 +412,7 @@ class ListJidel extends StatelessWidget {
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 if (context.mounted && !snackbarshown.shown) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu.'))
-                      .closed
-                      .then(
+                  ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(Texts.errorsUpdatingData.i18n())).closed.then(
                     (SnackBarClosedReason reason) {
                       snackbarshown.shown = false;
                     },
@@ -438,7 +435,7 @@ class ListJidel extends StatelessWidget {
                       child: Padding(
                         //half of the screen height padding
                         padding: EdgeInsets.symmetric(vertical: MediaQuery.sizeOf(context).height / 2 - 100),
-                        child: const Text('Žádná Jídla pro tento den.'),
+                        child: Text(Texts.noFood.i18n()),
                       ),
                     ),
                   ),
@@ -555,10 +552,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
       setState(() {});
     } catch (e) {
       if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackbarFunction('Nastala chyba při aktualizaci dat, zkontrolujte připojení a zkuste to znovu.'))
-            .closed
-            .then((SnackBarClosedReason reason) {
+        ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(Texts.errorsUpdatingData.i18n())).closed.then((SnackBarClosedReason reason) {
           snackbarshown.shown = false;
         });
       }
@@ -596,7 +590,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
         }
       }
     } catch (e) {
-      snackBarMessage('Nastala chyba pri pripojovani k serveru: $e');
+      snackBarMessage(Texts.errorsBadConnection.i18n());
     }
   }
 
@@ -635,16 +629,16 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           case StavJidla.objednano:
             textColor = Theme.of(context).colorScheme.onPrimary;
             buttonColor = Theme.of(context).colorScheme.primary;
-            obedText = 'Zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+            obedText = Texts.obedTextZrusit.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
           case StavJidla.neobjednano:
             textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
-            obedText = 'Objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+            obedText = Texts.obedTextObjednat.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
           //operace v minulosti
           case StavJidla.objednanoVyprsenaPlatnost:
-            obedText = 'Nelze zrušit ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+            obedText = Texts.obedTextNelzeZrusit.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
           case StavJidla.nedostupne:
             try {
@@ -671,26 +665,26 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
               //hope it's not important
             }
             if (loggedInCanteen.uzivatel!.kredit < jidlo!.cena! && !datumJidla.isBefore(DateTime.now())) {
-              obedText = 'Nedostatek kreditu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              obedText = Texts.obedTextNedostatekKreditu.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             } else {
-              obedText = 'Nelze objednat ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+              obedText = Texts.obedTextNelzeObjednat.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             }
             break;
           //operace na burze
           case StavJidla.objednanoNelzeOdebrat:
             textColor = Theme.of(context).colorScheme.onPrimary;
             buttonColor = Theme.of(context).colorScheme.primary;
-            obedText = 'Vložit na burzu ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+            obedText = Texts.obedTextVlozitNaBurzu.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
           case StavJidla.dostupneNaBurze:
             textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
-            obedText = 'Objednat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+            obedText = Texts.obedTextObjednatZBurzy.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
           case StavJidla.naBurze:
             textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
-            obedText = 'Odebrat z burzy ${jidlo!.varianta} za ${jidlo!.cena!.toInt()} Kč';
+            obedText = Texts.obedTextOdebratZBurzy.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
             break;
         }
         if (!ordering) {
@@ -750,7 +744,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   }
 
                   if (!await InternetConnectionChecker().hasConnection) {
-                    snackBarMessage('Nastala chyba při objednávání jídla, zkontrolujte připojení a zkuste to znovu.');
+                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     return;
                   }
 
@@ -772,7 +766,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   try {
                     canteen = await loggedInCanteen.canteenInstance;
                   } catch (e) {
-                    snackBarMessage('Nastala chyba při objednávání jídla: $e');
+                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     return;
                   }
                   Jidelnicek jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
@@ -780,11 +774,11 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     try {
                       jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                     } catch (e) {
-                      snackBarMessage('Nastala chyba připojení při objednávání jídla');
+                      snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     }
                   }
                   if (jidelnicek.jidla.length <= index) {
-                    snackBarMessage('Nastala chyba při objednávání jídla: Nepodařilo získat url pro objednání. Zkuste to znovu.');
+                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     return;
                   }
                   Jidlo jidlo = jidelnicek.jidla[index];
@@ -797,7 +791,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                           hasAnythingChanged = true;
                         } catch (e) {
-                          snackBarMessage('Nastala chyba při objednávání jídla: $e');
+                          snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                         }
                       }
                       break;
@@ -814,21 +808,21 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                                 loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                                 hasAnythingChanged = true;
                               } catch (e) {
-                                snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
+                                snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                               }
                             }
                           }
                           if (nalezenoJidloNaBurze == false) {
-                            snackBarMessage('Nepodařilo se najít jídlo na burze, někdo vám ho pravděpodobně vyfouknul před nosem.');
+                            snackBarMessage(Texts.errorsJidloNeniNaBurze.i18n());
                           }
                         } catch (e) {
-                          snackBarMessage('Nastala chyba při objednávání jídla z burzy: $e');
+                          snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                         }
                       }
                       break;
                     case StavJidla.objednanoVyprsenaPlatnost:
                       {
-                        snackBarMessage('Oběd nelze zrušit. Platnost objednávky vypršela.');
+                        snackBarMessage(Texts.errorsObedNelzeZrusit.i18n());
                       }
                       break;
                     case StavJidla.objednanoNelzeOdebrat:
@@ -837,25 +831,25 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           await canteen.doBurzy(jidlo);
                           hasAnythingChanged = true;
                         } catch (e) {
-                          snackBarMessage('Nastala chyba při dávání jídla na burzu: $e');
+                          snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                         }
                       }
                       break;
                     case StavJidla.nedostupne:
                       {
                         if (datumJidla.isBefore(DateTime.now())) {
-                          snackBarMessage('Oběd nelze objednat.');
+                          snackBarMessage(Texts.errorsNelzeObjednat.i18n());
                           break;
                         }
                         try {
                           if (loggedInCanteen.uzivatel!.kredit < jidlo.cena!) {
-                            snackBarMessage('Oběd nelze objednat - Nedostatečný kredit.');
+                            snackBarMessage(Texts.errorsNelzeObjednatKredit.i18n());
                             break;
                           }
                         } catch (e) {
                           //pokud se nepodaří načíst kredit, tak to necháme být
                         }
-                        snackBarMessage('Oběd nelze objednat.');
+                        snackBarMessage(Texts.errorsNelzeObjednat.i18n());
                       }
                       break;
                     case StavJidla.objednano:
@@ -864,7 +858,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           await canteen.objednat(jidlo);
                           hasAnythingChanged = true;
                         } catch (e) {
-                          snackBarMessage('Nastala chyba při rušení objednávky: $e');
+                          snackBarMessage(Texts.errorsChybaPriRuseni.i18n());
                         }
                       }
                       break;
@@ -874,7 +868,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           await canteen.doBurzy(jidlo);
                           hasAnythingChanged = true;
                         } catch (e) {
-                          snackBarMessage('Nastala chyba při dávání jídla na burzu: $e');
+                          snackBarMessage(Texts.errorsChybaPriDavaniNaBurzu.i18n());
                         }
                       }
                       break;
