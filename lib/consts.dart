@@ -210,7 +210,7 @@ class Texts {
 }
 
 class Links {
-  static const String autojidelna = 'https://autojidelna.tomprotiva.com';
+  static const String autojidelna = 'https://autojidelna.cz/';
   static const String repo = 'https://github.com/Autojidelna/autojidelna';
   static const latestVersionApi = 'https://api.github.com/repos/Autojidelna/autojidelna/releases/latest';
   static const String appStore = 'https://autojidelna.cz/release/appStore.json';
@@ -219,7 +219,7 @@ class Links {
   }
 
   static String currentChangelog(String version) {
-    return 'https://raw.githubusercontent.com/tpkowastaken/autojidelna/v$version/CHANGELOG.md';
+    return 'https://raw.githubusercontent.com/Autojidelna/autojidelna/v$version/CHANGELOG.md';
   }
 
   static String listSbiranychDat(String appVersion) {
