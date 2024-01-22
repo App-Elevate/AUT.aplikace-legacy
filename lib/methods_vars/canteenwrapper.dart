@@ -318,9 +318,17 @@ class LoggedInCanteen {
   }
 
   void smartPreIndexing(DateTime dateToBeJumpedTo) {
-    preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 2)), 4)
-        .then((_) => preIndexLunchesRange(dateToBeJumpedTo, 7))
-        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 7)), 20));
+    preIndexLunchesRange(dateToBeJumpedTo, 3)
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 2)), 2))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 3)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 6)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 9)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 5)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 12)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 15)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 18)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 21)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 8)), 3));
   }
 
   Future<void> preIndexLunchesRange(DateTime start, int howManyDays) async {
