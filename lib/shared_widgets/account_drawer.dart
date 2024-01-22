@@ -24,7 +24,7 @@ class MainAccountDrawer extends StatelessWidget {
   });
   final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
-  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>(consts.texts.accountDrawerLocationsUnknown.i18n());
+  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>(Texts.accountDrawerLocationsUnknown.i18n());
   final List locations = [];
 
   @override
@@ -97,7 +97,7 @@ class MainAccountDrawer extends StatelessWidget {
                                         '${loggedInCanteen.uzivatel!.kredit.toInt()}',
                                         style: const TextStyle(fontSize: 20),
                                       ),
-                                      Text(consts.texts.accountDrawercurrency.i18n()),
+                                      Text(Texts.accountDrawercurrency.i18n()),
                                     ],
                                   ),
                                 )
@@ -133,7 +133,7 @@ class MainAccountDrawer extends StatelessWidget {
               //navigation buttons
               //profile
               ListTile(
-                title: Text(consts.texts.accountDrawerprofile.i18n()),
+                title: Text(Texts.accountDrawerprofile.i18n()),
                 leading: const Icon(Icons.account_circle),
                 onTap: () {
                   Navigator.push(
@@ -148,7 +148,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //settings
               ListTile(
-                title: Text(consts.texts.accountDrawerSettings.i18n()),
+                title: Text(Texts.accountDrawerSettings.i18n()),
                 leading: const Icon(Icons.settings),
                 onTap: () {
                   Navigator.push(
@@ -161,7 +161,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //about app
               ListTile(
-                title: Text(consts.texts.about.i18n()),
+                title: Text(Texts.about.i18n()),
                 leading: const Icon(Icons.info_rounded),
                 onTap: () async {
                   if (!context.mounted) return;
@@ -172,15 +172,15 @@ class MainAccountDrawer extends StatelessWidget {
                   if (!context.mounted) return;
                   showAboutDialog(
                     context: context,
-                    applicationName: consts.texts.aboutAppName.i18n(),
-                    applicationLegalese: consts.texts.aboutCopyRight.i18n(),
+                    applicationName: Texts.aboutAppName.i18n(),
+                    applicationLegalese: Texts.aboutCopyRight.i18n(),
                     applicationVersion: '${packageInfo.version} - ${kDebugMode ? "Debug" : "Release"}',
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                         child: ElevatedButton(
-                          onPressed: (() => launchUrl(Uri.parse(consts.links.repo), mode: LaunchMode.externalApplication)),
-                          child: Text(consts.texts.aboutSourceCode.i18n()),
+                          onPressed: (() => launchUrl(Uri.parse(Links.repo), mode: LaunchMode.externalApplication)),
+                          child: Text(Texts.aboutSourceCode.i18n()),
                         ),
                       ),
                       Builder(
@@ -193,7 +193,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 if (localReleaseInfo.currentlyLatestVersion && context.mounted) {
                                   Navigator.of(context).pop();
                                   ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackbarFunction(consts.texts.aboutLatestVersion.i18n()))
+                                      .showSnackBar(snackbarFunction(Texts.aboutLatestVersion.i18n()))
                                       .closed
                                       .then((SnackBarClosedReason reason) {
                                     snackbarshown.shown = false;
@@ -202,7 +202,7 @@ class MainAccountDrawer extends StatelessWidget {
                                 }
                                 Future.delayed(Duration.zero, () => newUpdateDialog(context));
                               },
-                              child: Text(consts.texts.aboutCheckForUpdates.i18n(), textAlign: TextAlign.center),
+                              child: Text(Texts.aboutCheckForUpdates.i18n(), textAlign: TextAlign.center),
                             ),
                           );
                         },
@@ -213,12 +213,12 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               // share app
               ListTile(
-                title: Text(consts.texts.accountDrawerShareApp.i18n()),
+                title: Text(Texts.accountDrawerShareApp.i18n()),
                 leading: const Icon(Icons.share),
                 onTap: () async {
                   final RenderBox? box = context.findRenderObject() as RenderBox?;
-                  String text = consts.links.autojidelna;
-                  String subject = consts.texts.shareDescription.i18n();
+                  String text = Links.autojidelna;
+                  String subject = Texts.shareDescription.i18n();
                   await Share.share(
                     text,
                     subject: subject,
@@ -261,7 +261,7 @@ class MainAccountDrawer extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
-                              child: Row(children: [Text(consts.texts.accountDrawerPickLocation.i18n())]),
+                              child: Row(children: [Text(Texts.accountDrawerPickLocation.i18n())]),
                             ),
                             const Divider(height: 0, indent: 10, endIndent: 10),
                             ListView.builder(

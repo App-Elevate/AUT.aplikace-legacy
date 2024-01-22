@@ -29,7 +29,7 @@ SnackBar updateSnackbar(BuildContext context, ValueListenable valueListenable) {
       builder: (ctx, value, child) {
         switch (value) {
           case -1:
-            return Text(consts.texts.updateSnackbarWaiting.i18n());
+            return Text(Texts.updateSnackbarWaiting.i18n());
           case -2:
             closeSnackbarAfterDelay(context);
             return failedUpdate(context);
@@ -37,7 +37,7 @@ SnackBar updateSnackbar(BuildContext context, ValueListenable valueListenable) {
             closeSnackbarAfterDelay(context);
             return updateFinished(context);
           default:
-            return Text(consts.texts.updateSnackbarDownloading.i18n([(value * 100).toInt().toString()]));
+            return Text(Texts.updateSnackbarDownloading.i18n([(value * 100).toInt().toString()]));
         }
       },
     ),
@@ -59,7 +59,7 @@ Row failedUpdate(BuildContext context) {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           //light or dark theme
-          child: Text(consts.texts.updateSnackbarError.i18n()),
+          child: Text(Texts.updateSnackbarError.i18n()),
         ),
       ),
       Flexible(
@@ -69,7 +69,7 @@ Row failedUpdate(BuildContext context) {
               networkInstallApk(releaseInfo!.downloadUrl!, context);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
             },
-            child: Text(consts.texts.updateSnackbarTryAgain.i18n()),
+            child: Text(Texts.updateSnackbarTryAgain.i18n()),
           );
         }),
       ),
@@ -95,7 +95,7 @@ Row updateFinished(BuildContext context) {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           //light or dark theme
-          child: Text(consts.texts.updateSnackbarDownloaded.i18n()),
+          child: Text(Texts.updateSnackbarDownloaded.i18n()),
         ),
       ),
       Builder(

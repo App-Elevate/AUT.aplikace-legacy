@@ -35,8 +35,8 @@ class SettingsPage extends StatelessWidget {
   Future<void> resetAndDoNotifications() async {
     LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     for (LoggedInUser uzivatel in loginData.users) {
-      await loggedInCanteen.saveData(consts.prefs.lastJidloDneCheck + uzivatel.username, '');
-      await loggedInCanteen.saveData(consts.prefs.lastNotificationCheck + uzivatel.username, '');
+      await loggedInCanteen.saveData(Prefs.lastJidloDneCheck + uzivatel.username, '');
+      await loggedInCanteen.saveData(Prefs.lastNotificationCheck + uzivatel.username, '');
     }
     await doNotifications();
   }
@@ -44,14 +44,14 @@ class SettingsPage extends StatelessWidget {
   Future<void> setSettings() async {
     username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
     // analytics
-    bool analyticsDisabled = await loggedInCanteen.isPrefTrue(consts.prefs.disableAnalytics);
+    bool analyticsDisabled = await loggedInCanteen.isPrefTrue(Prefs.disableAnalytics);
     if (kDebugMode) {
       analyticsDisabled = true;
     }
     disableAnalyticsNotifier.value = analyticsDisabled;
     analyticsEnabledGlobally = !analyticsDisabled;
 
-    List<String>? themeSettingsList = await loggedInCanteen.readListData(consts.prefs.theme);
+    List<String>? themeSettingsList = await loggedInCanteen.readListData(Prefs.theme);
     if (themeSettingsList != null) {
       if (themeSettingsList[0] != "") {
         themeModeNotifier.value = themeSettingsList[0];
@@ -64,19 +64,19 @@ class SettingsPage extends StatelessWidget {
       }
     }
 
-    calendarBigMarkersNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.calendarBigMarkers);
+    calendarBigMarkersNotifier.value = await loggedInCanteen.isPrefTrue(Prefs.calendarBigMarkers);
 
-    skipWeekendsNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.skipWeekends);
+    skipWeekendsNotifier.value = await loggedInCanteen.isPrefTrue(Prefs.skipWeekends);
     skipWeekends = skipWeekendsNotifier.value;
 
-    jidloNotificationNotifier.value = await loggedInCanteen.isPrefTrue(consts.prefs.dailyFoodInfo + username);
+    jidloNotificationNotifier.value = await loggedInCanteen.isPrefTrue(Prefs.dailyFoodInfo + username);
 
-    String? jidloNotificationTimeString = await loggedInCanteen.readData(consts.prefs.foodNotifTime);
+    String? jidloNotificationTimeString = await loggedInCanteen.readData(Prefs.foodNotifTime);
     if (jidloNotificationTimeString != null && jidloNotificationTimeString != '') {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
 
-    String? lowCreditNotificationString = await loggedInCanteen.readData(consts.prefs.kreditNotifications + username);
+    String? lowCreditNotificationString = await loggedInCanteen.readData(Prefs.kreditNotifications + username);
     if (lowCreditNotificationString == '') {
       //notifications allowed
       lowCreditNotificationNotifier.value = true;
@@ -93,7 +93,7 @@ class SettingsPage extends StatelessWidget {
       }
     }
 
-    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData(consts.prefs.nemateObjednanoNotifications + username);
+    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData(Prefs.nemateObjednanoNotifications + username);
     if (nextWeekOrderNotificationNotifierString == '') {
       //notifications allowed
       nextWeekOrderNotificationNotifier.value = true;
@@ -114,7 +114,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(consts.texts.settingsTitle)),
+      appBar: AppBar(title: Text(Texts.settingsTitle.i18n())),
       body: FutureBuilder(
         future: setSettings(),
         builder: (context, snapshot) {
@@ -150,7 +150,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(consts.texts.settingsAppearence.i18n()),
+            child: Text(Texts.settingsAppearence.i18n()),
           ),
           const Divider(),
           ListTile(
@@ -176,16 +176,16 @@ class SettingsPage extends StatelessWidget {
                   segments: [
                     ButtonSegment<String>(
                       value: "0",
-                      label: Text(consts.texts.settingsLabelSystem.i18n()),
+                      label: Text(Texts.settingsLabelSystem.i18n()),
                       enabled: true,
                     ),
                     ButtonSegment<String>(
                       value: "1",
-                      label: Text(consts.texts.settingsLabelLight.i18n()),
+                      label: Text(Texts.settingsLabelLight.i18n()),
                     ),
                     ButtonSegment<String>(
                       value: "2",
-                      label: Text(consts.texts.settingsLabelDark.i18n()),
+                      label: Text(Texts.settingsLabelDark.i18n()),
                     ),
                   ],
                 );
@@ -324,7 +324,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text(consts.texts.settingsCalendarBigMarkers.i18n()),
+            title: Text(Texts.settingsCalendarBigMarkers.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: calendarBigMarkersNotifier,
               builder: (context, value, child) {
@@ -333,9 +333,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     calendarBigMarkersNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(consts.prefs.calendarBigMarkers, '1');
+                      loggedInCanteen.saveData(Prefs.calendarBigMarkers, '1');
                     } else {
-                      loggedInCanteen.saveData(consts.prefs.calendarBigMarkers, '');
+                      loggedInCanteen.saveData(Prefs.calendarBigMarkers, '');
                     }
                   },
                 );
@@ -355,11 +355,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(consts.texts.settingsConvenienceTitle.i18n()),
+            child: Text(Texts.settingsConvenienceTitle.i18n()),
           ),
           const Divider(),
           ListTile(
-            title: Text(consts.texts.settingsSkipWeekends.i18n()),
+            title: Text(Texts.settingsSkipWeekends.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: skipWeekendsNotifier,
               builder: (context, value, child) {
@@ -369,9 +369,9 @@ class SettingsPage extends StatelessWidget {
                     skipWeekendsNotifier.value = value;
                     skipWeekends = value;
                     if (value) {
-                      loggedInCanteen.saveData(consts.prefs.skipWeekends, '1');
+                      loggedInCanteen.saveData(Prefs.skipWeekends, '1');
                     } else {
-                      loggedInCanteen.saveData(consts.prefs.skipWeekends, '');
+                      loggedInCanteen.saveData(Prefs.skipWeekends, '');
                     }
                   },
                 );
@@ -391,11 +391,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(consts.texts.settingsNotificationFor.i18n() + username),
+            child: Text(Texts.settingsNotificationFor.i18n() + username),
           ),
           const Divider(),
           ExpansionTile(
-            title: Text(consts.texts.settingsTitleTodaysFood.i18n()),
+            title: Text(Texts.settingsTitleTodaysFood.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: jidloNotificationNotifier,
               builder: (context, value, child) {
@@ -404,9 +404,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     jidloNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(consts.prefs.dailyFoodInfo + username, '1');
+                      loggedInCanteen.saveData(Prefs.dailyFoodInfo + username, '1');
                     } else {
-                      loggedInCanteen.saveData(consts.prefs.dailyFoodInfo + username, '');
+                      loggedInCanteen.saveData(Prefs.dailyFoodInfo + username, '');
                     }
                     resetAndDoNotifications();
                   },
@@ -422,7 +422,7 @@ class SettingsPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(consts.texts.settingsNotificationTime.i18n()),
+                    Text(Texts.settingsNotificationTime.i18n()),
                     ValueListenableBuilder(
                       valueListenable: jidloNotificationTime,
                       builder: (context, value, child) {
@@ -433,7 +433,7 @@ class SettingsPage extends StatelessWidget {
                                 initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
                             if (timeOfDay != null && context.mounted) {
                               jidloNotificationTime.value = timeOfDay.format(context);
-                              await loggedInCanteen.saveData(consts.prefs.foodNotifTime, timeOfDay.format(context));
+                              await loggedInCanteen.saveData(Prefs.foodNotifTime, timeOfDay.format(context));
                               resetAndDoNotifications();
                             }
                           },
@@ -447,7 +447,7 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           ListTile(
-            title: Text(consts.texts.settingsTitleKredit.i18n()),
+            title: Text(Texts.settingsTitleKredit.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: lowCreditNotificationNotifier,
               builder: (context, value, child) {
@@ -456,9 +456,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     lowCreditNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(consts.prefs.kreditNotifications + username, '');
+                      loggedInCanteen.saveData(Prefs.kreditNotifications + username, '');
                     } else {
-                      loggedInCanteen.saveData(consts.prefs.kreditNotifications + username, '1');
+                      loggedInCanteen.saveData(Prefs.kreditNotifications + username, '1');
                     }
                     resetAndDoNotifications();
                   },
@@ -467,7 +467,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text(consts.texts.settingsNemateObjednano.i18n()),
+            title: Text(Texts.settingsNemateObjednano.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: nextWeekOrderNotificationNotifier,
               builder: (context, value, child) {
@@ -476,9 +476,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     nextWeekOrderNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(consts.prefs.nemateObjednanoNotifications + username, '');
+                      loggedInCanteen.saveData(Prefs.nemateObjednanoNotifications + username, '');
                     } else {
-                      loggedInCanteen.saveData(consts.prefs.nemateObjednanoNotifications + username, '1');
+                      loggedInCanteen.saveData(Prefs.nemateObjednanoNotifications + username, '1');
                     }
                     resetAndDoNotifications();
                   },
@@ -489,7 +489,7 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: RichText(
               text: TextSpan(
-                text: consts.texts.settingsAnotherOptions.i18n(),
+                text: Texts.settingsAnotherOptions.i18n(),
                 style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
@@ -511,11 +511,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(consts.texts.settingsDataCollection),
+            child: Text(Texts.settingsDataCollection.i18n()),
           ),
           const Divider(),
           ExpansionTile(
-            title: Text(consts.texts.settingsStopDataCollection),
+            title: Text(Texts.settingsStopDataCollection.i18n()),
             trailing: ValueListenableBuilder(
               valueListenable: disableAnalyticsNotifier,
               builder: (context, value, child) {

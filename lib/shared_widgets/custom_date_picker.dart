@@ -14,7 +14,7 @@ class CustomDatePicker {
     bool bigMarkersEnabled = false;
 
     Future<void> setConfig() async {
-      bigMarkersEnabled = await loggedInCanteen.isPrefTrue(consts.prefs.calendarBigMarkers);
+      bigMarkersEnabled = await loggedInCanteen.isPrefTrue(Prefs.calendarBigMarkers);
     }
 
     return showDialog<DateTime?>(
@@ -171,7 +171,7 @@ class CustomDatePicker {
                             onPressed: () {
                               Navigator.maybeOf(context)?.popUntil((route) => route.isFirst);
                             },
-                            child: Text(consts.texts.datePickerCancel.i18n()),
+                            child: Text(Texts.datePickerCancel.i18n()),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 10.0),
@@ -179,7 +179,7 @@ class CustomDatePicker {
                               onPressed: () {
                                 Navigator.of(context).pop(focusedDateNotifier.value);
                               },
-                              child: Text(consts.texts.datePickerOk.i18n()),
+                              child: Text(Texts.datePickerOk.i18n()),
                             ),
                           ),
                         ],

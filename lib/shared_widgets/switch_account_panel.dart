@@ -69,7 +69,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(consts.texts.accPanelTitle.i18n()),
+                            Text(Texts.accPanelTitle.i18n()),
                             const Divider(),
                             Expanded(
                               child: ListView.builder(
@@ -100,7 +100,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         //close before going to the page
         SwitchAccountVisible().setVisible(false);
         // wait for the animation to finish
-        await Future.delayed(Duration(milliseconds: consts.nums.switchAccountPanelDuration));
+        await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
         // pushing loginPage
         if (mounted) {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
@@ -113,7 +113,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
-              consts.texts.accPanelAddAccount.i18n(),
+              Texts.accPanelAddAccount.i18n(),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
@@ -133,7 +133,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 SwitchAccountVisible().setVisible(false);
                 await loggedInCanteen.switchAccount(id);
                 // wait for the animation to finish
-                await Future.delayed(Duration(milliseconds: consts.nums.switchAccountPanelDuration));
+                await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
                 widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
               } else {
                 // if the user clicks on the account that is already logged in
@@ -184,7 +184,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
             if (currentAccount) {
               SwitchAccountVisible().setVisible(false);
               // wait for the animation to finish
-              await Future.delayed(Duration(milliseconds: consts.nums.switchAccountPanelDuration));
+              await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
               widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
             }
             updateAccountPanel();

@@ -38,7 +38,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(consts.texts.popupNewVersion.i18n([releaseInfo!.latestVersion.toString()])),
+        title: Text(Texts.popupNewVersion.i18n([releaseInfo!.latestVersion.toString()])),
         content: SizedBox(
           height: 200,
           child: Scrollbar(
@@ -50,7 +50,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Text(
-                      consts.texts.popupNewUpdateInfo.i18n(),
+                      Texts.popupNewUpdateInfo.i18n(),
                       style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                     ),
                   ),
@@ -58,7 +58,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                     padding: const EdgeInsets.fromLTRB(0, 7.5, 0, 0),
                     child: HtmlWidget(
                       textStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                      md.markdownToHtml(releaseInfo!.changelog ?? consts.texts.popupChangeLogNotAvailable.i18n()),
+                      md.markdownToHtml(releaseInfo!.changelog ?? Texts.popupChangeLogNotAvailable.i18n()),
                     ),
                   ),
                 ],
@@ -81,7 +81,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      child: Text(consts.texts.popupUpdate.i18n()),
+                      child: Text(Texts.popupUpdate.i18n()),
                       onPressed: () {
                         if (Platform.isAndroid && (releaseInfo?.isOnGooglePlay ?? false)) {
                           launchUrl(Uri.parse(releaseInfo!.googlePlayUrl!), mode: LaunchMode.externalApplication);
@@ -96,10 +96,10 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                           (value) {
                             if (analyticsEnabledGlobally && analytics != null) {
                               analytics!.logEvent(
-                                name: consts.analyticsEventIds.updateButtonClicked,
+                                name: AnalyticsEventIds.updateButtonClicked,
                                 parameters: {
-                                  consts.analyticsEventIds.oldVer: value.version,
-                                  consts.analyticsEventIds.newVer: releaseInfo!.currentlyLatestVersion.toString()
+                                  AnalyticsEventIds.oldVer: value.version,
+                                  AnalyticsEventIds.newVer: releaseInfo!.currentlyLatestVersion.toString()
                                 },
                               );
                             }
@@ -114,8 +114,8 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   child: SizedBox(
                     width: 500,
                     child: ElevatedButton(
-                      onPressed: (() => launchUrl(Uri.parse(consts.links.latestRelease), mode: LaunchMode.externalApplication)),
-                      child: Text(consts.texts.popupShowOnGithub.i18n()),
+                      onPressed: (() => launchUrl(Uri.parse(Links.latestRelease), mode: LaunchMode.externalApplication)),
+                      child: Text(Texts.popupShowOnGithub.i18n()),
                     ),
                   ),
                 ),
@@ -124,7 +124,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
                   child: SizedBox(
                     width: 500,
                     child: ElevatedButton(
-                      child: Text(consts.texts.popupNotNow.i18n()),
+                      child: Text(Texts.popupNotNow.i18n()),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -142,7 +142,7 @@ void newUpdateDialog(BuildContext context, {int? tries}) {
 
 Widget logoutDialog(BuildContext context) {
   return AlertDialog(
-    title: Text(consts.texts.logoutUSure.i18n()),
+    title: Text(Texts.logoutUSure.i18n()),
     actionsAlignment: MainAxisAlignment.spaceBetween,
     alignment: Alignment.bottomCenter,
     actions: <Widget>[
@@ -150,14 +150,14 @@ Widget logoutDialog(BuildContext context) {
         onPressed: () {
           Navigator.of(context).pop(true);
         },
-        child: Text(consts.texts.logoutConfirm.i18n()),
+        child: Text(Texts.logoutConfirm.i18n()),
       ),
       TextButton(
         onPressed: () {
           Navigator.of(context).pop(false);
         },
         style: Theme.of(context).textButtonTheme.style!.copyWith(foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary)),
-        child: Text(consts.texts.logoutCancel.i18n()),
+        child: Text(Texts.logoutCancel.i18n()),
       ),
     ],
   );
@@ -169,7 +169,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(consts.texts.errorsLoad),
+        title: Text(Texts.errorsLoad.i18n()),
         content: Text(message),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
@@ -179,7 +179,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
             },
-            child: Text(consts.texts.failedDialogTryAgain),
+            child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
           TextButton(
             onPressed: () {
@@ -187,7 +187,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
             },
-            child: Text(consts.texts.failedDialogLogOut),
+            child: Text(Texts.failedDialogLogOut.i18n()),
           ),
         ],
       );
@@ -201,8 +201,8 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(consts.texts.failedDialogLoginFailed.i18n()),
-        content: Text(consts.texts.failedDialogLoginDetail.i18n([message])),
+        title: Text(Texts.failedDialogLoginFailed.i18n()),
+        content: Text(Texts.failedDialogLoginDetail.i18n([message])),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
         actions: <Widget>[
@@ -211,7 +211,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
             },
-            child: Text(consts.texts.failedDialogTryAgain.i18n()),
+            child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
           TextButton(
             onPressed: () {
@@ -219,7 +219,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
               Navigator.of(context).pop();
               setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
             },
-            child: Text(consts.texts.failedDialogLogOut.i18n()),
+            child: Text(Texts.failedDialogLogOut.i18n()),
           ),
         ],
       );
@@ -248,8 +248,8 @@ void failedDownload(BuildContext context, {int? tries}) async {
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(consts.texts.failedDialogDownload.i18n()),
-        content: Text(consts.texts.failedDialogDownloadDetail.i18n()),
+        title: Text(Texts.failedDialogDownload.i18n()),
+        content: Text(Texts.failedDialogDownloadDetail.i18n()),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
         actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -259,13 +259,13 @@ void failedDownload(BuildContext context, {int? tries}) async {
               networkInstallApk(releaseInfo!.downloadUrl!, context);
               Navigator.of(context).pop();
             },
-            child: Text(consts.texts.failedDialogTryAgain.i18n()),
+            child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(consts.texts.faliedDialogCancel.i18n()),
+            child: Text(Texts.faliedDialogCancel.i18n()),
           ),
         ],
       );

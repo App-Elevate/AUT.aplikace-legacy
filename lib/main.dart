@@ -151,7 +151,7 @@ class _MyAppState extends State<MyApp> {
     // After it expires the timer resets and user has to press back button twice again
     Future.delayed(const Duration(seconds: 5), () => canpop.value = false);
     Fluttertoast.showToast(
-        msg: consts.texts.toastsExit.i18n(),
+        msg: Texts.toastsExit.i18n(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -182,13 +182,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Setting the theme
     return FutureBuilder(
-      future: loggedInCanteen.readListData(consts.prefs.theme),
+      future: loggedInCanteen.readListData(Prefs.theme),
       initialData: ThemeMode.system,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           List<String> themeSettings;
           if (snapshot.data == null) {
-            loggedInCanteen.saveListData(consts.prefs.theme, ["0", "0", "0"]);
+            loggedInCanteen.saveListData(Prefs.theme, ["0", "0", "0"]);
             themeSettings = ["0", "0", "0"];
           } else {
             themeSettings = snapshot.data as List<String>;
@@ -329,13 +329,13 @@ class LoggingInWidget extends StatelessWidget {
           if (snapshot.error == ConnectionErrors.noLogin) {
             return LoginScreen(setHomeWidget: setHomeWidget);
           } else if (snapshot.error == ConnectionErrors.badLogin) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadLogin.i18n(), setHomeWidget));
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadLogin.i18n(), setHomeWidget));
           } else if (snapshot.error == ConnectionErrors.wrongUrl) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadUrl.i18n(), setHomeWidget));
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadUrl.i18n(), setHomeWidget));
           } else if (snapshot.error == ConnectionErrors.noInternet) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsNoInternet.i18n(), setHomeWidget));
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsNoInternet.i18n(), setHomeWidget));
           } else if (snapshot.error == ConnectionErrors.connectionFailed) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, consts.texts.errorsBadConnection.i18n(), setHomeWidget));
+            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadConnection.i18n(), setHomeWidget));
           }
         } else if (snapshot.connectionState == ConnectionState.done) {
           // setting the initial date
