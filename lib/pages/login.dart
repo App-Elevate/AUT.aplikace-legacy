@@ -38,20 +38,30 @@ class LoginScreen extends StatelessWidget {
 
   Scaffold formScaffold(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            Texts.aboutAppName.i18n(),
-            style: Theme.of(context).textTheme.displayLarge,
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height - MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: AppBar().preferredSize.height),
+                child: Text(
+                  Texts.aboutAppName.i18n(),
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+              ),
+              loginForm(context),
+            ],
           ),
-          loginForm(context),
-        ],
+        ),
       ),
     );
   }
@@ -96,9 +106,7 @@ class LoginScreen extends StatelessWidget {
                         errorText: value,
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return Texts.loginUrlFieldHint.i18n();
-                        }
+                        if (value == null || value.isEmpty) return Texts.loginUrlFieldHint.i18n();
                         return null;
                       },
                     );
