@@ -1,6 +1,11 @@
-## 1.2.9
+## 1.3.0
 
 - Předělaný kalendář
+- Oprava spoustu chyb
+- Přidána podpora pro více výdejen jídelny
+- Přidána podpora pro ss-stavebnikolin.cz
+- Přidána možnost náhodně objednat oběd z notifikace
+- Vylepšena stabilita a rychlost aplikace
 - Opraveno chování androidu, kdy se proces aplikace nespouštěl, tudíž nechodily notifikace
 - Přidán Pure black dark mode
 
