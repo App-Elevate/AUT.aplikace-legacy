@@ -54,6 +54,22 @@ void main() async {
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
       for (LoggedInUser uzivatel in loginData.users) {
+        List<String> prefs = [
+          Prefs.dailyFoodInfo,
+          Prefs.foodNotifTime,
+          Prefs.kreditNotifications,
+          Prefs.lastJidloDneCheck,
+          Prefs.lastNotificationCheck,
+          Prefs.nemateObjednanoNotifications
+        ];
+        for (String pref in prefs) {
+          await loggedInCanteen.readData(pref + uzivatel.username).then((value) {
+            if (value != null) {
+              loggedInCanteen.saveData('$pref${uzivatel.username}_${uzivatel.url}', value);
+              loggedInCanteen.removeData(pref + uzivatel.username);
+            }
+          });
+        }
         AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${uzivatel.username}_${uzivatel.url}');
         await AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${uzivatel.username}_${uzivatel.url}');
       }
