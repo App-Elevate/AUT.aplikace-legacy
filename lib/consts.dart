@@ -50,6 +50,17 @@ class AnalyticsEventIds {
 
 // Strings shown to the user
 class Texts {
+  /// initAwesome has a problem with the localization package so we just force czech
+  static String notificationsFor(String user) => 'Notifikace pro $user';
+  static const String jidloChannelName = 'Dnešní jídlo';
+  static String jidloChannelDescription(String user) => 'Notifikace každý den o tom jaké je dnes jídlo pro $user';
+  static const String dochazejiciKreditChannelName = 'Docházející kredit';
+  static String dochazejiciKreditChannelDescription(String user) => 'Notifikace o tom, zda vám dochází kredit týden dopředu pro $user';
+  static const String objednanoChannelName = 'Objednáno?';
+  static String objednanoChannelDescription(String user) => "Notifikace každý den o tom jaké je dnes jídlo pro $user";
+  static const String notificationOther = 'Ostatní';
+  static const String notificationOtherDescription = 'Ostatní notifikace, např. chybové hlášky...';
+
   static const String toastsExit = 'toast-exit';
 
   static const String errorsBadLogin = 'errors-bad-login';
@@ -186,17 +197,6 @@ class Texts {
   static const String obedTextVlozitNaBurzu = 'obed-text-vlozit-na-burzu';
   static const String obedTextObjednatZBurzy = 'obed-text-objednat-z-burzy';
   static const String obedTextOdebratZBurzy = 'obed-text-odebrat-z-burzy';
-
-  static const String notificationsFor = 'notifications-for';
-  static const String jidloChannelName = 'jidlo-channel-name';
-  static const String jidloChannelDescription = 'jidlo-channel-description';
-  static const String dochazejiciKreditChannelName = 'dochazejici-kredit-channel-name';
-  static const String dochazejiciKreditChannelDescription = 'dochazejici-kredit-channel-description';
-  static const String objednanoChannelName = 'objednano-channel-name';
-  static const String objednanoChannelDescription = 'objednano-channel-description';
-  static const String channelGroupNameOstatni = 'other';
-  static const String channelNameOstatni = 'other';
-  static const String channelDescriptionOstatni = 'other-description';
 
   static const String gettingDataNotifications = 'getting-data-notifications';
 

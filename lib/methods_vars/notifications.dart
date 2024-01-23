@@ -81,16 +81,16 @@ Future<bool> initAwesome() async {
     notificationChannelGroups.add(
       NotificationChannelGroup(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
-        channelGroupName: Texts.notificationsFor.i18n([user.username]),
+        channelGroupName: Texts.notificationsFor(user.username),
       ),
     );
     notificationChannels.add(
       NotificationChannel(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelKey: '${NotificationIds.dnesniJidloChannel}${user.username}_${user.url}',
-        channelName: Texts.jidloChannelName.i18n(),
+        channelName: Texts.jidloChannelName,
         channelShowBadge: true,
-        channelDescription: Texts.jidloChannelDescription.i18n([user.username]),
+        channelDescription: Texts.jidloChannelDescription(user.username),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -99,9 +99,9 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelKey: '${NotificationIds.kreditChannel}${user.username}_${user.url}',
-        channelName: Texts.dochazejiciKreditChannelName.i18n(),
+        channelName: Texts.dochazejiciKreditChannelName,
         channelShowBadge: true,
-        channelDescription: Texts.dochazejiciKreditChannelDescription.i18n([user.username]),
+        channelDescription: Texts.dochazejiciKreditChannelDescription(user.username),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -110,9 +110,9 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelKey: '${NotificationIds.objednanoChannel}${user.username}_${user.url}',
-        channelName: Texts.objednanoChannelName.i18n(),
+        channelName: Texts.objednanoChannelName,
         channelShowBadge: true,
-        channelDescription: Texts.objednanoChannelDescription.i18n([user.username]),
+        channelDescription: Texts.objednanoChannelDescription(user.username),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -121,15 +121,15 @@ Future<bool> initAwesome() async {
   notificationChannelGroups.add(
     NotificationChannelGroup(
       channelGroupKey: NotificationIds.channelGroupElse,
-      channelGroupName: Texts.other.i18n(),
+      channelGroupName: Texts.notificationOther,
     ),
   );
   notificationChannels.add(
     NotificationChannel(
       channelGroupKey: NotificationIds.channelGroupElse,
       channelKey: NotificationIds.channelElse,
-      channelName: Texts.other.i18n(),
-      channelDescription: Texts.channelDescriptionOstatni.i18n(),
+      channelName: Texts.notificationOther,
+      channelDescription: Texts.notificationOtherDescription,
       importance: NotificationImportance.Min,
       playSound: false,
     ),
