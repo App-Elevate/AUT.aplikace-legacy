@@ -16,15 +16,17 @@ class LoginScreen extends StatelessWidget {
     required this.setHomeWidget,
   });
   final Function(Widget widget) setHomeWidget;
-  //static is fix for keyboard disapearing when this screen is pushed (problem with rebuilding the widget)
+  // Static is fix for keyboard disapearing when this screen is pushed (problem with rebuilding the widget)
   static final _formKey = GlobalKey<FormState>();
-  //without static the text in the textfields would be deleted for the same reasons.
+  // Without static the text in the textfields would be deleted for the same reasons.
   static final _usernameController = TextEditingController();
   static final _passwordController = TextEditingController();
   static final _urlController = TextEditingController();
-  // first value is error text, second is if it the password is visible
+
+  /// First value is error text, second is if it the password is visible
   final ValueNotifier<List<dynamic>> passwordNotifier = ValueNotifier([null, false]);
   final ValueNotifier<String?> urlErrorText = ValueNotifier(null);
+  final ValueNotifier<bool> loggingIn = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -41,22 +43,17 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.background,
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onBackground),
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            alignment: Alignment.topCenter,
-            height: 85,
-            child: Text(
-              Texts.aboutAppName.i18n(),
-              style: const TextStyle(fontSize: 60),
-            ),
+          Text(
+            Texts.aboutAppName.i18n(),
+            style: Theme.of(context).textTheme.displayLarge,
           ),
-          loginForm(),
+          loginForm(context),
         ],
       ),
     );
@@ -76,13 +73,10 @@ class LoginScreen extends StatelessWidget {
   }
 
   void setLastUrl() async {
-    String? lastUrl = await loggedInCanteen.readData(Prefs.url);
-    if (lastUrl != null) {
-      _urlController.text = lastUrl;
-    }
+    _urlController.text = await loggedInCanteen.readData(Prefs.url) ?? "";
   }
 
-  Form loginForm() {
+  Form loginForm(context) {
     return Form(
       key: _formKey,
       child: Padding(
@@ -99,7 +93,6 @@ class LoginScreen extends StatelessWidget {
                       autocorrect: false,
                       decoration: InputDecoration(
                         labelText: Texts.loginUrlFieldLabel.i18n(),
-                        border: const OutlineInputBorder(),
                         errorText: value,
                       ),
                       validator: (value) {
@@ -121,14 +114,9 @@ class LoginScreen extends StatelessWidget {
                       controller: _usernameController,
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
-                      decoration: InputDecoration(
-                        labelText: Texts.loginUserFieldLabel.i18n(),
-                        border: const OutlineInputBorder(),
-                      ),
+                      decoration: InputDecoration(labelText: Texts.loginUserFieldLabel.i18n()),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return Texts.loginUserFieldHint.i18n();
-                        }
+                        if (value == null || value.isEmpty) return Texts.loginUserFieldHint.i18n();
                         return null;
                       },
                     ),
@@ -136,109 +124,80 @@ class LoginScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: ValueListenableBuilder(
-                        valueListenable: passwordNotifier,
-                        builder: (context, value, child) {
-                          return TextFormField(
-                            controller: _passwordController,
-                            textInputAction: TextInputAction.done,
-                            autofillHints: const [AutofillHints.password],
-                            obscureText: value[1] ? false : true,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              labelText: Texts.loginPasswordFieldLabel.i18n(),
-                              border: const OutlineInputBorder(),
-                              errorText: value[0],
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  passwordNotifier.value = [passwordNotifier.value[0], !passwordNotifier.value[1]];
-                                },
-                                icon: Icon(value[1] ? Icons.visibility : Icons.visibility_off),
-                              ),
+                      valueListenable: passwordNotifier,
+                      builder: (context, value, child) {
+                        return TextFormField(
+                          controller: _passwordController,
+                          textInputAction: TextInputAction.done,
+                          autofillHints: const [AutofillHints.password],
+                          obscureText: value[1] ? false : true,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            labelText: Texts.loginPasswordFieldLabel.i18n(),
+                            errorText: value[0],
+                            suffixIcon: IconButton(
+                              onPressed: () => passwordNotifier.value = [passwordNotifier.value[0], !passwordNotifier.value[1]],
+                              icon: Icon(value[1] ? Icons.visibility : Icons.visibility_off),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return Texts.loginPasswordFieldHint.i18n();
-                              }
-                              return null;
-                            },
-                          );
-                        }),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return Texts.loginPasswordFieldHint.i18n();
+                            return null;
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
             ),
-            loginSubmitButton(),
-            Builder(builder: (context) {
-              return RichText(
-                text: TextSpan(
-                  text: Texts.dataCollectionAgreement.i18n(),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                  children: [
-                    TextSpan(
-                      text: Texts.moreInfo.i18n(),
-                      style: const TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => SettingsPage(onlyAnalytics: true),
-                            ),
-                          );
-                        },
+            loginSubmitButton(context),
+            RichText(
+              text: TextSpan(
+                text: Texts.dataCollectionAgreement.i18n(),
+                style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                children: [
+                  TextSpan(
+                    text: Texts.moreInfo.i18n(),
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      decoration: TextDecoration.underline,
                     ),
-                  ],
-                ),
-              );
-            }),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(onlyAnalytics: true),
+                          ),
+                        );
+                      },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  final ValueNotifier<bool> loggingIn = ValueNotifier(false);
-  Builder loginSubmitButton() {
-    return Builder(builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: SizedBox(
-          height: 60,
-          width: 400,
-          child: ElevatedButton(
-            onPressed: loggingIn.value ? null : () => loginFieldCheck(context),
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-            child: ValueListenableBuilder(
-              valueListenable: loggingIn,
-              builder: (context, value, child) {
-                if (value) {
-                  return SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3.5,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  );
-                } else {
-                  return SizedBox(
-                    height: 60,
-                    child: Center(
-                      child: Text(
-                        Texts.loginButton.i18n(),
-                        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-                      ),
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
+  Container loginSubmitButton(context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      height: 60,
+      width: 400,
+      child: ElevatedButton(
+        onPressed: loggingIn.value ? null : () => loginFieldCheck(context),
+        style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+        child: ValueListenableBuilder(
+          valueListenable: loggingIn,
+          builder: (context, value, child) {
+            if (value) return CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary);
+            return Text(Texts.loginButton.i18n());
+          },
         ),
-      );
-    });
+      ),
+    );
   }
 
   void loginFieldCheck(BuildContext context) async {

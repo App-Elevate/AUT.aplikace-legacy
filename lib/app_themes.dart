@@ -107,6 +107,7 @@ class Themes {
         floatingLabelAlignment: FloatingLabelAlignment.start,
         hintStyle: TextStyle(),
         helperStyle: TextStyle(),
+        border: OutlineInputBorder(),
       ),
 
       // List tiles

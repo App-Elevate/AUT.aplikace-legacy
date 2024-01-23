@@ -1,6 +1,5 @@
 {
   "toast-exit": "Zmáčkněte tlačítko zpět pro ukončení aplikace",
-
   "errors-bad-login": "Nesprávné přihlašovací údaje",
   "errors-bad-url": "Nesprávné Url",
   "errors-bad-password": "Špatné heslo nebo uživatelské jméno",
@@ -22,7 +21,6 @@
   "errors-chyba-pri-ruseni": "Nastala chyba při rušení objednávky",
   "errors-undefined": "Nastala Chyba",
   "errors-changelog": "Nepodařilo se získat změny :/",
-
   "try-again": "Zkusit znovu",
   "cancel": "Zrušit",
   "profile": "Profil",
@@ -32,36 +30,29 @@
   "share-description": "Autojídelna (aplikace na objednávání jídla)",
   "settings": "Nastavení",
   "menu": "Jídelníček",
-
   "switch-account-panel-add-account": "Přidat účet",
   "switch-account-panel-title": "Účty",
-
   "update-snackbar-waiting": "Aktualizace - Čeká se na oprávnění",
   "update-snackbar-error": "Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu",
   "update-snackbar-downloading": "Nová Aktualizace se stahuje - %s%%",
   "update-snackbar-downloaded": "Aktualizace byla stažena, instalování",
-
   "popup-new-version-available": "Nová verze aplikace - %s",
   "popup-new-update-info": "Nová verze přináší: ",
   "popup-changelog-not-available": "Changelog není k dispozici",
   "popup-update": "Aktualizovat",
   "popup-show-on-github": "Zobrazit na Githubu",
   "popup-not-now": "Teď ne",
-
   "logout-u-sure": "Opravdu se chcete odhlásit?",
   "logout-confirm": "Odhlásit se",
-
   "account-drawer-locations-unknown": "Neznámá lokalita",
   "account-drawer-profile": "Profil",
   "account-drawer-share-app": "Sdílet aplikaci",
   "account-drawer-pick-location": "Vyberte lokaci: ",
-
   "about": "O aplikaci",
   "about-copy-right": "© 2023 Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
   "about-source-code": "Zdrojový kód",
   "about-latest-version": "Aktuálně jste na nejnovější verzi aplikace 👍",
   "about-check-for-updates": "Zkontrolovat aktualizace",
-
   "settings-appearence": "Vzhled",
   "settings-label-light": "Světlý",
   "settings-label-dark": "Tmavý",
@@ -83,13 +74,11 @@
   "settings-debug-options": "Debug Options",
   "settings-debug-force-notifications": "Force send notifications",
   "settings-debug-notifications": "Send Notifications",
-
   "kredit": "Kredit: %s Kč",
   "personal-info": "Osobní Údaje",
   "name": "Jméno: %s %s",
   "category": "Kategorie: %s",
   "payment-info": "Platební Údaje",
-
   "payment-account-number": "Číslo účtu: %s",
   "specific-symbol": "Specifický symbol: %s",
   "variable-symbol": "Variabilní symbol: %s",
@@ -99,17 +88,15 @@
   "needed-permission-description-1": "Pro automatickou instalaci aktualizace je potřeba povolit oprávnění pro instalaci aplikací z neznámých zdrojů.",
   "needed-permission-description-2": "Ta může vypadat takto:",
   "needed-permission-description-3": "Toto oprávnění používáme pouze k aktualizaci aplikace. Pokud si nepřejete oprávnění povolit můžete stále stáhnout apk z githubu.",
-
   "login-url-field-label": "Url stránky icanteen - např. jidelna.trebesin.cz",
   "login-url-field-hint": "Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz",
   "login-user-field-label": "Uživatelské jméno",
   "login-user-field-hint": "Zadejte prosím své uživatelské jméno",
   "login-password-field-label": "Heslo",
   "login-password-field-hint": "Zadejte prosím své heslo",
-  "data-collection-agreement": "Používáním aplikace souhlasíte se zasíláním anonymních dat.",
-  "more-info": "Více informací",
+  "data-collection-agreement": "Používáním aplikace souhlasíte se zasíláním anonymních dat. ",
+  "more-info": "Více informací.",
   "login-button": "Přihlásit se",
-
   "soup": "Polévka",
   "main-course": "Hlavní chod",
   "drinks": "Pití",
@@ -117,7 +104,6 @@
   "other": "Ostatní",
   "allergens": "Alergeny",
   "no-food": "Žádná jídla pro tento den.",
-
   "obed-text-zrusit": "Zrušit %s za %s Kč",
   "obed-text-objednat": "Objednat %s za %s Kč",
   "obed-text-nelze-zrusit": "Nelze zrušit %s za %s Kč",
@@ -126,7 +112,6 @@
   "obed-text-vlozit-na-burzu": "Vložit na burzu %s za %s Kč",
   "obed-text-objednat-z-burzy": "Objednat z burzy %s za %s Kč",
   "obed-text-odebrat-z-burzy": "Odebrat z burzy %s za %s Kč",
-
   "notifications-for": "Notifikace pro %s",
   "jidlo-channel-name": "Dnešní jídlo",
   "jidlo-channel-description": "Notifikace každý den o tom jaké je dnes jídlo pro %s",
@@ -135,12 +120,10 @@
   "objednano-channel-name": "Objednáno?",
   "objednano-channel-description": "Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden pro %s",
   "other-description": "Ostatní notifikace, např. chybové hlášky...",
-
   "getting-data-notifications": "Získávám data pro notifikace",
   "notification-dochazi-vam-kredit": "Dochází vám kredit!",
   "notification-kredit-pro": "Kredit pro %s %s: %s Kč",
   "notification-ztlumit": "Ztlumit na týden",
-
   "notification-objednejte-si": "objednejte si na příští týden",
   "notification-objednejte-si-detail": "Uživatel %s %s si stále ještě neobjenal na příští týden",
   "objednat-action": "Objednat vždy 1."
