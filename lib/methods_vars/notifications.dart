@@ -10,7 +10,6 @@ import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {
