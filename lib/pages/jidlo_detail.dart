@@ -73,7 +73,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.soup,
+                        Texts.soup.i18n(),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),

@@ -133,7 +133,7 @@ class Texts {
   static const String settingsAnotherOptions = 'settings-another-options';
   static const String settingsDataCollection = 'settings-data-collection';
   static const String settingsStopDataCollection = 'settings-stop-data-collection';
-  static const String settingsDataCollectionDescription = 'settings-data-collection-description';
+  static const String settingsDataCollectionDescription1 = 'settings-data-collection-description-1';
   static const String settingsDataCollectionDescription2 = 'settings-data-collection-description-2';
   static const String settingsDataCollectionDescription3 = 'settings-data-collection-description-3';
   static const String settingsDataCollectionDescription4 = 'settings-data-collection-description-4';
@@ -155,9 +155,9 @@ class Texts {
   static const String ordersWithAutojidelna = 'orders-with-autojidelna';
   static const String allowPermission = 'allow-permission';
   static const String neededPermission = 'needed-permission';
-  static const String neededPermissionDescription = 'needed-permission-description';
-  static const String neededPermissionDescription2 = 'needed-permission-description2';
-  static const String neededPermissionDescription3 = 'needed-permission-description3';
+  static const String neededPermissionDescription1 = 'needed-permission-description-1';
+  static const String neededPermissionDescription2 = 'needed-permission-description-2';
+  static const String neededPermissionDescription3 = 'needed-permission-description-3';
 
   static const String loginUrlFieldLabel = 'login-url-field-label';
   static const String loginUrlFieldHint = 'login-url-field-hint';
@@ -211,7 +211,7 @@ class Texts {
 }
 
 class Links {
-  static const String autojidelna = 'https://autojidelna.tomprotiva.com';
+  static const String autojidelna = 'https://autojidelna.cz/';
   static const String repo = 'https://github.com/Autojidelna/autojidelna';
   static const latestVersionApi = 'https://api.github.com/repos/Autojidelna/autojidelna/releases/latest';
   static const String appStore = 'https://autojidelna.cz/release/appStore.json';
@@ -220,7 +220,7 @@ class Links {
   }
 
   static String currentChangelog(String version) {
-    return 'https://raw.githubusercontent.com/tpkowastaken/autojidelna/v$version/CHANGELOG.md';
+    return 'https://raw.githubusercontent.com/Autojidelna/autojidelna/v$version/CHANGELOG.md';
   }
 
   static String listSbiranychDat(String appVersion) {
