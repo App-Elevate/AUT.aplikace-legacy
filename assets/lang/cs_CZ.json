@@ -142,7 +142,7 @@
   "notification-kredit-pro": "Kredit pro %s %s: %s Kč",
   "notification-ztlumit": "Ztlumit na týden",
 
-  "notification-objednejte-si": "objednejte si na příští týden",
+  "notification-objednejte-si": "Objednejte si na příští týden",
   "notification-objednejte-si-detail": "Uživatel %s %s si stále ještě neobjenal na příští týden",
   "objednat-action": "Objednat náhodně"
 }

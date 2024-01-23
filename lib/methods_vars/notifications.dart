@@ -246,7 +246,7 @@ Future<void> doNotifications({bool force = false}) async {
                   NotificationIds.payloadIndex: k.toString(),
                   NotificationIds.payloadIndexDne: jidelnicek.den.difference(minimalDate).inDays.toString(),
                 },
-                body: jidelnicek.jidla[0].nazev,
+                body: jidelnicek.jidla[k].kategorizovano?.hlavniJidlo ?? jidelnicek.jidla[k].nazev,
               ),
             );
             break;
@@ -450,9 +450,7 @@ class NotificationController {
 
   /// Use this method to detect if the user dismissed a notification
   @pragma("vm:entry-point")
-  static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
-    handleNotificationAction(receivedAction);
-  }
+  static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {}
 
   /// This method is used to detect when an action button or notification is pressed when the application is open.
   @pragma("vm:entry-point")
