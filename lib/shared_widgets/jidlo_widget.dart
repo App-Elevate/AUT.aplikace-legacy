@@ -311,7 +311,19 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                     snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                     return;
                   }
-                  Jidlo jidloSafe = jidlo!;
+                  Jidlo jidloSafe;
+                  try {
+                    jidloSafe = (await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true)).jidla[indexJidlaVeDni];
+                  } catch (e) {
+                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                    if (context.mounted) {
+                      setState(() {
+                        widget.ordering.value = false;
+                        icon = null;
+                      });
+                    }
+                    return;
+                  }
                   switch (stavJidla) {
                     case StavJidla.neobjednano:
                       {
