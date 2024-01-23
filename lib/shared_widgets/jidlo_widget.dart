@@ -433,6 +433,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                             jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                             jidelnicek = await canteen.doBurzy(jidelnicek.jidla[indexJidlaVeDni]);
                           }
+                          updateJidelnicek(jidelnicek);
                         } catch (e) {
                           snackBarMessage(Texts.errorsChybaPriDavaniNaBurzu.i18n());
                         }
