@@ -108,7 +108,6 @@ class MainAccountDrawer extends StatelessWidget {
                           ),
                           const VerticalDivider(),
                           //location
-                          //TODO: implement location picker
                           if (locations.isNotEmpty)
                             FutureBuilder(
                                 future: loggedInCanteen.readIntData('${Prefs.location}${username}_${loggedInCanteen.canteenDataUnsafe!.url}'),

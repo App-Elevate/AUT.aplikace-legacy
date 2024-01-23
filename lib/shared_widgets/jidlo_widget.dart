@@ -92,6 +92,7 @@ class ObjednatJidloTlacitko extends StatefulWidget {
 class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
   Widget? icon;
   Jidlo? jidlo;
+  Jidelnicek? lastJidelnicek;
   //fix for api returning garbage when switching orders
   void cannotBeOrderedFix() async {
     void snackBarMessage(String message) {
@@ -131,13 +132,13 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
     Color? textColor;
     Color? buttonColor;
     late StavJidla stavJidla;
-    final int index = widget.indexJidlaVeDni;
+    final int indexJidlaVeDni = widget.indexJidlaVeDni;
     final DateTime datumJidla = convertIndexToDatetime(widget.indexDne);
     String obedText;
     return ValueListenableBuilder(
       valueListenable: widget.jidelnicekListener,
       builder: (context, value, child) {
-        jidlo = value.jidla[index];
+        jidlo = value.jidla[indexJidlaVeDni];
         if (jidlo!.naBurze) {
           //pokud je od nás vloženo na burze, tak není potřeba kontrolovat nic jiného
           stavJidla = StavJidla.naBurze;
@@ -186,7 +187,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   prvniIndex = i;
                 }
               }
-              if (!jeVeDneDostupnyObed && prvniIndex == index) {
+              if (!jeVeDneDostupnyObed && prvniIndex == indexJidlaVeDni) {
                 cannotBeOrderedFix();
               }
             } catch (e) {
@@ -291,19 +292,40 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       ),
                     );
                   });
-                  late Canteen canteen;
+                  Canteen canteen;
                   try {
                     canteen = await loggedInCanteen.canteenInstance;
                   } catch (e) {
                     snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                    if (context.mounted) {
+                      setState(() {
+                        widget.ordering.value = false;
+                        icon = null;
+                      });
+                    }
                     return;
                   }
-                  Jidlo jidloSafe = jidlo!;
+                  Jidlo jidloSafe;
+                  try {
+                    jidloSafe = (await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true)).jidla[indexJidlaVeDni];
+                  } catch (e) {
+                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                    if (context.mounted) {
+                      setState(() {
+                        widget.ordering.value = false;
+                        icon = null;
+                      });
+                    }
+                    return;
+                  }
                   switch (stavJidla) {
                     case StavJidla.neobjednano:
                       {
                         try {
                           widget.jidelnicekListener.value = await canteen.objednat(jidloSafe);
+                          loggedInCanteen.canteenDataUnsafe!.jidelnicky[widget.jidelnicekListener.value.den] = widget.jidelnicekListener.value;
+                          loggedInCanteen.canteenDataUnsafe!.pocetJidel[widget.jidelnicekListener.value.den] =
+                              widget.jidelnicekListener.value.jidla.length;
                           loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                         } catch (e) {
                           snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
@@ -320,6 +342,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                             if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
                               try {
                                 widget.jidelnicekListener.value = await canteen.objednatZBurzy(jidloNaBurze);
+                                loggedInCanteen.canteenDataUnsafe!.jidelnicky[den] = widget.jidelnicekListener.value;
+                                loggedInCanteen.canteenDataUnsafe!.pocetJidel[widget.jidelnicekListener.value.den] =
+                                    widget.jidelnicekListener.value.jidla.length;
                                 loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                               } catch (e) {
                                 snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
@@ -343,6 +368,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       {
                         try {
                           widget.jidelnicekListener.value = await canteen.doBurzy(jidloSafe);
+                          loggedInCanteen.canteenDataUnsafe!.jidelnicky[widget.jidelnicekListener.value.den] = widget.jidelnicekListener.value;
+                          loggedInCanteen.canteenDataUnsafe!.pocetJidel[widget.jidelnicekListener.value.den] =
+                              widget.jidelnicekListener.value.jidla.length;
                         } catch (e) {
                           snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
                         }
@@ -369,6 +397,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       {
                         try {
                           widget.jidelnicekListener.value = await canteen.objednat(jidloSafe);
+                          loggedInCanteen.canteenDataUnsafe!.jidelnicky[widget.jidelnicekListener.value.den] = widget.jidelnicekListener.value;
+                          loggedInCanteen.canteenDataUnsafe!.pocetJidel[widget.jidelnicekListener.value.den] =
+                              widget.jidelnicekListener.value.jidla.length;
                         } catch (e) {
                           snackBarMessage(Texts.errorsChybaPriRuseni.i18n());
                         }
@@ -378,6 +409,9 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       {
                         try {
                           widget.jidelnicekListener.value = await canteen.doBurzy(jidloSafe);
+                          loggedInCanteen.canteenDataUnsafe!.jidelnicky[widget.jidelnicekListener.value.den] = widget.jidelnicekListener.value;
+                          loggedInCanteen.canteenDataUnsafe!.pocetJidel[widget.jidelnicekListener.value.den] =
+                              widget.jidelnicekListener.value.jidla.length;
                         } catch (e) {
                           snackBarMessage(Texts.errorsChybaPriDavaniNaBurzu.i18n());
                         }
