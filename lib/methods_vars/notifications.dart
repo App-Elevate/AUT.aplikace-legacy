@@ -319,7 +319,7 @@ Future<void> doNotifications({bool force = false}) async {
             actionType: ActionType.Default,
             title: Texts.notificationDochaziVamKredit.i18n(),
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
-            body: Texts.notificationKreditPro.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', cena.toString()]),
+            body: Texts.notificationKreditPro.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', kredit.toString()]),
           ),
           actionButtons: [
             NotificationActionButton(
