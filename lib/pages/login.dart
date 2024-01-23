@@ -62,7 +62,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void _setErrorText(String text, LoginFormErrorField field) {
+  void _setErrorText(String text, LoginFormErrorField? field) {
     switch (field) {
       case LoginFormErrorField.password:
         passwordNotifier.value = [text, passwordNotifier.value[1]];
@@ -72,6 +72,9 @@ class LoginScreen extends StatelessWidget {
         urlErrorText.value = text;
         passwordNotifier.value = [null, passwordNotifier.value[1]];
         break;
+      default:
+        urlErrorText.value = null;
+        passwordNotifier.value = [null, passwordNotifier.value[1]];
     }
   }
 
@@ -245,45 +248,35 @@ class LoginScreen extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       // If the form is valid, save the form fields.
       _formKey.currentState!.save();
+      _setErrorText('', null);
       loggingIn.value = true;
       String url = _urlController.text;
       try {
-        bool login = await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
-        if (login) {
-          loggedInCanteen.saveData(Prefs.url, url);
-          try {
-            changeDate(newDate: DateTime.now());
-            if (context.mounted) {
-              Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
-            }
-          } catch (e) {
-            //if it is not connected we don't have to do anything
+        await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
+        loggedInCanteen.saveData(Prefs.url, url);
+        try {
+          changeDate(newDate: DateTime.now());
+          if (context.mounted) {
+            Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
           }
-          setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
-        } else {
-          _setErrorText(Texts.errorsBadPassword.i18n(), LoginFormErrorField.password);
+        } catch (e) {
+          //if it is not connected we don't have to do anything
         }
+        setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
       } catch (e) {
-        bool connected = await InternetConnectionChecker().hasConnection;
-        if (!connected) {
-          _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
-        } else {
-          try {
-            //make a get request to the server to see if it is reachable
-            url = url.replaceAll('https://', '');
-            url = url.replaceAll('http://', '');
-            url = url.split('/')[0];
-            await http.get(Uri.parse('https://$url'));
+        switch (e) {
+          case ConnectionErrors.noInternet:
+            _setErrorText(Texts.errorsNoInternet.i18n(), LoginFormErrorField.url);
+            break;
+          case ConnectionErrors.wrongUrl:
+            _setErrorText(Texts.errorsBadUrl.i18n(), LoginFormErrorField.url);
+            break;
+          case ConnectionErrors.badLogin:
+            _setErrorText(Texts.errorsBadLogin.i18n(), LoginFormErrorField.password);
+            break;
+          default:
             _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
-          } catch (e) {
-            try {
-              url = url.replaceAll('https://', 'http://');
-              await http.get(Uri.parse('http://$url'));
-              _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
-            } catch (e) {
-              _setErrorText(Texts.errorsBadUrl.i18n(), LoginFormErrorField.url);
-            }
-          }
+            break;
         }
       }
       loggingIn.value = false;
