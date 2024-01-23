@@ -43,6 +43,7 @@ class LoginScreen extends StatelessWidget {
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
+        iconTheme: Theme.of(context).appBarTheme.iconTheme?.copyWith(color: Theme.of(context).colorScheme.onBackground),
       ),
       body: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
