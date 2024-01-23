@@ -169,7 +169,7 @@ class MainAccountDrawer extends StatelessWidget {
                   showAboutDialog(
                     context: context,
                     applicationName: Texts.aboutAppName.i18n(),
-                    applicationLegalese: Texts.aboutCopyRight.i18n(),
+                    applicationLegalese: Texts.aboutCopyRight.i18n([DateTime.now().year.toString()]),
                     applicationVersion: '${packageInfo.version} - ${kDebugMode ? "Debug" : "Release"}',
                     children: [
                       Padding(
