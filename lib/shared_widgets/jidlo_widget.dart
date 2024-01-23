@@ -333,10 +333,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                             jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                             jidelnicek = await canteen.objednat(jidelnicek.jidla[indexJidlaVeDni]);
                           }
-                          if (jidelnicek.jidla[indexJidlaVeDni].objednano == false) {
-                            jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
-                            jidelnicek = await canteen.objednat(jidelnicek.jidla[indexJidlaVeDni]);
-                          }
                           updateJidelnicek(jidelnicek);
                           loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                         } catch (e) {
@@ -392,10 +388,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                             jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                             jidelnicek = await canteen.doBurzy(jidelnicek.jidla[indexJidlaVeDni]);
                           }
-                          if (jidelnicek.jidla[indexJidlaVeDni].naBurze == false) {
-                            jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
-                            jidelnicek = await canteen.doBurzy(jidelnicek.jidla[indexJidlaVeDni]);
-                          }
                           updateJidelnicek(jidelnicek);
                         } catch (e) {
                           snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
@@ -427,10 +419,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                             jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                             jidelnicek = await canteen.objednat(jidelnicek.jidla[indexJidlaVeDni]);
                           }
-                          if (jidelnicek.jidla[indexJidlaVeDni].objednano == true) {
-                            jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
-                            jidelnicek = await canteen.objednat(jidelnicek.jidla[indexJidlaVeDni]);
-                          }
                           updateJidelnicek(jidelnicek);
                         } catch (e) {
                           snackBarMessage(Texts.errorsChybaPriRuseni.i18n());
@@ -441,10 +429,6 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                       {
                         try {
                           Jidelnicek jidelnicek = await canteen.doBurzy(jidloSafe);
-                          if (jidelnicek.jidla[indexJidlaVeDni].naBurze == true) {
-                            jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
-                            jidelnicek = await canteen.doBurzy(jidelnicek.jidla[indexJidlaVeDni]);
-                          }
                           if (jidelnicek.jidla[indexJidlaVeDni].naBurze == true) {
                             jidelnicek = await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true);
                             jidelnicek = await canteen.doBurzy(jidelnicek.jidla[indexJidlaVeDni]);
