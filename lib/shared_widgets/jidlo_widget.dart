@@ -40,33 +40,31 @@ class JidloWidget extends StatelessWidget {
           ),
         );
       },
-      child: ListTile(
-        subtitle: Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Builder(builder: (_) {
-                  String jidlo =
-                      (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicekListener.value.jidla[index].nazev) == ''
-                          ? jidelnicekListener.value.jidla[index].nazev
-                          : (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicekListener.value.jidla[index].nazev);
-                  return Text(
-                    jidlo,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  );
-                }),
-                const SizedBox(height: 16),
-                ObjednatJidloTlacitko(
-                  ordering: ordering,
-                  indexDne: indexDne,
-                  jidelnicekListener: jidelnicekListener,
-                  indexJidlaVeDni: index,
-                ),
-              ],
-            ),
+      child: Card(
+        margin: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * 0.05, vertical: MediaQuery.sizeOf(context).height * 0.01),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Builder(builder: (_) {
+                String jidlo =
+                    (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicekListener.value.jidla[index].nazev) == ''
+                        ? jidelnicekListener.value.jidla[index].nazev
+                        : (jidelnicekListener.value.jidla[index].kategorizovano?.hlavniJidlo ?? jidelnicekListener.value.jidla[index].nazev);
+                return Text(
+                  jidlo,
+                  style: Theme.of(context).textTheme.titleLarge,
+                );
+              }),
+              const SizedBox(height: 16),
+              ObjednatJidloTlacitko(
+                ordering: ordering,
+                indexDne: indexDne,
+                jidelnicekListener: jidelnicekListener,
+                indexJidlaVeDni: index,
+              ),
+            ],
           ),
         ),
       ),
