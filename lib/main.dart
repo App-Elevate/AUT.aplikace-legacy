@@ -54,8 +54,24 @@ void main() async {
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
       for (LoggedInUser uzivatel in loginData.users) {
-        AwesomeNotifications().removeChannel(NotificationIds.kreditChannel + uzivatel.username);
-        await AwesomeNotifications().removeChannel(NotificationIds.objednanoChannel + uzivatel.username);
+        List<String> prefs = [
+          Prefs.dailyFoodInfo,
+          Prefs.foodNotifTime,
+          Prefs.kreditNotifications,
+          Prefs.lastJidloDneCheck,
+          Prefs.lastNotificationCheck,
+          Prefs.nemateObjednanoNotifications
+        ];
+        for (String pref in prefs) {
+          await loggedInCanteen.readData(pref + uzivatel.username).then((value) {
+            if (value != null) {
+              loggedInCanteen.saveData('$pref${uzivatel.username}_${uzivatel.url}', value);
+              loggedInCanteen.removeData(pref + uzivatel.username);
+            }
+          });
+        }
+        AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${uzivatel.username}_${uzivatel.url}');
+        await AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${uzivatel.username}_${uzivatel.url}');
       }
     } catch (e) {
       //do nothing
@@ -134,15 +150,16 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+// ValueNotifier for the back button
+
 class _MyAppState extends State<MyApp> {
   // Key for the navigator
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
 
-  // ValueNotifier for the back button
-  ValueNotifier<bool> canpop = ValueNotifier<bool>(false);
-
   // root widget of the app
   late Widget homeWidget;
+
+  ValueNotifier<bool> canExit = ValueNotifier<bool>(false);
 
   // Handling the back button on android being pressed.
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
@@ -153,17 +170,17 @@ class _MyAppState extends State<MyApp> {
     // Checks if current Navigator still has screens on the stack.
     // And doesn't exit the app if it does
     if (yourKey.currentState!.canPop()) {
+      yourKey.currentState!.pop();
       // 'maybePop' method handles the decision of 'pop' to another WillPopScope if they exist.
       // If no other WillPopScope exists, it returns true
-      yourKey.currentState!.pop();
       return Future<bool>.value(false);
     }
     // If the current Navigator doesn't have any screens on the stack, it exits the app or shows a toast
     // setting the value to true so that the user can press the back button again and it exits this time
-    canpop.value = true;
+    canExit.value = true;
     // 5 second timer for the user to press the back button again.
     // After it expires the timer resets and user has to press back button twice again
-    Future.delayed(const Duration(seconds: 5), () => canpop.value = false);
+    Future.delayed(const Duration(seconds: 5), () => canExit.value = false);
     Fluttertoast.showToast(
         msg: Texts.toastsExit.i18n(),
         toastLength: Toast.LENGTH_SHORT,
@@ -299,7 +316,7 @@ class _MyAppState extends State<MyApp> {
 
   ValueListenableBuilder _pop() {
     return ValueListenableBuilder(
-      valueListenable: canpop,
+      valueListenable: canExit,
       builder: (context, value, child) {
         return PopScope(
           canPop: value,
@@ -337,19 +354,11 @@ class LoggingInWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
-      future: loggedInCanteen.loginFromStorage(),
+      future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           if (snapshot.error == ConnectionErrors.noLogin) {
             return LoginScreen(setHomeWidget: setHomeWidget);
-          } else if (snapshot.error == ConnectionErrors.badLogin) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadLogin.i18n(), setHomeWidget));
-          } else if (snapshot.error == ConnectionErrors.wrongUrl) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadUrl.i18n(), setHomeWidget));
-          } else if (snapshot.error == ConnectionErrors.noInternet) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsNoInternet.i18n(), setHomeWidget));
-          } else if (snapshot.error == ConnectionErrors.connectionFailed) {
-            Future.delayed(Duration.zero, () => failedLoginDialog(context, Texts.errorsBadConnection.i18n(), setHomeWidget));
           }
         } else if (snapshot.connectionState == ConnectionState.done) {
           // setting the initial date

@@ -200,28 +200,32 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(Texts.failedDialogLoginFailed.i18n()),
-        content: Text(Texts.failedDialogLoginDetail.i18n([message])),
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-        alignment: Alignment.bottomCenter,
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
-            },
-            child: Text(Texts.failedDialogTryAgain.i18n()),
-          ),
-          TextButton(
-            onPressed: () {
-              loggedInCanteen.logout();
-              Navigator.of(context).pop();
-              setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
-            },
-            child: Text(Texts.failedDialogLogOut.i18n()),
-          ),
-        ],
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (hey) => false,
+        child: AlertDialog(
+          title: Text(Texts.failedDialogLoginFailed.i18n()),
+          content: Text(Texts.failedDialogLoginDetail.i18n([message])),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          alignment: Alignment.bottomCenter,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+              },
+              child: Text(Texts.failedDialogTryAgain.i18n()),
+            ),
+            TextButton(
+              onPressed: () {
+                loggedInCanteen.logout();
+                Navigator.of(context).pop();
+                setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
+              },
+              child: Text(Texts.failedDialogLogOut.i18n()),
+            ),
+          ],
+        ),
       );
     },
   );
@@ -247,27 +251,31 @@ void failedDownload(BuildContext context, {int? tries}) async {
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(Texts.failedDialogDownload.i18n()),
-        content: Text(Texts.failedDialogDownloadDetail.i18n()),
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-        alignment: Alignment.bottomCenter,
-        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              networkInstallApk(releaseInfo!.downloadUrl!, context);
-              Navigator.of(context).pop();
-            },
-            child: Text(Texts.failedDialogTryAgain.i18n()),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(Texts.faliedDialogCancel.i18n()),
-          ),
-        ],
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (hey) => false,
+        child: AlertDialog(
+          title: Text(Texts.failedDialogDownload.i18n()),
+          content: Text(Texts.failedDialogDownloadDetail.i18n()),
+          actionsAlignment: MainAxisAlignment.spaceBetween,
+          alignment: Alignment.bottomCenter,
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                networkInstallApk(releaseInfo!.downloadUrl!, context);
+                Navigator.of(context).pop();
+              },
+              child: Text(Texts.failedDialogTryAgain.i18n()),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(Texts.faliedDialogCancel.i18n()),
+            ),
+          ],
+        ),
       );
     },
   );

@@ -16,6 +16,7 @@ class Prefs {
   static const String statistikaObjednavka = 'statistika:objednavka';
   static const String url = 'url';
   static const String firstTime = 'firstTime';
+  static const String location = 'location_';
 }
 
 class OldPrefs {

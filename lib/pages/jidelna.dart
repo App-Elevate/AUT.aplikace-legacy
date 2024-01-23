@@ -353,6 +353,7 @@ class ListJidel extends StatelessWidget {
   final Function(Widget widget) setHomeWidget;
   final Function(Widget widget) setScaffoldBody;
   final Function(BuildContext context) portableSoftRefresh;
+  final ValueNotifier<bool> ordering = ValueNotifier<bool>(false);
   final ValueNotifier<Jidelnicek> jidelnicekListener = ValueNotifier<Jidelnicek>(Jidelnicek(dateListener.value, []));
   ListJidel({
     required this.portableSoftRefresh,
@@ -372,6 +373,7 @@ class ListJidel extends StatelessWidget {
           await MyApp.navigatorKey.currentState!.push(
             MaterialPageRoute(
               builder: (context) => JidloDetail(
+                ordering: ordering,
                 indexDne: indexDne,
                 refreshButtons: portableSoftRefresh,
                 jidelnicekListener: jidelnicekListener,
@@ -449,6 +451,7 @@ class ListJidel extends StatelessWidget {
                   itemCount: value.jidla.length,
                   itemBuilder: (context, index) {
                     return JidloWidget(
+                      ordering: ordering,
                       indexDne: indexDne,
                       portableSoftRefresh: portableSoftRefresh,
                       jidelnicekListener: jidelnicekListener,

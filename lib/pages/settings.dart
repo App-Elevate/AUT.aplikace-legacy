@@ -20,6 +20,7 @@ class SettingsPage extends StatelessWidget {
   SettingsPage({super.key, this.onlyAnalytics = false});
   final bool onlyAnalytics;
   late final String username;
+  late final String url;
 
   final ValueNotifier<bool> disableAnalyticsNotifier = ValueNotifier<bool>(!analyticsEnabledGlobally);
   final ValueNotifier<bool> skipWeekendsNotifier = ValueNotifier<bool>(skipWeekends);
@@ -35,14 +36,15 @@ class SettingsPage extends StatelessWidget {
   Future<void> resetAndDoNotifications() async {
     LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     for (LoggedInUser uzivatel in loginData.users) {
-      await loggedInCanteen.removeData(Prefs.lastJidloDneCheck + uzivatel.username);
-      await loggedInCanteen.removeData(Prefs.lastNotificationCheck + uzivatel.username);
+      await loggedInCanteen.removeData('${Prefs.lastJidloDneCheck}${uzivatel.username}_${uzivatel.url}');
+      await loggedInCanteen.removeData('${Prefs.lastNotificationCheck}${uzivatel.username}_${uzivatel.url}');
     }
     await doNotifications();
   }
 
   Future<void> setSettings() async {
     username = loggedInCanteen.uzivatel!.uzivatelskeJmeno!;
+    url = loggedInCanteen.canteenDataUnsafe!.url;
     // analytics
     bool analyticsDisabled = await loggedInCanteen.isPrefTrue(Prefs.disableAnalytics);
     if (kDebugMode) {
@@ -69,14 +71,14 @@ class SettingsPage extends StatelessWidget {
     skipWeekendsNotifier.value = await loggedInCanteen.isPrefTrue(Prefs.skipWeekends);
     skipWeekends = skipWeekendsNotifier.value;
 
-    jidloNotificationNotifier.value = await loggedInCanteen.isPrefTrue(Prefs.dailyFoodInfo + username);
+    jidloNotificationNotifier.value = await loggedInCanteen.isPrefTrue('${Prefs.dailyFoodInfo}${username}_$url');
 
     String? jidloNotificationTimeString = await loggedInCanteen.readData(Prefs.foodNotifTime);
     if (jidloNotificationTimeString != null && jidloNotificationTimeString != '') {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
 
-    String? lowCreditNotificationString = await loggedInCanteen.readData(Prefs.kreditNotifications + username);
+    String? lowCreditNotificationString = await loggedInCanteen.readData('${Prefs.kreditNotifications}${username}_$url');
     if (lowCreditNotificationString == '') {
       //notifications allowed
       lowCreditNotificationNotifier.value = true;
@@ -93,7 +95,7 @@ class SettingsPage extends StatelessWidget {
       }
     }
 
-    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData(Prefs.nemateObjednanoNotifications + username);
+    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('${Prefs.nemateObjednanoNotifications}${username}_$url');
     if (nextWeekOrderNotificationNotifierString == '') {
       //notifications allowed
       nextWeekOrderNotificationNotifier.value = true;
@@ -404,9 +406,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     jidloNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(Prefs.dailyFoodInfo + username, '1');
+                      loggedInCanteen.saveData('${Prefs.dailyFoodInfo}${username}_$url', '1');
                     } else {
-                      loggedInCanteen.saveData(Prefs.dailyFoodInfo + username, '');
+                      loggedInCanteen.saveData('${Prefs.dailyFoodInfo}${username}_$url', '');
                     }
                     resetAndDoNotifications();
                   },
@@ -456,9 +458,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     lowCreditNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(Prefs.kreditNotifications + username, '');
+                      loggedInCanteen.saveData('${Prefs.kreditNotifications}${username}_$url', '');
                     } else {
-                      loggedInCanteen.saveData(Prefs.kreditNotifications + username, '1');
+                      loggedInCanteen.saveData('${Prefs.kreditNotifications}${username}_$url', '1');
                     }
                     resetAndDoNotifications();
                   },
@@ -476,9 +478,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     nextWeekOrderNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(Prefs.nemateObjednanoNotifications + username, '');
+                      loggedInCanteen.saveData('${Prefs.nemateObjednanoNotifications}${username}_$url', '');
                     } else {
-                      loggedInCanteen.saveData(Prefs.nemateObjednanoNotifications + username, '1');
+                      loggedInCanteen.saveData('${Prefs.nemateObjednanoNotifications}${username}_$url', '1');
                     }
                     resetAndDoNotifications();
                   },

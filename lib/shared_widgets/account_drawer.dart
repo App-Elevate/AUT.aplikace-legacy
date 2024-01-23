@@ -12,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Sharing app using the share button
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Opening links in browser
 import 'package:url_launcher/url_launcher.dart';
@@ -24,11 +25,12 @@ class MainAccountDrawer extends StatelessWidget {
   });
   final Function(Widget widget) setHomeWidget;
   final NavigationDrawerItem page;
-  final ValueNotifier<String> pickedLocationNotifier = ValueNotifier<String>(Texts.accountDrawerLocationsUnknown.i18n());
-  final List locations = [];
+  final ValueNotifier<int> pickedLocationNotifier = ValueNotifier<int>(1);
+  final Map<int, String> locations = {};
 
   @override
   Widget build(BuildContext context) {
+    locations.addAll(loggedInCanteen.canteenDataUnsafe?.vydejny ?? {});
     final String username = loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? '';
     return Drawer(
       child: SingleChildScrollView(
@@ -107,22 +109,17 @@ class MainAccountDrawer extends StatelessWidget {
                           const VerticalDivider(),
                           //location
                           //TODO: implement location picker
-                          /*
                           if (locations.isNotEmpty)
                             FutureBuilder(
-                              future: getLocation(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.done) {
-                                  if (!locations.contains(pickedLocationNotifier.value)) {
-                                    pickedLocationNotifier.value = locations[0];
+                                future: loggedInCanteen.readIntData('${Prefs.location}${username}_${loggedInCanteen.canteenDataUnsafe!.url}'),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    pickedLocationNotifier.value = snapshot.data as int;
                                   }
                                   return locationPicker(context);
-                                } else {
-                                  return const SizedBox(width: 100);
-                                }
-                              },
-                            ),*/
-                          if (locations.isEmpty) const SizedBox(width: 100),
+                                })
+                          else if (locations.isEmpty)
+                            const SizedBox(width: 100),
                         ],
                       ),
                     ),
@@ -233,7 +230,7 @@ class MainAccountDrawer extends StatelessWidget {
     );
   }
 
-  TextButton locationPicker(BuildContext context) {
+  Widget locationPicker(BuildContext context) {
     return TextButton(
       style: Theme.of(context).textButtonTheme.style!.copyWith(
             foregroundColor: MaterialStateProperty.resolveWith((states) {
@@ -272,9 +269,15 @@ class MainAccountDrawer extends StatelessWidget {
                                   padding: const EdgeInsets.all(0),
                                   highlightColor: Colors.transparent,
                                   splashColor: Colors.transparent,
-                                  onPressed: () {
-                                    pickedLocationNotifier.value = locations[value];
-                                    Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
+                                  onPressed: () async {
+                                    pickedLocationNotifier.value = value;
+                                    loggedInCanteen.zmenitVydejnu(value + 1);
+                                    Navigator.of(context).popUntil((route) => route.isFirst);
+                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    prefs.setInt(
+                                        '${Prefs.location}${loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? ''}_${loggedInCanteen.canteenDataUnsafe!.url}',
+                                        value);
+                                    setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
                                   },
                                   child: ListTile(
                                     visualDensity: VisualDensity.compact,
@@ -284,13 +287,13 @@ class MainAccountDrawer extends StatelessWidget {
                                         SizedBox(
                                           width: MediaQuery.sizeOf(context).width * 0.5,
                                           child: Text(
-                                            locations[value],
+                                            locations[value + 1]!,
                                             style: Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 19),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        if (pickedLocationNotifier.value == locations[value]) const Icon(Icons.check),
+                                        if (pickedLocationNotifier.value == value) const Icon(Icons.check),
                                       ],
                                     ),
                                   ),
@@ -318,7 +321,7 @@ class MainAccountDrawer extends StatelessWidget {
                 valueListenable: pickedLocationNotifier,
                 builder: (context, pickedLocation, child) {
                   return Text(
-                    pickedLocation,
+                    locations[pickedLocation + 1] ?? locations[1] ?? '',
                     style: const TextStyle(fontSize: 15),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
