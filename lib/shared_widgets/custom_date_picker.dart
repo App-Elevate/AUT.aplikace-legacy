@@ -34,6 +34,8 @@ class CustomDatePicker {
                         valueListenable: focusedDateNotifier,
                         builder: (context, value, child) {
                           return TableCalendar(
+                            //get current locale
+                            locale: '${Localizations.localeOf(context).languageCode}_${Localizations.localeOf(context).countryCode}',
                             sixWeekMonthsEnforced: true,
                             headerStyle: HeaderStyle(
                               formatButtonVisible: false,
