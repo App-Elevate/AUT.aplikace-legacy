@@ -412,7 +412,11 @@ class NotificationController {
         await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
       } else if (receivedAction.buttonKeyPressed.substring(0, 9) == NotificationIds.objednatButton) {
+        String username = receivedAction.buttonKeyPressed.substring(9).split('_')[0];
         LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
+        if (loggedInCanteen.uzivatel != null && loggedInCanteen.uzivatel?.uzivatelskeJmeno == username) {
+          tempLoggedInCanteen = loggedInCanteen;
+        }
         await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9).split('_')[0]);
       }
     }

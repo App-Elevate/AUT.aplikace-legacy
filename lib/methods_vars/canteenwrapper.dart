@@ -5,6 +5,7 @@ import 'dart:async';
 
 // json encoding and decoding
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -580,7 +581,10 @@ class LoggedInCanteen {
   /// don't call from main thread
   /// objedná první jídlo v každém dni, pokud už v tom dni nemáme objednáno.
   Future<void> quickOrder(String username) async {
-    if (!await loginAsUsername(username)) return;
+    if (_canteenInstance?.prihlasen != true) {
+      if (!await loginAsUsername(username)) return;
+    }
+    await _indexLunchesMonth();
     for (int i = 0; i < 10; i++) {
       bool mameObjednano = false;
       Jidelnicek jidelnicek = await getLunchesForDay(DateTime.now().add(Duration(days: i)));
@@ -591,7 +595,8 @@ class LoggedInCanteen {
         }
       }
       if (!mameObjednano && jidelnicek.jidla.isNotEmpty) {
-        await _canteenInstance!.objednat(jidelnicek.jidla[0]);
+        jidelnicek = await getLunchesForDay(DateTime.now().add(Duration(days: i)), requireNew: true);
+        await _canteenInstance!.objednat(jidelnicek.jidla[Random().nextInt(jidelnicek.jidla.length)]);
       }
     }
     return;
@@ -600,9 +605,13 @@ class LoggedInCanteen {
   Future<bool> loginAsUsername(String username, {bool saveToStorage = false}) async {
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     for (LoggedInUser uzivatel in loginData.users) {
-      if (uzivatel.username == username) {
-        await changeAccount(loginData.users.indexOf(uzivatel), indexLunches: false, saveToStorage: saveToStorage);
-        return true;
+      try {
+        if (uzivatel.username == username) {
+          await _login(uzivatel.url, uzivatel.username, uzivatel.password, safetyId: (_canteenData?.id ?? 0) + 1, indexLunches: false);
+          return true;
+        }
+      } catch (e) {
+        return false;
       }
     }
     return false;
