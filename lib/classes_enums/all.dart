@@ -127,16 +127,18 @@ class CanteenData {
   /// jídelníčky, které aktuálně načítáme
   Map<DateTime, Completer<Jidelnicek>> currentlyLoading;
 
-  CanteenData({
-    required this.username,
-    required this.url,
-    required this.uzivatel,
-    required this.jidlaNaBurze,
-    this.id = 0,
-    required this.currentlyLoading,
-    required this.jidelnicky,
-    required this.pocetJidel,
-  });
+  Map<int, String>? vydejny;
+
+  CanteenData(
+      {required this.username,
+      required this.url,
+      required this.uzivatel,
+      required this.jidlaNaBurze,
+      this.id = 0,
+      required this.currentlyLoading,
+      required this.jidelnicky,
+      required this.pocetJidel,
+      this.vydejny});
   CanteenData copyWith() {
     return CanteenData(
         username: username,
@@ -145,7 +147,8 @@ class CanteenData {
         jidlaNaBurze: jidlaNaBurze,
         currentlyLoading: currentlyLoading,
         jidelnicky: jidelnicky,
-        pocetJidel: pocetJidel);
+        pocetJidel: pocetJidel,
+        vydejny: vydejny);
   }
 }
 

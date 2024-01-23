@@ -15,6 +15,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:localization/localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -100,6 +101,31 @@ class LoggedInCanteen {
     }
   }
 
+  Future<dynamic> runWithSafety(Future f) async {
+    try {
+      return await f;
+    } catch (e) {
+      handleError(e);
+      return Future.error(e);
+    }
+  }
+
+  void handleError(dynamic e) {
+    if (e == ConnectionErrors.badLogin) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadLogin.i18n(), setHomeWidgetPublic));
+    } else if (e == ConnectionErrors.wrongUrl) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadUrl.i18n(), setHomeWidgetPublic));
+    } else if (e == ConnectionErrors.noInternet) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsNoInternet.i18n(), setHomeWidgetPublic));
+    } else if (e == ConnectionErrors.connectionFailed) {
+      Future.delayed(
+          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadConnection.i18n(), setHomeWidgetPublic));
+    }
+  }
+
   /// logs you in if you are already logged in or gets the already existing instance
   /// We don't have to do much of error handling here because we already know that the user has been logged in.
   /// If there is an error it's probably because of the internet connection or change of password. The popup is the best solution.
@@ -159,6 +185,7 @@ class LoggedInCanteen {
         await _canteenInstance!.login(username, password); //second try's the charm
       } catch (e) {
         bool connected = await InternetConnectionChecker().hasConnection;
+        _loginCompleter!.completeError(ConnectionErrors.noInternet);
         if (!connected) return Future.error(ConnectionErrors.noInternet);
         try {
           await http.get(Uri.parse(url));
@@ -177,20 +204,48 @@ class LoggedInCanteen {
         pocetJidel: {},
         username: username,
         url: url,
-        uzivatel: await _canteenInstance!.ziskejUzivatele(),
-        jidlaNaBurze: await _canteenInstance!.ziskatBurzu(),
+        uzivatel: _canteenInstance!.missingFeatures.contains(Features.ziskatUzivatele)
+            ? Uzivatel(uzivatelskeJmeno: username)
+            : await _canteenInstance!.ziskejUzivatele(),
+        jidlaNaBurze: _canteenInstance!.missingFeatures.contains(Features.burza) ? const [] : await _canteenInstance!.ziskatBurzu(),
         currentlyLoading: {},
         jidelnicky: {},
+        vydejny: (await _canteenInstance!.jidelnicekDen()).vydejny,
       );
     } catch (e) {
       _loginCompleter!.completeError(ConnectionErrors.connectionFailed);
       return Future.error(ConnectionErrors.connectionFailed);
     }
     if (indexLunches) {
+      int vydejna = (await readIntData(Prefs.location + username) ?? 0) + 1;
+      (await canteenInstance).vydejna = vydejna;
+      await _indexLunchesMonth();
       smartPreIndexing(DateTime.now());
     }
     _loginCompleter!.complete(_canteenInstance!);
     return canteenInstance;
+  }
+
+  Future<void> _indexLunchesMonth() async {
+    try {
+      if (_canteenInstance!.missingFeatures.contains(Features.jidelnicekMesic)) return;
+      List<Jidelnicek> jidelnicky = await (await canteenInstance).jidelnicekMesic();
+      for (Jidelnicek jidelnicek in jidelnicky) {
+        _canteenData!.jidelnicky[jidelnicek.den] = jidelnicek;
+        _canteenData!.pocetJidel[jidelnicek.den] = jidelnicek.jidla.length;
+      }
+    } catch (e) {
+      //indexing can be done later
+    }
+  }
+
+  void zmenitVydejnu(int vydejna) async {
+    (await canteenInstance).vydejna = vydejna;
+    _canteenData!.id++;
+    _canteenData!.jidelnicky.clear();
+    _canteenData!.pocetJidel.clear();
+    await _indexLunchesMonth();
+    smartPreIndexing(DateTime.now());
   }
 
   ///získá Jídelníček pro den [den]
@@ -278,9 +333,17 @@ class LoggedInCanteen {
   }
 
   void smartPreIndexing(DateTime dateToBeJumpedTo) {
-    preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 2)), 4)
-        .then((_) => preIndexLunchesRange(dateToBeJumpedTo, 7))
-        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 7)), 20));
+    preIndexLunchesRange(dateToBeJumpedTo, 3)
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 2)), 2))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 3)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 6)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 9)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 5)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 12)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 15)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 18)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.add(const Duration(days: 21)), 3))
+        .then((_) => preIndexLunchesRange(dateToBeJumpedTo.subtract(const Duration(days: 8)), 3));
   }
 
   Future<void> preIndexLunchesRange(DateTime start, int howManyDays) async {
@@ -378,6 +441,11 @@ class LoggedInCanteen {
   Future<String?> readData(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
+  }
+
+  Future<int?> readIntData(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(key);
   }
 
   /// save data to shared preferences used for storing url, statistics and settings in a list
