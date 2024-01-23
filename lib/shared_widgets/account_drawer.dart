@@ -108,7 +108,6 @@ class MainAccountDrawer extends StatelessWidget {
                           ),
                           const VerticalDivider(),
                           //location
-                          //TODO: implement location picker
                           if (locations.isNotEmpty)
                             FutureBuilder(
                                 future: loggedInCanteen.readIntData('${Prefs.location}${username}_${loggedInCanteen.canteenDataUnsafe!.url}'),
@@ -170,7 +169,7 @@ class MainAccountDrawer extends StatelessWidget {
                   showAboutDialog(
                     context: context,
                     applicationName: Texts.aboutAppName.i18n(),
-                    applicationLegalese: Texts.aboutCopyRight.i18n(),
+                    applicationLegalese: Texts.aboutCopyRight.i18n(['2023 - ${DateTime.now().year}']),
                     applicationVersion: '${packageInfo.version} - ${kDebugMode ? "Debug" : "Release"}',
                     children: [
                       Padding(

@@ -81,16 +81,16 @@ Future<bool> initAwesome() async {
     notificationChannelGroups.add(
       NotificationChannelGroup(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
-        channelGroupName: Texts.notificationsFor.i18n([user.username]),
+        channelGroupName: Texts.notificationsFor(user.username),
       ),
     );
     notificationChannels.add(
       NotificationChannel(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelKey: '${NotificationIds.dnesniJidloChannel}${user.username}_${user.url}',
-        channelName: Texts.jidloChannelName.i18n(),
+        channelName: Texts.jidloChannelName,
         channelShowBadge: true,
-        channelDescription: Texts.jidloChannelDescription.i18n([user.username]),
+        channelDescription: Texts.jidloChannelDescription(user.username),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -99,9 +99,9 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelKey: '${NotificationIds.kreditChannel}${user.username}_${user.url}',
-        channelName: Texts.dochazejiciKreditChannelName.i18n(),
+        channelName: Texts.dochazejiciKreditChannelName,
         channelShowBadge: true,
-        channelDescription: Texts.dochazejiciKreditChannelDescription.i18n([user.username]),
+        channelDescription: Texts.dochazejiciKreditChannelDescription(user.username),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -110,9 +110,9 @@ Future<bool> initAwesome() async {
       NotificationChannel(
         channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelKey: '${NotificationIds.objednanoChannel}${user.username}_${user.url}',
-        channelName: Texts.objednanoChannelName.i18n(),
+        channelName: Texts.objednanoChannelName,
         channelShowBadge: true,
-        channelDescription: Texts.objednanoChannelDescription.i18n([user.username]),
+        channelDescription: Texts.objednanoChannelDescription(user.username),
         defaultColor: const Color(0xFF9D50DD),
         ledColor: Colors.white,
       ),
@@ -121,15 +121,15 @@ Future<bool> initAwesome() async {
   notificationChannelGroups.add(
     NotificationChannelGroup(
       channelGroupKey: NotificationIds.channelGroupElse,
-      channelGroupName: Texts.other.i18n(),
+      channelGroupName: Texts.notificationOther,
     ),
   );
   notificationChannels.add(
     NotificationChannel(
       channelGroupKey: NotificationIds.channelGroupElse,
       channelKey: NotificationIds.channelElse,
-      channelName: Texts.other.i18n(),
-      channelDescription: Texts.channelDescriptionOstatni.i18n(),
+      channelName: Texts.notificationOther,
+      channelDescription: Texts.notificationOtherDescription,
       importance: NotificationImportance.Min,
       playSound: false,
     ),
@@ -155,7 +155,7 @@ Future<void> doNotifications({bool force = false}) async {
     locked: true,
     channelKey: NotificationIds.channelElse,
     actionType: ActionType.Default,
-    title: Texts.gettingDataNotifications.i18n(),
+    title: Texts.gettingDataNotifications,
   ));
   // Don't send notifications before 9 and after 22
   for (int i = 0; i < loginData.users.length && !((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force); i++) {
@@ -224,7 +224,7 @@ Future<void> doNotifications({bool force = false}) async {
                     id: 1024 - i,
                     channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
                     actionType: ActionType.Default,
-                    title: Texts.jidloChannelName.i18n(),
+                    title: Texts.jidloChannelName,
                     payload: {
                       NotificationIds.payloadUser: loginData.users[i].username,
                       NotificationIds.payloadIndex: k.toString(),
@@ -240,13 +240,13 @@ Future<void> doNotifications({bool force = false}) async {
                 id: 1024 - i,
                 channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
                 actionType: ActionType.Default,
-                title: Texts.jidloChannelName.i18n(),
+                title: Texts.jidloChannelName,
                 payload: {
                   NotificationIds.payloadUser: loginData.users[i].username,
                   NotificationIds.payloadIndex: k.toString(),
                   NotificationIds.payloadIndexDne: jidelnicek.den.difference(minimalDate).inDays.toString(),
                 },
-                body: jidelnicek.jidla[0].nazev,
+                body: jidelnicek.jidla[k].kategorizovano?.hlavniJidlo ?? jidelnicek.jidla[k].nazev,
               ),
             );
             break;
@@ -257,11 +257,11 @@ Future<void> doNotifications({bool force = false}) async {
               id: 1024,
               channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
               actionType: ActionType.Default,
-              title: Texts.jidloChannelName.i18n(),
+              title: Texts.jidloChannelName,
               payload: {
                 NotificationIds.payloadUser: loginData.users[i].username,
               },
-              body: Texts.noFood.i18n(),
+              body: Texts.noFood,
             ),
           );
         } else {
@@ -317,14 +317,14 @@ Future<void> doNotifications({bool force = false}) async {
             id: 512 - i,
             channelKey: '${NotificationIds.kreditChannel}${loginData.users[i].username}_${loginData.users[i].url}',
             actionType: ActionType.Default,
-            title: Texts.notificationDochaziVamKredit.i18n(),
+            title: Texts.notificationDochaziVamKredit,
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
-            body: Texts.notificationKreditPro.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', kredit.toString()]),
+            body: Texts.notificationKreditPro(uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', uzivatel.kredit.toInt()),
           ),
           actionButtons: [
             NotificationActionButton(
               key: '${NotificationIds.kreditChannel}${loginData.users[i].username}_${loginData.users[i].url}',
-              label: Texts.notificationZtlumit.i18n(),
+              label: Texts.notificationZtlumit,
               actionType: ActionType.Default,
               enabled: true,
             ),
@@ -357,21 +357,21 @@ Future<void> doNotifications({bool force = false}) async {
             id: i,
             channelKey: '${NotificationIds.objednanoChannel}${loginData.users[i].username}_${loginData.users[i].url}',
             actionType: ActionType.Default,
-            title: Texts.notificationObjednejteSi.i18n(),
+            title: Texts.notificationObjednejteSi,
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
-            body: Texts.notificationObjednejteSiDetail.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '']),
+            body: Texts.notificationObjednejteSiDetail(uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? ''),
           ),
           actionButtons: [
             NotificationActionButton(
               key: '${NotificationIds.objednatButton}${loginData.users[i].username}_${loginData.users[i].url}',
-              label: Texts.objednatAction.i18n(),
+              label: Texts.objednatAction,
               isDangerousOption: false,
               actionType: ActionType.Default,
               enabled: true,
             ),
             NotificationActionButton(
               key: '${NotificationIds.objednanoChannel}${loginData.users[i].username}_${loginData.users[i].url}',
-              label: Texts.notificationZtlumit.i18n(),
+              label: Texts.notificationZtlumit,
               actionType: ActionType.Default,
               enabled: true,
             ),
@@ -387,7 +387,7 @@ Future<void> doNotifications({bool force = false}) async {
           id: 10,
           channelKey: NotificationIds.channelElse,
           actionType: ActionType.Default,
-          title: Texts.errorsUndefined.i18n(),
+          title: Texts.nastalaChyba,
           body: e.toString(),
         ));
       }
@@ -412,7 +412,11 @@ class NotificationController {
         await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
       } else if (receivedAction.buttonKeyPressed.substring(0, 9) == NotificationIds.objednatButton) {
+        String username = receivedAction.buttonKeyPressed.substring(9).split('_')[0];
         LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
+        if (loggedInCanteen.uzivatel != null && loggedInCanteen.uzivatel?.uzivatelskeJmeno == username) {
+          tempLoggedInCanteen = loggedInCanteen;
+        }
         await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9).split('_')[0]);
       }
     }
@@ -446,9 +450,7 @@ class NotificationController {
 
   /// Use this method to detect if the user dismissed a notification
   @pragma("vm:entry-point")
-  static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {
-    handleNotificationAction(receivedAction);
-  }
+  static Future<void> onDismissActionReceivedMethod(ReceivedAction receivedAction) async {}
 
   /// This method is used to detect when an action button or notification is pressed when the application is open.
   @pragma("vm:entry-point")

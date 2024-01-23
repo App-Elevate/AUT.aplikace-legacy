@@ -50,6 +50,26 @@ class AnalyticsEventIds {
 
 // Strings shown to the user
 class Texts {
+  /// initAwesome and notifications in general have a problem with the localization package so we just force czech
+  static String notificationsFor(String user) => 'Notifikace pro $user';
+  static const String jidloChannelName = 'Dnešní jídlo';
+  static String jidloChannelDescription(String user) => 'Notifikace každý den o tom jaké je dnes jídlo pro $user';
+  static const String dochazejiciKreditChannelName = 'Docházející kredit';
+  static String dochazejiciKreditChannelDescription(String user) => 'Notifikace o tom, zda vám dochází kredit týden dopředu pro $user';
+  static const String objednanoChannelName = 'Objednáno?';
+  static String objednanoChannelDescription(String user) => "Notifikace každý den o tom jaké je dnes jídlo pro $user";
+  static const String notificationOther = 'Ostatní';
+  static const String notificationOtherDescription = 'Ostatní notifikace, např. chybové hlášky...';
+  static const String gettingDataNotifications = 'Získávám data pro notifikace';
+  static const String notificationDochaziVamKredit = 'Dochází vám kredit!';
+  static String notificationKreditPro(String jmeno, String prijmeni, int kredit) => 'Kredit pro $jmeno $prijmeni: $kredit Kč';
+  static const String notificationZtlumit = 'Ztlumit na týden';
+  static const String notificationObjednejteSi = 'Objednejte si na příští týden';
+  static String notificationObjednejteSiDetail(String jmeno, String prijmeni) => 'Uživatel $jmeno $prijmeni si stále ještě neobjenal na příští týden';
+  static const String objednatAction = 'Objednat náhodně';
+  static const String notificationNoFood = 'Žádná jídla pro tento den';
+  static const String nastalaChyba = 'Nastala chyba';
+
   static const String toastsExit = 'toast-exit';
 
   static const String errorsBadLogin = 'errors-bad-login';
@@ -186,28 +206,6 @@ class Texts {
   static const String obedTextVlozitNaBurzu = 'obed-text-vlozit-na-burzu';
   static const String obedTextObjednatZBurzy = 'obed-text-objednat-z-burzy';
   static const String obedTextOdebratZBurzy = 'obed-text-odebrat-z-burzy';
-
-  static const String notificationsFor = 'notifications-for';
-  static const String jidloChannelName = 'jidlo-channel-name';
-  static const String jidloChannelDescription = 'jidlo-channel-description';
-  static const String dochazejiciKreditChannelName = 'dochazejici-kredit-channel-name';
-  static const String dochazejiciKreditChannelDescription = 'dochazejici-kredit-channel-description';
-  static const String objednanoChannelName = 'objednano-channel-name';
-  static const String objednanoChannelDescription = 'objednano-channel-description';
-  static const String channelGroupNameOstatni = 'other';
-  static const String channelNameOstatni = 'other';
-  static const String channelDescriptionOstatni = 'other-description';
-
-  static const String gettingDataNotifications = 'getting-data-notifications';
-
-  static const String notificationDochaziVamKredit = 'notification-dochazi-vam-kredit';
-  static const String notificationKreditPro = 'notification-kredit-pro';
-  static const String notificationZtlumit = 'notification-ztlumit';
-
-  static const String notificationObjednejteSi = 'notification-objednejte-si';
-  static const String notificationObjednejteSiDetail = 'notification-objednejte-si-detail';
-
-  static const String objednatAction = 'objednat-action';
 }
 
 class Links {
