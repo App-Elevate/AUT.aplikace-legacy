@@ -111,7 +111,7 @@ class MainAccountDrawer extends StatelessWidget {
                           //TODO: implement location picker
                           if (locations.isNotEmpty)
                             FutureBuilder(
-                                future: loggedInCanteen.readIntData(Prefs.location + username),
+                                future: loggedInCanteen.readIntData('${Prefs.location}${username}_${loggedInCanteen.canteenDataUnsafe!.url}'),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     pickedLocationNotifier.value = snapshot.data as int;
@@ -274,7 +274,9 @@ class MainAccountDrawer extends StatelessWidget {
                                     loggedInCanteen.zmenitVydejnu(value + 1);
                                     Navigator.of(context).popUntil((route) => route.isFirst);
                                     SharedPreferences prefs = await SharedPreferences.getInstance();
-                                    prefs.setInt(Prefs.location + (loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? ''), value);
+                                    prefs.setInt(
+                                        '${Prefs.location}${loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? ''}_${loggedInCanteen.canteenDataUnsafe!.url}',
+                                        value);
                                     setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
                                   },
                                   child: ListTile(

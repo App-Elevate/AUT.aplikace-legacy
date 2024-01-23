@@ -80,14 +80,14 @@ Future<bool> initAwesome() async {
     LoggedInUser user = loginData.users[i];
     notificationChannelGroups.add(
       NotificationChannelGroup(
-        channelGroupKey: NotificationIds.channelGroup + user.username,
+        channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
         channelGroupName: Texts.notificationsFor.i18n([user.username]),
       ),
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: NotificationIds.channelGroup + user.username,
-        channelKey: NotificationIds.dnesniJidloChannel + user.username,
+        channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
+        channelKey: '${NotificationIds.dnesniJidloChannel}${user.username}_${user.url}',
         channelName: Texts.jidloChannelName.i18n(),
         channelShowBadge: true,
         channelDescription: Texts.jidloChannelDescription.i18n([user.username]),
@@ -97,8 +97,8 @@ Future<bool> initAwesome() async {
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: NotificationIds.channelGroup + user.username,
-        channelKey: NotificationIds.kreditChannel + user.username,
+        channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
+        channelKey: '${NotificationIds.kreditChannel}${user.username}_${user.url}',
         channelName: Texts.dochazejiciKreditChannelName.i18n(),
         channelShowBadge: true,
         channelDescription: Texts.dochazejiciKreditChannelDescription.i18n([user.username]),
@@ -108,8 +108,8 @@ Future<bool> initAwesome() async {
     );
     notificationChannels.add(
       NotificationChannel(
-        channelGroupKey: NotificationIds.channelGroup + user.username,
-        channelKey: NotificationIds.objednanoChannel + user.username,
+        channelGroupKey: '${NotificationIds.channelGroup}${user.username}_${user.url}',
+        channelKey: '${NotificationIds.objednanoChannel}${user.username}_${user.url}',
         channelName: Texts.objednanoChannelName.i18n(),
         channelShowBadge: true,
         channelDescription: Texts.objednanoChannelDescription.i18n([user.username]),
@@ -174,21 +174,23 @@ Future<void> doNotifications({bool force = false}) async {
     int difference = time.difference(now).inMinutes;
     //difference from time of day to now
 
-    if ((await loggedInCanteen.readData(Prefs.lastJidloDneCheck + loginData.users[i].username) == nowString ||
-            await loggedInCanteen.readData(Prefs.dailyFoodInfo + loginData.users[i].username) != '1' ||
+    if ((await loggedInCanteen.readData('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString ||
+            await loggedInCanteen.readData('${Prefs.dailyFoodInfo}${loginData.users[i].username}_${loginData.users[i].url}') != '1' ||
             difference > 120 ||
             difference < -120) &&
         !force) {
       jidloDne = false;
     } else {
-      await loggedInCanteen.saveData(Prefs.lastJidloDneCheck + loginData.users[i].username, nowString);
+      await loggedInCanteen.saveData('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
     }
 
-    if (await loggedInCanteen.readData(Prefs.lastNotificationCheck + loginData.users[i].username) == nowString && !force) {
+    if (await loggedInCanteen.readData('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString &&
+        !force) {
       kredit = false;
     }
 
-    if (await loggedInCanteen.readData(Prefs.lastNotificationCheck + loginData.users[i].username) == nowString && !force) {
+    if (await loggedInCanteen.readData('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString &&
+        !force) {
       objednavka = false;
     }
     /*
@@ -205,7 +207,7 @@ Future<void> doNotifications({bool force = false}) async {
     if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
-    loggedInCanteen.saveData(Prefs.lastNotificationCheck + loginData.users[i].username, nowString);
+    loggedInCanteen.saveData('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
 
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
@@ -220,7 +222,7 @@ Future<void> doNotifications({bool force = false}) async {
               AwesomeNotifications().createNotification(
                   content: NotificationContent(
                     id: 1024 - i,
-                    channelKey: NotificationIds.dnesniJidloChannel + loginData.users[i].username,
+                    channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
                     actionType: ActionType.Default,
                     title: Texts.jidloChannelName.i18n(),
                     payload: {
@@ -236,7 +238,7 @@ Future<void> doNotifications({bool force = false}) async {
             AwesomeNotifications().createNotification(
               content: NotificationContent(
                 id: 1024 - i,
-                channelKey: NotificationIds.dnesniJidloChannel + loginData.users[i].username,
+                channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
                 actionType: ActionType.Default,
                 title: Texts.jidloChannelName.i18n(),
                 payload: {
@@ -253,7 +255,7 @@ Future<void> doNotifications({bool force = false}) async {
           AwesomeNotifications().createNotification(
             content: NotificationContent(
               id: 1024,
-              channelKey: NotificationIds.dnesniJidloChannel + loginData.users[i].username,
+              channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
               actionType: ActionType.Default,
               title: Texts.jidloChannelName.i18n(),
               payload: {
@@ -292,7 +294,7 @@ Future<void> doNotifications({bool force = false}) async {
         }
       }
       //parse ignore date to DateTime
-      String? ignoreDateStr = await loggedInCanteen.readData(Prefs.kreditNotifications + loginData.users[i].username);
+      String? ignoreDateStr = await loggedInCanteen.readData('${Prefs.kreditNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
       DateTime ignoreDate;
       switch (ignoreDateStr) {
         //not ignored
@@ -313,7 +315,7 @@ Future<void> doNotifications({bool force = false}) async {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: 512 - i,
-            channelKey: NotificationIds.kreditChannel + loginData.users[i].username,
+            channelKey: '${NotificationIds.kreditChannel}${loginData.users[i].username}_${loginData.users[i].url}',
             actionType: ActionType.Default,
             title: Texts.notificationDochaziVamKredit.i18n(),
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
@@ -321,7 +323,7 @@ Future<void> doNotifications({bool force = false}) async {
           ),
           actionButtons: [
             NotificationActionButton(
-              key: NotificationIds.kreditChannel + loginData.users[i].username,
+              key: '${NotificationIds.kreditChannel}${loginData.users[i].username}_${loginData.users[i].url}',
               label: Texts.notificationZtlumit.i18n(),
               actionType: ActionType.Default,
               enabled: true,
@@ -331,7 +333,8 @@ Future<void> doNotifications({bool force = false}) async {
       }
       //pokud chybí aspoň 3 obědy z příštích 10 dní
       //parse ignore date to DateTime
-      String? ignoreDateStrObjednano = await loggedInCanteen.readData(Prefs.nemateObjednanoNotifications + loginData.users[i].username);
+      String? ignoreDateStrObjednano =
+          await loggedInCanteen.readData('${Prefs.nemateObjednanoNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
       DateTime ignoreDateObjednano;
       switch (ignoreDateStrObjednano) {
         //not ignored
@@ -352,7 +355,7 @@ Future<void> doNotifications({bool force = false}) async {
         AwesomeNotifications().createNotification(
           content: NotificationContent(
             id: i,
-            channelKey: NotificationIds.objednanoChannel + loginData.users[i].username,
+            channelKey: '${NotificationIds.objednanoChannel}${loginData.users[i].username}_${loginData.users[i].url}',
             actionType: ActionType.Default,
             title: Texts.notificationObjednejteSi.i18n(),
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
@@ -360,14 +363,14 @@ Future<void> doNotifications({bool force = false}) async {
           ),
           actionButtons: [
             NotificationActionButton(
-              key: NotificationIds.objednatButton + loginData.users[i].username,
+              key: '${NotificationIds.objednatButton}${loginData.users[i].username}_${loginData.users[i].url}',
               label: Texts.objednatAction.i18n(),
               isDangerousOption: false,
               actionType: ActionType.Default,
               enabled: true,
             ),
             NotificationActionButton(
-              key: NotificationIds.objednanoChannel + loginData.users[i].username,
+              key: '${NotificationIds.objednanoChannel}${loginData.users[i].username}_${loginData.users[i].url}',
               label: Texts.notificationZtlumit.i18n(),
               actionType: ActionType.Default,
               enabled: true,
@@ -410,7 +413,7 @@ class NotificationController {
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
       } else if (receivedAction.buttonKeyPressed.substring(0, 9) == NotificationIds.objednatButton) {
         LoggedInCanteen tempLoggedInCanteen = LoggedInCanteen();
-        await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9));
+        await tempLoggedInCanteen.quickOrder(receivedAction.buttonKeyPressed.substring(9).split('_')[0]);
       }
     }
     //přepnutí účtu, když uživatel klikne na notifikaci
