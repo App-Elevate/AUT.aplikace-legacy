@@ -289,7 +289,7 @@ class _MyAppState extends State<MyApp> {
                 MapLocalization.delegate,
               ],
               supportedLocales: const [
-                Locale('cs', 'cz'),
+                Locale('cs', 'CZ'),
                 //Locale('en', 'US'),
               ],
               localeResolutionCallback: (locale, supportedLocales) {
