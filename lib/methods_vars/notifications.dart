@@ -155,7 +155,7 @@ Future<void> doNotifications({bool force = false}) async {
     locked: true,
     channelKey: NotificationIds.channelElse,
     actionType: ActionType.Default,
-    title: Texts.gettingDataNotifications.i18n(),
+    title: Texts.gettingDataNotifications,
   ));
   // Don't send notifications before 9 and after 22
   for (int i = 0; i < loginData.users.length && !((DateTime.now().hour < 9 || DateTime.now().hour > 22) && !force); i++) {
@@ -224,7 +224,7 @@ Future<void> doNotifications({bool force = false}) async {
                     id: 1024 - i,
                     channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
                     actionType: ActionType.Default,
-                    title: Texts.jidloChannelName.i18n(),
+                    title: Texts.jidloChannelName,
                     payload: {
                       NotificationIds.payloadUser: loginData.users[i].username,
                       NotificationIds.payloadIndex: k.toString(),
@@ -240,7 +240,7 @@ Future<void> doNotifications({bool force = false}) async {
                 id: 1024 - i,
                 channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
                 actionType: ActionType.Default,
-                title: Texts.jidloChannelName.i18n(),
+                title: Texts.jidloChannelName,
                 payload: {
                   NotificationIds.payloadUser: loginData.users[i].username,
                   NotificationIds.payloadIndex: k.toString(),
@@ -257,11 +257,11 @@ Future<void> doNotifications({bool force = false}) async {
               id: 1024,
               channelKey: '${NotificationIds.dnesniJidloChannel}${loginData.users[i].username}_${loginData.users[i].url}',
               actionType: ActionType.Default,
-              title: Texts.jidloChannelName.i18n(),
+              title: Texts.jidloChannelName,
               payload: {
                 NotificationIds.payloadUser: loginData.users[i].username,
               },
-              body: Texts.noFood.i18n(),
+              body: Texts.noFood,
             ),
           );
         } else {
@@ -317,14 +317,14 @@ Future<void> doNotifications({bool force = false}) async {
             id: 512 - i,
             channelKey: '${NotificationIds.kreditChannel}${loginData.users[i].username}_${loginData.users[i].url}',
             actionType: ActionType.Default,
-            title: Texts.notificationDochaziVamKredit.i18n(),
+            title: Texts.notificationDochaziVamKredit,
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
-            body: Texts.notificationKreditPro.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', kredit.toString()]),
+            body: Texts.notificationKreditPro(uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '', uzivatel.kredit.toInt()),
           ),
           actionButtons: [
             NotificationActionButton(
               key: '${NotificationIds.kreditChannel}${loginData.users[i].username}_${loginData.users[i].url}',
-              label: Texts.notificationZtlumit.i18n(),
+              label: Texts.notificationZtlumit,
               actionType: ActionType.Default,
               enabled: true,
             ),
@@ -357,21 +357,21 @@ Future<void> doNotifications({bool force = false}) async {
             id: i,
             channelKey: '${NotificationIds.objednanoChannel}${loginData.users[i].username}_${loginData.users[i].url}',
             actionType: ActionType.Default,
-            title: Texts.notificationObjednejteSi.i18n(),
+            title: Texts.notificationObjednejteSi,
             payload: {NotificationIds.payloadUser: loginData.users[i].username},
-            body: Texts.notificationObjednejteSiDetail.i18n([uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? '']),
+            body: Texts.notificationObjednejteSiDetail(uzivatel.jmeno ?? '', uzivatel.prijmeni ?? uzivatel.uzivatelskeJmeno ?? ''),
           ),
           actionButtons: [
             NotificationActionButton(
               key: '${NotificationIds.objednatButton}${loginData.users[i].username}_${loginData.users[i].url}',
-              label: Texts.objednatAction.i18n(),
+              label: Texts.objednatAction,
               isDangerousOption: false,
               actionType: ActionType.Default,
               enabled: true,
             ),
             NotificationActionButton(
               key: '${NotificationIds.objednanoChannel}${loginData.users[i].username}_${loginData.users[i].url}',
-              label: Texts.notificationZtlumit.i18n(),
+              label: Texts.notificationZtlumit,
               actionType: ActionType.Default,
               enabled: true,
             ),
@@ -387,7 +387,7 @@ Future<void> doNotifications({bool force = false}) async {
           id: 10,
           channelKey: NotificationIds.channelElse,
           actionType: ActionType.Default,
-          title: Texts.errorsUndefined.i18n(),
+          title: Texts.nastalaChyba,
           body: e.toString(),
         ));
       }
