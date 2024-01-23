@@ -217,7 +217,7 @@ class LoggedInCanteen {
       return Future.error(ConnectionErrors.connectionFailed);
     }
     if (indexLunches) {
-      int vydejna = (await readIntData(Prefs.location + username) ?? 0) + 1;
+      int vydejna = (await readIntData('${Prefs.location}${username}_$url') ?? 0) + 1;
       (await canteenInstance).vydejna = vydejna;
       await _indexLunchesMonth();
       smartPreIndexing(DateTime.now());
@@ -287,7 +287,7 @@ class LoggedInCanteen {
         _currentlyLoading[den]!.completeError(e);
         _currentlyLoading.remove(den);
       }
-      if (e == 'Nejdříve se musíte přihlásit') {
+      if (e == CanteenLibExceptions.jePotrebaSePrihlasit) {
         return _ziskatJidelnicekDen(den, tries: tries + 1);
       } else if (analyticsEnabledGlobally && analytics != null) {
         FirebaseCrashlytics.instance.log(e.toString());
@@ -485,9 +485,9 @@ class LoggedInCanteen {
       }
     }
     if (!isDuplicate) {
-      AwesomeNotifications().removeChannel('jidlo_channel_${loginData.users[id].username}');
-      AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[id].username}');
-      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');
+      AwesomeNotifications().removeChannel('${NotificationIds.dnesniJidloChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${loginData.users[id].username}_${loginData.users[id].url}');
     }
     //removing just the one item from the array
 
@@ -518,8 +518,8 @@ class LoggedInCanteen {
     loginData.users.clear();
     loginData.currentlyLoggedInId = null;
     for (int id = 0; id < loginData.users.length; id++) {
-      AwesomeNotifications().removeChannel('objednano_channel_${loginData.users[id].username}');
-      AwesomeNotifications().removeChannel('kredit_channel_${loginData.users[id].username}');
+      AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${loginData.users[id].username}_${loginData.users[id].url}');
     }
     //even though I don't like this it is safe because this is called rarely
     _canteenInstance = null;

@@ -3,11 +3,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
-
 import 'package:autojidelna/local_imports.dart';
 
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:localization/localization.dart';
 
 class LoginScreen extends StatelessWidget {
