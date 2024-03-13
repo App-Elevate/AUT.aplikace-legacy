@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Přidána podpora pro více jídelen
+
 ## 1.3.0
 
 - Předělaný kalendář
