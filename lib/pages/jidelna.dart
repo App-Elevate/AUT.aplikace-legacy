@@ -161,16 +161,37 @@ class MainAppScreenState extends State<MainAppScreen> {
   Builder jidelnicekWidget() {
     return Builder(
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 4.0),
-          child: Column(
-            children: [
-              //toolbar
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Column(
+          children: [
+            //toolbar
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //open calendar button
-                  MaterialButton(
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      fixedSize: Size(MediaQuery.sizeOf(context).width * .5, 45),
+                      side: BorderSide(color: Theme.of(context).colorScheme.onSurfaceVariant, width: 1.75),
+                    ),
+                    onPressed: () async {
+                      DateTime currentDate = dateListener.value;
+                      var datePicked = await CustomDatePicker().showDatePicker(context, currentDate);
+                      if (datePicked == null) return;
+                      changeDate(newDate: datePicked, animateToPage: true);
+                    },
+                    icon: const Icon(Icons.calendar_today_rounded, size: 27.5),
+                    label: ValueListenableBuilder(
+                      valueListenable: dateListener,
+                      builder: (ctx, value, child) {
+                        DateTime currentDate = value;
+                        String dayOfWeek = loggedInCanteen.ziskatDenZData(currentDate.weekday);
+                        return Text("${currentDate.day}. ${currentDate.month} - $dayOfWeek");
+                      },
+                    ),
+                  ),
+                  /*MaterialButton(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     minWidth: 0,
@@ -184,7 +205,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                     },
                     child: const Icon(Icons.calendar_today),
                   ),
-
+              
                   //Date
                   ValueListenableBuilder(
                     valueListenable: dateListener,
@@ -240,7 +261,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                       );
                     },
                   ),
-
+                  */
                   //go to today button
                   MaterialButton(
                     splashColor: Colors.transparent,
@@ -263,22 +284,22 @@ class MainAppScreenState extends State<MainAppScreen> {
                   ),
                 ],
               ),
-              Expanded(
-                child: PageView.builder(
-                  controller: pageviewController,
-                  onPageChanged: (value) {
-                    changeDate(index: value);
-                  },
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return jidelnicekDenWidget(
-                      index,
-                    );
-                  },
-                ),
+            ),
+            Expanded(
+              child: PageView.builder(
+                controller: pageviewController,
+                onPageChanged: (value) {
+                  changeDate(index: value);
+                },
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return jidelnicekDenWidget(
+                    index,
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
