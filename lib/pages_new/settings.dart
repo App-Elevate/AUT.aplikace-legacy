@@ -5,7 +5,7 @@ class SettingAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return AppBar();
   }
 
   @override
