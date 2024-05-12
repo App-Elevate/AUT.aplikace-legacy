@@ -18,12 +18,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: [
+      appBar: <PreferredSizeWidget>[
         const CanteenAppBar(),
         const AccountAppBar(),
         const SettingAppBar(),
       ][pageIndex],
-      body: [
+      body: <Widget>[
         const CanteenPage(),
         const AccountPage(),
         const SettingPage(),
