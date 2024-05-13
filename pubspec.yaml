@@ -54,6 +54,7 @@ dependencies:
   awesome_notifications: ^0.8.2
   material_symbols_icons: ^4.2706.0
   table_calendar: ^3.0.9
+  provider: ^6.1.2
 
   # Firebase
   firebase_core: ^2.15.1
