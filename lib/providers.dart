@@ -57,42 +57,42 @@ class UserPreferences with ChangeNotifier {
   set setThemeStyle(ThemeStyle themeStyle) {
     if (_themeStyle == themeStyle) return;
     _themeStyle = themeStyle;
-    saveStringToSharedPreferences("ThemeStyle", _themeStyle.toString());
+    saveStringToSharedPreferences(Keys.themeStyle, _themeStyle.toString());
     notifyListeners();
   }
 
   /// Setter for theme mode
   set setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
-    saveStringToSharedPreferences("ThemeMode", _themeMode.toString());
+    saveStringToSharedPreferences(Keys.themeMode, _themeMode.toString());
     notifyListeners();
   }
 
   /// Setter for list UI
   set setListUi(bool isListUi) {
     _isListUi = isListUi;
-    saveBoolToSharedPreferences("ListUi", _isListUi);
+    saveBoolToSharedPreferences(Keys.listUi, _isListUi);
     notifyListeners();
   }
 
   /// Setter for pure black
   set setPureBlack(bool isPureBlack) {
     _isPureBlack = isPureBlack;
-    saveBoolToSharedPreferences("PureBlack", _isPureBlack);
+    saveBoolToSharedPreferences(Keys.pureBlack, _isPureBlack);
     notifyListeners();
   }
 
   /// Setter for big calendar markers
   set setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
-    saveBoolToSharedPreferences("BigCalendarMarkers", _bigCalendarMarkers);
+    saveBoolToSharedPreferences(Keys.bigCalendarMarkers, _bigCalendarMarkers);
     notifyListeners();
   }
 
   /// Setter for skip weekends
   set setSkipWeekends(bool skipWeekends) {
     _skipWeekends = skipWeekends;
-    saveBoolToSharedPreferences("SkipWeekends", _skipWeekends);
+    saveBoolToSharedPreferences(Keys.skipWeekends, _skipWeekends);
     notifyListeners();
   }
 }
