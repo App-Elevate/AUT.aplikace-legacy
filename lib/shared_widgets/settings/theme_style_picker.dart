@@ -41,7 +41,7 @@ class ThemeStylePicker extends StatelessWidget {
                     onPressed: () => userPreferences.setThemeStyle = ThemeStyle.values[index],
                     child: Column(
                       children: [
-                        SizedBox(height: 35, child: AppBar()),
+                        SizedBox(height: 35, child: AppBar(automaticallyImplyLeading: false)),
                         const Divider(color: Colors.transparent),
                         foodTileColorSchemePreview(context, theme.colorScheme.primary),
                         foodTileColorSchemePreview(context, theme.colorScheme.secondary),

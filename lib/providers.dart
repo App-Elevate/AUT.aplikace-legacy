@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 /// [isListUi]
 /// [isPureBlack]
 /// [bigCalendarMarkers]
+/// [skipWeekends]
 class UserPreferences with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
   ThemeMode _themeMode = ThemeMode.system;
   bool _isListUi = false;
   bool _isPureBlack = false;
   bool _bigCalendarMarkers = false;
+  bool _skipWeekends = false;
 
   /// Theme style getter
   ThemeStyle get themeStyle => _themeStyle;
@@ -30,18 +32,23 @@ class UserPreferences with ChangeNotifier {
   /// Big calendar markers getter
   bool get bigCalendarMarkers => _bigCalendarMarkers;
 
+  /// Skip weekends getter
+  bool get skipWeekends => _skipWeekends;
+
   void setAll(
     ThemeStyle themeStyle,
     ThemeMode themeMode,
     bool isListUi,
     bool isPureBlack,
     bool bigCalendarMarkers,
+    bool skipWeekends,
   ) {
     _themeStyle = themeStyle;
     _themeMode = themeMode;
     _isListUi = isListUi;
     _isPureBlack = isPureBlack;
     _bigCalendarMarkers = bigCalendarMarkers;
+    _skipWeekends = skipWeekends;
     notifyListeners();
   }
 
@@ -69,9 +76,15 @@ class UserPreferences with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Setter for bog calendar markers
+  /// Setter for big calendar markers
   set setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
+    notifyListeners();
+  }
+
+  /// Setter for skip weekends
+  set setSkipWeekends(bool skipWeekends) {
+    _skipWeekends = skipWeekends;
     notifyListeners();
   }
 }
