@@ -19,7 +19,9 @@ class ThemeStylePicker extends StatelessWidget {
             padding: const EdgeInsets.all(5),
             itemCount: ThemeStyle.values.length,
             itemBuilder: (context, index) {
-              final theme = Themes.getTheme(ThemeStyle.values[index], isPureBlack: userPreferences.isPureBlack);
+              final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.themeMode == ThemeMode.light;
+              final ThemeData theme = Themes.getTheme(ThemeStyle.values[index], isPureBlack: isBright ? null : userPreferences.isPureBlack);
+
               return Theme(
                 data: theme,
                 child: Padding(
