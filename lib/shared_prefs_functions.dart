@@ -49,3 +49,8 @@ Future<List<String>?> readListStringFromSharedPreferences(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getStringList(key);
 }
+
+Future<void> removeFromSharedPreferences(String key) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove(key);
+}
