@@ -1,5 +1,15 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Class containing getters for all keys used with shared preferences
+class Keys {
+  get themeMode => "ThemeMode";
+  get themeStyle => "ThemeStyle";
+  get listUi => "ListUi";
+  get pureBlack => "PureBlack";
+  get bigCalendarMarkers => "BigCalendarMarkers";
+  get skipWeekends => "SkipWeekends";
+}
+
 void saveIntToSharedPreferences(String key, int value) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setInt(key, value);
