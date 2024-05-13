@@ -1,6 +1,8 @@
 // Purpose: Main file of the app, contains the main function and the main widget of the app as well as the loading screen on startup
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/pages_new/navigation.dart';
+import 'package:autojidelna/providers.dart';
 
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
@@ -12,6 +14,7 @@ import 'package:localization/localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 // Toast for exiting the app
@@ -211,105 +214,108 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // Setting the theme
-    return FutureBuilder(
-      future: loggedInCanteen.readListData(Prefs.theme),
-      initialData: ThemeMode.system,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          List<String> themeSettings;
-          if (snapshot.data == null) {
-            loggedInCanteen.saveListData(Prefs.theme, ["0", "0", "0"]);
-            themeSettings = ["0", "0", "0"];
-          } else {
-            themeSettings = snapshot.data as List<String>;
-          }
-          ThemeMode themeMode;
-          ThemeStyle themeStyle;
-          bool pureBlack;
-
-          // Migration from v1.2.8 and lower
-          loggedInCanteen.readData("ThemeMode").then((value) {
-            if (value != null && value != "") {
-              themeSettings[0] = value;
-              loggedInCanteen.removeData("ThemeMode");
+    return ChangeNotifierProvider<UserPreferences>(
+      create: (context) => UserPreferences(),
+      child: FutureBuilder(
+        future: loggedInCanteen.readListData(Prefs.theme),
+        initialData: ThemeMode.system,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            List<String> themeSettings;
+            if (snapshot.data == null) {
+              loggedInCanteen.saveListData(Prefs.theme, ["0", "0", "0"]);
+              themeSettings = ["0", "0", "0"];
+            } else {
+              themeSettings = snapshot.data as List<String>;
             }
-          });
+            ThemeMode themeMode;
+            ThemeStyle themeStyle;
+            bool pureBlack;
 
-          switch (themeSettings[0]) {
-            case "2":
-              themeMode = ThemeMode.dark;
-              break;
-            case "1":
-              themeMode = ThemeMode.light;
-              break;
-            default:
-              themeMode = ThemeMode.system;
+            // Migration from v1.2.8 and lower
+            loggedInCanteen.readData("ThemeMode").then((value) {
+              if (value != null && value != "") {
+                themeSettings[0] = value;
+                loggedInCanteen.removeData("ThemeMode");
+              }
+            });
+
+            switch (themeSettings[0]) {
+              case "2":
+                themeMode = ThemeMode.dark;
+                break;
+              case "1":
+                themeMode = ThemeMode.light;
+                break;
+              default:
+                themeMode = ThemeMode.system;
+            }
+            switch (themeSettings[1]) {
+              case "5":
+                themeStyle = ThemeStyle.crimsonEarth;
+                break;
+              case "4":
+                themeStyle = ThemeStyle.evergreenSlate;
+                break;
+              case "3":
+                themeStyle = ThemeStyle.rustOlive;
+                break;
+              case "2":
+                themeStyle = ThemeStyle.blueMauve;
+                break;
+              case "1":
+                themeStyle = ThemeStyle.plumBrown;
+                break;
+              default:
+                themeStyle = ThemeStyle.defaultStyle;
+            }
+            pureBlack = themeSettings[2] == "1";
+            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
           }
-          switch (themeSettings[1]) {
-            case "5":
-              themeStyle = ThemeStyle.crimsonEarth;
-              break;
-            case "4":
-              themeStyle = ThemeStyle.evergreenSlate;
-              break;
-            case "3":
-              themeStyle = ThemeStyle.rustOlive;
-              break;
-            case "2":
-              themeStyle = ThemeStyle.blueMauve;
-              break;
-            case "1":
-              themeStyle = ThemeStyle.plumBrown;
-              break;
-            default:
-              themeStyle = ThemeStyle.defaultStyle;
-          }
-          pureBlack = themeSettings[2] == "1";
-          NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
-        }
 
-        LocalJsonLocalization.delegate.directories = ['assets/lang'];
+          LocalJsonLocalization.delegate.directories = ['assets/lang'];
 
-        return ValueListenableBuilder(
-          valueListenable: NotifyTheme().themeNotifier,
-          builder: (context, themeSettings, child) {
-            bool pureBlack = themeSettings.pureBlack;
-            return MaterialApp(
-              localizationsDelegates: [
-                // delegate from flutter_localization
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
+          return ValueListenableBuilder(
+            valueListenable: NotifyTheme().themeNotifier,
+            builder: (context, themeSettings, child) {
+              bool pureBlack = themeSettings.pureBlack;
+              return MaterialApp(
+                localizationsDelegates: [
+                  // delegate from flutter_localization
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
 
-                // delegate from localization package.
-                //json-file
-                LocalJsonLocalization.delegate,
-                //or map
-                MapLocalization.delegate,
-              ],
-              supportedLocales: const [
-                Locale('cs', 'CZ'),
-                //Locale('en', 'US'),
-              ],
-              localeResolutionCallback: (locale, supportedLocales) {
-                if (supportedLocales.contains(locale)) {
-                  return locale;
-                }
-                // default language
-                return const Locale('cs', 'CZ');
-              },
-              navigatorKey: MyApp.navigatorKey,
-              debugShowCheckedModeBanner: false,
-              //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(themeSettings.themeStyle),
-              darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
-              themeMode: themeSettings.themeMode,
-              home: child,
-            );
-          },
-          child: _pop(),
-        );
-      },
+                  // delegate from localization package.
+                  //json-file
+                  LocalJsonLocalization.delegate,
+                  //or map
+                  MapLocalization.delegate,
+                ],
+                supportedLocales: const [
+                  Locale('cs', 'CZ'),
+                  //Locale('en', 'US'),
+                ],
+                localeResolutionCallback: (locale, supportedLocales) {
+                  if (supportedLocales.contains(locale)) {
+                    return locale;
+                  }
+                  // default language
+                  return const Locale('cs', 'CZ');
+                },
+                navigatorKey: MyApp.navigatorKey,
+                debugShowCheckedModeBanner: false,
+                //debugShowMaterialGrid: true,
+                theme: Themes.getTheme(themeSettings.themeStyle),
+                darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
+                themeMode: context.watch<UserPreferences>().themeMode,
+                home: const NavigationScreen(),
+              );
+            },
+            child: _pop(),
+          );
+        },
+      ),
     );
   }
 
