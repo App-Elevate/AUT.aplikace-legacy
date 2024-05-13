@@ -1,4 +1,4 @@
-import 'package:autojidelna/pages_new/account.dart';
+//import 'package:autojidelna/pages_new/account.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
 import 'package:autojidelna/pages_new/more.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +20,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
     return Scaffold(
       appBar: <PreferredSizeWidget>[
         const CanteenAppBar(),
-        const AccountAppBar(),
+        //const AccountAppBar(),
         const MoreAppBar(),
       ][pageIndex],
       body: <Widget>[
         const CanteenPage(),
-        const AccountPage(),
+        //const AccountPage(),
         const MorePage(),
       ][pageIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -34,22 +34,22 @@ class _NavigationScreenState extends State<NavigationScreen> {
         onTap: changePageIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            activeIcon: Icon(Icons.abc),
-            label: "",
-            tooltip: "",
+            icon: Icon(Icons.menu_book),
+            activeIcon: Icon(Icons.menu_book_outlined),
+            label: "Canteen",
+            tooltip: "Canteen page",
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.abc),
             activeIcon: Icon(Icons.abc),
             label: "",
             tooltip: "",
-          ),
+          ),*/
           BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            activeIcon: Icon(Icons.abc),
-            label: "",
-            tooltip: "",
+            icon: Icon(Icons.more_horiz),
+            activeIcon: Icon(Icons.more_horiz_outlined),
+            label: "More",
+            tooltip: "More page",
           ),
         ],
       ),
