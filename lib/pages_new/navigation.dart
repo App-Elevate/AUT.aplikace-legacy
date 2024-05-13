@@ -1,6 +1,6 @@
 import 'package:autojidelna/pages_new/account.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
-import 'package:autojidelna/pages_new/settings.dart';
+import 'package:autojidelna/pages_new/more.dart';
 import 'package:flutter/material.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -21,12 +21,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
       appBar: <PreferredSizeWidget>[
         const CanteenAppBar(),
         const AccountAppBar(),
-        const SettingAppBar(),
+        const MoreAppBar(),
       ][pageIndex],
       body: <Widget>[
         const CanteenPage(),
         const AccountPage(),
-        const SettingPage(),
+        const MorePage(),
       ][pageIndex],
       bottomNavigationBar: BottomNavigationBar(
         useLegacyColorScheme: false,
