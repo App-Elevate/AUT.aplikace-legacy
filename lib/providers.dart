@@ -1,5 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/shared_prefs_functions.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:flutter/material.dart';
 
 /// Manages user preferences related to UI settings.
