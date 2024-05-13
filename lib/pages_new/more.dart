@@ -22,10 +22,9 @@ class MorePage extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text("Settings"),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const SettingsScreen()),
-            ),
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text("Settings"),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen())),
           )
         ],
       ),
