@@ -280,6 +280,7 @@ class _MyAppState extends State<MyApp> {
             valueListenable: NotifyTheme().themeNotifier,
             builder: (context, themeSettings, child) {
               bool pureBlack = themeSettings.pureBlack;
+              var userPreferences = context.watch<UserPreferences>();
               return MaterialApp(
                 localizationsDelegates: [
                   // delegate from flutter_localization
@@ -307,9 +308,9 @@ class _MyAppState extends State<MyApp> {
                 navigatorKey: MyApp.navigatorKey,
                 debugShowCheckedModeBanner: false,
                 //debugShowMaterialGrid: true,
-                theme: Themes.getTheme(themeSettings.themeStyle),
-                darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
-                themeMode: context.watch<UserPreferences>().themeMode,
+                theme: Themes.getTheme(userPreferences.themeStyle),
+                darkTheme: Themes.getTheme(userPreferences.themeStyle, isPureBlack: pureBlack),
+                themeMode: userPreferences.themeMode,
                 home: const NavigationScreen(),
               );
             },
