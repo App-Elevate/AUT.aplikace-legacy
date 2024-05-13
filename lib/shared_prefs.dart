@@ -2,12 +2,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Class containing getters for all keys used with shared preferences
 class Keys {
-  get themeMode => "ThemeMode";
-  get themeStyle => "ThemeStyle";
-  get listUi => "ListUi";
-  get pureBlack => "PureBlack";
-  get bigCalendarMarkers => "BigCalendarMarkers";
-  get skipWeekends => "SkipWeekends";
+  static get themeMode => "ThemeMode";
+  static get themeStyle => "ThemeStyle";
+  static get listUi => "ListUi";
+  static get pureBlack => "PureBlack";
+  static get bigCalendarMarkers => "BigCalendarMarkers";
+  static get skipWeekends => "SkipWeekends";
 }
 
 void saveIntToSharedPreferences(String key, int value) async {
