@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/shared_prefs_functions.dart';
 import 'package:flutter/material.dart';
 
 /// Manages user preferences related to UI settings.
@@ -54,37 +55,44 @@ class UserPreferences with ChangeNotifier {
 
   /// Setter for theme style
   set setThemeStyle(ThemeStyle themeStyle) {
+    if (_themeStyle == themeStyle) return;
     _themeStyle = themeStyle;
+    saveStringToSharedPreferences("ThemeStyle", _themeStyle.toString());
     notifyListeners();
   }
 
   /// Setter for theme mode
   set setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
+    saveStringToSharedPreferences("ThemeMode", _themeMode.toString());
     notifyListeners();
   }
 
   /// Setter for list UI
   set setListUi(bool isListUi) {
     _isListUi = isListUi;
+    saveBoolToSharedPreferences("ListUi", _isListUi);
     notifyListeners();
   }
 
   /// Setter for pure black
   set setPureBlack(bool isPureBlack) {
     _isPureBlack = isPureBlack;
+    saveBoolToSharedPreferences("PureBlack", _isPureBlack);
     notifyListeners();
   }
 
   /// Setter for big calendar markers
   set setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
+    saveBoolToSharedPreferences("BigCalendarMarkers", _bigCalendarMarkers);
     notifyListeners();
   }
 
   /// Setter for skip weekends
   set setSkipWeekends(bool skipWeekends) {
     _skipWeekends = skipWeekends;
+    saveBoolToSharedPreferences("SkipWeekends", _skipWeekends);
     notifyListeners();
   }
 }
