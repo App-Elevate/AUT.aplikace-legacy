@@ -62,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
             CustomDivider(height: Spacing.short1),
             SwitchListTile(
               title: const Text("Sell your data"),
-              value: false,
+              value: true,
               onChanged: (value) {},
             ),
           ],
