@@ -14,9 +14,10 @@ class AppearanceScreen extends StatelessWidget {
     final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.themeMode == ThemeMode.light;
     final TextStyle? subtitleTextStyle = isBright ? null : const TextStyle(color: Colors.white54);
 
-    final double height1 = MediaQuery.sizeOf(context).height * 0.035;
-    final double height2 = MediaQuery.sizeOf(context).height * 0.045;
-    final double height3 = MediaQuery.sizeOf(context).height * 0.005;
+    const double height1 = 4;
+    const double height2 = 8;
+    const double height3 = 30;
+    const double height4 = 38;
 
     return Scaffold(
       appBar: AppBar(title: const Text("Appearance")),
@@ -25,22 +26,22 @@ class AppearanceScreen extends StatelessWidget {
           children: [
             const CustomDivider(),
             const SectionTitle("Theme"),
-            const CustomDivider(height: 8, isTransparent: false),
-            CustomDivider(height: height1),
+            const CustomDivider(height: height2, isTransparent: false),
+            const CustomDivider(height: height3),
             const ThemeModePicker(),
-            CustomDivider(height: height2),
+            const CustomDivider(height: height4),
             const ThemeStylePicker(),
-            CustomDivider(height: height1),
+            const CustomDivider(height: height3),
             SwitchListTile(
               title: const Text("Pure black dark mode"),
               subtitle: Text("If You Only Knew The Power Of The Dark Side...", style: subtitleTextStyle),
               value: userPreferences.isPureBlack,
               onChanged: isBright ? null : (value) => userPreferences.setPureBlack = value,
             ),
-            CustomDivider(height: height1),
+            const CustomDivider(height: height3),
             const SectionTitle("Display"),
-            const CustomDivider(height: 8, isTransparent: false),
-            CustomDivider(height: height3),
+            const CustomDivider(height: height2, isTransparent: false),
+            const CustomDivider(height: height1),
             // TODO: implement this
             SwitchListTile(
               title: const Text("List UI"),
