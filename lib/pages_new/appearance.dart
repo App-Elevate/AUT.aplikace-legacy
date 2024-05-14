@@ -1,3 +1,4 @@
+import 'package:autojidelna/classes_enums/Spacing.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
@@ -14,11 +15,6 @@ class AppearanceScreen extends StatelessWidget {
     final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.themeMode == ThemeMode.light;
     final TextStyle? subtitleTextStyle = isBright ? null : const TextStyle(color: Colors.white54);
 
-    const double height1 = 4;
-    const double height2 = 8;
-    const double height3 = 30;
-    const double height4 = 38;
-
     return Scaffold(
       appBar: AppBar(title: const Text("Appearance")),
       body: SingleChildScrollView(
@@ -26,22 +22,22 @@ class AppearanceScreen extends StatelessWidget {
           children: [
             const CustomDivider(),
             const SectionTitle("Theme"),
-            const CustomDivider(height: height2, isTransparent: false),
-            const CustomDivider(height: height3),
+            CustomDivider(height: Spacing.short2, isTransparent: false),
+            CustomDivider(height: Spacing.medium1),
             const ThemeModePicker(),
-            const CustomDivider(height: height4),
+            CustomDivider(height: Spacing.medium2),
             const ThemeStylePicker(),
-            const CustomDivider(height: height3),
+            CustomDivider(height: Spacing.medium1),
             SwitchListTile(
               title: const Text("Pure black dark mode"),
               subtitle: Text("If You Only Knew The Power Of The Dark Side...", style: subtitleTextStyle),
               value: userPreferences.isPureBlack,
               onChanged: isBright ? null : (value) => userPreferences.setPureBlack = value,
             ),
-            const CustomDivider(height: height3),
+            CustomDivider(height: Spacing.medium1),
             const SectionTitle("Display"),
-            const CustomDivider(height: height2, isTransparent: false),
-            const CustomDivider(height: height1),
+            CustomDivider(height: Spacing.short2, isTransparent: false),
+            CustomDivider(height: Spacing.short1),
             // TODO: implement this
             SwitchListTile(
               title: const Text("List UI"),
