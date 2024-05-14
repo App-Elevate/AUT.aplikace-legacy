@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 
 /// Manages user preferences related to UI settings.
 ///
-/// [themeStyle]
-/// [themeMode]
-/// [isListUi]
-/// [isPureBlack]
-/// [bigCalendarMarkers]
-/// [skipWeekends]
+/// [themeStyle]            | Colorscheme of the app
+///
+/// [themeMode]             | Theme mode of the app
+///
+/// [isListUi]              | If true, Canteen menu is displayed in a list
+///
+/// [isPureBlack]           | If true, dark mode joins the dark side of the force
+///
+/// [bigCalendarMarkers]    | If true,  displays big markers in calendar
+///
+/// [skipWeekends]          | If true, doesnt display or skips weekends in Canteen menu
 class UserPreferences with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
   ThemeMode _themeMode = ThemeMode.system;
@@ -36,20 +41,20 @@ class UserPreferences with ChangeNotifier {
   /// Skip weekends getter
   bool get skipWeekends => _skipWeekends;
 
-  void setAll(
-    ThemeStyle themeStyle,
-    ThemeMode themeMode,
-    bool isListUi,
-    bool isPureBlack,
-    bool bigCalendarMarkers,
-    bool skipWeekends,
-  ) {
-    _themeStyle = themeStyle;
-    _themeMode = themeMode;
-    _isListUi = isListUi;
-    _isPureBlack = isPureBlack;
-    _bigCalendarMarkers = bigCalendarMarkers;
-    _skipWeekends = skipWeekends;
+  void setAll({
+    ThemeStyle? themeStyle,
+    ThemeMode? themeMode,
+    bool? isListUi,
+    bool? isPureBlack,
+    bool? bigCalendarMarkers,
+    bool? skipWeekends,
+  }) {
+    _themeStyle = themeStyle ?? _themeStyle;
+    _themeMode = themeMode ?? _themeMode;
+    _isListUi = isListUi ?? _isListUi;
+    _isPureBlack = isPureBlack ?? _isPureBlack;
+    _bigCalendarMarkers = bigCalendarMarkers ?? _bigCalendarMarkers;
+    _skipWeekends = skipWeekends ?? _skipWeekends;
     notifyListeners();
   }
 
@@ -93,6 +98,54 @@ class UserPreferences with ChangeNotifier {
   set setSkipWeekends(bool skipWeekends) {
     _skipWeekends = skipWeekends;
     saveBoolToSharedPreferences(Keys.skipWeekends, _skipWeekends);
+    notifyListeners();
+  }
+}
+
+class NotificationPreferences with ChangeNotifier {
+  bool _todaysFood = false;
+  TimeOfDay _sendTodaysFood = const TimeOfDay(hour: 11, minute: 0);
+  bool _lowCredit = false;
+  bool _weekLongFamine = false;
+
+  bool get todaysFood => _todaysFood;
+  TimeOfDay get sendTodaysFood => _sendTodaysFood;
+  bool get lowCredit => _lowCredit;
+  bool get weekLongFamine => _weekLongFamine;
+
+  void setAll({
+    bool? todaysFood,
+    TimeOfDay? sendTodaysFood,
+    bool? lowCredit,
+    bool? weekLongFamine,
+  }) {
+    _todaysFood = todaysFood ?? _todaysFood;
+    _sendTodaysFood = sendTodaysFood ?? _sendTodaysFood;
+    _lowCredit = lowCredit ?? _lowCredit;
+    _weekLongFamine = weekLongFamine ?? _weekLongFamine;
+  }
+
+  set setTodaysFood(bool todaysFood) {
+    _todaysFood = todaysFood;
+    saveBoolToSharedPreferences(Keys.todaysFood, _todaysFood);
+    notifyListeners();
+  }
+
+  set setSendTodaysFood(TimeOfDay sendTodaysFood) {
+    _sendTodaysFood = sendTodaysFood;
+    saveStringToSharedPreferences(Keys.sendTodaysFood, _sendTodaysFood.toString());
+    notifyListeners();
+  }
+
+  set setLowCredit(bool lowCredit) {
+    _lowCredit = lowCredit;
+    saveBoolToSharedPreferences(Keys.lowCredit, _lowCredit);
+    notifyListeners();
+  }
+
+  set setWeekLongFamine(bool weekLongFamine) {
+    _weekLongFamine = weekLongFamine;
+    saveBoolToSharedPreferences(Keys.weekLongFamine, _weekLongFamine);
     notifyListeners();
   }
 }
