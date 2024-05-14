@@ -215,8 +215,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // Setting the theme
-    return ChangeNotifierProvider<UserPreferences>(
-      create: (context) => UserPreferences(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserPreferences>(create: (context) => UserPreferences()),
+        ChangeNotifierProvider<NotificationPreferences>(create: (context) => NotificationPreferences()),
+      ],
       child: FutureBuilder(
         future: loggedInCanteen.readListData(Prefs.theme),
         initialData: ThemeMode.system,
