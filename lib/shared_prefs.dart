@@ -8,6 +8,10 @@ class Keys {
   static get pureBlack => "PureBlack";
   static get bigCalendarMarkers => "BigCalendarMarkers";
   static get skipWeekends => "SkipWeekends";
+  static get todaysFood => "TodaysFood";
+  static get sendTodaysFood => "SendTodaysFood";
+  static get lowCredit => "LowCredit";
+  static get weekLongFamine => "WeekLongFamine";
 }
 
 void saveIntToSharedPreferences(String key, int value) async {
