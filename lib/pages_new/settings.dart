@@ -15,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
 
     void pickTimeToSend() async {
       TimeOfDay savedTimeOfDay = notificationPreferences.sendTodaysFood;
-      notificationPreferences.setSendTodaysFood = await showTimePicker(context: context, initialTime: savedTimeOfDay) ?? savedTimeOfDay;
+      notificationPreferences.setSendTodaysFood(await showTimePicker(context: context, initialTime: savedTimeOfDay) ?? savedTimeOfDay);
     }
 
     return Scaffold(
@@ -35,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
             SwitchListTile(
               title: const Text("Today's food"),
               value: notificationPreferences.todaysFood,
-              onChanged: (value) => notificationPreferences.setTodaysFood = value,
+              onChanged: (value) => notificationPreferences.setTodaysFood,
             ),
             ListTile(
               title: const Text("Time?"),
@@ -49,12 +49,12 @@ class SettingsScreen extends StatelessWidget {
             SwitchListTile(
               title: const Text("Low Credit"),
               value: notificationPreferences.lowCredit,
-              onChanged: (value) => notificationPreferences.setLowCredit = value,
+              onChanged: (value) => notificationPreferences.setLowCredit,
             ),
             SwitchListTile(
               title: const Text("No food"),
               value: notificationPreferences.weekLongFamine,
-              onChanged: (value) => notificationPreferences.setWeekLongFamine = value,
+              onChanged: (value) => notificationPreferences.setWeekLongFamine,
             ),
             CustomDivider(height: Spacing.short2),
             const SectionTitle("Data collection"),

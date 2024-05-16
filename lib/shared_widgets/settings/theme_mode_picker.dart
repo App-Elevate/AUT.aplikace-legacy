@@ -13,7 +13,7 @@ class ThemeModePicker extends StatelessWidget {
         builder: (context, userPreferences, child) => SegmentedButton<ThemeMode>(
           showSelectedIcon: false,
           selected: {userPreferences.themeMode},
-          onSelectionChanged: (Set<ThemeMode> selected) => userPreferences.setThemeMode = selected.first,
+          onSelectionChanged: (Set<ThemeMode> selected) => userPreferences.setThemeMode(selected.first),
           segments: const [
             ButtonSegment<ThemeMode>(value: ThemeMode.system, label: Text("System")),
             ButtonSegment<ThemeMode>(value: ThemeMode.light, label: Text("Light")),

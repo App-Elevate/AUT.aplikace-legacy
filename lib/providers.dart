@@ -52,7 +52,7 @@ class UserPreferences with ChangeNotifier {
   }
 
   /// Setter for theme style
-  set setThemeStyle(ThemeStyle themeStyle) {
+  void setThemeStyle(ThemeStyle themeStyle) {
     if (_themeStyle == themeStyle) return;
     _themeStyle = themeStyle;
     saveStringToSharedPreferences(Keys.themeStyle, _themeStyle.toString());
@@ -60,35 +60,35 @@ class UserPreferences with ChangeNotifier {
   }
 
   /// Setter for theme mode
-  set setThemeMode(ThemeMode themeMode) {
+  void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
     saveStringToSharedPreferences(Keys.themeMode, _themeMode.toString());
     notifyListeners();
   }
 
   /// Setter for list UI
-  set setListUi(bool isListUi) {
+  void setListUi(bool isListUi) {
     _isListUi = isListUi;
     saveBoolToSharedPreferences(Keys.listUi, _isListUi);
     notifyListeners();
   }
 
   /// Setter for pure black
-  set setPureBlack(bool isPureBlack) {
+  void setPureBlack(bool isPureBlack) {
     _isPureBlack = isPureBlack;
     saveBoolToSharedPreferences(Keys.pureBlack, _isPureBlack);
     notifyListeners();
   }
 
   /// Setter for big calendar markers
-  set setCalendarMarkers(bool bigCalendarMarkers) {
+  void setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
     saveBoolToSharedPreferences(Keys.bigCalendarMarkers, _bigCalendarMarkers);
     notifyListeners();
   }
 
   /// Setter for skip weekends
-  set setSkipWeekends(bool skipWeekends) {
+  void setSkipWeekends(bool skipWeekends) {
     _skipWeekends = skipWeekends;
     saveBoolToSharedPreferences(Keys.skipWeekends, _skipWeekends);
     notifyListeners();
@@ -118,25 +118,25 @@ class NotificationPreferences with ChangeNotifier {
     _weekLongFamine = weekLongFamine ?? _weekLongFamine;
   }
 
-  set setTodaysFood(bool todaysFood) {
+  void setTodaysFood(bool todaysFood) {
     _todaysFood = todaysFood;
     saveBoolToSharedPreferences(Keys.todaysFood, _todaysFood);
     notifyListeners();
   }
 
-  set setSendTodaysFood(TimeOfDay sendTodaysFood) {
+  void setSendTodaysFood(TimeOfDay sendTodaysFood) {
     _sendTodaysFood = sendTodaysFood;
     saveStringToSharedPreferences(Keys.sendTodaysFood, _sendTodaysFood.toString());
     notifyListeners();
   }
 
-  set setLowCredit(bool lowCredit) {
+  void setLowCredit(bool lowCredit) {
     _lowCredit = lowCredit;
     saveBoolToSharedPreferences(Keys.lowCredit, _lowCredit);
     notifyListeners();
   }
 
-  set setWeekLongFamine(bool weekLongFamine) {
+  void setWeekLongFamine(bool weekLongFamine) {
     _weekLongFamine = weekLongFamine;
     saveBoolToSharedPreferences(Keys.weekLongFamine, _weekLongFamine);
     notifyListeners();
