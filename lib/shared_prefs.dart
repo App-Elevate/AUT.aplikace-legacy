@@ -70,9 +70,9 @@ Future<List<String>?> readListStringFromSharedPreferences(String key) async {
   return prefs.getStringList(key);
 }
 
-Future readEnumFromSharedPreferences(String key, List values) async {
+Future readEnumFromSharedPreferences(String key, List values, var defaultValue) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  return EnumToString.fromString(values, prefs.getString(key) ?? "");
+  return EnumToString.fromString(values, prefs.getString(key) ?? EnumToString.convertToString(defaultValue));
 }
 
 Future<void> removeFromSharedPreferences(String key) async {
