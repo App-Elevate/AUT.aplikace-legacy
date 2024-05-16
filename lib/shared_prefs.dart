@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Class containing getters for all keys used with shared preferences
@@ -39,6 +40,11 @@ void saveStringListToSharedPreferences(String key, List<String> value) async {
   await prefs.setStringList(key, value);
 }
 
+void saveEnumToSharedPreferences(String key, var value) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString(key, EnumToString.convertToString(value));
+}
+
 Future<int?> readIntFromSharedPreferences(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getInt(key);
@@ -62,6 +68,11 @@ Future<String?> readStringFromSharedPreferences(String key) async {
 Future<List<String>?> readListStringFromSharedPreferences(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getStringList(key);
+}
+
+Future readEnumFromSharedPreferences(String key, List values) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return EnumToString.fromString(values, prefs.getString(key) ?? "");
 }
 
 Future<void> removeFromSharedPreferences(String key) async {
