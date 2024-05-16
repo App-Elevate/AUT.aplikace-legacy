@@ -41,20 +41,13 @@ class UserPreferences with ChangeNotifier {
   /// Skip weekends getter
   bool get skipWeekends => _skipWeekends;
 
-  void setAll({
-    ThemeStyle? themeStyle,
-    ThemeMode? themeMode,
-    bool? isListUi,
-    bool? isPureBlack,
-    bool? bigCalendarMarkers,
-    bool? skipWeekends,
-  }) {
-    _themeStyle = themeStyle ?? _themeStyle;
-    _themeMode = themeMode ?? _themeMode;
-    _isListUi = isListUi ?? _isListUi;
-    _isPureBlack = isPureBlack ?? _isPureBlack;
-    _bigCalendarMarkers = bigCalendarMarkers ?? _bigCalendarMarkers;
-    _skipWeekends = skipWeekends ?? _skipWeekends;
+  void loadFromShraredPreferences() async {
+    _themeStyle = await readEnumFromSharedPreferences(Keys.themeStyle, ThemeStyle.values, _themeStyle);
+    _themeMode = await readEnumFromSharedPreferences(Keys.themeMode, ThemeMode.values, _themeMode);
+    _isListUi = await readBoolFromSharedPreferences(Keys.listUi) ?? _isListUi;
+    _isPureBlack = await readBoolFromSharedPreferences(Keys.pureBlack) ?? _isPureBlack;
+    _bigCalendarMarkers = await readBoolFromSharedPreferences(Keys.bigCalendarMarkers) ?? _bigCalendarMarkers;
+    _skipWeekends = await readBoolFromSharedPreferences(Keys.skipWeekends) ?? _skipWeekends;
     notifyListeners();
   }
 

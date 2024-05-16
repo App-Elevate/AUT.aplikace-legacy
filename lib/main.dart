@@ -224,6 +224,7 @@ class _MyAppState extends State<MyApp> {
         future: loggedInCanteen.readListData(Prefs.theme),
         initialData: ThemeMode.system,
         builder: (context, snapshot) {
+          context.read<UserPreferences>().loadFromShraredPreferences;
           if (snapshot.connectionState == ConnectionState.done) {
             List<String> themeSettings;
             if (snapshot.data == null) {
