@@ -35,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
             SwitchListTile(
               title: const Text("Today's food"),
               value: notificationPreferences.todaysFood,
-              onChanged: (value) => notificationPreferences.setTodaysFood,
+              onChanged: notificationPreferences.setTodaysFood,
             ),
             ListTile(
               title: const Text("Time?"),
@@ -49,12 +49,12 @@ class SettingsScreen extends StatelessWidget {
             SwitchListTile(
               title: const Text("Low Credit"),
               value: notificationPreferences.lowCredit,
-              onChanged: (value) => notificationPreferences.setLowCredit,
+              onChanged: notificationPreferences.setLowCredit,
             ),
             SwitchListTile(
               title: const Text("No food"),
               value: notificationPreferences.weekLongFamine,
-              onChanged: (value) => notificationPreferences.setWeekLongFamine,
+              onChanged: notificationPreferences.setWeekLongFamine,
             ),
             CustomDivider(height: Spacing.short2),
             const SectionTitle("Data collection"),
