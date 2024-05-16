@@ -32,7 +32,7 @@ class AppearanceScreen extends StatelessWidget {
               title: const Text("Pure black dark mode"),
               subtitle: Text("If You Only Knew The Power Of The Dark Side...", style: subtitleTextStyle),
               value: userPreferences.isPureBlack,
-              onChanged: isBright ? null : (value) => userPreferences.setPureBlack = value,
+              onChanged: isBright ? null : (value) => userPreferences.setPureBlack,
             ),
             CustomDivider(height: Spacing.medium1),
             const SectionTitle("Display"),
@@ -43,19 +43,19 @@ class AppearanceScreen extends StatelessWidget {
               title: const Text("List UI"),
               subtitle: Text("Old School!!!", style: subtitleTextStyle),
               value: userPreferences.isListUi,
-              onChanged: (value) => userPreferences.setListUi = value,
+              onChanged: (value) => userPreferences.setListUi,
             ),
             // TODO: implement this
             SwitchListTile(
               title: const Text("Big calendar markers"),
               value: userPreferences.bigCalendarMarkers,
-              onChanged: (value) => userPreferences.setCalendarMarkers = value,
+              onChanged: (value) => userPreferences.setCalendarMarkers,
             ),
             // TODO: implement this
             SwitchListTile(
               title: const Text("Skip weekends"),
               value: userPreferences.skipWeekends,
-              onChanged: (value) => userPreferences.setSkipWeekends = value,
+              onChanged: (value) => userPreferences.setSkipWeekends,
             ),
           ],
         ),

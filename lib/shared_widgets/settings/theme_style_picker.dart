@@ -38,7 +38,7 @@ class ThemeStylePicker extends StatelessWidget {
                         color: ThemeStyle.values[index] == userPreferences.themeStyle ? theme.colorScheme.primary : Colors.grey,
                       ),
                     ),
-                    onPressed: () => userPreferences.setThemeStyle = ThemeStyle.values[index],
+                    onPressed: () => userPreferences.setThemeStyle(ThemeStyle.values[index]),
                     child: Column(
                       children: [
                         SizedBox(height: 35, child: AppBar(automaticallyImplyLeading: false)),
