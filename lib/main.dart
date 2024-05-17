@@ -223,8 +223,8 @@ class _MyAppState extends State<MyApp> {
         future: loggedInCanteen.readListData(Prefs.theme),
         initialData: ThemeMode.system,
         builder: (context, snapshot) {
-          context.read<UserPreferences>().loadFromShraredPreferences;
           if (snapshot.connectionState == ConnectionState.done) {
+            context.read<UserPreferences>().loadFromShraredPreferences();
             List<String> themeSettings;
             if (snapshot.data == null) {
               loggedInCanteen.saveListData(Prefs.theme, ["0", "0", "0"]);
@@ -240,7 +240,6 @@ class _MyAppState extends State<MyApp> {
             loggedInCanteen.readData("ThemeMode").then((value) {
               if (value != null && value != "") {
                 themeSettings[0] = value;
-                loggedInCanteen.removeData("ThemeMode");
               }
             });
 
