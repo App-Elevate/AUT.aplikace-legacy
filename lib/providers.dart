@@ -55,14 +55,14 @@ class UserPreferences with ChangeNotifier {
   void setThemeStyle(ThemeStyle themeStyle) {
     if (_themeStyle == themeStyle) return;
     _themeStyle = themeStyle;
-    saveStringToSharedPreferences(Keys.themeStyle, _themeStyle.toString());
+    saveEnumToSharedPreferences(Keys.themeStyle, _themeStyle);
     notifyListeners();
   }
 
   /// Setter for theme mode
   void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
-    saveStringToSharedPreferences(Keys.themeMode, _themeMode.toString());
+    saveEnumToSharedPreferences(Keys.themeMode, _themeMode);
     notifyListeners();
   }
 
