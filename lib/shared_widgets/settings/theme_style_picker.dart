@@ -11,48 +11,47 @@ class ThemeStylePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 225,
-      child: Consumer<UserPreferences>(
-        builder: (context, userPreferences, child) {
-          return ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * .05),
-            itemCount: ThemeStyle.values.length,
-            itemBuilder: (context, index) {
-              final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.themeMode == ThemeMode.light;
-              final ThemeData theme = Themes.getTheme(ThemeStyle.values[index], isPureBlack: isBright ? null : userPreferences.isPureBlack);
+      child: Selector<UserPreferences, ({ThemeStyle style, Function(ThemeStyle) setStyle, ThemeMode mode, bool pureBlack})>(
+        selector: (_, p1) => (style: p1.themeStyle, setStyle: p1.setThemeStyle, mode: p1.themeMode, pureBlack: p1.isPureBlack),
+        builder: (context, userPreferences, _) => ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * .05),
+          itemCount: ThemeStyle.values.length,
+          itemBuilder: (context, index) {
+            final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.mode == ThemeMode.light;
+            final ThemeData theme = Themes.getTheme(ThemeStyle.values[index], isPureBlack: isBright ? null : userPreferences.pureBlack);
 
-              return Theme(
-                data: theme,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: OutlinedButton(
-                    clipBehavior: Clip.hardEdge,
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      fixedSize: const Size.fromWidth(125),
-                      padding: EdgeInsets.zero,
-                      side: BorderSide(
-                        width: 3,
-                        strokeAlign: BorderSide.strokeAlignInside,
-                        color: ThemeStyle.values[index] == userPreferences.themeStyle ? theme.colorScheme.primary : Colors.grey,
-                      ),
-                    ),
-                    onPressed: () => userPreferences.setThemeStyle(ThemeStyle.values[index]),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 35, child: AppBar(automaticallyImplyLeading: false)),
-                        const Divider(color: Colors.transparent),
-                        foodTileColorSchemePreview(context, theme.colorScheme.primary),
-                        foodTileColorSchemePreview(context, theme.colorScheme.secondary),
-                      ],
+            return Theme(
+              data: theme,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: OutlinedButton(
+                  clipBehavior: Clip.hardEdge,
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    fixedSize: const Size.fromWidth(125),
+                    padding: EdgeInsets.zero,
+                    side: BorderSide(
+                      width: 3,
+                      strokeAlign: BorderSide.strokeAlignInside,
+                      color: ThemeStyle.values[index] == userPreferences.style ? theme.colorScheme.primary : Colors.grey,
                     ),
                   ),
+                  onPressed: () => userPreferences.setStyle(ThemeStyle.values[index]),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 35, child: AppBar(automaticallyImplyLeading: false)),
+                      const Divider(color: Colors.transparent),
+                      foodTileColorSchemePreview(context, theme.colorScheme.primary),
+                      foodTileColorSchemePreview(context, theme.colorScheme.secondary),
+                    ],
+                  ),
                 ),
-              );
-            },
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
