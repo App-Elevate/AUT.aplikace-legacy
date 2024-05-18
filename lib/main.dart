@@ -3,6 +3,7 @@
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/pages_new/navigation.dart';
 import 'package:autojidelna/providers.dart';
+import 'package:autojidelna/shared_prefs.dart';
 
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
@@ -219,106 +220,50 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<UserPreferences>(create: (context) => UserPreferences()),
         ChangeNotifierProvider<NotificationPreferences>(create: (context) => NotificationPreferences()),
       ],
-      child: FutureBuilder(
-        future: loggedInCanteen.readListData(Prefs.theme),
-        initialData: ThemeMode.system,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            context.read<UserPreferences>().loadFromShraredPreferences();
-            List<String> themeSettings;
-            if (snapshot.data == null) {
-              loggedInCanteen.saveListData(Prefs.theme, ["0", "0", "0"]);
-              themeSettings = ["0", "0", "0"];
-            } else {
-              themeSettings = snapshot.data as List<String>;
-            }
-            ThemeMode themeMode;
-            ThemeStyle themeStyle;
-            bool pureBlack;
+      builder: (context, child) {
+        appearanceMigration(context);
+        LocalJsonLocalization.delegate.directories = ['assets/lang'];
+        context.read<UserPreferences>().loadFromShraredPreferences();
 
-            // Migration from v1.2.8 and lower
-            loggedInCanteen.readData("ThemeMode").then((value) {
-              if (value != null && value != "") {
-                themeSettings[0] = value;
-              }
-            });
+        return Selector<UserPreferences, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
+          selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
+          builder: (context, userPreferences, child) {
+            return MaterialApp(
+              localizationsDelegates: [
+                // delegate from flutter_localization
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
 
-            switch (themeSettings[0]) {
-              case "2":
-                themeMode = ThemeMode.dark;
-                break;
-              case "1":
-                themeMode = ThemeMode.light;
-                break;
-              default:
-                themeMode = ThemeMode.system;
-            }
-            switch (themeSettings[1]) {
-              case "5":
-                themeStyle = ThemeStyle.crimsonEarth;
-                break;
-              case "4":
-                themeStyle = ThemeStyle.evergreenSlate;
-                break;
-              case "3":
-                themeStyle = ThemeStyle.rustOlive;
-                break;
-              case "2":
-                themeStyle = ThemeStyle.blueMauve;
-                break;
-              case "1":
-                themeStyle = ThemeStyle.plumBrown;
-                break;
-              default:
-                themeStyle = ThemeStyle.defaultStyle;
-            }
-            pureBlack = themeSettings[2] == "1";
-            NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
-          }
-
-          LocalJsonLocalization.delegate.directories = ['assets/lang'];
-
-          return ValueListenableBuilder(
-            valueListenable: NotifyTheme().themeNotifier,
-            builder: (context, themeSettings, child) {
-              var userPreferences = context.watch<UserPreferences>();
-              return MaterialApp(
-                localizationsDelegates: [
-                  // delegate from flutter_localization
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-
-                  // delegate from localization package.
-                  //json-file
-                  LocalJsonLocalization.delegate,
-                  //or map
-                  MapLocalization.delegate,
-                ],
-                supportedLocales: const [
-                  Locale('cs', 'CZ'),
-                  //Locale('en', 'US'),
-                ],
-                localeResolutionCallback: (locale, supportedLocales) {
-                  if (supportedLocales.contains(locale)) {
-                    return locale;
-                  }
-                  // default language
-                  return const Locale('cs', 'CZ');
-                },
-                navigatorKey: MyApp.navigatorKey,
-                debugShowCheckedModeBanner: false,
-                //debugShowMaterialGrid: true,
-                theme: Themes.getTheme(userPreferences.themeStyle),
-                darkTheme: Themes.getTheme(userPreferences.themeStyle, isPureBlack: userPreferences.isPureBlack),
-                themeMode: userPreferences.themeMode,
-                home: const NavigationScreen(),
-              );
-            },
-            child: _pop(),
-          );
-        },
-      ),
+                // delegate from localization package.
+                //json-file
+                LocalJsonLocalization.delegate,
+                //or map
+                MapLocalization.delegate,
+              ],
+              supportedLocales: const [
+                Locale('cs', 'CZ'),
+                //Locale('en', 'US'),
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (supportedLocales.contains(locale)) {
+                  return locale;
+                }
+                // default language
+                return const Locale('cs', 'CZ');
+              },
+              navigatorKey: MyApp.navigatorKey,
+              debugShowCheckedModeBanner: false,
+              //debugShowMaterialGrid: true,
+              theme: Themes.getTheme(userPreferences.style),
+              darkTheme: Themes.getTheme(userPreferences.style, isPureBlack: userPreferences.isPureBlack),
+              themeMode: userPreferences.mode,
+              home: const NavigationScreen(),
+            );
+          },
+        );
+      },
+      child: _pop(),
     );
   }
 
@@ -343,6 +288,69 @@ class _MyAppState extends State<MyApp> {
           return route.didPop(result);
         },
       ),
+    );
+  }
+
+  void appearanceMigration(BuildContext context) {
+    readListStringFromSharedPreferences(Prefs.theme).then(
+      (data) {
+        ThemeMode themeMode;
+        ThemeStyle themeStyle;
+        bool pureBlack;
+        // Migration from v1.2.8 and lower
+        readStringFromSharedPreferences("ThemeMode").then((value) {
+          if (value != null && value != "" && value.length < 5) {
+            removeFromSharedPreferences("ThemeMode");
+            switch (value) {
+              case "2":
+                themeMode = ThemeMode.dark;
+                break;
+              case "1":
+                themeMode = ThemeMode.light;
+                break;
+              default:
+                themeMode = ThemeMode.system;
+            }
+          }
+        });
+        //  Migration from v1.3.1 and lower
+        if (data != null && data.length == 3) {
+          switch (data[0]) {
+            case "2":
+              themeMode = ThemeMode.dark;
+              break;
+            case "1":
+              themeMode = ThemeMode.light;
+              break;
+            default:
+              themeMode = ThemeMode.system;
+          }
+          switch (data[1]) {
+            case "5":
+              themeStyle = ThemeStyle.crimsonEarth;
+              break;
+            case "4":
+              themeStyle = ThemeStyle.evergreenSlate;
+              break;
+            case "3":
+              themeStyle = ThemeStyle.rustOlive;
+              break;
+            case "2":
+              themeStyle = ThemeStyle.blueMauve;
+              break;
+            case "1":
+              themeStyle = ThemeStyle.plumBrown;
+              break;
+            default:
+              themeStyle = ThemeStyle.defaultStyle;
+          }
+          pureBlack = data[2] == "1";
+          UserPreferences userPreferences = context.read<UserPreferences>();
+          userPreferences.setThemeMode(themeMode);
+          userPreferences.setThemeStyle(themeStyle);
+          userPreferences.setPureBlack(pureBlack);
+        }
+      },
     );
   }
 }
