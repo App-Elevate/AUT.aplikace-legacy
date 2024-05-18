@@ -20,9 +20,7 @@ class AppearanceScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CustomDivider(),
             const SectionTitle("Theme"),
-            CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.medium1),
             // theme mode picker
             const ThemeModePicker(),
@@ -40,10 +38,7 @@ class AppearanceScreen extends StatelessWidget {
                 onChanged: isBright ? null : userPreferences.set,
               ),
             ),
-            CustomDivider(height: Spacing.medium1),
             const SectionTitle("Display"),
-            CustomDivider(height: Spacing.short2, isTransparent: false),
-            CustomDivider(height: Spacing.short1),
             // TODO: implement this
             // list UI switch
             Selector<UserPreferences, ({bool read, Function(bool) set})>(
