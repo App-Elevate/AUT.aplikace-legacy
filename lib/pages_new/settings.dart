@@ -3,6 +3,7 @@ import 'package:autojidelna/pages_new/appearance.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
+import 'package:autojidelna/shared_widgets/settings/time_picker_todays_food.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,13 +12,6 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NotificationPreferences notificationPreferences = context.watch<NotificationPreferences>();
-
-    void pickTimeToSend() async {
-      TimeOfDay savedTimeOfDay = notificationPreferences.sendTodaysFood;
-      notificationPreferences.setSendTodaysFood(await showTimePicker(context: context, initialTime: savedTimeOfDay) ?? savedTimeOfDay);
-    }
-
     return Scaffold(
       appBar: AppBar(title: const Text("Settings")),
       body: SingleChildScrollView(
@@ -32,27 +26,7 @@ class SettingsScreen extends StatelessWidget {
             const SectionTitle("Notification"),
             CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.short1),
-            Selector<NotificationPreferences, ({bool read, Function(bool) set, TimeOfDay readSend})>(
-              selector: (_, p1) => (read: p1.todaysFood, set: p1.setTodaysFood, readSend: p1.sendTodaysFood),
-              builder: (context, notificationPreferences, child) => Column(
-                children: [
-                  SwitchListTile(
-                    title: const Text("Today's food"),
-                    value: notificationPreferences.read,
-                    onChanged: notificationPreferences.set,
-                  ),
-                  ListTile(
-                    title: const Text("Time?"),
-                    enabled: notificationPreferences.read,
-                    onTap: pickTimeToSend,
-                    trailing: OutlinedButton(
-                      onPressed: notificationPreferences.read ? pickTimeToSend : null,
-                      child: Text(notificationPreferences.readSend.format(context)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const TimePickerTodaysFoodTiles(),
             Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.lowCredit, set: p1.setLowCredit),
               builder: (context, notificationPreferences, child) => SwitchListTile(
