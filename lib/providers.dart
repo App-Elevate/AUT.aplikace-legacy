@@ -41,6 +41,7 @@ class UserPreferences with ChangeNotifier {
   /// Skip weekends getter
   bool get skipWeekends => _skipWeekends;
 
+  /// Loads settings from shared preferences
   void loadFromShraredPreferences() async {
     _themeStyle = await readEnumFromSharedPreferences(Keys.themeStyle, ThemeStyle.values, _themeStyle);
     _themeMode = await readEnumFromSharedPreferences(Keys.themeMode, ThemeMode.values, _themeMode);

@@ -215,7 +215,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Setting the theme
+    // Setting up providers
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UserPreferences>(create: (context) => UserPreferences()),
@@ -226,6 +226,7 @@ class _MyAppState extends State<MyApp> {
         LocalJsonLocalization.delegate.directories = ['assets/lang'];
         context.read<UserPreferences>().loadFromShraredPreferences();
 
+        // Rebuilds when themeMode, themeStyle or isPureBlack is changed
         return Selector<UserPreferences, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
           selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
           builder: (context, userPreferences, child) {
@@ -292,6 +293,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  /// Migration logic for older versions
   void appearanceMigration(BuildContext context) {
     readListStringFromSharedPreferences(Prefs.theme).then(
       (data) {
