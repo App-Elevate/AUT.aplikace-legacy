@@ -65,16 +65,6 @@ class AppearanceScreen extends StatelessWidget {
                 onChanged: userPreferences.set,
               ),
             ),
-            // TODO: implement this
-            // skip weekends switch
-            Selector<UserPreferences, ({bool read, Function(bool) set})>(
-              selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
-              builder: (context, userPreferences, child) => SwitchListTile(
-                title: const Text("Skip weekends"),
-                value: userPreferences.read,
-                onChanged: userPreferences.set,
-              ),
-            ),
           ],
         ),
       ),

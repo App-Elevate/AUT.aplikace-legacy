@@ -22,7 +22,21 @@ class SettingsScreen extends StatelessWidget {
               title: const Text("Appearance"),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AppearanceScreen())),
             ),
+            CustomDivider(height: Spacing.short2),
+            const SectionTitle("Convenience"),
+            CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.short1),
+            // TODO: implement this
+            // skip weekends switch
+            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
+              builder: (context, userPreferences, child) => SwitchListTile(
+                title: const Text("Skip weekends"),
+                value: userPreferences.read,
+                onChanged: userPreferences.set,
+              ),
+            ),
+            CustomDivider(height: Spacing.short2),
             const SectionTitle("Notification"),
             CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.short1),
