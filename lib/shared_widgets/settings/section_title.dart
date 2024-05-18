@@ -1,3 +1,5 @@
+import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/material.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -6,12 +8,19 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.sizeOf(context).width * .9,
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
-      ),
+    return Column(
+      children: [
+        CustomDivider(height: Spacing.short2),
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width * .9,
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+        ),
+        CustomDivider(height: Spacing.short2, isTransparent: false),
+        CustomDivider(height: Spacing.short1),
+      ],
     );
   }
 }
