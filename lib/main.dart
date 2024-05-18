@@ -295,6 +295,8 @@ class _MyAppState extends State<MyApp> {
   void appearanceMigration(BuildContext context) {
     readListStringFromSharedPreferences(Prefs.theme).then(
       (data) {
+        removeFromSharedPreferences(Prefs.theme);
+
         ThemeMode themeMode;
         ThemeStyle themeStyle;
         bool pureBlack;
