@@ -11,8 +11,3 @@ class CustomDivider extends StatelessWidget {
     return Divider(color: isTransparent ? Colors.transparent : null, height: height, indent: indent, endIndent: indent);
   }
 }
-
-Divider divider(BuildContext context, {double? height, bool isTransparent = true}) {
-  double indent = MediaQuery.sizeOf(context).width * 0.025;
-  return Divider(color: isTransparent ? Colors.transparent : null, height: height, indent: indent, endIndent: indent);
-}
