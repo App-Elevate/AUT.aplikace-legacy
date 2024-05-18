@@ -229,7 +229,7 @@ class _MyAppState extends State<MyApp> {
         // Rebuilds when themeMode, themeStyle or isPureBlack is changed
         return Selector<UserPreferences, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
           selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
-          builder: (context, userPreferences, child) {
+          builder: (context, theme, child) {
             return MaterialApp(
               localizationsDelegates: [
                 // delegate from flutter_localization
@@ -257,9 +257,9 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(userPreferences.style),
-              darkTheme: Themes.getTheme(userPreferences.style, isPureBlack: userPreferences.isPureBlack),
-              themeMode: userPreferences.mode,
+              theme: Themes.getTheme(theme.style),
+              darkTheme: Themes.getTheme(theme.style, isPureBlack: theme.isPureBlack),
+              themeMode: theme.mode,
               home: const NavigationScreen(),
             );
           },
@@ -304,7 +304,7 @@ class _MyAppState extends State<MyApp> {
         bool pureBlack;
         // Migration from v1.2.8 and lower
         readStringFromSharedPreferences("ThemeMode").then((value) {
-          if (value != null && value != "" && value.length < 5) {
+          if (value != null && value != "" && value.length < 2) {
             removeFromSharedPreferences("ThemeMode");
             switch (value) {
               case "2":
