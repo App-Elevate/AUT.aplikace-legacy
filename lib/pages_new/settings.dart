@@ -32,29 +32,42 @@ class SettingsScreen extends StatelessWidget {
             const SectionTitle("Notification"),
             CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.short1),
-            SwitchListTile(
-              title: const Text("Today's food"),
-              value: notificationPreferences.todaysFood,
-              onChanged: notificationPreferences.setTodaysFood,
-            ),
-            ListTile(
-              title: const Text("Time?"),
-              enabled: notificationPreferences.todaysFood,
-              onTap: pickTimeToSend,
-              trailing: OutlinedButton(
-                onPressed: notificationPreferences.todaysFood ? pickTimeToSend : null,
-                child: Text(notificationPreferences.sendTodaysFood.format(context)),
+            Selector<NotificationPreferences, ({bool read, Function(bool) set, TimeOfDay readSend})>(
+              selector: (_, p1) => (read: p1.todaysFood, set: p1.setTodaysFood, readSend: p1.sendTodaysFood),
+              builder: (context, notificationPreferences, child) => Column(
+                children: [
+                  SwitchListTile(
+                    title: const Text("Today's food"),
+                    value: notificationPreferences.read,
+                    onChanged: notificationPreferences.set,
+                  ),
+                  ListTile(
+                    title: const Text("Time?"),
+                    enabled: notificationPreferences.read,
+                    onTap: pickTimeToSend,
+                    trailing: OutlinedButton(
+                      onPressed: notificationPreferences.read ? pickTimeToSend : null,
+                      child: Text(notificationPreferences.readSend.format(context)),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SwitchListTile(
-              title: const Text("Low Credit"),
-              value: notificationPreferences.lowCredit,
-              onChanged: notificationPreferences.setLowCredit,
+            Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.lowCredit, set: p1.setLowCredit),
+              builder: (context, notificationPreferences, child) => SwitchListTile(
+                title: const Text("Low Credit"),
+                value: notificationPreferences.read,
+                onChanged: notificationPreferences.set,
+              ),
             ),
-            SwitchListTile(
-              title: const Text("No food"),
-              value: notificationPreferences.weekLongFamine,
-              onChanged: notificationPreferences.setWeekLongFamine,
+            Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.weekLongFamine, set: p1.setWeekLongFamine),
+              builder: (context, notificationPreferences, child) => SwitchListTile(
+                title: const Text("No food"),
+                value: notificationPreferences.read,
+                onChanged: notificationPreferences.set,
+              ),
             ),
             CustomDivider(height: Spacing.short2),
             const SectionTitle("Data collection"),

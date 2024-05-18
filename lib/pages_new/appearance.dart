@@ -11,8 +11,8 @@ class AppearanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userPreferences = context.watch<UserPreferences>();
-    final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.themeMode == ThemeMode.light;
+    final bool isLightMode = context.select<UserPreferences, ThemeMode>((value) => value.themeMode) == ThemeMode.light;
+    final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || isLightMode;
     final TextStyle? subtitleTextStyle = isBright ? null : const TextStyle(color: Colors.white54);
 
     return Scaffold(
@@ -24,38 +24,56 @@ class AppearanceScreen extends StatelessWidget {
             const SectionTitle("Theme"),
             CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.medium1),
+            // theme mode picker
             const ThemeModePicker(),
             CustomDivider(height: Spacing.medium2),
+            // theme style picker
             const ThemeStylePicker(),
             CustomDivider(height: Spacing.medium1),
-            SwitchListTile(
-              title: const Text("Pure black dark mode"),
-              subtitle: Text("If You Only Knew The Power Of The Dark Side...", style: subtitleTextStyle),
-              value: userPreferences.isPureBlack,
-              onChanged: isBright ? null : userPreferences.setPureBlack,
+            // pure black mode switch
+            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),
+              builder: (context, userPreferences, child) => SwitchListTile(
+                title: const Text("Pure black dark mode"),
+                subtitle: Text("If You Only Knew The Power Of The Dark Side...", style: subtitleTextStyle),
+                value: userPreferences.read,
+                onChanged: isBright ? null : userPreferences.set,
+              ),
             ),
             CustomDivider(height: Spacing.medium1),
             const SectionTitle("Display"),
             CustomDivider(height: Spacing.short2, isTransparent: false),
             CustomDivider(height: Spacing.short1),
             // TODO: implement this
-            SwitchListTile(
-              title: const Text("List UI"),
-              subtitle: Text("Old School!!!", style: subtitleTextStyle),
-              value: userPreferences.isListUi,
-              onChanged: userPreferences.setListUi,
+            // list UI switch
+            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.isListUi, set: p1.setListUi),
+              builder: (context, userPreferences, child) => SwitchListTile(
+                title: const Text("List UI"),
+                subtitle: Text("Old School!!!", style: subtitleTextStyle),
+                value: userPreferences.read,
+                onChanged: userPreferences.set,
+              ),
             ),
             // TODO: implement this
-            SwitchListTile(
-              title: const Text("Big calendar markers"),
-              value: userPreferences.bigCalendarMarkers,
-              onChanged: userPreferences.setCalendarMarkers,
+            // big calendar markers switch
+            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.bigCalendarMarkers, set: p1.setCalendarMarkers),
+              builder: (context, userPreferences, child) => SwitchListTile(
+                title: const Text("Big calendar markers"),
+                value: userPreferences.read,
+                onChanged: userPreferences.set,
+              ),
             ),
             // TODO: implement this
-            SwitchListTile(
-              title: const Text("Skip weekends"),
-              value: userPreferences.skipWeekends,
-              onChanged: userPreferences.setSkipWeekends,
+            // skip weekends switch
+            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
+              builder: (context, userPreferences, child) => SwitchListTile(
+                title: const Text("Skip weekends"),
+                value: userPreferences.read,
+                onChanged: userPreferences.set,
+              ),
             ),
           ],
         ),
