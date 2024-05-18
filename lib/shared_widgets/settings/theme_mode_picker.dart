@@ -9,11 +9,12 @@ class ThemeModePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width * .9,
-      child: Consumer<UserPreferences>(
-        builder: (context, userPreferences, child) => SegmentedButton<ThemeMode>(
+      child: Selector<UserPreferences, ({ThemeMode read, Function(ThemeMode) set})>(
+        selector: (_, userPreferences) => (read: userPreferences.themeMode, set: userPreferences.setThemeMode),
+        builder: (_, userPreferences, __) => SegmentedButton<ThemeMode>(
           showSelectedIcon: false,
-          selected: {userPreferences.themeMode},
-          onSelectionChanged: (Set<ThemeMode> selected) => userPreferences.setThemeMode(selected.first),
+          selected: {userPreferences.read},
+          onSelectionChanged: (Set<ThemeMode> selected) => userPreferences.set(selected.first),
           segments: const [
             ButtonSegment<ThemeMode>(value: ThemeMode.system, label: Text("System")),
             ButtonSegment<ThemeMode>(value: ThemeMode.light, label: Text("Light")),
