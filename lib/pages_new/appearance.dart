@@ -31,11 +31,11 @@ class AppearanceScreen extends StatelessWidget {
             // pure black mode switch
             Selector<UserPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),
-              builder: (context, userPreferences, child) => SwitchListTile(
+              builder: (context, pureBlack, child) => SwitchListTile(
                 title: const Text("Pure black dark mode"),
                 subtitle: Text("If You Only Knew The Power Of The Dark Side...", style: subtitleTextStyle),
-                value: userPreferences.read,
-                onChanged: isBright ? null : userPreferences.set,
+                value: pureBlack.read,
+                onChanged: isBright ? null : pureBlack.set,
               ),
             ),
             const SectionTitle("Display"),
@@ -43,21 +43,21 @@ class AppearanceScreen extends StatelessWidget {
             // list UI switch
             Selector<UserPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.isListUi, set: p1.setListUi),
-              builder: (context, userPreferences, child) => SwitchListTile(
+              builder: (context, listUi, child) => SwitchListTile(
                 title: const Text("List UI"),
                 subtitle: Text("Old School!!!", style: subtitleTextStyle),
-                value: userPreferences.read,
-                onChanged: userPreferences.set,
+                value: listUi.read,
+                onChanged: listUi.set,
               ),
             ),
             // TODO: implement this
             // big calendar markers switch
             Selector<UserPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.bigCalendarMarkers, set: p1.setCalendarMarkers),
-              builder: (context, userPreferences, child) => SwitchListTile(
+              builder: (context, bigCalendarMarkers, child) => SwitchListTile(
                 title: const Text("Big calendar markers"),
-                value: userPreferences.read,
-                onChanged: userPreferences.set,
+                value: bigCalendarMarkers.read,
+                onChanged: bigCalendarMarkers.set,
               ),
             ),
           ],

@@ -20,20 +20,20 @@ class TimePickerTodaysFoodTiles extends StatelessWidget {
 
     return Selector<NotificationPreferences, ({bool read, Function(bool) set, TimeOfDay readSend})>(
       selector: (_, p1) => (read: p1.todaysFood, set: p1.setTodaysFood, readSend: p1.sendTodaysFood),
-      builder: (context, notificationPreferences, child) => Column(
+      builder: (context, todaysFood, child) => Column(
         children: [
           SwitchListTile(
             title: const Text("Today's food"),
-            value: notificationPreferences.read,
-            onChanged: notificationPreferences.set,
+            value: todaysFood.read,
+            onChanged: todaysFood.set,
           ),
           ListTile(
             title: const Text("Time?"),
-            enabled: notificationPreferences.read,
+            enabled: todaysFood.read,
             onTap: pickTimeToSend,
             trailing: OutlinedButton(
-              onPressed: notificationPreferences.read ? pickTimeToSend : null,
-              child: Text(notificationPreferences.readSend.format(context)),
+              onPressed: todaysFood.read ? pickTimeToSend : null,
+              child: Text(todaysFood.readSend.format(context)),
             ),
           ),
         ],

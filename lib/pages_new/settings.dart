@@ -25,30 +25,32 @@ class SettingsScreen extends StatelessWidget {
             // skip weekends switch
             Selector<UserPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
-              builder: (context, userPreferences, child) => SwitchListTile(
+              builder: (context, skipWeekends, child) => SwitchListTile(
                 title: const Text("Skip weekends"),
-                value: userPreferences.read,
-                onChanged: userPreferences.set,
+                value: skipWeekends.read,
+                onChanged: skipWeekends.set,
               ),
             ),
+            // TODO: implement this
             const SectionTitle("Notification"),
             const TimePickerTodaysFoodTiles(),
             Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.lowCredit, set: p1.setLowCredit),
-              builder: (context, notificationPreferences, child) => SwitchListTile(
+              builder: (context, lowCredit, child) => SwitchListTile(
                 title: const Text("Low Credit"),
-                value: notificationPreferences.read,
-                onChanged: notificationPreferences.set,
+                value: lowCredit.read,
+                onChanged: lowCredit.set,
               ),
             ),
             Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.weekLongFamine, set: p1.setWeekLongFamine),
-              builder: (context, notificationPreferences, child) => SwitchListTile(
+              builder: (context, weekLongFamine, child) => SwitchListTile(
                 title: const Text("No food"),
-                value: notificationPreferences.read,
-                onChanged: notificationPreferences.set,
+                value: weekLongFamine.read,
+                onChanged: weekLongFamine.set,
               ),
             ),
+            // TODO: implement this
             const SectionTitle("Data collection"),
             SwitchListTile(
               title: const Text("Sell your data"),
