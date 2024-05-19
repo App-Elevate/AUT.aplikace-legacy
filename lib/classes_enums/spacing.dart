@@ -9,6 +9,9 @@ class Spacing {
   /// 8.0
   static double get short2 => 8;
 
+  /// 16.0
+  static double get shortMedium => 16;
+
   /// 30.0
   static double get medium1 => 30;
 
