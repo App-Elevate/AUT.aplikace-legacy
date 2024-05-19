@@ -57,6 +57,8 @@ dependencies:
   table_calendar: ^3.0.9
   provider: ^6.1.2
   enum_to_string: ^2.0.1
+  icons_flutter: ^0.0.4
+  flutter_svg: ^2.0.10+1
 
   # Firebase
   firebase_core: ^2.15.1
