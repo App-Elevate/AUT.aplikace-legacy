@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/settings.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/switch_account_panel_v2.dart';
@@ -85,7 +86,12 @@ class MorePage extends StatelessWidget {
             leading: const Icon(Icons.settings_outlined),
             title: const Text("Settings"),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen())),
-          )
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text("About"),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutScreen())),
+          ),
         ],
       ),
     );
