@@ -260,6 +260,7 @@ class _MyAppState extends State<MyApp> {
               darkTheme: Themes.getTheme(theme.style, isPureBlack: theme.isPureBlack),
               themeMode: theme.mode,
               home: const NavigationScreen(),
+              title: "Autojídelna",
             );
           },
         );
