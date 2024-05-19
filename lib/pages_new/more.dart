@@ -76,7 +76,47 @@ class MorePage extends StatelessWidget {
                         Flexible(child: CustomDivider(isTransparent: false, hasEndIndent: false)),
                       ],
                     ),
-                  )
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const CustomDivider(),
+          Card(
+            clipBehavior: Clip.hardEdge,
+            margin: EdgeInsets.symmetric(horizontal: Spacing.shortMedium),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: Spacing.shortMedium, vertical: Spacing.short1),
+              child: Column(
+                children: [
+                  const Row(
+                    children: [
+                      Text("Location", style: TextStyle(color: Colors.white54)),
+                      Flexible(child: CustomDivider(isTransparent: false, hasEndIndent: false)),
+                    ],
+                  ),
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    visualDensity: VisualDensity(vertical: -4),
+                    title: Text("unknown"),
+                  ),
+                  MaterialButton(
+                    visualDensity: const VisualDensity(vertical: -4),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: EdgeInsets.zero,
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    textColor: Theme.of(context).colorScheme.primary,
+                    onPressed: () {},
+                    child: const Row(
+                      children: [
+                        Flexible(child: CustomDivider(isTransparent: false, hasIndent: false)),
+                        Text("Change location", style: TextStyle(color: Colors.white54)),
+                        Flexible(child: CustomDivider(isTransparent: false, hasEndIndent: false)),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
