@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
         Flexible(
           child: ListView.builder(
             itemCount: 1, // placeholder
-            itemBuilder: (context, index) {
-              return accountRow(context, "Placeholder", false, 0);
-            },
+            itemBuilder: (context, index) => accountRow(context, "Placeholder", false, 0),
           ),
         ),
         CustomDivider(height: Spacing.zero, isTransparent: false),
@@ -29,7 +28,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
     return ListTile(
       leading: const Icon(Icons.add),
       title: Text("Add account", style: Theme.of(context).textTheme.bodyLarge),
-      onTap: () {},
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen())),
     );
   }
 
