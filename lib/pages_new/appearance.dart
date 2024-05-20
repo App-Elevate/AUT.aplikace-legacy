@@ -1,4 +1,4 @@
-import 'package:autojidelna/classes_enums/Spacing.dart';
+import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
@@ -21,13 +21,13 @@ class AppearanceScreen extends StatelessWidget {
         child: Column(
           children: [
             const SectionTitle("Theme"),
-            CustomDivider(height: Spacing.medium1),
+            CustomDivider(height: Spacing.s30),
             // theme mode picker
             const ThemeModePicker(),
-            CustomDivider(height: Spacing.medium2),
+            CustomDivider(height: Spacing.s38),
             // theme style picker
             const ThemeStylePicker(),
-            CustomDivider(height: Spacing.medium1),
+            CustomDivider(height: Spacing.s30),
             // pure black mode switch
             Selector<UserPreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),
