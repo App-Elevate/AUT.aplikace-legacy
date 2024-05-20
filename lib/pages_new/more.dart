@@ -7,6 +7,7 @@ import 'package:autojidelna/shared_widgets/more/account_overview_card.dart';
 import 'package:autojidelna/shared_widgets/more/location_picker_card.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MoreAppBar({super.key});
@@ -51,6 +52,11 @@ class MorePage extends StatelessWidget {
             leading: const Icon(Icons.info_outline),
             title: const Text("About"),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutScreen())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.share_outlined),
+            title: const Text("Share the app"),
+            onTap: () async => await Share.share("https://autojidelna.cz/", subject: "Autojídelna"),
           ),
         ],
       ),
