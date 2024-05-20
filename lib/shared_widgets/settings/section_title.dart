@@ -10,7 +10,7 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomDivider(height: Spacing.short2),
+        CustomDivider(height: Spacing.s8),
         SizedBox(
           width: MediaQuery.sizeOf(context).width * .9,
           child: Text(
@@ -18,8 +18,8 @@ class SectionTitle extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
         ),
-        CustomDivider(height: Spacing.short2, isTransparent: false),
-        CustomDivider(height: Spacing.short1),
+        CustomDivider(height: Spacing.s8, isTransparent: false),
+        CustomDivider(height: Spacing.s4),
       ],
     );
   }

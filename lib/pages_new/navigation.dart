@@ -20,12 +20,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
     return Scaffold(
       appBar: <PreferredSizeWidget>[
         const CanteenAppBar(),
-        //const AccountAppBar(),
         const MoreAppBar(),
       ][pageIndex],
       body: <Widget>[
         const CanteenPage(),
-        //const AccountPage(),
         const MorePage(),
       ][pageIndex],
       bottomNavigationBar: BottomNavigationBar(
