@@ -33,7 +33,7 @@ class MorePage extends StatelessWidget {
           const SectionTitle("Something"),
           //CustomDivider(height: Spacing.short1),
           ListTile(
-            leading: const Icon(Icons.account_circle_outlined),
+            leading: const Icon(Icons.person_outline),
             title: const Text("Account"),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AccountScreen())),
           ),
