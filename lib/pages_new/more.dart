@@ -31,7 +31,6 @@ class MorePage extends StatelessWidget {
           const LocationPickerCard(),
           CustomDivider(height: Spacing.s24),
           const SectionTitle("Something"),
-          //CustomDivider(height: Spacing.short1),
           ListTile(
             leading: const Icon(Icons.person_outline),
             title: const Text("Account"),
