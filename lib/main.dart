@@ -1,7 +1,7 @@
 // Purpose: Main file of the app, contains the main function and the main widget of the app as well as the loading screen on startup
 
 import 'package:autojidelna/local_imports.dart';
-import 'package:autojidelna/pages_new/navigation.dart';
+import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_prefs.dart';
 
@@ -259,7 +259,7 @@ class _MyAppState extends State<MyApp> {
               theme: Themes.getTheme(theme.style),
               darkTheme: Themes.getTheme(theme.style, isPureBlack: theme.isPureBlack),
               themeMode: theme.mode,
-              home: const NavigationScreen(),
+              home: const LoginScreenV2(),
               title: "Autojídelna",
             );
           },

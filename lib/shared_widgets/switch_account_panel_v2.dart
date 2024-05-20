@@ -28,7 +28,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
     return ListTile(
       leading: const Icon(Icons.add),
       title: Text("Add account", style: Theme.of(context).textTheme.bodyLarge),
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreen())),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LoginScreenV2())),
     );
   }
 
