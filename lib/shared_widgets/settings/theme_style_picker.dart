@@ -17,7 +17,7 @@ class ThemeStylePicker extends StatelessWidget {
         builder: (context, userPreferences, _) => ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: Spacing.shortMedium),
+          padding: EdgeInsets.symmetric(horizontal: Spacing.s16),
           itemCount: ThemeStyle.values.length,
           itemBuilder: (context, index) {
             final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.mode == ThemeMode.light;

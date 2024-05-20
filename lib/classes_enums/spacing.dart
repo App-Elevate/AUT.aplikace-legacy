@@ -1,20 +1,10 @@
 /// Standardised doubles for spacing in UI
 class Spacing {
-  /// 0
   static double get zero => 0;
-
-  /// 4.0
-  static double get short1 => 4;
-
-  /// 8.0
-  static double get short2 => 8;
-
-  /// 16.0
-  static double get shortMedium => 16;
-
-  /// 30.0
-  static double get medium1 => 30;
-
-  /// 38.0
-  static double get medium2 => 38;
+  static double get s4 => 4;
+  static double get s8 => 8;
+  static double get s16 => 16;
+  static double get s24 => 24;
+  static double get s30 => 30;
+  static double get s38 => 38;
 }

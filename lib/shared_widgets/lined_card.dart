@@ -27,9 +27,9 @@ class LinedCard extends StatelessWidget {
       onTap: smallButton ? null : onPressed,
       child: Card(
         clipBehavior: Clip.hardEdge,
-        margin: EdgeInsets.symmetric(horizontal: Spacing.shortMedium),
+        margin: EdgeInsets.symmetric(horizontal: Spacing.s16),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.shortMedium, vertical: Spacing.short1),
+          padding: EdgeInsets.symmetric(horizontal: Spacing.s16, vertical: Spacing.s4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

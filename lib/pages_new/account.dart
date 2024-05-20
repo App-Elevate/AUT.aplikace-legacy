@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AccountAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const AccountAppBar({super.key});
+class AccountScreen extends StatelessWidget {
+  const AccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AppBar();
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class AccountPage extends StatelessWidget {
-  const AccountPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text("Account")),
+      body: const Placeholder(),
+    );
   }
 }

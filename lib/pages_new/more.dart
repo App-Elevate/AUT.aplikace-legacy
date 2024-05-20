@@ -1,9 +1,11 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/about.dart';
+import 'package:autojidelna/pages_new/account.dart';
 import 'package:autojidelna/pages_new/settings.dart';
 import 'package:autojidelna/shared_widgets/more/account_overview_card.dart';
 import 'package:autojidelna/shared_widgets/more/location_picker_card.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
+import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:flutter/material.dart';
 
 class MoreAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -27,7 +29,14 @@ class MorePage extends StatelessWidget {
           const AccountOverviewCard(),
           const CustomDivider(),
           const LocationPickerCard(),
-          CustomDivider(height: Spacing.medium2),
+          CustomDivider(height: Spacing.s24),
+          const SectionTitle("Something"),
+          //CustomDivider(height: Spacing.short1),
+          ListTile(
+            leading: const Icon(Icons.account_circle_outlined),
+            title: const Text("Account"),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AccountScreen())),
+          ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text("Settings"),
