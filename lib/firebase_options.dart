@@ -64,6 +64,6 @@ class DefaultFirebaseOptions {
     projectId: 'autojidelna',
     databaseURL: 'https://autojidelna-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'autojidelna.appspot.com',
-    iosBundleId: 'cz.appelevate.autojidelna',
+    iosBundleId: 'com.tomprotiva.autojidelna',
   );
 }

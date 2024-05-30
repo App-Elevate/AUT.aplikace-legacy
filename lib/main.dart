@@ -20,6 +20,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Notifications
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:background_fetch/background_fetch.dart';
 
 void main() async {
   // Ensure that the app is initialized
@@ -68,11 +70,31 @@ void main() async {
             }
           });
         }
+        AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${uzivatel.username}_${uzivatel.url}');
+        await AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${uzivatel.username}_${uzivatel.url}');
       }
     } catch (e) {
       //do nothing
     }
+    await AwesomeNotifications().dispose();
   }
+
+  // Initialize the notifications
+  initAwesome();
+
+  // Setting listeners for when the app is running and notification button is clicked
+  AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+      onNotificationCreatedMethod: NotificationController.onNotificationCreatedMethod,
+      onNotificationDisplayedMethod: NotificationController.onNotificationDisplayedMethod,
+      onDismissActionReceivedMethod: NotificationController.onDismissActionReceivedMethod);
+
+  // Detecting if the app was opened from a notification and handling it if it was
+  ReceivedAction? receivedAction = await AwesomeNotifications().getInitialNotificationAction(removeFromActionEvents: false);
+  await NotificationController.handleNotificationAction(receivedAction);
+
+  // Initializing the background fetch
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
   // Check if user has opped out of analytics
 

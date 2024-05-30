@@ -2,7 +2,11 @@
 
 import 'package:autojidelna/local_imports.dart';
 
+import 'package:background_fetch/background_fetch.dart';
+
 import 'package:canteenlib/canteenlib.dart';
+
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
@@ -50,6 +54,39 @@ class MainAppScreenState extends State<MainAppScreen> {
       }
     }
     setScaffoldBody(MainAppScreenState().jidelnicekWidget());
+  }
+
+  @override
+  initState() {
+    loggedInCanteen.readData(Prefs.firstTime).then((value) {
+      if (value != '1') {
+        initPlatformState().then((value) async {
+          await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+            if (!isAllowed) {
+              //TODO: less annoying popup for notifications
+
+              // This is just a basic example. For real apps, you must show some
+              // friendly dialog box before call the request method.
+              // This is very important to not harm the user experience
+              //
+              //                    /|\
+              //                     |
+              //                     |
+              //                     |
+              //
+              //              Users are fine ;)
+              //
+              AwesomeNotifications().requestPermissionToSendNotifications();
+            }
+            BackgroundFetch.start();
+          });
+        });
+      } else {
+        initPlatformState();
+      }
+      loggedInCanteen.saveData(Prefs.firstTime, '1');
+    });
+    super.initState();
   }
 
   ///callback for SlidingUpPanel

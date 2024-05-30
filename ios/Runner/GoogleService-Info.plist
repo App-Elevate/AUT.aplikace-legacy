@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>cz.appelevate.autojidelna</string>
+	<string>com.tomprotiva.autojidelna</string>
 	<key>PROJECT_ID</key>
 	<string>autojidelna</string>
 	<key>STORAGE_BUCKET</key>

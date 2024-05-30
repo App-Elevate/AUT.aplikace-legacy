@@ -7,6 +7,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+
 import 'package:canteenlib/canteenlib.dart';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -413,6 +415,7 @@ class LoggedInCanteen {
   ///saves the loginData class to secure storage
   Future<void> saveLoginToSecureStorage(LoginDataAutojidelna loginData) async {
     await saveDataToSecureStorage('loginData', jsonEncode(loginData));
+    initAwesome();
   }
 
   ///gets an instance of loginData.
@@ -475,10 +478,17 @@ class LoggedInCanteen {
       analytics!.logEvent(name: 'logout');
     }
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
+    bool isDuplicate = false;
     for (int i = 0; i < loginData.users.length; i++) {
       if (loginData.users[i].username == loginData.users[id].username && i != id) {
+        isDuplicate = true;
         break;
       }
+    }
+    if (!isDuplicate) {
+      AwesomeNotifications().removeChannel('${NotificationIds.dnesniJidloChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${loginData.users[id].username}_${loginData.users[id].url}');
     }
     //removing just the one item from the array
 
@@ -508,6 +518,10 @@ class LoggedInCanteen {
     loginData.currentlyLoggedIn = false;
     loginData.users.clear();
     loginData.currentlyLoggedInId = null;
+    for (int id = 0; id < loginData.users.length; id++) {
+      AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+    }
     //even though I don't like this it is safe because this is called rarely
     _canteenInstance = null;
     _canteenData = null;

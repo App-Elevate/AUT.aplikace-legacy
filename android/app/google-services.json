@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:108088693003:android:a876fdaf042a909d96d20e",
         "android_client_info": {
-          "package_name": "cz.appelevate.autojidelna"
+          "package_name": "com.tomprotiva.autojidelna"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "108088693003-8svtmkptltbqo5a7a8lj2g04a7m01s95.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.autojidelna"
+                "bundle_id": "com.tomprotiva.autojidelna"
               }
             }
           ]
