@@ -1,6 +1,4 @@
 // settings page. Can be called from account drawer or login screen
-import 'package:awesome_notifications/awesome_notifications.dart';
-
 // kDebugMode
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +37,6 @@ class SettingsPage extends StatelessWidget {
       await loggedInCanteen.removeData('${Prefs.lastJidloDneCheck}${uzivatel.username}_${uzivatel.url}');
       await loggedInCanteen.removeData('${Prefs.lastNotificationCheck}${uzivatel.username}_${uzivatel.url}');
     }
-    await doNotifications();
   }
 
   Future<void> setSettings() async {
@@ -493,10 +490,7 @@ class SettingsPage extends StatelessWidget {
               text: TextSpan(
                 text: Texts.settingsAnotherOptions.i18n(),
                 style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () async {
-                    AwesomeNotifications().showNotificationConfigPage();
-                  },
+                recognizer: TapGestureRecognizer()..onTap = () async {},
               ),
             ),
           ),
@@ -591,9 +585,7 @@ class SettingsPage extends StatelessWidget {
           const Divider(),
           ListTile(
             title: ElevatedButton(
-              onPressed: () async {
-                doNotifications(force: true);
-              },
+              onPressed: () async {},
               child: Text(Texts.settingsDebugForceNotifications.i18n()),
             ),
           ),
