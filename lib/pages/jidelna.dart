@@ -174,7 +174,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     minWidth: 0,
-                    textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                    textColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     padding: EdgeInsets.zero,
                     onPressed: () async {
                       DateTime currentDate = dateListener.value;
@@ -202,7 +202,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                               highlightColor: Colors.transparent,
                               padding: const EdgeInsets.symmetric(horizontal: 5),
                               minWidth: 0,
-                              textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                              textColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                               onPressed: () {
                                 changeDate(daysChange: -1);
                               },
@@ -210,7 +210,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                             ),
                             TextButton(
                               style: Theme.of(context).textButtonTheme.style?.copyWith(
-                                    foregroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primary),
+                                    foregroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primary),
                                   ),
                               onPressed: () async {
                                 var datePicked = await CustomDatePicker().showDatePicker(context, currentDate);
@@ -229,7 +229,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                               highlightColor: Colors.transparent,
                               padding: const EdgeInsets.symmetric(horizontal: 5),
                               minWidth: 0,
-                              textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                              textColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                               onPressed: () {
                                 changeDate(daysChange: 1);
                               },
@@ -247,12 +247,12 @@ class MainAppScreenState extends State<MainAppScreen> {
                     highlightColor: Colors.transparent,
                     minWidth: 0,
                     height: 27.5,
-                    textColor: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                    textColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                     padding: const EdgeInsets.symmetric(horizontal: 7.5),
                     shape: ContinuousRectangleBorder(
                       borderRadius: BorderRadius.circular(12.5),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.5),
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                         width: 1.75,
                       ),
                     ),

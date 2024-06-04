@@ -102,7 +102,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         // wait for the animation to finish
         await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
         // pushing loginPage
-        if (mounted) {
+        if (mounted && context.mounted) {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen(setHomeWidget: widget.setHomeWidget)));
         }
       },
@@ -166,7 +166,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           icon: Icon(
             Icons.logout,
             size: 30,
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () async {
             // popup asking the user if they are sure they want to logout

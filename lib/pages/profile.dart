@@ -70,7 +70,7 @@ class ProfilePage extends StatelessWidget {
   Container _userMainInfo(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: Row(

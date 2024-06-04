@@ -254,8 +254,8 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
 
         return ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(buttonColor),
-            foregroundColor: MaterialStatePropertyAll(textColor),
+            backgroundColor: WidgetStatePropertyAll(buttonColor),
+            foregroundColor: WidgetStatePropertyAll(textColor),
           ),
           onPressed: isButtonDisabled || widget.ordering.value
               ? null

@@ -66,7 +66,6 @@ Row failedUpdate(BuildContext context) {
         child: Builder(builder: (context) {
           return ElevatedButton(
             onPressed: () {
-              networkInstallApk(releaseInfo!.downloadUrl!, context);
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
             },
             child: Text(Texts.updateSnackbarTryAgain.i18n()),
