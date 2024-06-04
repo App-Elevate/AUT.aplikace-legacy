@@ -19,9 +19,9 @@ class Themes {
 
       // Colors
       colorScheme: colorScheme,
-      canvasColor: colorScheme.background,
-      disabledColor: colorScheme.surfaceVariant,
-      scaffoldBackgroundColor: colorScheme.background,
+      canvasColor: colorScheme.surface,
+      disabledColor: colorScheme.surfaceContainerHighest,
+      scaffoldBackgroundColor: colorScheme.surface,
       shadowColor: Colors.transparent,
       splashColor: Colors.transparent,
       splashFactory: NoSplash.splashFactory,
@@ -30,25 +30,25 @@ class Themes {
       // Main
       iconTheme: IconThemeData(
         size: 30,
-        color: colorScheme.onBackground,
+        color: colorScheme.onSurface,
       ),
       appBarTheme: AppBarTheme(
         scrolledUnderElevation: pureBlack ? 0 : 2,
         elevation: pureBlack ? 0 : 2,
-        backgroundColor: dark ? colorScheme.background : colorScheme.primary,
-        foregroundColor: dark ? colorScheme.onBackground : colorScheme.onPrimary,
+        backgroundColor: dark ? colorScheme.surface : colorScheme.primary,
+        foregroundColor: dark ? colorScheme.onSurface : colorScheme.onPrimary,
         iconTheme: IconThemeData(
-          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
+          color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
         ),
         actionsIconTheme: IconThemeData(
-          color: dark ? colorScheme.onBackground : colorScheme.onPrimary,
+          color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
         ),
       ),
       cardTheme: const CardTheme(elevation: 2),
-      dividerTheme: DividerThemeData(color: colorScheme.surfaceVariant),
+      dividerTheme: DividerThemeData(color: colorScheme.surfaceContainerHighest),
       drawerTheme: DrawerThemeData(
         surfaceTintColor: colorScheme.surfaceTint,
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         scrimColor: colorScheme.scrim,
         elevation: 2,
         width: 275,
@@ -70,20 +70,20 @@ class Themes {
         closeIconColor: colorScheme.onInverseSurface,
       ),
       datePickerTheme: DatePickerThemeData(
-        backgroundColor: colorScheme.background,
-        headerBackgroundColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
-        headerForegroundColor: dark ? colorScheme.onBackground : colorScheme.onSecondary,
+        backgroundColor: colorScheme.surface,
+        headerBackgroundColor: dark ? colorScheme.onSurface.withOpacity(0.1) : colorScheme.secondary,
+        headerForegroundColor: dark ? colorScheme.onSurface : colorScheme.onSecondary,
         dividerColor: Colors.transparent,
         elevation: pureBlack ? 0 : 2,
       ),
       dialogTheme: DialogTheme(
-        backgroundColor: colorScheme.background,
+        backgroundColor: colorScheme.surface,
         elevation: pureBlack ? 3 : 2,
         surfaceTintColor: colorScheme.surfaceTint,
         alignment: Alignment.center,
-        iconColor: colorScheme.onBackground,
+        iconColor: colorScheme.onSurface,
         titleTextStyle: TextStyle(
-          color: colorScheme.onBackground,
+          color: colorScheme.onSurface,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
@@ -93,8 +93,8 @@ class Themes {
         actionsPadding: const EdgeInsets.fromLTRB(12, 0, 16, 7),
       ),
       timePickerTheme: TimePickerThemeData(
-        backgroundColor: colorScheme.background,
-        dialHandColor: dark ? colorScheme.onBackground.withOpacity(0.1) : colorScheme.secondary,
+        backgroundColor: colorScheme.surface,
+        dialHandColor: dark ? colorScheme.onSurface.withOpacity(0.1) : colorScheme.secondary,
         elevation: pureBlack ? 3 : 2,
       ),
 
@@ -115,8 +115,8 @@ class Themes {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
         selectedColor: colorScheme.primary,
-        iconColor: colorScheme.onBackground,
-        textColor: colorScheme.onBackground,
+        iconColor: colorScheme.onSurface,
+        textColor: colorScheme.onSurface,
         titleTextStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w400,
@@ -137,30 +137,30 @@ class Themes {
       switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          textStyle: const MaterialStatePropertyAll(
+          textStyle: const WidgetStatePropertyAll(
             TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
               height: 1.25,
             ),
           ),
-          backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-            if (states.contains(MaterialState.disabled)) {
-              return colorScheme.surfaceVariant; // Disabled color
+          backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return colorScheme.surfaceContainerHighest; // Disabled color
             }
-            return colorScheme.background; // Regular color
+            return colorScheme.surface; // Regular color
           }),
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.disabled)) {
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
               return colorScheme.onSurfaceVariant;
             }
-            return colorScheme.onBackground;
+            return colorScheme.onSurface;
           }),
-          fixedSize: const MaterialStatePropertyAll(Size.fromHeight(50)),
+          fixedSize: const WidgetStatePropertyAll(Size.fromHeight(50)),
           splashFactory: InkRipple.splashFactory,
           alignment: Alignment.center,
-          shadowColor: const MaterialStatePropertyAll(Colors.transparent),
-          elevation: const MaterialStatePropertyAll(4),
+          shadowColor: const WidgetStatePropertyAll(Colors.transparent),
+          elevation: const WidgetStatePropertyAll(4),
         ),
       ),
       iconButtonTheme: const IconButtonThemeData(
@@ -170,8 +170,8 @@ class Themes {
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: MaterialStatePropertyAll(colorScheme.onSurface),
-          textStyle: const MaterialStatePropertyAll(
+          foregroundColor: WidgetStatePropertyAll(colorScheme.onSurface),
+          textStyle: const WidgetStatePropertyAll(
             TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
@@ -179,14 +179,14 @@ class Themes {
             ),
           ),
           splashFactory: NoSplash.splashFactory,
-          overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         ),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.selected)) {
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.selected)) {
                 return colorScheme.primary;
               }
               return Colors.transparent;
@@ -262,11 +262,9 @@ class ColorSchemes {
     onSecondary: Colors.white,
     error: Colors.red,
     onError: Colors.black,
-    background: Colors.white,
-    onBackground: Colors.black,
     surface: Colors.white,
     onSurface: Colors.black,
-    surfaceVariant: Colors.black12,
+    surfaceContainerHighest: Colors.black12,
     onSurfaceVariant: Colors.black54,
     scrim: Colors.black54,
     surfaceTint: Colors.black,
@@ -282,11 +280,9 @@ class ColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFCF6679),
     onError: Colors.white,
-    background: Color(0xff121212),
-    onBackground: Colors.white,
     surface: Color(0xff121212),
     onSurface: Colors.white,
-    surfaceVariant: Colors.white12,
+    surfaceContainerHighest: Colors.white12,
     onSurfaceVariant: Colors.white54,
     scrim: Colors.black54,
     surfaceTint: Colors.white,
@@ -302,11 +298,9 @@ class ColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFCF6679),
     onError: Colors.white,
-    background: Colors.black,
-    onBackground: Colors.white,
     surface: Color(0xff121212),
     onSurface: Colors.white,
-    surfaceVariant: Colors.white12,
+    surfaceContainerHighest: Colors.white12,
     onSurfaceVariant: Colors.white54,
     scrim: Colors.black87,
     surfaceTint: Colors.white,

@@ -56,7 +56,7 @@ class MainAccountDrawer extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: TextButton(
                           style: Theme.of(context).textButtonTheme.style?.copyWith(
-                                textStyle: const MaterialStatePropertyAll(
+                                textStyle: const WidgetStatePropertyAll(
                                   TextStyle(
                                     inherit: true,
                                     fontSize: 20,
@@ -179,30 +179,6 @@ class MainAccountDrawer extends StatelessWidget {
                           child: Text(Texts.aboutSourceCode.i18n()),
                         ),
                       ),
-                      Builder(
-                        builder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                ReleaseInfo localReleaseInfo = releaseInfo ?? await getLatestRelease();
-                                if (localReleaseInfo.currentlyLatestVersion && context.mounted) {
-                                  Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackbarFunction(Texts.aboutLatestVersion.i18n()))
-                                      .closed
-                                      .then((SnackBarClosedReason reason) {
-                                    snackbarshown.shown = false;
-                                  });
-                                  return;
-                                }
-                                Future.delayed(Duration.zero, () => newUpdateDialog(context));
-                              },
-                              child: Text(Texts.aboutCheckForUpdates.i18n(), textAlign: TextAlign.center),
-                            ),
-                          );
-                        },
-                      ),
                     ],
                   );
                 },
@@ -232,13 +208,13 @@ class MainAccountDrawer extends StatelessWidget {
   Widget locationPicker(BuildContext context) {
     return TextButton(
       style: Theme.of(context).textButtonTheme.style!.copyWith(
-            foregroundColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.disabled)) {
-                return Theme.of(context).colorScheme.onBackground;
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return Theme.of(context).colorScheme.onSurface;
               }
               return Theme.of(context).colorScheme.primary;
             }),
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            padding: const WidgetStatePropertyAll(EdgeInsets.all(0)),
           ),
       onPressed: locations.length < 2
           ? null

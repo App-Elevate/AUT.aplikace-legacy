@@ -43,7 +43,7 @@ class CustomDatePicker {
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(28), topRight: Radius.circular(28)),
                                 color: Theme.of(context).colorScheme.brightness == Brightness.dark
-                                    ? Theme.of(context).colorScheme.onBackground.withOpacity(0.1)
+                                    ? Theme.of(context).colorScheme.onSurface.withOpacity(0.1)
                                     : Theme.of(context).colorScheme.secondary,
                               ),
                             ),

@@ -35,7 +35,43 @@
               "client_id": "108088693003-8svtmkptltbqo5a7a8lj2g04a7m01s95.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.tomprotiva.autojidelna"
+                "bundle_id": "com.example.autojidelna"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108088693003:android:eb6d15855fefa46f96d20e",
+        "android_client_info": {
+          "package_name": "cz.appelevate.autojidelna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "108088693003-nu0jmettp9aohnmu1kbtdp98ar24n895.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACTnrxRr55tjfBo6asnamXJdB7gy2VqcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "108088693003-nu0jmettp9aohnmu1kbtdp98ar24n895.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "108088693003-8svtmkptltbqo5a7a8lj2g04a7m01s95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.autojidelna"
               }
             }
           ]

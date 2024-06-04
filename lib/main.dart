@@ -202,7 +202,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    getLatestRelease();
     setHomeWidgetPublic = setHomeWidget;
     // Only after at least the action method is set, the notification events are delivered
     homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);
@@ -367,13 +366,11 @@ class LoggingInWidget extends StatelessWidget {
           } else {
             setCurrentDate();
           }
-          // checking for updates
-          Future.delayed(Duration.zero, () => newUpdateDialog(context));
           // routing to main app screen (jidelnicek)
           return MainAppScreen(setHomeWidget: setHomeWidget);
         }
         return Container(
-          decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
           child: const Center(
             child: CircularProgressIndicator(),
           ),

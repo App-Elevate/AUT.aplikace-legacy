@@ -225,7 +225,7 @@ class SettingsPage extends StatelessWidget {
                                       ? Theme.of(context).colorScheme.primary
                                       : Theme.of(context).colorScheme.onSurfaceVariant,
                                 ),
-                                color: Theme.of(context).colorScheme.background),
+                                color: Theme.of(context).colorScheme.surface),
                             height: 250,
                             width: 125,
                             child: Column(
@@ -539,7 +539,7 @@ class SettingsPage extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   text: Texts.settingsDataCollectionDescription1.i18n(),
-                  style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                   children: [
                     TextSpan(
                       text: Texts.settingsDataCollectionDescription2.i18n(),
