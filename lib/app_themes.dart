@@ -44,7 +44,12 @@ class Themes {
           color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
         ),
       ),
-      cardTheme: const CardTheme(elevation: 2),
+      cardTheme: CardTheme(
+        elevation: 2,
+        clipBehavior: Clip.hardEdge,
+        color: colorScheme.surface,
+        surfaceTintColor: colorScheme.surfaceTint,
+      ),
       dividerTheme: DividerThemeData(color: colorScheme.surfaceContainerHighest),
       drawerTheme: DrawerThemeData(
         surfaceTintColor: colorScheme.surfaceTint,

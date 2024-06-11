@@ -26,9 +26,8 @@ class LinedCard extends StatelessWidget {
     return GestureDetector(
       onTap: smallButton ? null : onPressed,
       child: Card(
-        clipBehavior: Clip.hardEdge,
         margin: EdgeInsets.symmetric(horizontal: Spacing.s16),
-        child: Container(
+        child: Padding(
           padding: EdgeInsets.symmetric(horizontal: Spacing.s16, vertical: Spacing.s4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
