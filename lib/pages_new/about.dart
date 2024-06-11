@@ -21,7 +21,7 @@ class AboutScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 85.0),
             child: SvgPicture.asset(
               "assets/images/logo.svg",
-              colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onBackground, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
               height: MediaQuery.sizeOf(context).height * .10,
             ),
           ),
