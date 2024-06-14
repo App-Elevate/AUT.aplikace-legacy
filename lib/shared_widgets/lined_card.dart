@@ -32,7 +32,7 @@ class LinedCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              dividerWithText(title, titleTextAlign),
+              dividerWithText(context, text: title, textAlign: titleTextAlign),
               child ?? const SizedBox(),
               footerButton(context),
             ],
@@ -43,7 +43,7 @@ class LinedCard extends StatelessWidget {
   }
 
   Widget footerButton(BuildContext context) {
-    if (!smallButton) return dividerWithText(footer, footerTextAlign);
+    if (!smallButton) return dividerWithText(context, text: footer, textAlign: footerTextAlign);
     return MaterialButton(
       visualDensity: const VisualDensity(vertical: -4),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -53,11 +53,11 @@ class LinedCard extends StatelessWidget {
       highlightColor: Colors.transparent,
       textColor: Theme.of(context).colorScheme.primary,
       onPressed: onPressed,
-      child: dividerWithText(footer, footerTextAlign),
+      child: dividerWithText(context, text: footer, textAlign: footerTextAlign),
     );
   }
 
-  Widget dividerWithText(String? text, TextAlign textAlign) {
+  Widget dividerWithText(BuildContext context, {String? text, TextAlign? textAlign}) {
     if (text == null) {
       return const CustomDivider(isTransparent: false, hasIndent: false);
     }
@@ -65,7 +65,7 @@ class LinedCard extends StatelessWidget {
       children: [
         if (textAlign != TextAlign.start && textAlign != TextAlign.left && textAlign != TextAlign.justify)
           const Flexible(child: CustomDivider(isTransparent: false, hasIndent: false)),
-        Text(text, style: const TextStyle(color: Colors.white54)),
+        Text(text, style: Theme.of(context).textTheme.labelLarge),
         if (textAlign != TextAlign.end && textAlign != TextAlign.right)
           const Flexible(child: CustomDivider(isTransparent: false, hasEndIndent: false)),
       ],
