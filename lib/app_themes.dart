@@ -27,11 +27,26 @@ class Themes {
       splashFactory: NoSplash.splashFactory,
       typography: Typography.material2021(),
 
-      // Main
-      iconTheme: IconThemeData(
-        size: 30,
-        color: colorScheme.onSurface,
+      textTheme: TextTheme(
+        bodySmall: const TextStyle(fontFamily: "Inter"),
+        bodyMedium: const TextStyle(fontFamily: "Inter"),
+        bodyLarge: const TextStyle(fontFamily: "Inter"),
+        labelSmall: TextStyle(fontFamily: "Lexend", color: colorScheme.onSurfaceVariant),
+        labelMedium: TextStyle(fontFamily: "Lexend", color: colorScheme.onSurfaceVariant),
+        labelLarge: TextStyle(fontFamily: "Lexend", color: colorScheme.onSurfaceVariant),
+        titleSmall: const TextStyle(fontFamily: "Lexend"),
+        titleMedium: const TextStyle(fontFamily: "Lexend"),
+        titleLarge: const TextStyle(fontFamily: "Lexend"),
+        headlineSmall: const TextStyle(fontFamily: "Lexend"),
+        headlineMedium: const TextStyle(fontFamily: "Lexend"),
+        headlineLarge: const TextStyle(fontFamily: "Lexend"),
+        displaySmall: const TextStyle(fontFamily: "Lexend"),
+        displayMedium: const TextStyle(fontFamily: "Lexend"),
+        displayLarge: const TextStyle(fontFamily: "Lexend"),
       ),
+
+      // Main
+      iconTheme: IconThemeData(size: 30, color: colorScheme.onSurface),
       appBarTheme: AppBarTheme(
         scrolledUnderElevation: pureBlack ? 0 : 2,
         elevation: pureBlack ? 0 : 2,
