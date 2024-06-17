@@ -132,18 +132,20 @@ class Themes {
 
       // List tiles
       listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
         selectedColor: colorScheme.primary,
         iconColor: colorScheme.onSurface,
-        textColor: colorScheme.onSurface,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           fontSize: 20,
+          fontFamily: "Inter",
           fontWeight: FontWeight.w400,
+          color: colorScheme.onSurface,
         ),
-        subtitleTextStyle: const TextStyle(
+        subtitleTextStyle: TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.normal,
+          fontFamily: "Inter",
+          color: colorScheme.onSurfaceVariant,
         ),
         visualDensity: VisualDensity.comfortable,
       ),
