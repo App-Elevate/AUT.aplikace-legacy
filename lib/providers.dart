@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_prefs.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,13 @@ import 'package:flutter/material.dart';
 ///
 /// [isPureBlack]           | If true, dark mode joins the dark side of the force
 ///
-/// [bigCalendarMarkers]    | If true,  displays big markers in calendar
+/// [bigCalendarMarkers]    | If true, displays big markers in calendar
 ///
 /// [skipWeekends]          | If true, doesnt display or skips weekends in Canteen menu
+///
+/// [dateFormat]            | Date Format used in the app
+///
+/// [relTimeStamps]         | If true, displays "today" instead of 1.1.2024
 class UserPreferences with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
   ThemeMode _themeMode = ThemeMode.system;
@@ -22,6 +27,8 @@ class UserPreferences with ChangeNotifier {
   bool _isPureBlack = false;
   bool _bigCalendarMarkers = false;
   bool _skipWeekends = false;
+  DateFormat _dateFormat = DateFormat.system;
+  bool _relTimeStamps = false;
 
   /// Theme style getter
   ThemeStyle get themeStyle => _themeStyle;
@@ -41,6 +48,12 @@ class UserPreferences with ChangeNotifier {
   /// Skip weekends getter
   bool get skipWeekends => _skipWeekends;
 
+  /// Date Format getter
+  DateFormat get dateFormat => _dateFormat;
+
+  /// Relative TimeStamps getter
+  bool get relTimeStamps => _relTimeStamps;
+
   /// Loads settings from shared preferences
   void loadFromShraredPreferences() async {
     _themeStyle = await readEnumFromSharedPreferences(Keys.themeStyle, ThemeStyle.values, _themeStyle);
@@ -49,6 +62,8 @@ class UserPreferences with ChangeNotifier {
     _isPureBlack = await readBoolFromSharedPreferences(Keys.pureBlack) ?? _isPureBlack;
     _bigCalendarMarkers = await readBoolFromSharedPreferences(Keys.bigCalendarMarkers) ?? _bigCalendarMarkers;
     _skipWeekends = await readBoolFromSharedPreferences(Keys.skipWeekends) ?? _skipWeekends;
+    _dateFormat = await readEnumFromSharedPreferences(Keys.dateFormat, DateFormat.values, _dateFormat);
+    _relTimeStamps = await readBoolFromSharedPreferences(Keys.relTimeStamps) ?? _relTimeStamps;
     notifyListeners();
   }
 
@@ -85,6 +100,20 @@ class UserPreferences with ChangeNotifier {
   void setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
     saveBoolToSharedPreferences(Keys.bigCalendarMarkers, _bigCalendarMarkers);
+    notifyListeners();
+  }
+
+  /// Setter for date format
+  void setDateFormat(DateFormat dateFormat) {
+    _dateFormat = dateFormat;
+    saveEnumToSharedPreferences(Keys.dateFormat, _dateFormat);
+    notifyListeners();
+  }
+
+  /// Setter for relative timestamps
+  void setRelTimeStamps(bool relTimeStamps) {
+    _relTimeStamps = relTimeStamps;
+    saveBoolToSharedPreferences(Keys.relTimeStamps, _relTimeStamps);
     notifyListeners();
   }
 

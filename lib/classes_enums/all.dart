@@ -335,3 +335,17 @@ enum ThemeStyle {
   evergreenSlate,
   crimsonEarth,
 }
+
+enum DateFormat {
+  system,
+  mmddyy,
+  ddmmyy,
+  yyyymmdd,
+  ddmmmyyyy,
+  mmmddyyyy,
+}
+
+class Fonts {
+  static String get body => "Inter";
+  static String get headings => "Lexend";
+}

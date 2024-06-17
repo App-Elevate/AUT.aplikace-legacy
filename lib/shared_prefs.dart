@@ -8,6 +8,8 @@ class Keys {
   static get listUi => "ListUi";
   static get pureBlack => "PureBlack";
   static get bigCalendarMarkers => "BigCalendarMarkers";
+  static get dateFormat => "dateFormat";
+  static get relTimeStamps => "relTimeStamps";
   static get skipWeekends => "SkipWeekends";
   static get todaysFood => "TodaysFood";
   static get sendTodaysFood => "SendTodaysFood";
