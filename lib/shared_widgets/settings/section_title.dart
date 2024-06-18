@@ -13,7 +13,7 @@ class SectionTitle extends StatelessWidget {
       children: [
         CustomDivider(height: Spacing.s8),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * .05),
+          padding: EdgeInsets.symmetric(horizontal: Spacing.s16),
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),

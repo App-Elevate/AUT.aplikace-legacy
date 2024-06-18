@@ -1,10 +1,9 @@
-import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
+import 'package:autojidelna/shared_widgets/settings/date_format_picker_button.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +21,7 @@ class AppearanceScreen extends StatelessWidget {
         child: Column(
           children: [
             const SectionTitle("Theme"),
-            CustomDivider(height: Spacing.s30),
+            CustomDivider(height: Spacing.s24),
             // theme mode picker
             const ThemeModePicker(),
             CustomDivider(height: Spacing.s38),
@@ -70,14 +69,8 @@ class AppearanceScreen extends StatelessWidget {
                 onChanged: relTimeStamps.set,
               ),
             ),
-            Selector<UserPreferences, ({DateFormat read, Function(DateFormat) set})>(
-              selector: (_, p1) => (read: p1.dateFormat, set: p1.setDateFormat),
-              builder: (context, dateFormat, child) => ListTile(
-                title: const Text("Date format"),
-                subtitle: Text(EnumToString.convertToString(dateFormat.read)),
-                onTap: () {},
-              ),
-            ),
+            const DateFormatPickerButton(),
+            const CustomDivider(),
           ],
         ),
       ),
