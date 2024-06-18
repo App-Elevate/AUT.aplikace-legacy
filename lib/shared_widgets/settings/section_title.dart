@@ -9,10 +9,11 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomDivider(height: Spacing.s8),
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * .9,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: MediaQuery.sizeOf(context).width * .05),
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
