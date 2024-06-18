@@ -11,7 +11,7 @@ class DateFormatPickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<UserPreferences, ({DateFormat read})>(
+    return Selector<AppearancePreferences, ({DateFormat read})>(
       selector: (_, p1) => (read: p1.dateFormat),
       builder: (context, dateFormat, child) => ListTile(
         title: const Text("Date format"),

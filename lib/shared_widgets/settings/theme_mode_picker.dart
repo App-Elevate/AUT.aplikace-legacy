@@ -9,7 +9,7 @@ class ThemeModePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width * .9,
-      child: Selector<UserPreferences, ({ThemeMode read, Function(ThemeMode) set})>(
+      child: Selector<AppearancePreferences, ({ThemeMode read, Function(ThemeMode) set})>(
         selector: (_, p1) => (read: p1.themeMode, set: p1.setThemeMode),
         builder: (_, themeMode, __) => SegmentedButton<ThemeMode>(
           showSelectedIcon: false,

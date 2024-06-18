@@ -19,7 +19,7 @@ class DateFormatPicker extends StatelessWidget {
       buttonPadding: EdgeInsets.zero,
       actionsPadding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
       title: const SectionTitle("Date Format"),
-      content: Selector<UserPreferences, ({DateFormat read, Function(DateFormat) set})>(
+      content: Selector<AppearancePreferences, ({DateFormat read, Function(DateFormat) set})>(
         selector: (_, p1) => (read: p1.dateFormat, set: p1.setDateFormat),
         builder: (context, dateFormat, child) => SingleChildScrollView(
           child: SizedBox(

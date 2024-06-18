@@ -23,12 +23,22 @@ class SettingsScreen extends StatelessWidget {
             const SectionTitle("Convenience"),
             // TODO: implement this
             // skip weekends switch
-            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
               builder: (context, skipWeekends, child) => SwitchListTile(
                 title: const Text("Skip weekends"),
                 value: skipWeekends.read,
                 onChanged: skipWeekends.set,
+              ),
+            ),
+            // TODO: implement this
+            // big calendar markers switch
+            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
+              selector: (_, p1) => (read: p1.bigCalendarMarkers, set: p1.setCalendarMarkers),
+              builder: (context, bigCalendarMarkers, child) => SwitchListTile(
+                title: const Text("Big calendar markers"),
+                value: bigCalendarMarkers.read,
+                onChanged: bigCalendarMarkers.set,
               ),
             ),
             // TODO: implement this

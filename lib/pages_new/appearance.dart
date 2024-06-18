@@ -12,7 +12,7 @@ class AppearanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLightMode = context.select<UserPreferences, ThemeMode>((value) => value.themeMode) == ThemeMode.light;
+    final bool isLightMode = context.select<AppearancePreferences, ThemeMode>((value) => value.themeMode) == ThemeMode.light;
     final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || isLightMode;
 
     return Scaffold(
@@ -29,7 +29,7 @@ class AppearanceScreen extends StatelessWidget {
             const ThemeStylePicker(),
             CustomDivider(height: Spacing.s30),
             // pure black mode switch
-            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),
               builder: (context, pureBlack, child) => SwitchListTile(
                 title: const Text("Pure black dark mode"),
@@ -41,7 +41,7 @@ class AppearanceScreen extends StatelessWidget {
             const SectionTitle("Display"),
             // TODO: implement this
             // list UI switch
-            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.isListUi, set: p1.setListUi),
               builder: (context, listUi, child) => SwitchListTile(
                 title: const Text("List UI"),
@@ -50,21 +50,11 @@ class AppearanceScreen extends StatelessWidget {
                 onChanged: listUi.set,
               ),
             ),
-            // TODO: implement this
-            // big calendar markers switch
-            Selector<UserPreferences, ({bool read, Function(bool) set})>(
-              selector: (_, p1) => (read: p1.bigCalendarMarkers, set: p1.setCalendarMarkers),
-              builder: (context, bigCalendarMarkers, child) => SwitchListTile(
-                title: const Text("Big calendar markers"),
-                value: bigCalendarMarkers.read,
-                onChanged: bigCalendarMarkers.set,
-              ),
-            ),
-            Selector<UserPreferences, ({bool read, Function(bool) set})>(
+            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
               selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps),
               builder: (context, relTimeStamps, child) => SwitchListTile(
                 title: const Text("Relative timestamps"),
-                subtitle: const Text("Today instead of 1.1.2024"),
+                subtitle: const Text('"Today" instead of "1.1.2024"'),
                 value: relTimeStamps.read,
                 onChanged: relTimeStamps.set,
               ),

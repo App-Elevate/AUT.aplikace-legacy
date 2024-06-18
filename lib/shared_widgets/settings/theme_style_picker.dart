@@ -12,7 +12,7 @@ class ThemeStylePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 225,
-      child: Selector<UserPreferences, ({ThemeStyle style, Function(ThemeStyle) setStyle, ThemeMode mode, bool pureBlack})>(
+      child: Selector<AppearancePreferences, ({ThemeStyle style, Function(ThemeStyle) setStyle, ThemeMode mode, bool pureBlack})>(
         selector: (_, p1) => (style: p1.themeStyle, setStyle: p1.setThemeStyle, mode: p1.themeMode, pureBlack: p1.isPureBlack),
         builder: (context, userPreferences, _) => ListView.builder(
           shrinkWrap: true,
