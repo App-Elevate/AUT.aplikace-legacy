@@ -4,7 +4,7 @@ import 'package:autojidelna/classes_enums/all.dart';
 ///
 /// [format]      | what format it should use
 ///
-/// [date]        | date to be formated
+/// [date]        | date to be formated, if null returns DateTime.ssnow()
 ///
 /// [inSettings]  | If true, adds a "title" to the date -> ex. "Default (1.1.2024)"
 String getCorrectDateString(DateFormat format, {DateTime? date, bool inSettings = false}) {

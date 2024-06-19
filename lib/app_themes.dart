@@ -50,14 +50,7 @@ class Themes {
       appBarTheme: AppBarTheme(
         scrolledUnderElevation: pureBlack ? 0 : 2,
         elevation: pureBlack ? 0 : 2,
-        backgroundColor: dark ? colorScheme.surface : colorScheme.primary,
-        foregroundColor: dark ? colorScheme.onSurface : colorScheme.onPrimary,
-        iconTheme: IconThemeData(
-          color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
-        ),
-        actionsIconTheme: IconThemeData(
-          color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
-        ),
+        actionsIconTheme: IconThemeData(color: colorScheme.onSurfaceVariant),
       ),
       cardTheme: CardTheme(
         elevation: 2,
@@ -98,7 +91,7 @@ class Themes {
       ),
       dialogTheme: DialogTheme(
         backgroundColor: colorScheme.surface,
-        elevation: pureBlack ? 3 : 2,
+        elevation: 3,
         surfaceTintColor: colorScheme.surfaceTint,
         alignment: Alignment.center,
         iconColor: colorScheme.onSurface,
@@ -107,15 +100,13 @@ class Themes {
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        contentTextStyle: const TextStyle(
-          fontSize: 15,
-        ),
+        contentTextStyle: const TextStyle(fontSize: 15),
         actionsPadding: const EdgeInsets.fromLTRB(12, 0, 16, 7),
       ),
       timePickerTheme: TimePickerThemeData(
         backgroundColor: colorScheme.surface,
         dialHandColor: dark ? colorScheme.onSurface.withOpacity(0.1) : colorScheme.secondary,
-        elevation: pureBlack ? 3 : 2,
+        elevation: 3,
       ),
 
       // Inputs
@@ -167,15 +158,11 @@ class Themes {
             ),
           ),
           backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return colorScheme.surfaceContainerHighest; // Disabled color
-            }
+            if (states.contains(WidgetState.disabled)) return colorScheme.surfaceContainerHighest; // Disabled color
             return colorScheme.surface; // Regular color
           }),
           foregroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return colorScheme.onSurfaceVariant;
-            }
+            if (states.contains(WidgetState.disabled)) return colorScheme.onSurfaceVariant;
             return colorScheme.onSurface;
           }),
           fixedSize: const WidgetStatePropertyAll(Size.fromHeight(50)),
@@ -186,9 +173,7 @@ class Themes {
         ),
       ),
       iconButtonTheme: const IconButtonThemeData(
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-        ),
+        style: ButtonStyle(splashFactory: NoSplash.splashFactory),
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
@@ -202,6 +187,14 @@ class Themes {
           ),
           splashFactory: NoSplash.splashFactory,
           overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          side: WidgetStatePropertyAll(BorderSide(
+            width: 1.75,
+            color: colorScheme.onSurfaceVariant,
+          )),
         ),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
