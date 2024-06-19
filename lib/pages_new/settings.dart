@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/appearance.dart';
 import 'package:autojidelna/pages_new/convenience.dart';
 import 'package:autojidelna/pages_new/data_collection.dart';
@@ -36,6 +37,11 @@ class SettingsScreen extends StatelessWidget {
             leading: const Icon(Icons.cookie_outlined),
             title: const Text("Data Collection"),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DataCollectionScreen())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text("About"),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutScreen())),
           ),
         ],
       ),
