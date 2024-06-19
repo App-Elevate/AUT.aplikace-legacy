@@ -15,7 +15,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
         Flexible(
           child: ListView.builder(
             itemCount: 1, // placeholder
-            itemBuilder: (context, index) => accountRow(context, "Placeholder", false, 0),
+            itemBuilder: (context, index) => accountRow(context, username: "Placeholder"),
           ),
         ),
         CustomDivider(height: Spacing.zero, isTransparent: false),
@@ -32,15 +32,23 @@ class SwitchAccountPanelV2 extends StatelessWidget {
     );
   }
 
-  Widget accountRow(BuildContext context, String username, bool currentAccount, int id) {
+  Widget accountRow(BuildContext context, {String username = "", bool currentAccount = false}) {
     return ListTile(
       //leading: const Icon(Icons.account_circle),
       title: Text(username, style: currentAccount ? const TextStyle(fontWeight: FontWeight.w600) : null),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (currentAccount) const Icon(Icons.check),
-          IconButton(icon: const Icon(Icons.logout, size: 30), onPressed: () {}),
+          if (currentAccount) const Icon(Icons.check, size: 30),
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: Icon(
+              Icons.logout,
+              size: 30,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            onPressed: () {},
+          ),
         ],
       ),
       onTap: () {},
