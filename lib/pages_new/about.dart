@@ -1,3 +1,4 @@
+import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("About")),
-      body: Column(
+      body: ScrollViewColumn(
         children: [
           // logo
           Padding(

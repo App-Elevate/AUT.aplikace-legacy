@@ -1,3 +1,4 @@
+import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsScreen extends StatelessWidget {
@@ -7,7 +8,7 @@ class StatisticsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Statistics")),
-      body: const Placeholder(),
+      body: const ScrollViewColumn(),
     );
   }
 }
