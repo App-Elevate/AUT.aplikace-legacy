@@ -1,12 +1,10 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/appearance.dart';
+import 'package:autojidelna/pages_new/convenience.dart';
 import 'package:autojidelna/pages_new/data_collection.dart';
 import 'package:autojidelna/pages_new/notifications.dart';
-import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
-import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -25,6 +23,11 @@ class SettingsScreen extends StatelessWidget {
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AppearanceScreen())),
             ),
             ListTile(
+              leading: const Icon(Icons.tune_outlined),
+              title: const Text("Convenience"),
+              onTap: () async => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ConvenienceScreen())),
+            ),
+            ListTile(
               leading: const Icon(Icons.edit_notifications_outlined),
               title: const Text("Notifications"),
               onTap: () async => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotificationScreen())),
@@ -34,27 +37,7 @@ class SettingsScreen extends StatelessWidget {
               title: const Text("Data Collection"),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DataCollectionScreen())),
             ),
-            const SectionTitle("Convenience"),
-            // TODO: implement this
-            // skip weekends switch
-            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
-              selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
-              builder: (context, skipWeekends, child) => SwitchListTile(
-                title: const Text("Skip weekends"),
-                value: skipWeekends.read,
-                onChanged: skipWeekends.set,
-              ),
-            ),
-            // TODO: implement this
-            // big calendar markers switch
-            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
-              selector: (_, p1) => (read: p1.bigCalendarMarkers, set: p1.setCalendarMarkers),
-              builder: (context, bigCalendarMarkers, child) => SwitchListTile(
-                title: const Text("Big calendar markers"),
-                value: bigCalendarMarkers.read,
-                onChanged: bigCalendarMarkers.set,
-              ),
-            ),
+            const CustomDivider(),
           ],
         ),
       ),
