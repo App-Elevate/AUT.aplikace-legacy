@@ -2,7 +2,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Class containing getters for all keys used with shared preferences
-class Keys {
+class SharedPrefsKeys {
   static get themeMode => "ThemeMode";
   static get themeStyle => "ThemeStyle";
   static get listUi => "ListUi";

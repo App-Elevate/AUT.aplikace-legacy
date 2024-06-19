@@ -56,14 +56,14 @@ class AppearancePreferences with ChangeNotifier {
 
   /// Loads settings from shared preferences
   void loadFromShraredPreferences() async {
-    _themeStyle = await readEnumFromSharedPreferences(Keys.themeStyle, ThemeStyle.values, _themeStyle);
-    _themeMode = await readEnumFromSharedPreferences(Keys.themeMode, ThemeMode.values, _themeMode);
-    _isListUi = await readBoolFromSharedPreferences(Keys.listUi) ?? _isListUi;
-    _isPureBlack = await readBoolFromSharedPreferences(Keys.pureBlack) ?? _isPureBlack;
-    _bigCalendarMarkers = await readBoolFromSharedPreferences(Keys.bigCalendarMarkers) ?? _bigCalendarMarkers;
-    _skipWeekends = await readBoolFromSharedPreferences(Keys.skipWeekends) ?? _skipWeekends;
-    _dateFormat = await readEnumFromSharedPreferences(Keys.dateFormat, DateFormat.values, _dateFormat);
-    _relTimeStamps = await readBoolFromSharedPreferences(Keys.relTimeStamps) ?? _relTimeStamps;
+    _themeStyle = await readEnumFromSharedPreferences(SharedPrefsKeys.themeStyle, ThemeStyle.values, _themeStyle);
+    _themeMode = await readEnumFromSharedPreferences(SharedPrefsKeys.themeMode, ThemeMode.values, _themeMode);
+    _isListUi = await readBoolFromSharedPreferences(SharedPrefsKeys.listUi) ?? _isListUi;
+    _isPureBlack = await readBoolFromSharedPreferences(SharedPrefsKeys.pureBlack) ?? _isPureBlack;
+    _bigCalendarMarkers = await readBoolFromSharedPreferences(SharedPrefsKeys.bigCalendarMarkers) ?? _bigCalendarMarkers;
+    _skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? _skipWeekends;
+    _dateFormat = await readEnumFromSharedPreferences(SharedPrefsKeys.dateFormat, DateFormat.values, _dateFormat);
+    _relTimeStamps = await readBoolFromSharedPreferences(SharedPrefsKeys.relTimeStamps) ?? _relTimeStamps;
     notifyListeners();
   }
 
@@ -71,56 +71,56 @@ class AppearancePreferences with ChangeNotifier {
   void setThemeStyle(ThemeStyle themeStyle) {
     if (_themeStyle == themeStyle) return;
     _themeStyle = themeStyle;
-    saveEnumToSharedPreferences(Keys.themeStyle, _themeStyle);
+    saveEnumToSharedPreferences(SharedPrefsKeys.themeStyle, _themeStyle);
     notifyListeners();
   }
 
   /// Setter for theme mode
   void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
-    saveEnumToSharedPreferences(Keys.themeMode, _themeMode);
+    saveEnumToSharedPreferences(SharedPrefsKeys.themeMode, _themeMode);
     notifyListeners();
   }
 
   /// Setter for list UI
   void setListUi(bool isListUi) {
     _isListUi = isListUi;
-    saveBoolToSharedPreferences(Keys.listUi, _isListUi);
+    saveBoolToSharedPreferences(SharedPrefsKeys.listUi, _isListUi);
     notifyListeners();
   }
 
   /// Setter for pure black
   void setPureBlack(bool isPureBlack) {
     _isPureBlack = isPureBlack;
-    saveBoolToSharedPreferences(Keys.pureBlack, _isPureBlack);
+    saveBoolToSharedPreferences(SharedPrefsKeys.pureBlack, _isPureBlack);
     notifyListeners();
   }
 
   /// Setter for big calendar markers
   void setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
-    saveBoolToSharedPreferences(Keys.bigCalendarMarkers, _bigCalendarMarkers);
+    saveBoolToSharedPreferences(SharedPrefsKeys.bigCalendarMarkers, _bigCalendarMarkers);
     notifyListeners();
   }
 
   /// Setter for date format
   void setDateFormat(DateFormat dateFormat) {
     _dateFormat = dateFormat;
-    saveEnumToSharedPreferences(Keys.dateFormat, _dateFormat);
+    saveEnumToSharedPreferences(SharedPrefsKeys.dateFormat, _dateFormat);
     notifyListeners();
   }
 
   /// Setter for relative timestamps
   void setRelTimeStamps(bool relTimeStamps) {
     _relTimeStamps = relTimeStamps;
-    saveBoolToSharedPreferences(Keys.relTimeStamps, _relTimeStamps);
+    saveBoolToSharedPreferences(SharedPrefsKeys.relTimeStamps, _relTimeStamps);
     notifyListeners();
   }
 
   /// Setter for skip weekends
   void setSkipWeekends(bool skipWeekends) {
     _skipWeekends = skipWeekends;
-    saveBoolToSharedPreferences(Keys.skipWeekends, _skipWeekends);
+    saveBoolToSharedPreferences(SharedPrefsKeys.skipWeekends, _skipWeekends);
     notifyListeners();
   }
 }
@@ -150,25 +150,25 @@ class NotificationPreferences with ChangeNotifier {
 
   void setTodaysFood(bool todaysFood) {
     _todaysFood = todaysFood;
-    saveBoolToSharedPreferences(Keys.todaysFood, _todaysFood);
+    saveBoolToSharedPreferences(SharedPrefsKeys.todaysFood, _todaysFood);
     notifyListeners();
   }
 
   void setSendTodaysFood(TimeOfDay sendTodaysFood) {
     _sendTodaysFood = sendTodaysFood;
-    saveStringToSharedPreferences(Keys.sendTodaysFood, _sendTodaysFood.toString());
+    saveStringToSharedPreferences(SharedPrefsKeys.sendTodaysFood, _sendTodaysFood.toString());
     notifyListeners();
   }
 
   void setLowCredit(bool lowCredit) {
     _lowCredit = lowCredit;
-    saveBoolToSharedPreferences(Keys.lowCredit, _lowCredit);
+    saveBoolToSharedPreferences(SharedPrefsKeys.lowCredit, _lowCredit);
     notifyListeners();
   }
 
   void setWeekLongFamine(bool weekLongFamine) {
     _weekLongFamine = weekLongFamine;
-    saveBoolToSharedPreferences(Keys.weekLongFamine, _weekLongFamine);
+    saveBoolToSharedPreferences(SharedPrefsKeys.weekLongFamine, _weekLongFamine);
     notifyListeners();
   }
 }
