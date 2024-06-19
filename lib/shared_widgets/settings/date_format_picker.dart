@@ -32,7 +32,7 @@ class DateFormatPicker extends StatelessWidget {
                 return ListTile(
                   minVerticalPadding: 0,
                   visualDensity: const VisualDensity(vertical: -4),
-                  title: Text(getCorrectDateString(format)),
+                  title: Text(getCorrectDateString(format, inSettings: true)),
                   titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                   trailing: pickedFormat == format ? const Icon(Icons.check) : null,
                   onTap: () {

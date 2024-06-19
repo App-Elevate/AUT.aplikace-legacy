@@ -1,29 +1,36 @@
 import 'package:autojidelna/classes_enums/all.dart';
 
-String getCorrectDateString(DateFormat format, {DateTime? date}) {
+String getCorrectDateString(DateFormat format, {DateTime? date, bool inSettings = false}) {
   String string;
+  String dateStr;
   DateTime currentDate = DateTime.now();
   date = DateTime(currentDate.year, currentDate.month, currentDate.day);
   switch (format) {
     case DateFormat.ddmmmyyyy:
-      string = "dd MMM yyyy (${currentDate.day} ${getMonthString(currentDate.month)} ${currentDate.year})";
+      dateStr = "${currentDate.day} ${getMonthString(currentDate.month)} ${currentDate.year}";
+      string = "dd MMM yyyy ($dateStr)";
       break;
     case DateFormat.ddmmyy:
-      string = "dd/MM/yy (${currentDate.day}/${currentDate.month}/${currentDate.year % 100})";
+      dateStr = "${currentDate.day}/${currentDate.month}/${currentDate.year % 100}";
+      string = "dd/MM/yy ($dateStr)";
       break;
     case DateFormat.mmddyy:
-      string = "MM/dd/yy (${currentDate.month}/${currentDate.day}/${currentDate.year % 100})";
+      dateStr = "${currentDate.month}/${currentDate.day}/${currentDate.year % 100}";
+      string = "MM/dd/yy ($dateStr)";
       break;
     case DateFormat.mmmddyyyy:
-      string = "MMM dd, yyyy(${getMonthString(currentDate.month)} ${currentDate.day}, ${currentDate.year})";
+      dateStr = "${getMonthString(currentDate.month)} ${currentDate.day}, ${currentDate.year}";
+      string = "MMM dd, yyyy($dateStr)";
       break;
     case DateFormat.yyyymmdd:
-      string = "yyyy-mm-dd (${currentDate.year}-${currentDate.month}-${currentDate.day})";
+      dateStr = "${currentDate.year}-${currentDate.month}-${currentDate.day}";
+      string = "yyyy-mm-dd ($dateStr)";
       break;
     default:
-      string = "Default (${currentDate.day}. ${currentDate.month}. ${currentDate.year})";
+      dateStr = "${currentDate.day}. ${currentDate.month}. ${currentDate.year}";
+      string = "Default ($dateStr)";
   }
-  return string;
+  return inSettings ? string : dateStr;
 }
 
 String getMonthString(int month) {

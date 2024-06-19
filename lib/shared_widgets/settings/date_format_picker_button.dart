@@ -15,10 +15,8 @@ class DateFormatPickerButton extends StatelessWidget {
       selector: (_, p1) => (read: p1.dateFormat),
       builder: (context, dateFormat, child) => ListTile(
         title: const Text("Date format"),
-        subtitle: Text(getCorrectDateString(dateFormat.read)),
-        onTap: () {
-          configuredDialog(context, builder: (context) => const DateFormatPicker());
-        },
+        subtitle: Text(getCorrectDateString(dateFormat.read, inSettings: true)),
+        onTap: () => configuredDialog(context, builder: (context) => const DateFormatPicker()),
       ),
     );
   }

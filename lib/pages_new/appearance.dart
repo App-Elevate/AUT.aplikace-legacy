@@ -1,4 +1,6 @@
+import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
@@ -50,11 +52,11 @@ class AppearanceScreen extends StatelessWidget {
                 onChanged: listUi.set,
               ),
             ),
-            Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
-              selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps),
+            Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormat format})>(
+              selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
               builder: (context, relTimeStamps, child) => SwitchListTile(
                 title: const Text("Relative timestamps"),
-                subtitle: const Text('"Today" instead of "1.1.2024"'),
+                subtitle: Text('"Today" instead of "${getCorrectDateString(relTimeStamps.format, date: DateTime.now())}"'),
                 value: relTimeStamps.read,
                 onChanged: relTimeStamps.set,
               ),
