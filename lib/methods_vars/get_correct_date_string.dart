@@ -1,5 +1,12 @@
 import 'package:autojidelna/classes_enums/all.dart';
 
+/// Returns correctly formated date string
+///
+/// [format]      | what format it should use
+///
+/// [date]        | date to be formated
+///
+/// [inSettings]  | If true, adds a "title" to the date -> ex. "Default (1.1.2024)"
 String getCorrectDateString(DateFormat format, {DateTime? date, bool inSettings = false}) {
   String string;
   String dateStr;
@@ -33,6 +40,7 @@ String getCorrectDateString(DateFormat format, {DateTime? date, bool inSettings 
   return inSettings ? string : dateStr;
 }
 
+/// Converts moth number to month name
 String getMonthString(int month) {
   const monthStrings = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

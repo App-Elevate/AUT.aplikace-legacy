@@ -336,6 +336,7 @@ enum ThemeStyle {
   crimsonEarth,
 }
 
+/// Describes what time format will be used by the app
 enum DateFormat {
   system,
   mmddyy,
@@ -345,6 +346,7 @@ enum DateFormat {
   mmmddyyyy,
 }
 
+/// Class containing all fonts used by the apps
 class Fonts {
   static String get body => "Inter";
   static String get headings => "Lexend";
