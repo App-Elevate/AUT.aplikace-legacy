@@ -135,7 +135,7 @@ class Themes {
         //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
         selectedColor: colorScheme.primary,
-        iconColor: colorScheme.onSurface,
+        iconColor: colorScheme.primary.withOpacity(.75),
         titleTextStyle: TextStyle(
           fontSize: 20,
           fontFamily: Fonts.body,
