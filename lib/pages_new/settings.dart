@@ -1,5 +1,8 @@
+import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/appearance.dart';
+import 'package:autojidelna/pages_new/data_collection.dart';
 import 'package:autojidelna/providers.dart';
+import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:autojidelna/shared_widgets/settings/time_picker_todays_food.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +18,16 @@ class SettingsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            CustomDivider(height: Spacing.s4),
             ListTile(
               leading: const Icon(Icons.palette_outlined),
               title: const Text("Appearance"),
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AppearanceScreen())),
+            ),
+            ListTile(
+              leading: const Icon(Icons.cookie_outlined),
+              title: const Text("Data Collection"),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DataCollectionScreen())),
             ),
             const SectionTitle("Convenience"),
             // TODO: implement this
@@ -59,13 +68,6 @@ class SettingsScreen extends StatelessWidget {
                 value: weekLongFamine.read,
                 onChanged: weekLongFamine.set,
               ),
-            ),
-            // TODO: implement this
-            const SectionTitle("Data collection"),
-            SwitchListTile(
-              title: const Text("Sell your data"),
-              value: true,
-              onChanged: (value) {},
             ),
           ],
         ),
