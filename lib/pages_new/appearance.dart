@@ -5,9 +5,9 @@ import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
-import 'package:autojidelna/shared_widgets/settings/date_format_picker_button.dart';
+import 'package:autojidelna/shared_widgets/settings/date_format_picker.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
-import 'package:autojidelna/shared_widgets/settings/tablet_ui_button.dart';
+import 'package:autojidelna/shared_widgets/settings/tablet_ui_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
