@@ -351,3 +351,10 @@ class Fonts {
   static String get body => "Inter";
   static String get headings => "Lexend";
 }
+
+enum TabletUi {
+  auto,
+  always,
+  landscape,
+  never,
+}

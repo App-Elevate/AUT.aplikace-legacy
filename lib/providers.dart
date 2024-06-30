@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 ///
 /// [themeMode]             | Theme mode of the app
 ///
+/// [isTabletUi]            | If true, the app will use a tablet friendly ui
+///
 /// [isListUi]              | If true, Canteen menu is displayed in a list
 ///
 /// [isPureBlack]           | If true, dark mode joins the dark side of the force
@@ -23,6 +25,7 @@ import 'package:flutter/material.dart';
 class AppearancePreferences with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
   ThemeMode _themeMode = ThemeMode.system;
+  TabletUi _tabletUi = TabletUi.auto;
   bool _isListUi = false;
   bool _isPureBlack = false;
   bool _bigCalendarMarkers = false;
@@ -35,6 +38,9 @@ class AppearancePreferences with ChangeNotifier {
 
   /// Theme mode getter
   ThemeMode get themeMode => _themeMode;
+
+  /// Tablet UI getter
+  TabletUi get tabletUi => _tabletUi;
 
   /// List UI getter
   bool get isListUi => _isListUi;
@@ -58,6 +64,7 @@ class AppearancePreferences with ChangeNotifier {
   void loadFromShraredPreferences() async {
     _themeStyle = await readEnumFromSharedPreferences(SharedPrefsKeys.themeStyle, ThemeStyle.values, _themeStyle);
     _themeMode = await readEnumFromSharedPreferences(SharedPrefsKeys.themeMode, ThemeMode.values, _themeMode);
+    _tabletUi = await readEnumFromSharedPreferences(SharedPrefsKeys.tabletUi, TabletUi.values, _tabletUi);
     _isListUi = await readBoolFromSharedPreferences(SharedPrefsKeys.listUi) ?? _isListUi;
     _isPureBlack = await readBoolFromSharedPreferences(SharedPrefsKeys.pureBlack) ?? _isPureBlack;
     _bigCalendarMarkers = await readBoolFromSharedPreferences(SharedPrefsKeys.bigCalendarMarkers) ?? _bigCalendarMarkers;
@@ -79,6 +86,13 @@ class AppearancePreferences with ChangeNotifier {
   void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
     saveEnumToSharedPreferences(SharedPrefsKeys.themeMode, _themeMode);
+    notifyListeners();
+  }
+
+  /// Setter for tablet ui
+  void setTabletUi(TabletUi tabletui) {
+    _tabletUi = tabletui;
+    saveEnumToSharedPreferences(SharedPrefsKeys.tabletUi, _tabletUi);
     notifyListeners();
   }
 

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPrefsKeys {
   static get themeMode => "ThemeMode";
   static get themeStyle => "ThemeStyle";
+  static get tabletUi => "tabletUi";
   static get listUi => "ListUi";
   static get pureBlack => "PureBlack";
   static get bigCalendarMarkers => "BigCalendarMarkers";
