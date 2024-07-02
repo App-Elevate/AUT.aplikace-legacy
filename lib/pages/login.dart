@@ -96,22 +96,19 @@ class LoginScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
-              child: ValueListenableBuilder(
-                  valueListenable: urlErrorText,
-                  builder: (ctx, value, child) {
-                    return TextFormField(
-                      controller: _urlController,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                        labelText: Texts.loginUrlFieldLabel.i18n(),
-                        errorText: value,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return Texts.loginUrlFieldHint.i18n();
-                        return null;
-                      },
-                    );
-                  }),
+              child: DropdownMenu(
+                enableFilter: true,
+                requestFocusOnTap: true,
+                width: 290,
+                label: Text(Texts.loginUrlFieldLabel.i18n()),
+                helperText: "Nenašli jste svoji školu? Klikněte sem",
+                dropdownMenuEntries: const [
+                  DropdownMenuEntry(value: "jidelna.trebesin.cz", label: 'Střední průmyslová škola a Gymnázium Třebešín'),
+                  DropdownMenuEntry(value: "jidelna smichov", label: 'Smíchovská střední průmyslová škola'),
+                  DropdownMenuEntry(value: "jidelna jecna", label: 'Střední průmyslová škola elektrotechnická Ječná'),
+                  DropdownMenuEntry(value: "jidelna women (coffee emoji)", label: 'Dívčí katolická střední škola')
+                ],
+              ),
             ),
             AutofillGroup(
               child: Column(
