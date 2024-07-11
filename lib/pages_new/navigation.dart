@@ -1,6 +1,6 @@
 //import 'package:autojidelna/pages_new/account.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
-import 'package:autojidelna/pages_new/more.dart';
+import 'package:autojidelna/pages_new/more/more.dart';
 import 'package:flutter/material.dart';
 
 class NavigationScreen extends StatefulWidget {

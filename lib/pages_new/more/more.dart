@@ -1,8 +1,8 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/about.dart';
-import 'package:autojidelna/pages_new/account.dart';
-import 'package:autojidelna/pages_new/settings.dart';
-import 'package:autojidelna/pages_new/statistics.dart';
+import 'package:autojidelna/pages_new/more/account.dart';
+import 'package:autojidelna/pages_new/settings/settings.dart';
+import 'package:autojidelna/pages_new/more/statistics.dart';
 import 'package:autojidelna/shared_widgets/more/account_overview_card.dart';
 import 'package:autojidelna/shared_widgets/more/location_picker_card.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';

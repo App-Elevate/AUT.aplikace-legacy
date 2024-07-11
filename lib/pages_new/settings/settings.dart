@@ -1,9 +1,9 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/about.dart';
-import 'package:autojidelna/pages_new/appearance.dart';
-import 'package:autojidelna/pages_new/convenience.dart';
-import 'package:autojidelna/pages_new/data_collection.dart';
-import 'package:autojidelna/pages_new/notifications.dart';
+import 'package:autojidelna/pages_new/settings/appearance.dart';
+import 'package:autojidelna/pages_new/settings/convenience.dart';
+import 'package:autojidelna/pages_new/settings/data_collection.dart';
+import 'package:autojidelna/pages_new/settings/notifications.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/material.dart';
