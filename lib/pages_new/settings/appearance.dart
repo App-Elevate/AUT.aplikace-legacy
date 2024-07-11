@@ -44,16 +44,6 @@ class AppearanceScreen extends StatelessWidget {
           const SectionTitle("Display"),
           // TODO: implement this
           const TabletUiButton(),
-          // list UI switch
-          Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
-            selector: (_, p1) => (read: p1.isListUi, set: p1.setListUi),
-            builder: (context, listUi, child) => SwitchListTile(
-              title: const Text("List UI"),
-              subtitle: const Text("Old School!!!"),
-              value: listUi.read,
-              onChanged: listUi.set,
-            ),
-          ),
           Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormat format})>(
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(

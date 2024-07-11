@@ -14,6 +14,16 @@ class ConvenienceScreen extends StatelessWidget {
       body: ScrollViewColumn(
         children: [
           const SectionTitle("Convenience"),
+          // list UI switch
+          Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
+            selector: (_, p1) => (read: p1.isListUi, set: p1.setListUi),
+            builder: (context, listUi, child) => SwitchListTile(
+              title: const Text("List UI"),
+              subtitle: const Text("Old School!!!"),
+              value: listUi.read,
+              onChanged: listUi.set,
+            ),
+          ),
           // TODO: implement this
           // skip weekends switch
           Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
