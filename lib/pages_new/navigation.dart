@@ -1,4 +1,3 @@
-//import 'package:autojidelna/pages_new/account.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
 import 'package:autojidelna/pages_new/more/more.dart';
 import 'package:flutter/material.dart';
@@ -26,26 +25,19 @@ class _NavigationScreenState extends State<NavigationScreen> {
         const CanteenPage(),
         const MorePage(),
       ][pageIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        useLegacyColorScheme: false,
-        currentIndex: pageIndex,
-        onTap: changePageIndex,
-        items: const [
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: pageIndex,
+        onDestinationSelected: changePageIndex,
+        destinations: const [
+          NavigationDestination(
             icon: Icon(Icons.menu_book),
-            activeIcon: Icon(Icons.menu_book_outlined),
+            selectedIcon: Icon(Icons.menu_book_outlined),
             label: "Canteen",
             tooltip: "Canteen page",
           ),
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.abc),
-            activeIcon: Icon(Icons.abc),
-            label: "",
-            tooltip: "",
-          ),*/
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.more_horiz),
-            activeIcon: Icon(Icons.more_horiz_outlined),
+            selectedIcon: Icon(Icons.more_horiz_outlined),
             label: "More",
             tooltip: "More page",
           ),

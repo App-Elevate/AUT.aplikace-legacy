@@ -27,6 +27,7 @@ class Themes {
       splashFactory: NoSplash.splashFactory,
       typography: Typography.material2021(),
 
+      // Texts
       textTheme: TextTheme(
         bodySmall: TextStyle(fontFamily: Fonts.body),
         bodyMedium: TextStyle(fontFamily: Fonts.body),
@@ -65,6 +66,10 @@ class Themes {
         scrimColor: colorScheme.scrim,
         elevation: 2,
         width: 275,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        indicatorColor: colorScheme.secondary,
+        elevation: pureBlack ? 0 : 2,
       ),
 
       // Popups
