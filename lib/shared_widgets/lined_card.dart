@@ -2,6 +2,7 @@ import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/material.dart';
 
+/// Creates a card with a horizontal bar at the top and bottom
 class LinedCard extends StatelessWidget {
   const LinedCard({
     super.key,
@@ -13,12 +14,26 @@ class LinedCard extends StatelessWidget {
     this.onPressed,
     this.child,
   });
+
+  /// Card title, aligned with the top bar
   final String? title;
+
+  /// Card title, aligned with the bottom bar
   final String? footer;
+
+  /// How to align the title text
   final TextAlign titleTextAlign;
+
+  /// How to align the footer text
   final TextAlign footerTextAlign;
+
+  /// If true, the whole card will be pressable, else only the bottom bar
   final bool smallButton;
+
+  /// The callback that is called when the button is tapped or otherwise activated.
   final void Function()? onPressed;
+
+  /// Creates a widget that insets its child.
   final Widget? child;
 
   @override
@@ -44,6 +59,7 @@ class LinedCard extends StatelessWidget {
 
   Widget footerButton(BuildContext context) {
     if (!smallButton) return dividerWithText(context, text: footer, textAlign: footerTextAlign);
+
     return MaterialButton(
       visualDensity: const VisualDensity(vertical: -4),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -58,9 +74,8 @@ class LinedCard extends StatelessWidget {
   }
 
   Widget dividerWithText(BuildContext context, {String? text, TextAlign? textAlign}) {
-    if (text == null) {
-      return const CustomDivider(isTransparent: false, hasIndent: false);
-    }
+    if (text == null) return const CustomDivider(isTransparent: false, hasIndent: false);
+
     return Row(
       children: [
         if (textAlign != TextAlign.start && textAlign != TextAlign.left && textAlign != TextAlign.justify)

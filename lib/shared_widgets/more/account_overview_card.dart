@@ -11,9 +11,7 @@ class AccountOverviewCard extends StatelessWidget {
     return LinedCard(
       title: "Username",
       footer: "Change account",
-      onPressed: () {
-        configuredBottomSheet(context, builder: (context) => const SwitchAccountPanelV2());
-      },
+      onPressed: () => configuredBottomSheet(context, builder: (context) => const SwitchAccountPanelV2()),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
