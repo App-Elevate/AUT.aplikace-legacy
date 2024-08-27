@@ -11,6 +11,8 @@ class LinedCard extends StatelessWidget {
     this.titleTextAlign = TextAlign.start,
     this.footerTextAlign = TextAlign.center,
     this.smallButton = true,
+    this.transparentTitleDivider = false,
+    this.transparentFooterDivider = false,
     this.onPressed,
     this.child,
   });
@@ -30,6 +32,12 @@ class LinedCard extends StatelessWidget {
   /// If true, the whole card will be pressable, else only the bottom bar
   final bool smallButton;
 
+  /// If true, top bar will be transparent
+  final bool transparentTitleDivider;
+
+  /// If true, bottom bar will be transparent
+  final bool transparentFooterDivider;
+
   /// The callback that is called when the button is tapped or otherwise activated.
   final void Function()? onPressed;
 
@@ -47,7 +55,7 @@ class LinedCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              dividerWithText(context, text: title, textAlign: titleTextAlign),
+              dividerWithText(context, text: title, textAlign: titleTextAlign, transparentDivider: transparentTitleDivider),
               child ?? const SizedBox(),
               footerButton(context),
             ],
@@ -58,7 +66,8 @@ class LinedCard extends StatelessWidget {
   }
 
   Widget footerButton(BuildContext context) {
-    if (!smallButton) return dividerWithText(context, text: footer, textAlign: footerTextAlign);
+    Widget divider = dividerWithText(context, text: footer, textAlign: footerTextAlign, transparentDivider: transparentFooterDivider);
+    if (!smallButton) return divider;
 
     return MaterialButton(
       visualDensity: const VisualDensity(vertical: -4),
@@ -69,20 +78,19 @@ class LinedCard extends StatelessWidget {
       highlightColor: Colors.transparent,
       textColor: Theme.of(context).colorScheme.primary,
       onPressed: onPressed,
-      child: dividerWithText(context, text: footer, textAlign: footerTextAlign),
+      child: divider,
     );
   }
 
-  Widget dividerWithText(BuildContext context, {String? text, TextAlign? textAlign}) {
-    if (text == null) return const CustomDivider(isTransparent: false, hasIndent: false);
-
+  Widget dividerWithText(BuildContext context, {String? text, TextAlign? textAlign, bool transparentDivider = false}) {
+    if (text == null) return CustomDivider(isTransparent: transparentDivider, hasIndent: false, hasEndIndent: false);
     return Row(
       children: [
         if (textAlign != TextAlign.start && textAlign != TextAlign.left && textAlign != TextAlign.justify)
-          const Flexible(child: CustomDivider(isTransparent: false, hasIndent: false)),
+          Flexible(child: CustomDivider(isTransparent: transparentDivider, hasIndent: false)),
         Text(text, style: Theme.of(context).textTheme.labelLarge),
         if (textAlign != TextAlign.end && textAlign != TextAlign.right)
-          const Flexible(child: CustomDivider(isTransparent: false, hasEndIndent: false)),
+          Flexible(child: CustomDivider(isTransparent: transparentDivider, hasEndIndent: false)),
       ],
     );
   }
