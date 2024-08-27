@@ -12,7 +12,7 @@ class DayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card.outlined(
-      elevation: 0,
+      elevation: 0.6,
       color: Colors.black,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Theme.of(context).dividerTheme.color!)),
       margin: EdgeInsets.symmetric(horizontal: Spacing.s16, vertical: Spacing.s16),

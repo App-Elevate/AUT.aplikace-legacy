@@ -68,7 +68,8 @@ class Themes {
       ),
       navigationBarTheme: NavigationBarThemeData(
         indicatorColor: colorScheme.secondary,
-        elevation: pureBlack ? 0 : 2,
+        surfaceTintColor: colorScheme.surfaceTint,
+        elevation: pureBlack ? 0 : null,
       ),
 
       // Popups
@@ -317,7 +318,7 @@ class ColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFCF6679),
     onError: Colors.white,
-    surface: Color(0xff121212),
+    surface: Colors.black,
     onSurface: Colors.white,
     surfaceContainerHighest: Colors.white12,
     onSurfaceVariant: Colors.white54,
