@@ -56,7 +56,6 @@ class Themes {
       cardTheme: CardTheme(
         elevation: 2,
         clipBehavior: Clip.hardEdge,
-        color: colorScheme.surface,
         surfaceTintColor: colorScheme.surfaceTint,
       ),
       dividerTheme: DividerThemeData(color: colorScheme.surfaceContainerHighest),

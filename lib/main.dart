@@ -259,7 +259,7 @@ class _MyAppState extends State<MyApp> {
               theme: Themes.getTheme(theme.style),
               darkTheme: Themes.getTheme(theme.style, isPureBlack: theme.isPureBlack),
               themeMode: theme.mode,
-              home: const LoginScreenV2(),
+              home: LoginScreenV2(),
               title: "Autojídelna",
             );
           },

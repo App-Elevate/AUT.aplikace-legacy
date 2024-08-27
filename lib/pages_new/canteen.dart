@@ -1,6 +1,10 @@
 import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/calendar_buttons.dart';
+import 'package:autojidelna/shared_widgets/canteen/list_view_canteen.dart';
+import 'package:autojidelna/shared_widgets/canteen/page_view_canteen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CanteenAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CanteenAppBar({super.key});
@@ -25,6 +29,9 @@ class CanteenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Selector<AppearancePreferences, bool>(
+      selector: (_, p1) => p1.isListUi,
+      builder: (context, data, child) => data ? const ListViewCanteen() : const PageViewCanteen(),
+    );
   }
 }
