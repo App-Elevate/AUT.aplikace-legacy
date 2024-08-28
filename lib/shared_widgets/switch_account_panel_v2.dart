@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
@@ -18,7 +17,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
             itemBuilder: (context, index) => accountRow(context, username: "Placeholder"),
           ),
         ),
-        CustomDivider(height: Spacing.zero, isTransparent: false),
+        const CustomDivider(height: 0, isTransparent: false),
         addAccountButton(context)
       ],
     );
