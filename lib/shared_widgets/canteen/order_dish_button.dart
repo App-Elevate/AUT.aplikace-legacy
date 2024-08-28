@@ -63,14 +63,12 @@ class OrderDishButton extends StatelessWidget {
     await Future.delayed(const Duration(milliseconds: 200));
     try {
       if (!convertIndexToDatetime(dayIndex).isBefore(DateTime.now()) && context.mounted) {
-        final readMenu = context.read<DishesOfTheDay>().menu;
-        final setMenu = context.read<DishesOfTheDay>().setMenu;
+        final DishesOfTheDay dishesOfTheDay = context.read<DishesOfTheDay>();
         Jidelnicek jidelnicekCheck = await loggedInCanteen.getLunchesForDay(convertIndexToDatetime(dayIndex), requireNew: true);
 
         for (int i = 0; i < jidelnicekCheck.jidla.length; i++) {
-          //print(readMenu.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat);
-          if (readMenu.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
-            setMenu(jidelnicekCheck);
+          if (dishesOfTheDay.menu.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
+            dishesOfTheDay.setMenu(jidelnicekCheck);
             return;
           }
         }

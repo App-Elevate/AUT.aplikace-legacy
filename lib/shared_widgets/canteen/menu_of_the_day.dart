@@ -14,22 +14,34 @@ class MenuOfTheDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => DishesOfTheDay(),
-      builder: (context, child) {
-        context.read<DishesOfTheDay>().setDayIndex(dayIndex);
-        return Consumer<DishesOfTheDay>(builder: (context, data, child) {
-          return FutureBuilder(
-            future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(dayIndex)),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) return const ErrorLoadingData();
+      create: (context) => DishesOfTheDay()..setDayIndex(dayIndex),
+      child: const _MenuContent(),
+    );
+  }
+}
 
-              if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+class _MenuContent extends StatelessWidget {
+  const _MenuContent();
 
-              data.setMenu(snapshot.data as Jidelnicek);
-              return const DishList();
-            },
-          );
-        });
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<DishesOfTheDay>(
+      builder: (context, data, child) {
+        return FutureBuilder(
+          future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(data.dayIndex)),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) return const ErrorLoadingData();
+
+            if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+
+            // Check if widget is still in tree
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (context.mounted) data.setMenu(snapshot.data as Jidelnicek);
+            });
+
+            return const DishList();
+          },
+        );
       },
     );
   }

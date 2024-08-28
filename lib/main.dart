@@ -200,7 +200,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<AppearancePreferences>(create: (context) => AppearancePreferences()),
         ChangeNotifierProvider<NotificationPreferences>(create: (context) => NotificationPreferences()),
       ],
-      builder: (context, child) {
+      builder: (context, __) {
         appearanceMigration(context);
         LocalJsonLocalization.delegate.directories = ['assets/lang'];
         context.read<AppearancePreferences>().loadFromShraredPreferences();

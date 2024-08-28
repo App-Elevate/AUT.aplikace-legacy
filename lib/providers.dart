@@ -201,7 +201,7 @@ class DishesOfTheDay extends ChangeNotifier {
   void setMenu(Jidelnicek menu) {
     if (menu == _menu) return;
     _menu = menu;
-    Future.microtask(notifyListeners); // Can be called during build
+    notifyListeners(); // Can be called during build
   }
 
   void setOrdering(bool ordering) {
@@ -213,6 +213,6 @@ class DishesOfTheDay extends ChangeNotifier {
   void setDayIndex(int dayIndex) {
     if (dayIndex == _dayIndex) return;
     _dayIndex = dayIndex;
-    Future.microtask(notifyListeners);
+    notifyListeners();
   }
 }
