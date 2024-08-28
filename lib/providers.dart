@@ -1,6 +1,7 @@
 import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_prefs.dart';
+import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 
 /// Manages user preferences related to UI settings.
@@ -184,5 +185,35 @@ class NotificationPreferences with ChangeNotifier {
     _weekLongFamine = weekLongFamine;
     saveBoolToSharedPreferences(SharedPrefsKeys.weekLongFamine, _weekLongFamine);
     notifyListeners();
+  }
+}
+
+class DishesOfTheDay extends ChangeNotifier {
+  Jidelnicek _menu = Jidelnicek(DateTime.now(), []);
+  bool _ordering = false;
+  int _dayIndex = 0;
+
+  Jidelnicek get menu => _menu;
+
+  bool get ordering => _ordering;
+
+  int get dayIndex => _dayIndex;
+
+  void setMenu(Jidelnicek menu) {
+    if (menu == _menu) return;
+    _menu = menu;
+    Future.microtask(notifyListeners); // Can be called during build
+  }
+
+  void setOrdering(bool ordering) {
+    if (ordering == _ordering) return;
+    _ordering = ordering;
+    notifyListeners();
+  }
+
+  void setDayIndex(int dayIndex) {
+    if (dayIndex == _dayIndex) return;
+    _dayIndex = dayIndex;
+    Future.microtask(notifyListeners);
   }
 }
