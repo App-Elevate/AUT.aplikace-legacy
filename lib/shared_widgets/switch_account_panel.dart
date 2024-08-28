@@ -134,7 +134,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                 await loggedInCanteen.switchAccount(id);
                 // wait for the animation to finish
                 await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
-                widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
+                widget.setHomeWidget(const LoggingInWidget(/*setHomeWidget: widget.setHomeWidget*/));
               } else {
                 // if the user clicks on the account that is already logged in
                 // we don't have to do any changes so we just close it
@@ -185,7 +185,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
               SwitchAccountVisible().setVisible(false);
               // wait for the animation to finish
               await Future.delayed(const Duration(milliseconds: Nums.switchAccountPanelDuration));
-              widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget));
+              widget.setHomeWidget(const LoggingInWidget(/*setHomeWidget: widget.setHomeWidget*/));
             }
             updateAccountPanel();
           },

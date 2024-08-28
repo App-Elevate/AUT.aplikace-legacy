@@ -139,7 +139,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                 opticalSize: 30,
               ),
               onPressed: () {
-                widget.setHomeWidget(LoggingInWidget(setHomeWidget: widget.setHomeWidget, pageIndex: pageviewController.page!.round().toInt()));
+                widget.setHomeWidget(LoggingInWidget(/*setHomeWidget: widget.setHomeWidget, */ pageIndex: pageviewController.page!.round().toInt()));
               },
             ),
           ],

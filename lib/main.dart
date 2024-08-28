@@ -2,6 +2,7 @@
 
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/pages_new/login.dart';
+import 'package:autojidelna/pages_new/navigation.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_prefs.dart';
 
@@ -105,9 +106,7 @@ void main() async {
   String? analyticsDisabled = await loggedInCanteen.readData(Prefs.disableAnalytics);
 
   // Know if this release is debug and disable analytics if it is
-  if (kDebugMode) {
-    analyticsDisabled = '1';
-  }
+  if (kDebugMode) analyticsDisabled = '1';
 
   // Initializing firebase if analytics are not disabled
   if (analyticsDisabled != '1') {
@@ -160,9 +159,6 @@ class _MyAppState extends State<MyApp> {
   // Key for the navigator
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
 
-  // root widget of the app
-  late Widget homeWidget;
-
   ValueNotifier<bool> canExit = ValueNotifier<bool>(false);
 
   // Handling the back button on android being pressed.
@@ -194,22 +190,6 @@ class _MyAppState extends State<MyApp> {
         textColor: Colors.white,
         fontSize: 16.0);
     return Future<bool>.value(true);
-  }
-
-  // function for replacing the route stack and setting a new widget
-  void setHomeWidget(Widget widget) {
-    Navigator.of(_myAppKey.currentContext!).popUntil((route) => route.isFirst);
-    setState(() {
-      homeWidget = widget;
-    });
-  }
-
-  @override
-  void initState() {
-    setHomeWidgetPublic = setHomeWidget;
-    // Only after at least the action method is set, the notification events are delivered
-    homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);
-    super.initState();
   }
 
   @override
@@ -247,9 +227,7 @@ class _MyAppState extends State<MyApp> {
                 //Locale('en', 'US'),
               ],
               localeResolutionCallback: (locale, supportedLocales) {
-                if (supportedLocales.contains(locale)) {
-                  return locale;
-                }
+                if (supportedLocales.contains(locale)) return locale;
                 // default language
                 return const Locale('cs', 'CZ');
               },
@@ -259,7 +237,7 @@ class _MyAppState extends State<MyApp> {
               theme: Themes.getTheme(theme.style),
               darkTheme: Themes.getTheme(theme.style, isPureBlack: theme.isPureBlack),
               themeMode: theme.mode,
-              home: LoginScreenV2(),
+              home: const LoggingInWidget(),
               title: "Autojídelna",
             );
           },
@@ -283,9 +261,7 @@ class _MyAppState extends State<MyApp> {
       },
       child: Navigator(
         key: _myAppKey,
-        pages: [
-          MaterialPage(child: homeWidget),
-        ],
+        pages: const [MaterialPage(child: LoggingInWidget())],
         onPopPage: (route, result) {
           return route.didPop(result);
         },
@@ -363,13 +339,10 @@ class _MyAppState extends State<MyApp> {
 class LoggingInWidget extends StatelessWidget {
   const LoggingInWidget({
     super.key,
-    required this.setHomeWidget,
     this.pageIndex = -1,
   });
   // index aktualniho dne - pro refresh button v pravo nahoře
   final int pageIndex;
-
-  final Function(Widget widget) setHomeWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -378,9 +351,7 @@ class LoggingInWidget extends StatelessWidget {
       future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          if (snapshot.error == ConnectionErrors.noLogin) {
-            return LoginScreen(setHomeWidget: setHomeWidget);
-          }
+          if (snapshot.error == ConnectionErrors.noLogin) return LoginScreenV2();
         } else if (snapshot.connectionState == ConnectionState.done) {
           // setting the initial date
           if (pageIndex != -1) {
@@ -389,7 +360,7 @@ class LoggingInWidget extends StatelessWidget {
             setCurrentDate();
           }
           // routing to main app screen (jidelnicek)
-          return MainAppScreen(setHomeWidget: setHomeWidget);
+          return const NavigationScreen();
         }
         return Container(
           decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),

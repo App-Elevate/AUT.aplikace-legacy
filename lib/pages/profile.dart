@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
           }
           await loggedInCanteen.logout();
           await Future.delayed(const Duration(milliseconds: 300));
-          setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+          setHomeWidget(const LoggingInWidget(/*setHomeWidget: setHomeWidget*/));
         },
         icon: const Icon(Icons.logout),
       ),

@@ -1,6 +1,7 @@
 // Includes all popups used in the app.
 
 // flutter
+import 'package:autojidelna/pages_new/login.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
@@ -29,7 +30,7 @@ Widget logoutDialog(BuildContext context) {
   );
 }
 
-void failedLunchDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
+void failedLunchDialog(BuildContext context, String message) async {
   showDialog(
     context: context,
     barrierDismissible: true,
@@ -43,7 +44,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoggingInWidget()), (route) => false);
             },
             child: Text(Texts.failedDialogTryAgain.i18n()),
           ),
@@ -51,7 +52,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
             onPressed: () {
               loggedInCanteen.logout();
               Navigator.of(context).pop();
-              setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreenV2())), (route) => false);
             },
             child: Text(Texts.failedDialogLogOut.i18n()),
           ),
@@ -61,7 +62,7 @@ void failedLunchDialog(BuildContext context, String message, Function(Widget wid
   );
 }
 
-void failedLoginDialog(BuildContext context, String message, Function(Widget widget) setHomeWidget) async {
+void failedLoginDialog(BuildContext context, String message) async {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -78,7 +79,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                setHomeWidget(LoggingInWidget(setHomeWidget: setHomeWidget));
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoggingInWidget()), (route) => false);
               },
               child: Text(Texts.failedDialogTryAgain.i18n()),
             ),
@@ -86,7 +87,7 @@ void failedLoginDialog(BuildContext context, String message, Function(Widget wid
               onPressed: () {
                 loggedInCanteen.logout();
                 Navigator.of(context).pop();
-                setHomeWidget(LoginScreen(setHomeWidget: setHomeWidget));
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreenV2())), (route) => false);
               },
               child: Text(Texts.failedDialogLogOut.i18n()),
             ),

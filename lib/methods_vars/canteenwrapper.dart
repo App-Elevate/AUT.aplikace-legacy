@@ -113,17 +113,13 @@ class LoggedInCanteen {
 
   void handleError(dynamic e) {
     if (e == ConnectionErrors.badLogin) {
-      Future.delayed(
-          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadLogin.i18n(), setHomeWidgetPublic));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadLogin.i18n()));
     } else if (e == ConnectionErrors.wrongUrl) {
-      Future.delayed(
-          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadUrl.i18n(), setHomeWidgetPublic));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadUrl.i18n()));
     } else if (e == ConnectionErrors.noInternet) {
-      Future.delayed(
-          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsNoInternet.i18n(), setHomeWidgetPublic));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsNoInternet.i18n()));
     } else if (e == ConnectionErrors.connectionFailed) {
-      Future.delayed(
-          Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadConnection.i18n(), setHomeWidgetPublic));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadConnection.i18n()));
     }
   }
 

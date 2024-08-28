@@ -1,6 +1,7 @@
 // Purpose: Login screen for the app
 
 import 'package:autojidelna/pages_new/navigation.dart';
+import 'package:autojidelna/pages_new/settings/data_collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -172,9 +173,7 @@ class LoginScreenV2 extends StatelessWidget {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SettingsPage(onlyAnalytics: true),
-                          ),
+                          MaterialPageRoute(builder: (context) => const DataCollectionScreen()),
                         );
                       },
                   ),
@@ -192,16 +191,15 @@ class LoginScreenV2 extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 60,
       width: 400,
-      child: ElevatedButton(
-        onPressed: loggingIn.value ? null : () => loginFieldCheck(context),
-        style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-        child: ValueListenableBuilder(
-          valueListenable: loggingIn,
-          builder: (context, value, child) {
-            if (value) return CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary);
-            return Text(Texts.loginButton.i18n());
-          },
-        ),
+      child: ValueListenableBuilder(
+        valueListenable: loggingIn,
+        builder: (context, value, child) {
+          return ElevatedButton(
+            onPressed: value ? null : () => loginFieldCheck(context),
+            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+            child: value ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary) : Text(Texts.loginButton.i18n()),
+          );
+        },
       ),
     );
   }
@@ -218,9 +216,7 @@ class LoginScreenV2 extends StatelessWidget {
         loggedInCanteen.saveData(Prefs.url, url);
         try {
           changeDate(newDate: DateTime.now());
-          if (context.mounted) {
-            Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
-          }
+          MyApp.navigatorKey.currentState!.popUntil((route) => route.isFirst);
         } catch (e) {
           //if it is not connected we don't have to do anything
         }

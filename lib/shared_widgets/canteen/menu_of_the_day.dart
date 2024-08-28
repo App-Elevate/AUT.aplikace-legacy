@@ -23,7 +23,7 @@ class MenuOfTheDay extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasError) return const ErrorLoadingData();
 
-              if (snapshot.connectionState == ConnectionState.waiting) return const CircularProgressIndicator();
+              if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
 
               data.setMenu(snapshot.data as Jidelnicek);
               return const DishList();
