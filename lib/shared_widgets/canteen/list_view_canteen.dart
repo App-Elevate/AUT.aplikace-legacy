@@ -1,6 +1,6 @@
-import 'package:autojidelna/methods_vars/canteenwrapper.dart';
-import 'package:autojidelna/methods_vars/datetime_wrapper.dart';
+import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_widgets/canteen/day_card.dart';
+import 'package:autojidelna/shared_widgets/canteen/error_loading_data.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 
@@ -9,20 +9,35 @@ class ListViewCanteen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Jidelnicek>(
-      future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(6678)),
+    Future<List<Jidelnicek>> fetchDailyMenus() async {
+      const int daysToFetch = 20; // Number of days to be fetched
+      final List<Jidelnicek> dailyMenus = [];
+
+      for (int i = 0; i < daysToFetch; i++) {
+        final jidelnicek = await loggedInCanteen.getLunchesForDay(convertIndexToDatetime(pageviewController.initialPage + i));
+        dailyMenus.add(jidelnicek);
+      }
+
+      return dailyMenus;
+    }
+
+    return FutureBuilder<List<Jidelnicek>>(
+      future: fetchDailyMenus(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('data');
+          return const Center(child: Text('Error loading data'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-        Jidelnicek jidelnicek = snapshot.data as Jidelnicek;
+
+        final dailyMenus = snapshot.data ?? [];
+
+        if (dailyMenus.isEmpty) return const ErrorLoadingData();
+
         return ListView.builder(
-          shrinkWrap: true,
-          itemCount: 1,
-          itemBuilder: (context, index) => DayCard(jidelnicek: jidelnicek),
+          itemCount: dailyMenus.length,
+          itemBuilder: (context, index) => DayCard(jidelnicek: dailyMenus[index]),
         );
       },
     );

@@ -1,10 +1,12 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/methods_vars/capitalize.dart';
 import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/canteen/food_section_list_tile.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DayCard extends StatelessWidget {
@@ -13,6 +15,7 @@ class DayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (jidelnicek.jidla.isEmpty) return const SizedBox();
     return Card.outlined(
       elevation: 0.6,
       color: Colors.black,
@@ -42,8 +45,9 @@ class DayCardheader extends StatelessWidget {
           child: Selector<AppearancePreferences, DateFormatOptions>(
             selector: (p0, p1) => p1.dateFormat,
             builder: (context, format, ___) {
+              String day = capitalize(DateFormat('EEEE', Localizations.localeOf(context).toLanguageTag()).format(date));
               return Text(
-                getCorrectDateString(format, date: date),
+                '$day - ${getCorrectDateString(format, date: date)}',
                 style: Theme.of(context).textTheme.titleMedium,
               );
             },
