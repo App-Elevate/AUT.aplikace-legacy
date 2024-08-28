@@ -19,7 +19,7 @@ class CalendarButton extends StatelessWidget {
           selector: (_, p1) => p1.dateFormat,
           builder: (context, dateFormat, _) => ValueListenableBuilder(
             valueListenable: dateListener,
-            builder: (context, value, ___) => Text(getCorrectDateString(dateFormat, value)),
+            builder: (context, value, ___) => Text(getCorrectDateString(dateFormat, date: value)),
           ),
         ),
       ),

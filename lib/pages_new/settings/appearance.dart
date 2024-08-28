@@ -48,7 +48,7 @@ class AppearanceScreen extends StatelessWidget {
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(
               title: const Text("Relative timestamps"),
-              subtitle: Text('"Today" instead of "${getCorrectDateString(relTimeStamps.format, DateTime.now())}"'),
+              subtitle: Text('"Today" instead of "${getCorrectDateString(relTimeStamps.format)}"'),
               value: relTimeStamps.read,
               onChanged: relTimeStamps.set,
             ),

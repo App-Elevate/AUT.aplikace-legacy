@@ -44,7 +44,7 @@ class DayCardheader extends StatelessWidget {
             selector: (p0, p1) => p1.dateFormat,
             builder: (context, format, ___) {
               return Text(
-                getCorrectDateString(format, date),
+                getCorrectDateString(format, date: date),
                 style: Theme.of(context).textTheme.titleMedium,
               );
             },

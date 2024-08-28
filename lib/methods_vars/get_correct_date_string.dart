@@ -5,10 +5,10 @@ import 'package:intl/intl.dart';
 ///
 /// [format]      | what format it should use
 ///
-/// [date]        | date to be formated, if null returns DateTime.ssnow()
+/// [date]        | date to be formated, if null returns DateTime.now()
 ///
-/// [inSettings]  | If true, adds a "title" to the date -> ex. "Default (1.1.2024)"
-String getCorrectDateString(DateFormatOptions format, DateTime date, {bool inSettings = false}) {
+/// [inSettings]  | If true, adds a "title" to the date -> ex. "d. M. y (1.1.2024)"
+String getCorrectDateString(DateFormatOptions format, {DateTime? date, bool inSettings = false}) {
   String formatStr;
   switch (format) {
     case DateFormatOptions.ddmmmyyyy:
@@ -29,7 +29,7 @@ String getCorrectDateString(DateFormatOptions format, DateTime date, {bool inSet
     default:
       formatStr = 'd. M. y';
   }
-  String dateStr = DateFormat(formatStr).format(date);
+  String dateStr = DateFormat(formatStr).format(date ?? DateTime.now());
   String settingsStr = "$formatStr ($dateStr)";
   return inSettings ? settingsStr : dateStr;
 }
