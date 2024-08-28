@@ -1,5 +1,4 @@
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_prefs.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,7 @@ class AppearancePreferences with ChangeNotifier {
   bool _isPureBlack = false;
   bool _bigCalendarMarkers = false;
   bool _skipWeekends = false;
-  DateFormat _dateFormat = DateFormat.system;
+  DateFormatOptions _dateFormat = DateFormatOptions.dMy;
   bool _relTimeStamps = false;
 
   /// Theme style getter
@@ -56,7 +55,7 @@ class AppearancePreferences with ChangeNotifier {
   bool get skipWeekends => _skipWeekends;
 
   /// Date Format getter
-  DateFormat get dateFormat => _dateFormat;
+  DateFormatOptions get dateFormat => _dateFormat;
 
   /// Relative TimeStamps getter
   bool get relTimeStamps => _relTimeStamps;
@@ -70,7 +69,7 @@ class AppearancePreferences with ChangeNotifier {
     _isPureBlack = await readBoolFromSharedPreferences(SharedPrefsKeys.pureBlack) ?? _isPureBlack;
     _bigCalendarMarkers = await readBoolFromSharedPreferences(SharedPrefsKeys.bigCalendarMarkers) ?? _bigCalendarMarkers;
     _skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? _skipWeekends;
-    _dateFormat = await readEnumFromSharedPreferences(SharedPrefsKeys.dateFormat, DateFormat.values, _dateFormat);
+    _dateFormat = await readEnumFromSharedPreferences(SharedPrefsKeys.dateFormat, DateFormatOptions.values, _dateFormat);
     _relTimeStamps = await readBoolFromSharedPreferences(SharedPrefsKeys.relTimeStamps) ?? _relTimeStamps;
     notifyListeners();
   }
@@ -119,7 +118,7 @@ class AppearancePreferences with ChangeNotifier {
   }
 
   /// Setter for date format
-  void setDateFormat(DateFormat dateFormat) {
+  void setDateFormat(DateFormatOptions dateFormat) {
     _dateFormat = dateFormat;
     saveEnumToSharedPreferences(SharedPrefsKeys.dateFormat, _dateFormat);
     notifyListeners();

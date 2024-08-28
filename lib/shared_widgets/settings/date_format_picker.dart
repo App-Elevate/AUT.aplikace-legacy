@@ -11,11 +11,11 @@ class DateFormatPickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<AppearancePreferences, ({DateFormat read})>(
+    return Selector<AppearancePreferences, ({DateFormatOptions read})>(
       selector: (_, p1) => (read: p1.dateFormat),
       builder: (context, dateFormat, child) => ListTile(
         title: const Text("Date format"),
-        subtitle: Text(getCorrectDateString(dateFormat.read, inSettings: true)),
+        subtitle: Text(getCorrectDateString(dateFormat.read, DateTime.now(), inSettings: true)),
         onTap: () => configuredDialog(context, builder: (context) => const DateFormatPicker()),
       ),
     );
@@ -29,17 +29,17 @@ class DateFormatPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConfiguredAlertDialog(
       title: "Date Format",
-      content: Selector<AppearancePreferences, ({DateFormat read, Function(DateFormat) set})>(
+      content: Selector<AppearancePreferences, ({DateFormatOptions read, Function(DateFormatOptions) set})>(
         selector: (_, p1) => (read: p1.dateFormat, set: p1.setDateFormat),
         builder: (context, dateFormat, child) => SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: DateFormat.values
+            children: DateFormatOptions.values
                 .map(
                   (format) => ListTile(
                     minVerticalPadding: 0,
                     visualDensity: const VisualDensity(vertical: -4),
-                    title: Text(getCorrectDateString(format, inSettings: true)),
+                    title: Text(getCorrectDateString(format, DateTime.now(), inSettings: true)),
                     titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                     trailing: dateFormat.read == format ? const Icon(Icons.check) : null,
                     onTap: () {

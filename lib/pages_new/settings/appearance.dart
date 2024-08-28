@@ -44,11 +44,11 @@ class AppearanceScreen extends StatelessWidget {
           const SectionTitle("Display"),
           // TODO: implement this
           const TabletUiButton(),
-          Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormat format})>(
+          Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormatOptions format})>(
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(
               title: const Text("Relative timestamps"),
-              subtitle: Text('"Today" instead of "${getCorrectDateString(relTimeStamps.format, date: DateTime.now())}"'),
+              subtitle: Text('"Today" instead of "${getCorrectDateString(relTimeStamps.format, DateTime.now())}"'),
               value: relTimeStamps.read,
               onChanged: relTimeStamps.set,
             ),

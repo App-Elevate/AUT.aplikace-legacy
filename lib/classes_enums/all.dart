@@ -337,8 +337,8 @@ enum ThemeStyle {
 }
 
 /// Describes what time format will be used by the app
-enum DateFormat {
-  system,
+enum DateFormatOptions {
+  dMy,
   mmddyy,
   ddmmyy,
   yyyymmdd,
