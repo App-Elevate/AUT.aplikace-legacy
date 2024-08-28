@@ -23,9 +23,9 @@ class DataCollectionScreen extends StatelessWidget {
             value: true,
             onChanged: (value) {},
           ),
-          CustomDivider(height: 8),
+          const CustomDivider(height: 8),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: RichText(
               text: TextSpan(
                 text: Texts.settingsDataCollectionDescription1.i18n(),

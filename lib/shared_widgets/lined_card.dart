@@ -87,6 +87,10 @@ class LinedCard extends StatelessWidget {
       children: [
         if (textAlign != TextAlign.start && textAlign != TextAlign.left && textAlign != TextAlign.justify)
           Flexible(child: CustomDivider(isTransparent: transparentDivider, hasIndent: false)),
+        if (text == footer && footerTextAlign == TextAlign.end && onPressed != null) ...[
+          Icon(Icons.arrow_forward_ios_rounded, size: 15, color: Theme.of(context).listTileTheme.subtitleTextStyle!.color),
+          const SizedBox(width: 5),
+        ],
         Text(text, style: Theme.of(context).textTheme.labelLarge),
         if (textAlign != TextAlign.end && textAlign != TextAlign.right)
           Flexible(child: CustomDivider(isTransparent: transparentDivider, hasEndIndent: false)),

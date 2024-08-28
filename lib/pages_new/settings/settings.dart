@@ -16,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Settings")),
       body: ScrollViewColumn(
         children: [
-          CustomDivider(height: 4),
+          const CustomDivider(height: 4),
           ListTile(
             leading: const Icon(Icons.palette_outlined),
             title: const Text("Appearance"),
