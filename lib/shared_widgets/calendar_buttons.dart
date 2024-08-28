@@ -1,5 +1,5 @@
-import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/classes_enums/spacing.dart';
+import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +15,12 @@ class CalendarButton extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: () {},
         icon: const Icon(Icons.calendar_month_outlined),
-        label: Selector<AppearancePreferences, ({DateFormat read})>(
-          selector: (_, p1) => (read: p1.dateFormat),
-          builder: (context, dateFormat, _) => Text(getCorrectDateString(dateFormat.read)),
+        label: Selector<AppearancePreferences, DateFormatOptions>(
+          selector: (_, p1) => p1.dateFormat,
+          builder: (context, dateFormat, _) => ValueListenableBuilder(
+            valueListenable: dateListener,
+            builder: (context, value, ___) => Text(getCorrectDateString(dateFormat, value)),
+          ),
         ),
       ),
     );
@@ -40,9 +43,7 @@ class TodayButton extends StatelessWidget {
           side: BorderSide(color: Theme.of(context).colorScheme.onSurfaceVariant, width: 1.75),
         ),
         child: Text(DateTime.now().day.toString()),
-        onPressed: () {
-          //changeDate(newDate: DateTime.now(), animateToPage: true);
-        },
+        onPressed: () => changeDate(newDate: DateTime.now(), animateToPage: true),
       ),
     );
   }
