@@ -1,3 +1,4 @@
+import 'package:autojidelna/pages_new/dish_detail.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +22,7 @@ class FoodSectionListTile extends StatelessWidget {
               : (selection[index].kategorizovano?.hlavniJidlo ?? selection[index].nazev);
 
           return ListTile(
-            //enabled: jidlo.lzeObjednat,
+            enabled: jidlo.lzeObjednat,
             visualDensity: VisualDensity.compact,
             contentPadding: EdgeInsets.zero,
             titleTextStyle: Theme.of(context).textTheme.bodyMedium,
@@ -33,7 +34,7 @@ class FoodSectionListTile extends StatelessWidget {
             title: Text(nazev),
             subtitle: Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(jidlo.cena)),
             trailing: IconButton(
-              onPressed: () {}, // TODO: Push to detail page
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DishDetail())),
               icon: Icon(
                 Icons.info_outline,
                 color: Theme.of(context).listTileTheme.subtitleTextStyle!.color,
