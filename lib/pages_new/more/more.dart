@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/more/account.dart';
 import 'package:autojidelna/pages_new/settings/settings.dart';
@@ -30,7 +29,7 @@ class MorePage extends StatelessWidget {
         const AccountOverviewCard(),
         const CustomDivider(),
         const LocationPickerCard(),
-        CustomDivider(height: Spacing.s38),
+        const CustomDivider(height: 38),
         const CustomDivider(isTransparent: false),
         ListTile(
           leading: const Icon(Icons.person_outline),

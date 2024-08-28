@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/calendar_buttons.dart';
 import 'package:autojidelna/shared_widgets/canteen/list_view_canteen.dart';
@@ -13,9 +12,9 @@ class CanteenAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: const CalendarButton(),
-      actions: [
-        const TodayButton(),
-        VerticalDivider(color: Colors.transparent, width: Spacing.s16),
+      actions: const [
+        TodayButton(),
+        VerticalDivider(color: Colors.transparent, width: 16),
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:autojidelna/app_themes.dart';
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +16,7 @@ class ThemeStylePicker extends StatelessWidget {
         builder: (context, userPreferences, _) => ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: Spacing.s16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemCount: ThemeStyle.values.length,
           itemBuilder: (context, index) {
             final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || userPreferences.mode == ThemeMode.light;

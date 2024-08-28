@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/material.dart';
 
@@ -11,16 +10,16 @@ class SectionTitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomDivider(height: Spacing.s8),
+        const CustomDivider(height: 8),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.s16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
         ),
-        CustomDivider(height: Spacing.s8, isTransparent: false),
-        CustomDivider(height: Spacing.s4),
+        const CustomDivider(height: 8, isTransparent: false),
+        const CustomDivider(height: 4),
       ],
     );
   }

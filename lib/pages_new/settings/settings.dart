@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/settings/appearance.dart';
 import 'package:autojidelna/pages_new/settings/convenience.dart';
@@ -17,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Settings")),
       body: ScrollViewColumn(
         children: [
-          CustomDivider(height: Spacing.s4),
+          CustomDivider(height: 4),
           ListTile(
             leading: const Icon(Icons.palette_outlined),
             title: const Text("Appearance"),

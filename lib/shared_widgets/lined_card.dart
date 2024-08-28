@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/material.dart';
 
@@ -49,9 +48,9 @@ class LinedCard extends StatelessWidget {
     return GestureDetector(
       onTap: smallButton ? null : onPressed,
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: Spacing.s16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.s16, vertical: Spacing.s4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

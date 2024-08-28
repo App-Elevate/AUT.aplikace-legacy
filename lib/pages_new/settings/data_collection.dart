@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/consts.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
@@ -24,9 +23,9 @@ class DataCollectionScreen extends StatelessWidget {
             value: true,
             onChanged: (value) {},
           ),
-          CustomDivider(height: Spacing.s8),
+          CustomDivider(height: 8),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: Spacing.s16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: RichText(
               text: TextSpan(
                 text: Texts.settingsDataCollectionDescription1.i18n(),

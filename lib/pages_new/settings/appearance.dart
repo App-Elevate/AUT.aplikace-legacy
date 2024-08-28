@@ -1,5 +1,4 @@
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
@@ -24,13 +23,13 @@ class AppearanceScreen extends StatelessWidget {
       body: ScrollViewColumn(
         children: [
           const SectionTitle("Theme"),
-          CustomDivider(height: Spacing.s24),
+          const CustomDivider(height: 24),
           // theme mode picker
           const ThemeModePicker(),
-          CustomDivider(height: Spacing.s38),
+          const CustomDivider(height: 38),
           // theme style picker
           const ThemeStylePicker(),
-          CustomDivider(height: Spacing.s30),
+          const CustomDivider(height: 30),
           // pure black mode switch
           Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),

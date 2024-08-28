@@ -1,4 +1,3 @@
-import 'package:autojidelna/classes_enums/spacing.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
@@ -38,8 +37,8 @@ class TodayButton extends StatelessWidget {
       child: MaterialButton(
         textColor: Theme.of(context).colorScheme.onSurfaceVariant,
         padding: EdgeInsets.zero,
-        shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.circular(Spacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
           side: BorderSide(color: Theme.of(context).colorScheme.onSurfaceVariant, width: 1.75),
         ),
         child: Text(DateTime.now().day.toString()),
