@@ -16,6 +16,7 @@ class DayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (jidelnicek.jidla.isEmpty) return const SizedBox();
+    Map<String, List<Jidlo>> sortedDishes = mapDishesByVarianta(jidelnicek.jidla);
     return Card.outlined(
       elevation: 0.6,
       color: Colors.black,
@@ -25,10 +26,30 @@ class DayCard extends StatelessWidget {
         children: [
           DayCardheader(date: jidelnicek.den),
           const CustomDivider(isTransparent: false),
-          FoodSectionListTile(title: 'OBĚD', selection: jidelnicek.jidla),
+          ...sortedDishes.entries.map((e) => FoodSectionListTile(title: e.key.toUpperCase(), selection: e.value)),
         ],
       ),
     );
+  }
+
+  // Using regular expression to remove digits and extra spaces ['OBĚD 1' => 'OBĚD']
+  String normalizeVarianta(String varianta) => varianta.replaceAll(RegExp(r'\d'), '').trim();
+
+  // Group dishes by normalized `varianta`
+  Map<String, List<Jidlo>> mapDishesByVarianta(List<Jidlo> dishes) {
+    Map<String, List<Jidlo>> mappedDishes = {};
+
+    for (Jidlo dish in dishes) {
+      String normalizedVarianta = normalizeVarianta(dish.varianta);
+
+      if (mappedDishes.containsKey(normalizedVarianta)) {
+        mappedDishes[normalizedVarianta]!.add(dish);
+      } else {
+        mappedDishes[normalizedVarianta] = [dish];
+      }
+    }
+
+    return mappedDishes;
   }
 }
 

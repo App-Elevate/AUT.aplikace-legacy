@@ -32,7 +32,9 @@ class FoodSectionListTile extends StatelessWidget {
               onChanged: jidlo.lzeObjednat ? (data) {} : null,
             ),
             title: Text(nazev),
-            subtitle: Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(jidlo.cena)),
+            subtitle: jidlo.cena == null
+                ? null
+                : Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(jidlo.cena)),
             trailing: IconButton(
               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DishDetail())),
               icon: Icon(
