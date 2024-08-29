@@ -1,5 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/methods_vars/capitalize.dart';
+import 'package:autojidelna/methods_vars/string_extention.dart';
 import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/canteen/food_section_list_tile.dart';

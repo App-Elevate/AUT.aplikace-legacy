@@ -1,5 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/methods_vars/capitalize.dart';
+import 'package:autojidelna/methods_vars/string_extention.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
 import 'package:autojidelna/shared_widgets/configured_alert_dialog.dart';
