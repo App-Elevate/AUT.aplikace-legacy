@@ -16,7 +16,7 @@ class TabletUiButton extends StatelessWidget {
       selector: (_, p1) => (read: p1.tabletUi),
       builder: (context, tabletUi, child) => ListTile(
         title: const Text("Tablet UI"),
-        subtitle: Text(capitalize(EnumToString.convertToString(tabletUi.read))),
+        subtitle: Text(EnumToString.convertToString(tabletUi.read).capitalize()),
         onTap: () => configuredDialog(context, builder: (context) => const TabletUiPicker()),
       ),
     );
@@ -40,7 +40,7 @@ class TabletUiPicker extends StatelessWidget {
                   (format) => ListTile(
                     minVerticalPadding: 0,
                     visualDensity: const VisualDensity(vertical: -4),
-                    title: Text(capitalize(EnumToString.convertToString(format))),
+                    title: Text(EnumToString.convertToString(format).capitalize()),
                     titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                     trailing: tabletUi.read == format ? const Icon(Icons.check) : null,
                     onTap: () {
