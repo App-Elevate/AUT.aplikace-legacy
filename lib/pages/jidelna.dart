@@ -64,8 +64,6 @@ class MainAppScreenState extends State<MainAppScreen> {
         initPlatformState().then((value) async {
           await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
             if (!isAllowed) {
-              //TODO: less annoying popup for notifications
-
               // This is just a basic example. For real apps, you must show some
               // friendly dialog box before call the request method.
               // This is very important to not harm the user experience
@@ -176,12 +174,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                       fixedSize: Size(MediaQuery.sizeOf(context).width * .5, 45),
                       side: BorderSide(color: Theme.of(context).colorScheme.onSurfaceVariant, width: 1.75),
                     ),
-                    onPressed: () async {
-                      DateTime currentDate = dateListener.value;
-                      var datePicked = await CustomDatePicker().showDatePicker(context, currentDate);
-                      if (datePicked == null) return;
-                      changeDate(newDate: datePicked, animateToPage: true);
-                    },
+                    onPressed: () async => await CustomDatePicker().showDatePicker(context, dateListener.value),
                     icon: const Icon(Icons.calendar_today_rounded, size: 27.5),
                     label: ValueListenableBuilder(
                       valueListenable: dateListener,

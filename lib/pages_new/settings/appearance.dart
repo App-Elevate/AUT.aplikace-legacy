@@ -41,8 +41,7 @@ class AppearanceScreen extends StatelessWidget {
             ),
           ),
           SectionTitle(lang.settingsDisplay),
-          // TODO: implement this
-          // const TabletUiButton(),
+          // TODO: const TabletUiButton(),
           Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormatOptions format})>(
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(

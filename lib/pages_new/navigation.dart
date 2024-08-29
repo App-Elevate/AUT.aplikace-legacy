@@ -48,10 +48,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
         const CanteenAppBar(),
         const MoreAppBar(),
       ][pageIndex],
-      body: <Widget>[
-        const CanteenPage(),
-        const MorePage(),
-      ][pageIndex],
+      body: IndexedStack(
+        index: pageIndex,
+        children: const [
+          CanteenPage(),
+          MorePage(),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: pageIndex,
         onDestinationSelected: changePageIndex,
