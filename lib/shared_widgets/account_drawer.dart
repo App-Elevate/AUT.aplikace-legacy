@@ -129,7 +129,7 @@ class MainAccountDrawer extends StatelessWidget {
               //navigation buttons
               //profile
               ListTile(
-                title: Text(lang.accountDrawerProfile),
+                title: Text(lang.account),
                 leading: const Icon(Icons.account_circle),
                 onTap: () {
                   Navigator.push(
@@ -185,7 +185,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               // share app
               ListTile(
-                title: Text(lang.accountDrawerShareApp),
+                title: Text(lang.shareApp),
                 leading: const Icon(Icons.share),
                 onTap: () async {
                   final RenderBox? box = context.findRenderObject() as RenderBox?;

@@ -178,16 +178,16 @@ class SettingsPage extends StatelessWidget {
                   segments: [
                     ButtonSegment<String>(
                       value: "0",
-                      label: Text(lang.settingsLabelSystem),
+                      label: Text(lang.systemThemeMode),
                       enabled: true,
                     ),
                     ButtonSegment<String>(
                       value: "1",
-                      label: Text(lang.settingsLabelLight),
+                      label: Text(lang.lightThemeMode),
                     ),
                     ButtonSegment<String>(
                       value: "2",
-                      label: Text(lang.settingsLabelDark),
+                      label: Text(lang.darkThemeMode),
                     ),
                   ],
                 );
@@ -449,7 +449,7 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           ListTile(
-            title: Text(lang.settingsTitleKredit),
+            title: Text(lang.settingsTitleCredit),
             trailing: ValueListenableBuilder(
               valueListenable: lowCreditNotificationNotifier,
               builder: (context, value, child) {
@@ -557,7 +557,7 @@ class SettingsPage extends StatelessWidget {
                       text: lang.settingsDataCollectionDescription_3,
                     ),
                     TextSpan(
-                      text: lang.settingsDataCollectionDescription_4,
+                      text: lang.settingsDataCollectionDescription_4("1"),
                       style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {

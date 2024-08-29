@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/shared_widgets/configured_bottom_sheet.dart';
 import 'package:autojidelna/shared_widgets/lined_card.dart';
 import 'package:autojidelna/shared_widgets/switch_account_panel_v2.dart';
@@ -9,20 +10,20 @@ class AccountOverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LinedCard(
-      title: "Username",
-      footer: "Change account",
+      title: "Username", //TODO: account username
+      footer: lang.changeAccount,
       onPressed: () => configuredBottomSheet(context, builder: (context) => const SwitchAccountPanelV2()),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.account_circle, size: 75),
-          VerticalDivider(color: Colors.transparent),
+          const Icon(Icons.account_circle, size: 75),
+          const VerticalDivider(color: Colors.transparent),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Credit: 2000 kč"),
-              Text("Category: Students"),
+              Text(lang.credit(2)),
+              Text(lang.category('category')),
             ],
           ),
         ],

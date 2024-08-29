@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,12 +24,12 @@ class TimePickerTodaysFoodTiles extends StatelessWidget {
       builder: (context, todaysFood, child) => Column(
         children: [
           SwitchListTile(
-            title: const Text("Today's food"),
+            title: Text(lang.settingsTitleTodaysFood),
             value: todaysFood.read,
             onChanged: todaysFood.set,
           ),
           ListTile(
-            title: const Text("Time?"),
+            title: Text(lang.settingsNotificationTime),
             enabled: todaysFood.read,
             onTap: pickTimeToSend,
             trailing: OutlinedButton(

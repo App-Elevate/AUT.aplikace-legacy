@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class ConfiguredAlertDialog extends StatelessWidget {
                     visualDensity: const VisualDensity(vertical: -4),
                     padding: const EdgeInsets.only(right: 16),
                   ),
-                  child: const Text("Cancel"),
+                  child: Text(lang.cancel),
                 ),
               ],
             ),

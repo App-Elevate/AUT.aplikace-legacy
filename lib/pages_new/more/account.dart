@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -6,7 +7,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Account")),
+      appBar: AppBar(title: Text(lang.account)),
       body: const Placeholder(),
     );
   }

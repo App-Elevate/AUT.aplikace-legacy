@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
@@ -11,15 +12,15 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Notifications")),
+      appBar: AppBar(title: Text(lang.notifications)),
       body: ScrollViewColumn(
         children: [
-          const SectionTitle("Notifications"),
+          SectionTitle(lang.notifications),
           const TimePickerTodaysFoodTiles(),
           Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.lowCredit, set: p1.setLowCredit),
             builder: (context, lowCredit, child) => SwitchListTile(
-              title: const Text("Low Credit"),
+              title: Text(lang.settingsTitleCredit),
               value: lowCredit.read,
               onChanged: lowCredit.set,
             ),
@@ -27,7 +28,7 @@ class NotificationScreen extends StatelessWidget {
           Selector<NotificationPreferences, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.weekLongFamine, set: p1.setWeekLongFamine),
             builder: (context, weekLongFamine, child) => SwitchListTile(
-              title: const Text("No food"),
+              title: Text(lang.settingsNemateObjednano),
               value: weekLongFamine.read,
               onChanged: weekLongFamine.set,
             ),

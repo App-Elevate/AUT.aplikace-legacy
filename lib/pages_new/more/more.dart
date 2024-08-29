@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/more/account.dart';
 import 'package:autojidelna/pages_new/settings/settings.dart';
@@ -33,29 +34,29 @@ class MorePage extends StatelessWidget {
         const CustomDivider(isTransparent: false),
         ListTile(
           leading: const Icon(Icons.person_outline),
-          title: const Text("Account"),
+          title: Text(lang.account),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AccountScreen())),
         ),
         ListTile(
           leading: const Icon(Icons.analytics_outlined),
-          title: const Text("Statistics"),
+          title: Text(lang.statistics),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const StatisticsScreen())),
         ),
         const CustomDivider(isTransparent: false),
         ListTile(
           leading: const Icon(Icons.settings_outlined),
-          title: const Text("Settings"),
+          title: Text(lang.settings),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SettingsScreen())),
         ),
         ListTile(
           leading: const Icon(Icons.info_outline),
-          title: const Text("About"),
+          title: Text(lang.about),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutScreen())),
         ),
         ListTile(
           leading: const Icon(Icons.share_outlined),
-          title: const Text("Share the app"),
-          onTap: () async => await Share.share("https://autojidelna.cz/", subject: "Autojídelna"),
+          title: Text(lang.shareApp),
+          onTap: () async => await Share.share("https://autojidelna.cz/", subject: lang.appName),
         ),
       ],
     );

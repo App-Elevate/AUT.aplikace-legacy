@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
@@ -19,10 +20,10 @@ class AppearanceScreen extends StatelessWidget {
     final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || isLightMode;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Appearance")),
+      appBar: AppBar(title: Text(lang.settingsAppearence)),
       body: ScrollViewColumn(
         children: [
-          const SectionTitle("Theme"),
+          SectionTitle(lang.settingsTheme),
           const CustomDivider(height: 24),
           // theme mode picker
           const ThemeModePicker(),
@@ -34,20 +35,20 @@ class AppearanceScreen extends StatelessWidget {
           Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),
             builder: (context, pureBlack, child) => SwitchListTile(
-              title: const Text("Pure black dark mode"),
-              subtitle: const Text("If You Only Knew The Power Of The Dark Side..."),
+              title: Text(lang.settingsAmoled),
+              subtitle: Text(lang.settingsAmoledSub),
               value: pureBlack.read,
               onChanged: isBright ? null : pureBlack.set,
             ),
           ),
-          const SectionTitle("Display"),
+          SectionTitle(lang.settingsDisplay),
           // TODO: implement this
           const TabletUiButton(),
           Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormatOptions format})>(
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(
-              title: const Text("Relative timestamps"),
-              subtitle: Text('"Today" instead of "${getCorrectDateString(relTimeStamps.format)}"'),
+              title: Text(lang.settingsRelativeTimestamps),
+              subtitle: Text(lang.settingsRelativeTimestampsSub(getCorrectDateString(relTimeStamps.format))),
               value: relTimeStamps.read,
               onChanged: relTimeStamps.set,
             ),

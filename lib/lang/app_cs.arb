@@ -31,14 +31,14 @@
   "errorsChangelog": "Nepodařilo se získat změny :/",
   "tryAgain": "Zkusit znovu",
   "cancel": "Zrušit",
-  "profile": "Profil",
   "ok": "OK",
   "currency": "Kč",
   "appName": "Autojídelna",
   "shareDescription": "Autojídelna (aplikace na objednávání jídla)",
   "settings": "Nastavení",
   "menu": "Jídelníček",
-  "switchAccountPanelAddAccount": "Přidat účet",
+  "addAccount": "Přidat účet",
+  "changeAccount": "Změnit účet",
   "switchAccountPanelTitle": "Účty",
   "updateSnackbarWaiting": "Aktualizace - Čeká se na oprávnění",
   "updateSnackbarError": "Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu",
@@ -67,8 +67,8 @@
   "logoutUSure": "Opravdu se chcete odhlásit?",
   "logoutConfirm": "Odhlásit se",
   "accountDrawerLocationsUnknown": "Neznámá lokalita",
-  "accountDrawerProfile": "Profil",
-  "accountDrawerShareApp": "Sdílet aplikaci",
+  "account": "Účet",
+  "shareApp": "Sdílet aplikaci",
   "accountDrawerPickLocation": "Vyberte lokaci: ",
   "about": "O aplikaci",
   "aboutCopyRight": "© 2023 - {time} Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
@@ -84,9 +84,25 @@
   "aboutLatestVersion": "Aktuálně jste na nejnovější verzi aplikace 👍",
   "aboutCheckForUpdates": "Zkontrolovat aktualizace",
   "settingsAppearence": "Vzhled",
-  "settingsLabelLight": "Světlý",
-  "settingsLabelDark": "Tmavý",
-  "settingsLabelSystem": "Systém",
+  "settingsTheme": "Schéma",
+  "systemThemeMode": "Systém",
+  "lightThemeMode": "Světlý",
+  "darkThemeMode": "Tmavý",
+  "settingsAmoled": "AMOLED mód",
+  "settingsAmoledSub": "Join the dark side!",
+  "settingsDisplay": "Zobrazení",
+  "settingsRelativeTimestamps": "Relativní časové značky",
+  "settingsRelativeTimestampsSub": "'Dnes' místo '{date}'",
+  "@settingsRelativeTimestampsSub": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "convenience": "Pohodlí",
+  "listUi": "List UI",
+  "tabletUi": "Tablet UI",
   "settingsCalendarBigMarkers": "Velké ukazatele v kalendáři",
   "settingsSkipWeekends": "Přeskakovat víkendy při procházení jídelníčku",
   "settingsNotificationFor": "Oznámení pro {username}",
@@ -98,7 +114,7 @@
     }
   },
   "settingsTitleTodaysFood": "Dnešní jídlo",
-  "settingsTitleKredit": "Nízký credit",
+  "settingsTitleCredit": "Nízký credit",
   "settingsNotificationTime": "Čas oznámení: ",
   "settingsNemateObjednano": "Nemáte objednáno na příští týden",
   "settingsAnotherOptions": "Další možnosti v nastavení systému...",
@@ -107,15 +123,25 @@
   "settingsDataCollectionDescription_1": "Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve ",
   "settingsDataCollectionDescription_2": "Zdrojovém kódu",
   "settingsDataCollectionDescription_3": " nebo na ",
-  "settingsDataCollectionDescription_4": "seznamu sbíraných dat",
+  "settingsDataCollectionDescription_4": "{arg, select, 1{seznamu} other{Seznam}} sbíraných dat",
+  "@settingsDataCollectionDescription_4": {
+    "description": "0 -> Seznam zbíraných dat 1 -> seznamu zbíraných dat",
+    "placeholders": {
+      "arg": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
   "settingsDebugOptions": "Debug Options",
   "settingsDebugForceNotifications": "Force send notifications",
   "settingsDebugNotifications": "Send Notifications",
-  "kredit": "Kredit: {ammount} Kč",
-  "@kredit": {
+  "credit": "Kredit: {ammount} Kč",
+  "@credit": {
     "placeholders": {
       "ammount": {
-        "type": "int"
+        "type": "int",
+        "format": "decimalPattern"
       }
     }
   },
@@ -200,7 +226,8 @@
   "vlozitNaBurzu": "Vložit na burzu",
   "objednatZBurzy": "Objednat z burzy",
   "odebratZBurzy": "Odebrat z burzy",
-  "notificationsFor": "Notifikace pro {username}",
+  "notifications": "Oznámení",
+  "notificationsFor": "Oznámení pro {username}",
   "@notificationsFor": {
     "placeholders": {
       "username": {
@@ -209,7 +236,7 @@
     }
   },
   "jidloChannelName": "Dnešní jídlo",
-  "jidloChannelDescription": "Notifikace každý den o tom jaké je dnes jídlo pro {username}",
+  "jidloChannelDescription": "Oznámení každý den o tom jaké je dnes jídlo pro {username}",
   "@jidloChannelDescription": {
     "placeholders": {
       "username": {
@@ -218,7 +245,7 @@
     }
   },
   "dochazejiciKreditChannelName": "Docházející kredit",
-  "dochazejiciKreditChannelDescription": "Notifikace o tom, zda vám dochází kredit týden dopředu pro {username}",
+  "dochazejiciKreditChannelDescription": "Oznámení o tom, zda vám dochází kredit týden dopředu pro {username}",
   "@dochazejiciKreditChannelDescription": {
     "placeholders": {
       "username": {
@@ -227,7 +254,7 @@
     }
   },
   "objednanoChannelName": "Objednáno?",
-  "objednanoChannelDescription": "Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden pro {username}",
+  "objednanoChannelDescription": "Oznámení týden dopředu o tom, zda jste si objednal jídlo na příští týden pro {username}",
   "@objednanoChannelDescription": {
     "placeholders": {
       "username": {
@@ -235,8 +262,8 @@
       }
     }
   },
-  "otherDescription": "Ostatní notifikace, např. chybové hlášky",
-  "gettingDataNotifications": "Získávám data pro notifikace",
+  "otherDescription": "Ostatní oznámení, např. chybové hlášky",
+  "gettingDataNotifications": "Získávám data pro oznámení",
   "notificationDochaziVamKredit": "Dochází vám kredit!",
   "notificationKreditPro": "Kredit pro {first} {last}: {ammount} Kč",
   "@notificationKreditPro": {
@@ -265,5 +292,24 @@
       }
     }
   },
-  "objednatAction": "Objednat náhodně"
+  "objednatAction": "Objednat náhodně",
+  "version": "Verze",
+  "debug": "Debug",
+  "stable": "Stable",
+  "aboutVersionSubtitle": "{arg, select, true{Debug} other{Stable}} {version}",
+  "@aboutVersionSubtitle": {
+    "description": "aboutVersionSubtitle",
+    "placeholders": {
+      "arg": {
+        "type": "String",
+        "example": "true"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "licenses": "Licenses",
+  "statistics": "Statistiky",
+  "dateFormat": "Formát dat"
 }

@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/settings/appearance.dart';
 import 'package:autojidelna/pages_new/settings/convenience.dart';
@@ -13,33 +14,33 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Settings")),
+      appBar: AppBar(title: Text(lang.settings)),
       body: ScrollViewColumn(
         children: [
           const CustomDivider(height: 4),
           ListTile(
             leading: const Icon(Icons.palette_outlined),
-            title: const Text("Appearance"),
+            title: Text(lang.settingsAppearence),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AppearanceScreen())),
           ),
           ListTile(
             leading: const Icon(Icons.tune_outlined),
-            title: const Text("Convenience"),
+            title: Text(lang.convenience),
             onTap: () async => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ConvenienceScreen())),
           ),
           ListTile(
             leading: const Icon(Icons.edit_notifications_outlined),
-            title: const Text("Notifications"),
+            title: Text(lang.notifications),
             onTap: () async => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotificationScreen())),
           ),
           ListTile(
             leading: const Icon(Icons.cookie_outlined),
-            title: const Text("Data Collection"),
+            title: Text(lang.settingsDataCollection),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DataCollectionScreen())),
           ),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: const Text("About"),
+            title: Text(lang.about),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AboutScreen())),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
@@ -26,7 +27,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
   Widget addAccountButton(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.add),
-      title: Text("Add account", style: Theme.of(context).textTheme.bodyLarge),
+      title: Text(lang.addAccount, style: Theme.of(context).textTheme.bodyLarge),
       onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreenV2())),
     );
   }

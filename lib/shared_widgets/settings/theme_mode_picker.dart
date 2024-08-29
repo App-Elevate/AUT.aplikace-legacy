@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +16,10 @@ class ThemeModePicker extends StatelessWidget {
           showSelectedIcon: false,
           selected: {themeMode.read},
           onSelectionChanged: (Set<ThemeMode> selected) => themeMode.set(selected.first),
-          segments: const [
-            ButtonSegment<ThemeMode>(value: ThemeMode.system, label: Text("System")),
-            ButtonSegment<ThemeMode>(value: ThemeMode.light, label: Text("Light")),
-            ButtonSegment<ThemeMode>(value: ThemeMode.dark, label: Text("Dark")),
+          segments: [
+            ButtonSegment<ThemeMode>(value: ThemeMode.system, label: Text(lang.systemThemeMode)),
+            ButtonSegment<ThemeMode>(value: ThemeMode.light, label: Text(lang.lightThemeMode)),
+            ButtonSegment<ThemeMode>(value: ThemeMode.dark, label: Text(lang.darkThemeMode)),
           ],
         ),
       ),

@@ -14,13 +14,15 @@ class DataCollectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const TextStyle style = TextStyle(color: Colors.blue, decoration: TextDecoration.underline);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Data Collection")),
+      appBar: AppBar(title: Text(lang.settingsDataCollection)),
       body: ScrollViewColumn(
         children: [
-          const SectionTitle("Data Collection"),
+          SectionTitle(lang.settingsDataCollection),
           SwitchListTile(
-            title: const Text("Sell your data"),
+            title: Text(lang.settingsStopDataCollection),
             value: true,
             onChanged: (value) {},
           ),
@@ -34,15 +36,13 @@ class DataCollectionScreen extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: lang.settingsDataCollectionDescription_2,
-                    style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                    style: style,
                     recognizer: TapGestureRecognizer()..onTap = () => openDataCollectionUrl(true),
                   ),
+                  TextSpan(text: lang.settingsDataCollectionDescription_3),
                   TextSpan(
-                    text: lang.settingsDataCollectionDescription_3,
-                  ),
-                  TextSpan(
-                    text: lang.settingsDataCollectionDescription_4,
-                    style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                    text: lang.settingsDataCollectionDescription_4("1"),
+                    style: style,
                     recognizer: TapGestureRecognizer()..onTap = () => openDataCollectionUrl(false),
                   ),
                 ],

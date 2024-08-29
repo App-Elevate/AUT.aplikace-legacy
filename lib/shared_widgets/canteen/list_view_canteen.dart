@@ -1,3 +1,4 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_widgets/canteen/day_card.dart';
 import 'package:autojidelna/shared_widgets/canteen/error_loading_data.dart';
@@ -25,7 +26,7 @@ class ListViewCanteen extends StatelessWidget {
       future: fetchDailyMenus(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Center(child: Text('Error loading data'));
+          return Center(child: Text(lang.errorsLoadingData));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

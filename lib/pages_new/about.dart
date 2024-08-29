@@ -1,8 +1,8 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:icons_flutter/icons_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -14,7 +14,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("About")),
+      appBar: AppBar(title: Text(lang.about)),
       body: ScrollViewColumn(
         children: [
           // logo
@@ -33,13 +33,13 @@ class AboutScreen extends StatelessWidget {
             builder: (context, data) {
               if (data.hasData && data.data != null) {
                 return ListTile(
-                  title: const Text("Version"),
-                  subtitle: Text("${kDebugMode ? "Debug" : "Stable"} ${data.data!.version}"),
-                  onTap: () async {
+                  title: Text(lang.version),
+                  subtitle: Text(lang.aboutVersionSubtitle(kDebugMode.toString(), data.data!.version)),
+                  /*onTap: () async {
                     await Clipboard.setData(
                       ClipboardData(text: "App version: ${data.data!.version}"),
                     ); // TODO: mby add some other data
-                  },
+                  },*/
                 );
               }
               return const SizedBox();
@@ -47,12 +47,12 @@ class AboutScreen extends StatelessWidget {
           ),
           // licenses list tile
           ListTile(
-            title: const Text("Licenses"),
+            title: Text(lang.licenses),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LicensePage())),
           ),
           // collected data list tile
           ListTile(
-            title: const Text("Collected data list"),
+            title: Text(lang.settingsDataCollectionDescription_4("0")),
             onTap: () {
               launchUrl(Uri.parse("https://github.com/Autojidelna/autojidelna/blob/main/listSbiranychDat.md"));
             },

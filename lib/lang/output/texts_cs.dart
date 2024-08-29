@@ -4,7 +4,7 @@ import 'texts.dart';
 
 /// The translations for Czech (`cs`).
 class TextsCs extends Texts {
-  TextsCs([super.locale = 'cs']);
+  TextsCs([String locale = 'cs']) : super(locale);
 
   @override
   String get toastExit => 'Zmáčkněte tlačítko zpět pro ukončení aplikace';
@@ -31,10 +31,12 @@ class TextsCs extends Texts {
   String get errorsJidloNeniNaBurze => 'Jídlo není na burze';
 
   @override
-  String get errorsChybaPriDavaniNaBurzu => 'Nastala chyba při dávání jídla na burzu';
+  String get errorsChybaPriDavaniNaBurzu =>
+      'Nastala chyba při dávání jídla na burzu';
 
   @override
-  String get errorsBadConnection => 'Nepodařilo se připojit k serveru icanteen. Zkuste to znovu později';
+  String get errorsBadConnection =>
+      'Nepodařilo se připojit k serveru icanteen. Zkuste to znovu později';
 
   @override
   String get errorsNoInternet => 'Nemáte připojení k internetu';
@@ -51,19 +53,22 @@ class TextsCs extends Texts {
   String get errorsDownloadingApp => 'Aktualizace aplikace selhala';
 
   @override
-  String get errorsDownloadingAppDetail => 'Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.';
+  String get errorsDownloadingAppDetail =>
+      'Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.';
 
   @override
   String get errorsLoad => 'Selhalo načítání jídelníčku';
 
   @override
-  String get errorsObedNelzeZrusit => 'Oběd nelze zrušit. Platnost objednávky vypršela.';
+  String get errorsObedNelzeZrusit =>
+      'Oběd nelze zrušit. Platnost objednávky vypršela.';
 
   @override
   String get errorsNelzeObjednat => 'Oběd nelze objednat';
 
   @override
-  String get errorsNelzeObjednatKredit => 'Oběd nelze objednat - Nedostatečný kredit.';
+  String get errorsNelzeObjednatKredit =>
+      'Oběd nelze objednat - Nedostatečný kredit.';
 
   @override
   String get errorsChybaPriRuseni => 'Nastala chyba při rušení objednávky';
@@ -79,9 +84,6 @@ class TextsCs extends Texts {
 
   @override
   String get cancel => 'Zrušit';
-
-  @override
-  String get profile => 'Profil';
 
   @override
   String get ok => 'OK';
@@ -102,7 +104,10 @@ class TextsCs extends Texts {
   String get menu => 'Jídelníček';
 
   @override
-  String get switchAccountPanelAddAccount => 'Přidat účet';
+  String get addAccount => 'Přidat účet';
+
+  @override
+  String get changeAccount => 'Změnit účet';
 
   @override
   String get switchAccountPanelTitle => 'Účty';
@@ -111,7 +116,8 @@ class TextsCs extends Texts {
   String get updateSnackbarWaiting => 'Aktualizace - Čeká se na oprávnění';
 
   @override
-  String get updateSnackbarError => 'Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu';
+  String get updateSnackbarError =>
+      'Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu';
 
   @override
   String updateSnackbarDownloading(int value) {
@@ -119,7 +125,8 @@ class TextsCs extends Texts {
   }
 
   @override
-  String get updateSnackbarDownloaded => 'Aktualizace byla stažena, instalování';
+  String get updateSnackbarDownloaded =>
+      'Aktualizace byla stažena, instalování';
 
   @override
   String popupNewVersionAvailable(String version) {
@@ -151,10 +158,10 @@ class TextsCs extends Texts {
   String get accountDrawerLocationsUnknown => 'Neznámá lokalita';
 
   @override
-  String get accountDrawerProfile => 'Profil';
+  String get account => 'Účet';
 
   @override
-  String get accountDrawerShareApp => 'Sdílet aplikaci';
+  String get shareApp => 'Sdílet aplikaci';
 
   @override
   String get accountDrawerPickLocation => 'Vyberte lokaci: ';
@@ -174,7 +181,8 @@ class TextsCs extends Texts {
   String get aboutSourceCode => 'Zdrojový kód';
 
   @override
-  String get aboutLatestVersion => 'Aktuálně jste na nejnovější verzi aplikace 👍';
+  String get aboutLatestVersion =>
+      'Aktuálně jste na nejnovější verzi aplikace 👍';
 
   @override
   String get aboutCheckForUpdates => 'Zkontrolovat aktualizace';
@@ -183,19 +191,49 @@ class TextsCs extends Texts {
   String get settingsAppearence => 'Vzhled';
 
   @override
-  String get settingsLabelLight => 'Světlý';
+  String get settingsTheme => 'Schéma';
 
   @override
-  String get settingsLabelDark => 'Tmavý';
+  String get systemThemeMode => 'Systém';
 
   @override
-  String get settingsLabelSystem => 'Systém';
+  String get lightThemeMode => 'Světlý';
+
+  @override
+  String get darkThemeMode => 'Tmavý';
+
+  @override
+  String get settingsAmoled => 'AMOLED mód';
+
+  @override
+  String get settingsAmoledSub => 'Join the dark side!';
+
+  @override
+  String get settingsDisplay => 'Zobrazení';
+
+  @override
+  String get settingsRelativeTimestamps => 'Relativní časové značky';
+
+  @override
+  String settingsRelativeTimestampsSub(String date) {
+    return 'Dnes místo {date}';
+  }
+
+  @override
+  String get convenience => 'Pohodlí';
+
+  @override
+  String get listUi => 'List UI';
+
+  @override
+  String get tabletUi => 'Tablet UI';
 
   @override
   String get settingsCalendarBigMarkers => 'Velké ukazatele v kalendáři';
 
   @override
-  String get settingsSkipWeekends => 'Přeskakovat víkendy při procházení jídelníčku';
+  String get settingsSkipWeekends =>
+      'Přeskakovat víkendy při procházení jídelníčku';
 
   @override
   String settingsNotificationFor(String username) {
@@ -206,7 +244,7 @@ class TextsCs extends Texts {
   String get settingsTitleTodaysFood => 'Dnešní jídlo';
 
   @override
-  String get settingsTitleKredit => 'Nízký credit';
+  String get settingsTitleCredit => 'Nízký credit';
 
   @override
   String get settingsNotificationTime => 'Čas oznámení: ';
@@ -221,7 +259,8 @@ class TextsCs extends Texts {
   String get settingsDataCollection => 'Shromažďování údajů';
 
   @override
-  String get settingsStopDataCollection => 'Zastavit sledování analytických služeb';
+  String get settingsStopDataCollection =>
+      'Zastavit sledování analytických služeb';
 
   @override
   String get settingsDataCollectionDescription_1 =>
@@ -234,7 +273,16 @@ class TextsCs extends Texts {
   String get settingsDataCollectionDescription_3 => ' nebo na ';
 
   @override
-  String get settingsDataCollectionDescription_4 => 'seznamu sbíraných dat';
+  String settingsDataCollectionDescription_4(String arg) {
+    String _temp0 = intl.Intl.selectLogic(
+      arg,
+      {
+        '1': 'seznamu',
+        'other': 'Seznam',
+      },
+    );
+    return '$_temp0 sbíraných dat';
+  }
 
   @override
   String get settingsDebugOptions => 'Debug Options';
@@ -246,8 +294,12 @@ class TextsCs extends Texts {
   String get settingsDebugNotifications => 'Send Notifications';
 
   @override
-  String kredit(int ammount) {
-    return 'Kredit: $ammount Kč';
+  String credit(int ammount) {
+    final intl.NumberFormat ammountNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String ammountString = ammountNumberFormat.format(ammount);
+
+    return 'Kredit: $ammountString Kč';
   }
 
   @override
@@ -304,10 +356,12 @@ class TextsCs extends Texts {
       'Toto oprávnění používáme pouze k aktualizaci aplikace. Pokud si nepřejete oprávnění povolit můžete stále stáhnout apk z githubu.';
 
   @override
-  String get loginUrlFieldLabel => 'Url stránky icanteen - např. jidelna.trebesin.cz';
+  String get loginUrlFieldLabel =>
+      'Url stránky icanteen - např. jidelna.trebesin.cz';
 
   @override
-  String get loginUrlFieldHint => 'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
+  String get loginUrlFieldHint =>
+      'Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz';
 
   @override
   String get loginUserFieldLabel => 'Uživatelské jméno';
@@ -322,7 +376,8 @@ class TextsCs extends Texts {
   String get loginPasswordFieldHint => 'Zadejte prosím své heslo';
 
   @override
-  String get dataCollectionAgreement => 'Používáním aplikace souhlasíte se zasíláním anonymních dat. ';
+  String get dataCollectionAgreement =>
+      'Používáním aplikace souhlasíte se zasíláním anonymních dat. ';
 
   @override
   String get moreInfo => 'Více informací.';
@@ -373,8 +428,11 @@ class TextsCs extends Texts {
   String get odebratZBurzy => 'Odebrat z burzy';
 
   @override
+  String get notifications => 'Oznámení';
+
+  @override
   String notificationsFor(String username) {
-    return 'Notifikace pro $username';
+    return 'Oznámení pro $username';
   }
 
   @override
@@ -382,7 +440,7 @@ class TextsCs extends Texts {
 
   @override
   String jidloChannelDescription(String username) {
-    return 'Notifikace každý den o tom jaké je dnes jídlo pro $username';
+    return 'Oznámení každý den o tom jaké je dnes jídlo pro $username';
   }
 
   @override
@@ -390,7 +448,7 @@ class TextsCs extends Texts {
 
   @override
   String dochazejiciKreditChannelDescription(String username) {
-    return 'Notifikace o tom, zda vám dochází kredit týden dopředu pro $username';
+    return 'Oznámení o tom, zda vám dochází kredit týden dopředu pro $username';
   }
 
   @override
@@ -398,14 +456,14 @@ class TextsCs extends Texts {
 
   @override
   String objednanoChannelDescription(String username) {
-    return 'Notifikace týden dopředu o tom, zda jste si objednal jídlo na příští týden pro $username';
+    return 'Oznámení týden dopředu o tom, zda jste si objednal jídlo na příští týden pro $username';
   }
 
   @override
-  String get otherDescription => 'Ostatní notifikace, např. chybové hlášky';
+  String get otherDescription => 'Ostatní oznámení, např. chybové hlášky';
 
   @override
-  String get gettingDataNotifications => 'Získávám data pro notifikace';
+  String get gettingDataNotifications => 'Získávám data pro oznámení';
 
   @override
   String get notificationDochaziVamKredit => 'Dochází vám kredit!';
@@ -422,10 +480,41 @@ class TextsCs extends Texts {
   String get notificationObjednejteSi => 'Objednejte si na příští týden';
 
   @override
-  String notificationObjednejteSiDetail(String first, String last, Object fist) {
+  String notificationObjednejteSiDetail(
+      String first, String last, Object fist) {
     return 'Uživatel $fist $last si stále ještě neobjenal na příští týden';
   }
 
   @override
   String get objednatAction => 'Objednat náhodně';
+
+  @override
+  String get version => 'Verze';
+
+  @override
+  String get debug => 'Debug';
+
+  @override
+  String get stable => 'Stable';
+
+  @override
+  String aboutVersionSubtitle(String arg, String version) {
+    String _temp0 = intl.Intl.selectLogic(
+      arg,
+      {
+        'true': 'Debug',
+        'other': 'Stable',
+      },
+    );
+    return '$_temp0 $version';
+  }
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get statistics => 'Statistiky';
+
+  @override
+  String get dateFormat => 'Formát dat';
 }

@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/string_extention.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
@@ -15,7 +16,7 @@ class TabletUiButton extends StatelessWidget {
     return Selector<AppearancePreferences, ({TabletUi read})>(
       selector: (_, p1) => (read: p1.tabletUi),
       builder: (context, tabletUi, child) => ListTile(
-        title: const Text("Tablet UI"),
+        title: Text(lang.tabletUi),
         subtitle: Text(EnumToString.convertToString(tabletUi.read).capitalize()),
         onTap: () => configuredDialog(context, builder: (context) => const TabletUiPicker()),
       ),

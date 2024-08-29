@@ -113,7 +113,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
-              lang.switchAccountPanelAddAccount,
+              lang.addAccount,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),

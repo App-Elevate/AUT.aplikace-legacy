@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(lang.profile),
+        title: Text(lang.account),
         actions: [
           _appBarLogoutButton(context),
         ],
@@ -95,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
-                        lang.kredit(loggedInCanteen.uzivatel!.kredit.toInt()),
+                        lang.credit(loggedInCanteen.uzivatel!.kredit.toInt()),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
