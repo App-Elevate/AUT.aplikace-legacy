@@ -24,7 +24,9 @@ class PageViewFoodCard extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               visualDensity: const VisualDensity(vertical: -4),
               title: Text(dish.kategorizovano!.hlavniJidlo!),
-              subtitle: Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(dish.cena)),
+              subtitle: dish.cena == null
+                  ? null
+                  : Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(dish.cena)),
             ),
             const CustomDivider(height: 8),
             OrderDishButton(dish),
