@@ -16,6 +16,18 @@ class DayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (jidelnicek.jidla.isEmpty) return const SizedBox();
+    return ChangeNotifierProvider(
+      create: (context) => DishesOfTheDay(),
+      child: _DayCardContent(jidelnicek),
+    );
+  }
+}
+
+class _DayCardContent extends StatelessWidget {
+  const _DayCardContent(this.jidelnicek);
+  final Jidelnicek jidelnicek;
+  @override
+  Widget build(BuildContext context) {
     Map<String, List<Jidlo>> sortedDishes = mapDishesByVarianta(jidelnicek.jidla);
     return Card.outlined(
       elevation: 0.6,
