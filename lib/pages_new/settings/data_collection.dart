@@ -24,14 +24,15 @@ class DataCollectionScreen extends StatelessWidget {
         children: [
           SectionTitle(lang.settingsDataCollection),
           Selector<AppearancePreferences, ({bool read, void Function(bool) set})>(
-              selector: (_, p1) => (read: p1.analytics, set: p1.setAnalytics),
-              builder: (_, data, ___) {
-                return SwitchListTile(
-                  title: Text(lang.settingsStopDataCollection),
-                  value: !data.read,
-                  onChanged: data.set,
-                );
-              }),
+            selector: (_, p1) => (read: p1.analytics, set: p1.setAnalytics),
+            builder: (_, data, ___) {
+              return SwitchListTile(
+                title: Text(lang.settingsStopDataCollection),
+                value: data.read,
+                onChanged: data.set,
+              );
+            },
+          ),
           const CustomDivider(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
