@@ -33,7 +33,7 @@ class AppearancePreferences with ChangeNotifier {
   bool _skipWeekends = false;
   DateFormatOptions _dateFormat = DateFormatOptions.dMy;
   bool _relTimeStamps = false;
-  bool _collectingData = true;
+  bool _analytics = true;
 
   /// Theme style getter
   ThemeStyle get themeStyle => _themeStyle;
@@ -62,7 +62,7 @@ class AppearancePreferences with ChangeNotifier {
   /// Relative TimeStamps getter
   bool get relTimeStamps => _relTimeStamps;
 
-  bool get collectingData => _collectingData;
+  bool get analytics => _analytics;
 
   /// Loads settings from shared preferences
   void loadFromShraredPreferences() async {
@@ -75,6 +75,7 @@ class AppearancePreferences with ChangeNotifier {
     _skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? _skipWeekends;
     _dateFormat = await readEnumFromSharedPreferences(SharedPrefsKeys.dateFormat, DateFormatOptions.values, _dateFormat);
     _relTimeStamps = await readBoolFromSharedPreferences(SharedPrefsKeys.relTimeStamps) ?? _relTimeStamps;
+    _analytics = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics) ?? _analytics;
     notifyListeners();
   }
 
@@ -143,10 +144,10 @@ class AppearancePreferences with ChangeNotifier {
     notifyListeners();
   }
 
-  void setDataCollection(bool collecting) {
-    _collectingData = collecting;
+  void setAnalytics(bool collecting) {
+    _analytics = collecting;
     analyticsEnabledGlobally = collecting;
-    saveBoolToSharedPreferences(SharedPrefsKeys.analytics, _collectingData);
+    saveBoolToSharedPreferences(SharedPrefsKeys.analytics, _analytics);
     notifyListeners();
   }
 }
