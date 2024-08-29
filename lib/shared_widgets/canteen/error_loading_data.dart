@@ -1,5 +1,5 @@
 import 'package:autojidelna/consts.dart';
-import 'package:autojidelna/shared_widgets/canteen/page_view_canteen.dart';
+import 'package:autojidelna/methods_vars/portable_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:material_symbols_icons/symbols.dart';

@@ -1,6 +1,6 @@
 import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/methods_vars/portable_refresh.dart';
 import 'package:autojidelna/providers.dart';
-import 'package:autojidelna/shared_widgets/canteen/page_view_canteen.dart';
 import 'package:autojidelna/shared_widgets/canteen/page_view_food_card.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +20,10 @@ class DishList extends StatelessWidget {
           if (dishList.isEmpty) WidgetsBinding.instance.addPostFrameCallback((_) => child!);
 
           return ListView.builder(
-              itemCount: dishList.length,
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              itemBuilder: (_, index) => PageViewFoodCard(dishList[index]));
+            itemCount: dishList.length,
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            itemBuilder: (_, index) => PageViewFoodCard(dishList[index]),
+          );
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
