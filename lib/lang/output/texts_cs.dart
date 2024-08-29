@@ -294,7 +294,7 @@ class TextsCs extends Texts {
   String get settingsDebugNotifications => 'Send Notifications';
 
   @override
-  String credit(int ammount) {
+  String credit(double ammount) {
     final intl.NumberFormat ammountNumberFormat =
         intl.NumberFormat.decimalPattern(localeName);
     final String ammountString = ammountNumberFormat.format(ammount);

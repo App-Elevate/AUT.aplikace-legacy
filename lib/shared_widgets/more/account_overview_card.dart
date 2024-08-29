@@ -1,4 +1,5 @@
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/methods_vars/canteenwrapper.dart';
 import 'package:autojidelna/shared_widgets/configured_bottom_sheet.dart';
 import 'package:autojidelna/shared_widgets/lined_card.dart';
 import 'package:autojidelna/shared_widgets/switch_account_panel_v2.dart';
@@ -10,7 +11,7 @@ class AccountOverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LinedCard(
-      title: "Username", //TODO: account username
+      title: loggedInCanteen.uzivatel!.uzivatelskeJmeno!,
       footer: lang.changeAccount,
       onPressed: () => configuredBottomSheet(context, builder: (context) => const SwitchAccountPanelV2()),
       child: Row(
@@ -20,10 +21,10 @@ class AccountOverviewCard extends StatelessWidget {
           const VerticalDivider(color: Colors.transparent),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(lang.credit(2)),
-              Text(lang.category('category')),
+              Text(lang.credit(loggedInCanteen.uzivatel!.kredit), style: Theme.of(context).textTheme.headlineSmall),
+              if (loggedInCanteen.uzivatel!.kategorie != null) Text(loggedInCanteen.uzivatel!.kategorie!),
             ],
           ),
         ],

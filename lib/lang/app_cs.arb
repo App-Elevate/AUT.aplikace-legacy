@@ -140,7 +140,7 @@
   "@credit": {
     "placeholders": {
       "ammount": {
-        "type": "int",
+        "type": "double",
         "format": "decimalPattern"
       }
     }

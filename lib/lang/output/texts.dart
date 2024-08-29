@@ -599,7 +599,7 @@ abstract class Texts {
   ///
   /// In cs, this message translates to:
   /// **'Kredit: {ammount} Kč'**
-  String credit(int ammount);
+  String credit(double ammount);
 
   /// No description provided for @personalInfo.
   ///

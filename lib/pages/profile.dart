@@ -95,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
-                        lang.credit(loggedInCanteen.uzivatel!.kredit.toInt()),
+                        lang.credit(loggedInCanteen.uzivatel!.kredit),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
