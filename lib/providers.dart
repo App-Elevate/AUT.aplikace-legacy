@@ -62,6 +62,7 @@ class AppearancePreferences with ChangeNotifier {
   /// Relative TimeStamps getter
   bool get relTimeStamps => _relTimeStamps;
 
+  /// Analytics getter
   bool get analytics => _analytics;
 
   /// Loads settings from shared preferences

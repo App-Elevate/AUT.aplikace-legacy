@@ -111,9 +111,7 @@ void main() async {
   // Initializing firebase if analytics are not disabled
   if (analyticsDisabled != true) {
     analyticsEnabledGlobally = true;
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
     // Setting up crashlytics
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -125,7 +123,7 @@ void main() async {
   }
 
   // Loading settings from preferences
-  skipWeekends = await loggedInCanteen.isPrefTrue(Prefs.skipWeekends);
+  skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? false;
 
   // Skipping to next monday if we are currently on saturday or sunday
   // If not initializing normally

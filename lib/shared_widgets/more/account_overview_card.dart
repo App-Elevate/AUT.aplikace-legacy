@@ -23,7 +23,7 @@ class AccountOverviewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(lang.credit(loggedInCanteen.uzivatel!.kredit), style: Theme.of(context).textTheme.headlineSmall),
+              Text(lang.credit(loggedInCanteen.uzivatel!.kredit), style: Theme.of(context).textTheme.titleMedium),
               if (loggedInCanteen.uzivatel!.kategorie != null) Text(loggedInCanteen.uzivatel!.kategorie!),
             ],
           ),

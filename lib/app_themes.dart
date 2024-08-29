@@ -76,11 +76,9 @@ class Themes {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
         elevation: pureBlack ? 0 : 2,
-        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
+        contentTextStyle: TextStyle(fontFamily: Fonts.body, color: colorScheme.onInverseSurface),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(16),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         behavior: SnackBarBehavior.floating,
         insetPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
@@ -101,11 +99,12 @@ class Themes {
         alignment: Alignment.center,
         iconColor: colorScheme.onSurface,
         titleTextStyle: TextStyle(
+          fontFamily: Fonts.headings,
           color: colorScheme.onSurface,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        contentTextStyle: const TextStyle(fontSize: 15),
+        contentTextStyle: TextStyle(fontFamily: Fonts.body, fontSize: 15),
         actionsPadding: const EdgeInsets.fromLTRB(12, 0, 16, 7),
       ),
       timePickerTheme: TimePickerThemeData(
@@ -115,15 +114,15 @@ class Themes {
       ),
 
       // Inputs
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
         errorMaxLines: 1,
-        labelStyle: TextStyle(),
+        labelStyle: TextStyle(fontFamily: Fonts.body),
         floatingLabelAlignment: FloatingLabelAlignment.start,
-        hintStyle: TextStyle(),
-        helperStyle: TextStyle(),
-        border: OutlineInputBorder(),
+        hintStyle: TextStyle(fontFamily: Fonts.body),
+        helperStyle: TextStyle(fontFamily: Fonts.body),
+        border: const OutlineInputBorder(),
       ),
 
       // List tiles
@@ -133,7 +132,7 @@ class Themes {
         selectedColor: colorScheme.primary,
         iconColor: colorScheme.primary.withOpacity(.75),
         titleTextStyle: TextStyle(
-          fontSize: 20,
+          fontSize: 19,
           fontFamily: Fonts.body,
           fontWeight: FontWeight.w400,
           color: colorScheme.onSurface,
@@ -155,8 +154,9 @@ class Themes {
       switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          textStyle: const WidgetStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             TextStyle(
+              fontFamily: Fonts.headings,
               fontSize: 18,
               fontWeight: FontWeight.w500,
               height: 1.25,
@@ -183,8 +183,9 @@ class Themes {
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           foregroundColor: WidgetStatePropertyAll(colorScheme.onSurface),
-          textStyle: const WidgetStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             TextStyle(
+              fontFamily: Fonts.body,
               fontSize: 16,
               fontWeight: FontWeight.w500,
               height: 1.25,

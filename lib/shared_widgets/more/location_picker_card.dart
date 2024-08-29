@@ -40,7 +40,7 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
             title: Text(locations[selectedLocation + 1] ?? locations[1] ?? ''),
           ),
         ),
-        if (locations.isEmpty) lockedCover(),
+        if (locations.isEmpty) lockedCover(context),
       ],
     );
   }
@@ -76,13 +76,13 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
     );
   }
 
-  Positioned lockedCover() {
+  Positioned lockedCover(BuildContext context) {
     return Positioned.fill(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.black.withOpacity(.9),
+          color: Theme.of(context).colorScheme.onInverseSurface.withOpacity(.9),
         ),
         alignment: Alignment.center,
         child: const Icon(Icons.lock_outline_rounded),
