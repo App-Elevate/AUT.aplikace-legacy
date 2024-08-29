@@ -1,10 +1,11 @@
 import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/canteenwrapper.dart';
 import 'package:autojidelna/shared_widgets/configured_alert_dialog.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
 import 'package:autojidelna/shared_widgets/lined_card.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationPickerCard extends StatefulWidget {
@@ -48,7 +49,7 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
     configuredDialog(
       context,
       builder: (context) => ConfiguredAlertDialog(
-        title: Texts.accountDrawerPickLocation.i18n(),
+        title: lang.accountDrawerPickLocation,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(

@@ -1,15 +1,15 @@
 // Includes all popups used in the app.
 
 // flutter
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/login.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
-import 'package:localization/localization.dart';
 
 Widget logoutDialog(BuildContext context) {
   return AlertDialog(
-    title: Text(Texts.logoutUSure.i18n()),
+    title: Text(lang.logoutUSure),
     actionsAlignment: MainAxisAlignment.spaceBetween,
     alignment: Alignment.bottomCenter,
     actions: <Widget>[
@@ -17,14 +17,14 @@ Widget logoutDialog(BuildContext context) {
         onPressed: () {
           Navigator.of(context).pop(true);
         },
-        child: Text(Texts.logoutConfirm.i18n()),
+        child: Text(lang.logoutConfirm),
       ),
       TextButton(
         onPressed: () {
           Navigator.of(context).pop(false);
         },
         style: Theme.of(context).textButtonTheme.style!.copyWith(foregroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primary)),
-        child: Text(Texts.logoutCancel.i18n()),
+        child: Text(lang.cancel),
       ),
     ],
   );
@@ -36,7 +36,7 @@ void failedLunchDialog(BuildContext context, String message) async {
     barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(Texts.errorsLoad.i18n()),
+        title: Text(lang.errorsLoad),
         content: Text(message),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         alignment: Alignment.bottomCenter,
@@ -46,7 +46,7 @@ void failedLunchDialog(BuildContext context, String message) async {
               Navigator.of(context).pop();
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoggingInWidget()), (route) => false);
             },
-            child: Text(Texts.failedDialogTryAgain.i18n()),
+            child: Text(lang.tryAgain),
           ),
           TextButton(
             onPressed: () {
@@ -54,7 +54,7 @@ void failedLunchDialog(BuildContext context, String message) async {
               Navigator.of(context).pop();
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreenV2())), (route) => false);
             },
-            child: Text(Texts.failedDialogLogOut.i18n()),
+            child: Text(lang.logoutConfirm),
           ),
         ],
       );
@@ -71,8 +71,8 @@ void failedLoginDialog(BuildContext context, String message) async {
         canPop: false,
         onPopInvoked: (hey) => false,
         child: AlertDialog(
-          title: Text(Texts.failedDialogLoginFailed.i18n()),
-          content: Text(Texts.failedDialogLoginDetail.i18n([message])),
+          title: Text(lang.errorsLoginFailed),
+          content: Text(lang.errorsLoginFailedDetail(message)),
           actionsAlignment: MainAxisAlignment.spaceBetween,
           alignment: Alignment.bottomCenter,
           actions: <Widget>[
@@ -81,7 +81,7 @@ void failedLoginDialog(BuildContext context, String message) async {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoggingInWidget()), (route) => false);
               },
-              child: Text(Texts.failedDialogTryAgain.i18n()),
+              child: Text(lang.tryAgain),
             ),
             TextButton(
               onPressed: () {
@@ -89,7 +89,7 @@ void failedLoginDialog(BuildContext context, String message) async {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreenV2())), (route) => false);
               },
-              child: Text(Texts.failedDialogLogOut.i18n()),
+              child: Text(lang.logoutConfirm),
             ),
           ],
         ),

@@ -26,7 +26,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  localization: ^2.1.1
   shared_preferences: ^2.0.0
   flutter_secure_storage: ^9.0.0
   canteenlib: ^4.0.3
@@ -85,6 +84,7 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:

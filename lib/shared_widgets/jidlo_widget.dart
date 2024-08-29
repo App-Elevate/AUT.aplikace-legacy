@@ -1,9 +1,9 @@
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:localization/localization.dart';
 
 class JidloWidget extends StatelessWidget {
   const JidloWidget({
@@ -122,7 +122,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
         }
       }
     } catch (e) {
-      snackBarMessage(Texts.errorsBadConnection.i18n());
+      snackBarMessage(lang.errorsBadConnection);
     }
   }
 
@@ -161,16 +161,16 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
           case StavJidla.objednano:
             textColor = Theme.of(context).colorScheme.onPrimary;
             buttonColor = Theme.of(context).colorScheme.primary;
-            obedText = Texts.obedTextZrusit.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+            obedText = lang.cancel;
             break;
           case StavJidla.neobjednano:
             textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
-            obedText = Texts.obedTextObjednat.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+            obedText = lang.objednat;
             break;
           //operace v minulosti
           case StavJidla.objednanoVyprsenaPlatnost:
-            obedText = Texts.obedTextNelzeZrusit.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+            obedText = lang.nelzeZrusit;
             break;
           case StavJidla.nedostupne:
             try {
@@ -197,26 +197,26 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
               //hope it's not important
             }
             if (loggedInCanteen.uzivatel!.kredit < jidlo!.cena! && !datumJidla.isBefore(DateTime.now())) {
-              obedText = Texts.obedTextNedostatekKreditu.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+              obedText = lang.nedostatekKreditu;
             } else {
-              obedText = Texts.obedTextNelzeObjednat.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+              obedText = lang.nelzeObjednat;
             }
             break;
           //operace na burze
           case StavJidla.objednanoNelzeOdebrat:
             textColor = Theme.of(context).colorScheme.onPrimary;
             buttonColor = Theme.of(context).colorScheme.primary;
-            obedText = Texts.obedTextVlozitNaBurzu.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+            obedText = lang.vlozitNaBurzu;
             break;
           case StavJidla.dostupneNaBurze:
             textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
-            obedText = Texts.obedTextObjednatZBurzy.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+            obedText = lang.objednatZBurzy;
             break;
           case StavJidla.naBurze:
             textColor = Theme.of(context).colorScheme.onSecondary;
             buttonColor = Theme.of(context).colorScheme.secondary;
-            obedText = Texts.obedTextOdebratZBurzy.i18n([jidlo!.varianta, jidlo!.cena!.toInt().toString()]);
+            obedText = lang.odebratZBurzy;
             break;
         }
         if (!widget.ordering.value) {
@@ -289,7 +289,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
 
                   if (widget.ordering.value) return;
                   if (!await InternetConnectionChecker().hasConnection) {
-                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                    snackBarMessage(lang.errorsObjednavaniJidla);
                     return;
                   }
 
@@ -308,14 +308,14 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                   try {
                     canteen = await loggedInCanteen.canteenInstance;
                   } catch (e) {
-                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                    snackBarMessage(lang.errorsObjednavaniJidla);
                     return;
                   }
                   Jidlo jidloSafe;
                   try {
                     jidloSafe = (await loggedInCanteen.getLunchesForDay(datumJidla, requireNew: true)).jidla[indexJidlaVeDni];
                   } catch (e) {
-                    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                    snackBarMessage(lang.errorsObjednavaniJidla);
                     if (context.mounted) {
                       setState(() {
                         widget.ordering.value = false;
@@ -336,7 +336,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           updateJidelnicek(jidelnicek);
                           loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                         } catch (e) {
-                          snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                          snackBarMessage(lang.errorsObjednavaniJidla);
                         }
                       }
                       break;
@@ -363,21 +363,21 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                                 updateJidelnicek(jidelnicek);
                                 loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
                               } catch (e) {
-                                snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                                snackBarMessage(lang.errorsObjednavaniJidla);
                               }
                             }
                           }
                           if (nalezenoJidloNaBurze == false) {
-                            snackBarMessage(Texts.errorsJidloNeniNaBurze.i18n());
+                            snackBarMessage(lang.errorsJidloNeniNaBurze);
                           }
                         } catch (e) {
-                          snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                          snackBarMessage(lang.errorsObjednavaniJidla);
                         }
                       }
                       break;
                     case StavJidla.objednanoVyprsenaPlatnost:
                       {
-                        snackBarMessage(Texts.errorsObedNelzeZrusit.i18n());
+                        snackBarMessage(lang.errorsObedNelzeZrusit);
                       }
                       break;
                     case StavJidla.objednanoNelzeOdebrat:
@@ -390,25 +390,25 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           }
                           updateJidelnicek(jidelnicek);
                         } catch (e) {
-                          snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+                          snackBarMessage(lang.errorsObjednavaniJidla);
                         }
                       }
                       break;
                     case StavJidla.nedostupne:
                       {
                         if (datumJidla.isBefore(DateTime.now())) {
-                          snackBarMessage(Texts.errorsNelzeObjednat.i18n());
+                          snackBarMessage(lang.errorsNelzeObjednat);
                           break;
                         }
                         try {
                           if (loggedInCanteen.uzivatel!.kredit < jidloSafe.cena!) {
-                            snackBarMessage(Texts.errorsNelzeObjednatKredit.i18n());
+                            snackBarMessage(lang.errorsNelzeObjednatKredit);
                             break;
                           }
                         } catch (e) {
                           //pokud se nepodaří načíst kredit, tak to necháme být
                         }
-                        snackBarMessage(Texts.errorsNelzeObjednat.i18n());
+                        snackBarMessage(lang.errorsNelzeObjednat);
                       }
                       break;
                     case StavJidla.objednano:
@@ -421,7 +421,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           }
                           updateJidelnicek(jidelnicek);
                         } catch (e) {
-                          snackBarMessage(Texts.errorsChybaPriRuseni.i18n());
+                          snackBarMessage(lang.errorsChybaPriRuseni);
                         }
                       }
                       break;
@@ -435,7 +435,7 @@ class _ObjednatJidloTlacitkoState extends State<ObjednatJidloTlacitko> {
                           }
                           updateJidelnicek(jidelnicek);
                         } catch (e) {
-                          snackBarMessage(Texts.errorsChybaPriDavaniNaBurzu.i18n());
+                          snackBarMessage(lang.errorsChybaPriDavaniNaBurzu);
                         }
                       }
                       break;

@@ -1,5 +1,6 @@
 // The main page. This is what user sees once he is logged in
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:background_fetch/background_fetch.dart';
@@ -9,7 +10,7 @@ import 'package:canteenlib/canteenlib.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -48,7 +49,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       // Find the ScaffoldMessenger in the widget tree
       // and use it to show a SnackBar.
       if (context.mounted && !snackbarshown.shown) {
-        ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(Texts.errorsUpdatingData.i18n())).closed.then((SnackBarClosedReason reason) {
+        ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(lang.errorsUpdatingData)).closed.then((SnackBarClosedReason reason) {
           snackbarshown.shown = false;
         });
       }
@@ -128,7 +129,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       body: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Texts.aboutAppName.i18n()),
+          title: Text(lang.appName),
           actions: [
             //refresh button
             IconButton(
@@ -334,7 +335,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                           SizedBox(
                             width: MediaQuery.sizeOf(context).width * 0.75,
                             child: Text(
-                              Texts.errorsLoadingData.i18n(),
+                              lang.errorsLoadingData,
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                     fontWeight: FontWeight.bold,
@@ -433,7 +434,7 @@ class ListJidel extends StatelessWidget {
                 // Find the ScaffoldMessenger in the widget tree
                 // and use it to show a SnackBar.
                 if (context.mounted && !snackbarshown.shown) {
-                  ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(Texts.errorsUpdatingData.i18n())).closed.then(
+                  ScaffoldMessenger.of(context).showSnackBar(snackbarFunction(lang.errorsUpdatingData)).closed.then(
                     (SnackBarClosedReason reason) {
                       snackbarshown.shown = false;
                     },
@@ -456,7 +457,7 @@ class ListJidel extends StatelessWidget {
                       child: Padding(
                         //half of the screen height padding
                         padding: EdgeInsets.symmetric(vertical: MediaQuery.sizeOf(context).height / 2 - 100),
-                        child: Text(Texts.noFood.i18n()),
+                        child: Text(lang.noFood),
                       ),
                     ),
                   ),

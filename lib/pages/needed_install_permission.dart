@@ -1,9 +1,9 @@
 // Page that opens when the user hasn't granted the permission to install apps from unknown sources
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
@@ -16,7 +16,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Texts.neededPermission.i18n()),
+        title: Text(lang.neededPermission),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -26,13 +26,13 @@ class NeededInstallPermissionPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                Texts.neededPermissionDescription1.i18n(),
+                lang.neededPermissionDescription_1,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  Texts.neededPermissionDescription2.i18n(),
+                  lang.neededPermissionDescription_2,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
@@ -46,7 +46,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
                 ),
               ),
               Text(
-                Texts.neededPermissionDescription3.i18n(),
+                lang.neededPermissionDescription_3,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               Padding(
@@ -58,7 +58,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
                       child: SizedBox(
                         width: 550,
                         child: ElevatedButton(
-                          child: Text(Texts.allowPermission.i18n()),
+                          child: Text(lang.allowPermission),
                           onPressed: () {
                             Navigator.of(context).pop();
                             Permission.requestInstallPackages.request();
@@ -71,7 +71,7 @@ class NeededInstallPermissionPage extends StatelessWidget {
                       child: SizedBox(
                         width: 550,
                         child: ElevatedButton(
-                          child: Text(Texts.popupShowOnGithub.i18n()),
+                          child: Text(lang.popupShowOnGithub),
                           onPressed: () async {
                             Navigator.of(context).pop();
                             launchUrl(Uri.parse(Links.latestRelease), mode: LaunchMode.externalApplication);

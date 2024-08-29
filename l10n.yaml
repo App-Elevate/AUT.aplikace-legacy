@@ -1,0 +1,10 @@
+arb-dir: lib/lang
+output-dir: lib/lang/output
+template-arb-file: app_cs.arb
+output-localization-file: texts.dart
+untranslated-messages-file: untranslated_messages.json
+output-class: Texts
+format: true
+use-escaping: true
+nullable-getter: false
+synthetic-package: false

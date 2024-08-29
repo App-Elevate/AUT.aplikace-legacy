@@ -1,7 +1,7 @@
-import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/portable_refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+
 import 'package:material_symbols_icons/symbols.dart';
 
 class ErrorLoadingData extends StatelessWidget {
@@ -26,7 +26,7 @@ class ErrorLoadingData extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.sizeOf(context).width * 0.75,
                 child: Text(
-                  Texts.errorsLoadingData.i18n(),
+                  lang.errorsLoadingData,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,

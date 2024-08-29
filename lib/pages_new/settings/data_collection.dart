@@ -1,10 +1,11 @@
 import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
+
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,19 +29,19 @@ class DataCollectionScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: RichText(
               text: TextSpan(
-                text: Texts.settingsDataCollectionDescription1.i18n(),
+                text: lang.settingsDataCollectionDescription_1,
                 style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                 children: [
                   TextSpan(
-                    text: Texts.settingsDataCollectionDescription2.i18n(),
+                    text: lang.settingsDataCollectionDescription_2,
                     style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()..onTap = () => openDataCollectionUrl(true),
                   ),
                   TextSpan(
-                    text: Texts.settingsDataCollectionDescription3.i18n(),
+                    text: lang.settingsDataCollectionDescription_3,
                   ),
                   TextSpan(
-                    text: Texts.settingsDataCollectionDescription4.i18n(),
+                    text: lang.settingsDataCollectionDescription_4,
                     style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                     recognizer: TapGestureRecognizer()..onTap = () => openDataCollectionUrl(false),
                   ),

@@ -1,13 +1,12 @@
 // Purpose: Login screen for the app
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/navigation.dart';
 import 'package:autojidelna/pages_new/settings/data_collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
-
-import 'package:localization/localization.dart';
 
 class LoginScreenV2 extends StatelessWidget {
   LoginScreenV2({super.key});
@@ -53,7 +52,7 @@ class LoginScreenV2 extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: AppBar().preferredSize.height),
                 child: Text(
-                  Texts.aboutAppName.i18n(),
+                  lang.appName,
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
@@ -101,11 +100,11 @@ class LoginScreenV2 extends StatelessWidget {
                       controller: _urlController,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        labelText: Texts.loginUrlFieldLabel.i18n(),
+                        labelText: lang.loginUrlFieldLabel,
                         errorText: value,
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return Texts.loginUrlFieldHint.i18n();
+                        if (value == null || value.isEmpty) return lang.loginUrlFieldHint;
                         return null;
                       },
                     );
@@ -121,9 +120,9 @@ class LoginScreenV2 extends StatelessWidget {
                       controller: _usernameController,
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
-                      decoration: InputDecoration(labelText: Texts.loginUserFieldLabel.i18n()),
+                      decoration: InputDecoration(labelText: lang.loginUserFieldLabel),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return Texts.loginUserFieldHint.i18n();
+                        if (value == null || value.isEmpty) return lang.loginUserFieldHint;
                         return null;
                       },
                     ),
@@ -140,7 +139,7 @@ class LoginScreenV2 extends StatelessWidget {
                           obscureText: value[1] ? false : true,
                           autocorrect: false,
                           decoration: InputDecoration(
-                            labelText: Texts.loginPasswordFieldLabel.i18n(),
+                            labelText: lang.loginPasswordFieldLabel,
                             errorText: value[0],
                             suffixIcon: IconButton(
                               onPressed: () => passwordNotifier.value = [passwordNotifier.value[0], !passwordNotifier.value[1]],
@@ -148,7 +147,7 @@ class LoginScreenV2 extends StatelessWidget {
                             ),
                           ),
                           validator: (value) {
-                            if (value == null || value.isEmpty) return Texts.loginPasswordFieldHint.i18n();
+                            if (value == null || value.isEmpty) return lang.loginPasswordFieldHint;
                             return null;
                           },
                         );
@@ -161,11 +160,11 @@ class LoginScreenV2 extends StatelessWidget {
             loginSubmitButton(context),
             RichText(
               text: TextSpan(
-                text: Texts.dataCollectionAgreement.i18n(),
+                text: lang.dataCollectionAgreement,
                 style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 children: [
                   TextSpan(
-                    text: Texts.moreInfo.i18n(),
+                    text: lang.moreInfo,
                     style: const TextStyle(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -197,7 +196,7 @@ class LoginScreenV2 extends StatelessWidget {
           return ElevatedButton(
             onPressed: value ? null : () => loginFieldCheck(context),
             style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-            child: value ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary) : Text(Texts.loginButton.i18n()),
+            child: value ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary) : Text(lang.loginButton),
           );
         },
       ),
@@ -224,16 +223,16 @@ class LoginScreenV2 extends StatelessWidget {
       } catch (e) {
         switch (e) {
           case ConnectionErrors.noInternet:
-            _setErrorText(Texts.errorsNoInternet.i18n(), LoginFormErrorField.url);
+            _setErrorText(lang.errorsNoInternet, LoginFormErrorField.url);
             break;
           case ConnectionErrors.wrongUrl:
-            _setErrorText(Texts.errorsBadUrl.i18n(), LoginFormErrorField.url);
+            _setErrorText(lang.errorsBadUrl, LoginFormErrorField.url);
             break;
           case ConnectionErrors.badLogin:
-            _setErrorText(Texts.errorsBadLogin.i18n(), LoginFormErrorField.password);
+            _setErrorText(lang.errorsBadLogin, LoginFormErrorField.password);
             break;
           default:
-            _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
+            _setErrorText(lang.errorsBadConnection, LoginFormErrorField.url);
             break;
         }
       }

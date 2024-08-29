@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:canteenlib/canteenlib.dart';
@@ -16,7 +17,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:localization/localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -113,13 +113,13 @@ class LoggedInCanteen {
 
   void handleError(dynamic e) {
     if (e == ConnectionErrors.badLogin) {
-      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadLogin.i18n()));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, lang.errorsBadLogin));
     } else if (e == ConnectionErrors.wrongUrl) {
-      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadUrl.i18n()));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, lang.errorsBadUrl));
     } else if (e == ConnectionErrors.noInternet) {
-      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsNoInternet.i18n()));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, lang.errorsNoInternet));
     } else if (e == ConnectionErrors.connectionFailed) {
-      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, Texts.errorsBadConnection.i18n()));
+      Future.delayed(Duration.zero, () => failedLoginDialog(MyApp.navigatorKey.currentState!.context, lang.errorsBadConnection));
     }
   }
 

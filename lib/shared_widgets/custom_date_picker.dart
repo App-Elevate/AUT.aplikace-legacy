@@ -1,9 +1,9 @@
 // This is the custom date picker used in the main app screen (jidelna.dart)
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 
@@ -173,7 +173,7 @@ class CustomDatePicker {
                             onPressed: () {
                               Navigator.maybeOf(context)?.popUntil((route) => route.isFirst);
                             },
-                            child: Text(Texts.datePickerCancel.i18n()),
+                            child: Text(lang.cancel),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 10.0),
@@ -181,7 +181,7 @@ class CustomDatePicker {
                               onPressed: () {
                                 Navigator.of(context).pop(focusedDateNotifier.value);
                               },
-                              child: Text(Texts.datePickerOk.i18n()),
+                              child: Text(lang.ok),
                             ),
                           ),
                         ],

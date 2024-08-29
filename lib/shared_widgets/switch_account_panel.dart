@@ -1,9 +1,9 @@
 // Contains the panel that shows up when the user clicks on the account icon in the account drawer
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 class SwitchAccountPanel extends StatefulWidget {
   const SwitchAccountPanel({
@@ -69,7 +69,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(Texts.accPanelTitle.i18n()),
+                            Text(lang.switchAccountPanelTitle),
                             const Divider(),
                             Expanded(
                               child: ListView.builder(
@@ -113,7 +113,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
-              Texts.accPanelAddAccount.i18n(),
+              lang.switchAccountPanelAddAccount,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),

@@ -1,5 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
-import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/canteenwrapper.dart';
 import 'package:autojidelna/methods_vars/datetime_wrapper.dart';
 import 'package:autojidelna/methods_vars/snackbar_message.dart';
@@ -9,7 +9,6 @@ import 'package:canteenlib/canteenlib.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 
 late Canteen canteen;
@@ -27,7 +26,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
   }
 
   void errorOrderingDish() {
-    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+    snackBarMessage(lang.errorsObjednavaniJidla);
     prov.setOrdering(false);
   }
 
@@ -91,7 +90,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
       }
     }
     if (!foundOnBurza) {
-      snackBarMessage(Texts.errorsJidloNeniNaBurze.i18n());
+      snackBarMessage(lang.errorsJidloNeniNaBurze);
     }
   }
 
@@ -105,14 +104,14 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
 
   void processNedostupne(Jidlo jidloSafe, DateTime day) {
     if (day.isBefore(DateTime.now())) {
-      snackBarMessage(Texts.errorsNelzeObjednat.i18n());
+      snackBarMessage(lang.errorsNelzeObjednat);
       return;
     }
     if (loggedInCanteen.uzivatel!.kredit < jidloSafe.cena!) {
-      snackBarMessage(Texts.errorsNelzeObjednatKredit.i18n());
+      snackBarMessage(lang.errorsNelzeObjednatKredit);
       return;
     }
-    snackBarMessage(Texts.errorsNelzeObjednat.i18n());
+    snackBarMessage(lang.errorsNelzeObjednat);
   }
 
   Future<void> processObjednano(Jidlo jidloSafe, int dishIndex, DateTime day) async {
@@ -123,7 +122,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
       }
       updateJidelnicek(jidelnicek);
     } catch (e) {
-      snackBarMessage(Texts.errorsChybaPriRuseni.i18n());
+      snackBarMessage(lang.errorsChybaPriRuseni);
     }
   }
 
@@ -135,7 +134,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
         updateJidelnicek(jidelnicek);
       }
     } catch (e) {
-      snackBarMessage(Texts.errorsChybaPriDavaniNaBurzu.i18n());
+      snackBarMessage(lang.errorsChybaPriDavaniNaBurzu);
     }
   }
 
@@ -160,11 +159,11 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
         await processNaBurze(jidloSafe, dishIndex, day);
         break;
       case StavJidla.objednanoVyprsenaPlatnost:
-        snackBarMessage(Texts.errorsObedNelzeZrusit.i18n());
+        snackBarMessage(lang.errorsObedNelzeZrusit);
         break;
     }
   } catch (e) {
-    snackBarMessage(Texts.errorsObjednavaniJidla.i18n());
+    snackBarMessage(lang.errorsObjednavaniJidla);
   } finally {
     prov.setOrdering(false);
   }
@@ -187,7 +186,7 @@ void cannotBeOrderedFix(BuildContext context, int dayIndex) async {
       }
     }
   } catch (e) {
-    snackBarMessage(Texts.errorsBadConnection.i18n());
+    snackBarMessage(lang.errorsBadConnection);
   }
 }
 
@@ -229,17 +228,17 @@ String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
   DateTime datumJidla = convertIndexToDatetime(dayIndex);
   switch (stavJidla) {
     case StavJidla.objednano:
-      return Texts.obedTextZrusit.i18n();
+      return lang.cancel;
     case StavJidla.neobjednano:
-      return Texts.obedTextObjednat.i18n();
+      return lang.objednat;
     case StavJidla.objednanoVyprsenaPlatnost:
-      return Texts.obedTextNelzeZrusit.i18n();
+      return lang.nelzeZrusit;
     case StavJidla.objednanoNelzeOdebrat:
-      return Texts.obedTextVlozitNaBurzu.i18n();
+      return lang.vlozitNaBurzu;
     case StavJidla.dostupneNaBurze:
-      return Texts.obedTextObjednatZBurzy.i18n();
+      return lang.objednatZBurzy;
     case StavJidla.naBurze:
-      return Texts.obedTextOdebratZBurzy.i18n();
+      return lang.odebratZBurzy;
     case StavJidla.nedostupne:
       try {
         bool jeVeDneDostupnyObed = false;
@@ -262,9 +261,9 @@ String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
         //hope it's not important
       }
       if (loggedInCanteen.uzivatel!.kredit < dish.cena! && !datumJidla.isBefore(DateTime.now())) {
-        return Texts.obedTextNedostatekKreditu.i18n();
+        return lang.nedostatekKreditu;
       } else {
-        return Texts.obedTextNelzeObjednat.i18n();
+        return lang.nelzeObjednat;
       }
     default:
       return '';

@@ -1,9 +1,9 @@
 // Profile page including just some basic statistics and user info
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key, required this.setHomeWidget});
@@ -13,7 +13,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Texts.profile.i18n()),
+        title: Text(lang.profile),
         actions: [
           _appBarLogoutButton(context),
         ],
@@ -95,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
-                        Texts.kredit.i18n([loggedInCanteen.uzivatel!.kredit.toInt().toString()]),
+                        lang.kredit(loggedInCanteen.uzivatel!.kredit.toInt()),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
@@ -117,7 +117,7 @@ class ProfilePage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text(Texts.personalInfo.i18n()),
+            child: Text(lang.personalInfo),
           ),
           const Divider(),
           Padding(
@@ -129,7 +129,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.jmeno != null || loggedInCanteen.uzivatel!.prijmeni != null) {
                       return Text(
-                        Texts.name.i18n([loggedInCanteen.uzivatel!.jmeno ?? '', loggedInCanteen.uzivatel!.prijmeni ?? '']),
+                        lang.name(loggedInCanteen.uzivatel!.jmeno ?? '', loggedInCanteen.uzivatel!.prijmeni ?? ''),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -141,7 +141,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.kategorie != null) {
                       return Text(
-                        Texts.category.i18n([loggedInCanteen.uzivatel!.kategorie ?? '']),
+                        lang.category(loggedInCanteen.uzivatel!.kategorie ?? ''),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -165,7 +165,7 @@ class ProfilePage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.paymentInfo.i18n()),
+            child: Text(lang.paymentInfo),
           ),
           const Divider(),
           Padding(
@@ -177,7 +177,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.ucetProPlatby != null && loggedInCanteen.uzivatel!.ucetProPlatby != '') {
                       return Text(
-                        Texts.paymentAccountNumber.i18n([loggedInCanteen.uzivatel!.ucetProPlatby ?? '']),
+                        lang.paymentAccountNumber(loggedInCanteen.uzivatel!.ucetProPlatby ?? ''),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -189,7 +189,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.specSymbol != null && loggedInCanteen.uzivatel!.specSymbol != '') {
                       return Text(
-                        Texts.specificSymbol.i18n([loggedInCanteen.uzivatel!.specSymbol ?? '']),
+                        lang.specificSymbol(loggedInCanteen.uzivatel!.specSymbol ?? ''),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -202,7 +202,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.varSymbol != null && loggedInCanteen.uzivatel!.varSymbol != '') {
                       return Text(
-                        Texts.variableSymbol.i18n([loggedInCanteen.uzivatel!.varSymbol ?? '']),
+                        lang.variableSymbol(loggedInCanteen.uzivatel!.varSymbol ?? ''),
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -226,7 +226,7 @@ class ProfilePage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.aboutAppName.i18n()),
+            child: Text(lang.appName),
           ),
           const Divider(),
           Padding(
@@ -236,12 +236,12 @@ class ProfilePage extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                   return Text(
-                    Texts.ordersWithAutojidelna.i18n([snapshot.data.toString()]),
+                    lang.ordersWithAutojidelna(int.parse(snapshot.data!)),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 } else {
                   return Text(
-                    Texts.ordersWithAutojidelna.i18n(['0']),
+                    lang.ordersWithAutojidelna(0),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                   );
                 }

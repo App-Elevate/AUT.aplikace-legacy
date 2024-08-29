@@ -1,12 +1,12 @@
 // Detail jídla
 
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_widgets/jidlo_widget.dart';
 
 import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 class JidloDetail extends StatelessWidget {
   const JidloDetail({
@@ -73,7 +73,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.soup.i18n(),
+                        lang.soup,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -101,7 +101,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.mainCourse.i18n(),
+                        lang.mainCourse,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -129,7 +129,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.drinks.i18n(),
+                        lang.drinks,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -157,7 +157,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.sideDish.i18n(),
+                        lang.sideDish,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -185,7 +185,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.other.i18n(),
+                        lang.other,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),
@@ -213,7 +213,7 @@ class JidloDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        Texts.allergens.i18n(),
+                        lang.allergens,
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                       ),
                     ),

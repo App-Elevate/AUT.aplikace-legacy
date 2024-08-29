@@ -1,4 +1,5 @@
 // settings page. Can be called from account drawer or login screen
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 // kDebugMode
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:autojidelna/local_imports.dart';
-import 'package:localization/localization.dart';
 
 // used to get the version of the app
 import 'package:package_info_plus/package_info_plus.dart';
@@ -116,7 +116,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(Texts.settingsTitle.i18n())),
+      appBar: AppBar(title: Text(lang.settings)),
       body: FutureBuilder(
         future: setSettings(),
         builder: (context, snapshot) {
@@ -152,7 +152,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.settingsAppearence.i18n()),
+            child: Text(lang.settingsAppearence),
           ),
           const Divider(),
           ListTile(
@@ -178,16 +178,16 @@ class SettingsPage extends StatelessWidget {
                   segments: [
                     ButtonSegment<String>(
                       value: "0",
-                      label: Text(Texts.settingsLabelSystem.i18n()),
+                      label: Text(lang.settingsLabelSystem),
                       enabled: true,
                     ),
                     ButtonSegment<String>(
                       value: "1",
-                      label: Text(Texts.settingsLabelLight.i18n()),
+                      label: Text(lang.settingsLabelLight),
                     ),
                     ButtonSegment<String>(
                       value: "2",
-                      label: Text(Texts.settingsLabelDark.i18n()),
+                      label: Text(lang.settingsLabelDark),
                     ),
                   ],
                 );
@@ -326,7 +326,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text(Texts.settingsCalendarBigMarkers.i18n()),
+            title: Text(lang.settingsCalendarBigMarkers),
             trailing: ValueListenableBuilder(
               valueListenable: calendarBigMarkersNotifier,
               builder: (context, value, child) {
@@ -357,11 +357,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.settingsConvenienceTitle.i18n()),
+            child: Text(lang.menu),
           ),
           const Divider(),
           ListTile(
-            title: Text(Texts.settingsSkipWeekends.i18n()),
+            title: Text(lang.settingsSkipWeekends),
             trailing: ValueListenableBuilder(
               valueListenable: skipWeekendsNotifier,
               builder: (context, value, child) {
@@ -393,11 +393,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.settingsNotificationFor.i18n() + username),
+            child: Text(lang.settingsNotificationFor(username)),
           ),
           const Divider(),
           ExpansionTile(
-            title: Text(Texts.settingsTitleTodaysFood.i18n()),
+            title: Text(lang.settingsTitleTodaysFood),
             trailing: ValueListenableBuilder(
               valueListenable: jidloNotificationNotifier,
               builder: (context, value, child) {
@@ -424,7 +424,7 @@ class SettingsPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(Texts.settingsNotificationTime.i18n()),
+                    Text(lang.settingsNotificationTime),
                     ValueListenableBuilder(
                       valueListenable: jidloNotificationTime,
                       builder: (context, value, child) {
@@ -449,7 +449,7 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
           ListTile(
-            title: Text(Texts.settingsTitleKredit.i18n()),
+            title: Text(lang.settingsTitleKredit),
             trailing: ValueListenableBuilder(
               valueListenable: lowCreditNotificationNotifier,
               builder: (context, value, child) {
@@ -469,7 +469,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text(Texts.settingsNemateObjednano.i18n()),
+            title: Text(lang.settingsNemateObjednano),
             trailing: ValueListenableBuilder(
               valueListenable: nextWeekOrderNotificationNotifier,
               builder: (context, value, child) {
@@ -491,7 +491,7 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             title: RichText(
               text: TextSpan(
-                text: Texts.settingsAnotherOptions.i18n(),
+                text: lang.settingsAnotherOptions,
                 style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
@@ -513,11 +513,11 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.settingsDataCollection.i18n()),
+            child: Text(lang.settingsDataCollection),
           ),
           const Divider(),
           ExpansionTile(
-            title: Text(Texts.settingsStopDataCollection.i18n()),
+            title: Text(lang.settingsStopDataCollection),
             trailing: ValueListenableBuilder(
               valueListenable: disableAnalyticsNotifier,
               builder: (context, value, child) {
@@ -538,11 +538,11 @@ class SettingsPage extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                  text: Texts.settingsDataCollectionDescription1.i18n(),
+                  text: lang.settingsDataCollectionDescription_1,
                   style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                   children: [
                     TextSpan(
-                      text: Texts.settingsDataCollectionDescription2.i18n(),
+                      text: lang.settingsDataCollectionDescription_2,
                       style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
@@ -554,10 +554,10 @@ class SettingsPage extends StatelessWidget {
                         },
                     ),
                     TextSpan(
-                      text: Texts.settingsDataCollectionDescription3.i18n(),
+                      text: lang.settingsDataCollectionDescription_3,
                     ),
                     TextSpan(
-                      text: Texts.settingsDataCollectionDescription4.i18n(),
+                      text: lang.settingsDataCollectionDescription_4,
                       style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
@@ -586,7 +586,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(Texts.settingsDebugOptions.i18n()),
+            child: Text(lang.settingsDebugOptions),
           ),
           const Divider(),
           ListTile(
@@ -594,7 +594,7 @@ class SettingsPage extends StatelessWidget {
               onPressed: () async {
                 doNotifications(force: true);
               },
-              child: Text(Texts.settingsDebugForceNotifications.i18n()),
+              child: Text(lang.settingsDebugForceNotifications),
             ),
           ),
           ListTile(
@@ -602,7 +602,7 @@ class SettingsPage extends StatelessWidget {
               onPressed: () async {
                 resetAndDoNotifications();
               },
-              child: Text(Texts.settingsDebugNotifications.i18n()),
+              child: Text(lang.settingsDebugNotifications),
             ),
           ),
         ],

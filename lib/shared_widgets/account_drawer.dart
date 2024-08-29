@@ -1,11 +1,11 @@
 // account drawer that is called from the main page (top left)
 
 // kDebugMode
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
-import 'package:localization/localization.dart';
 
 // Getting current version
 import 'package:package_info_plus/package_info_plus.dart';
@@ -99,7 +99,7 @@ class MainAccountDrawer extends StatelessWidget {
                                         loggedInCanteen.uzivatel!.kredit.toInt().toString(),
                                         style: const TextStyle(fontSize: 20),
                                       ),
-                                      Text(Texts.accountDrawercurrency.i18n()),
+                                      Text(lang.currency),
                                     ],
                                   ),
                                 )
@@ -129,7 +129,7 @@ class MainAccountDrawer extends StatelessWidget {
               //navigation buttons
               //profile
               ListTile(
-                title: Text(Texts.accountDrawerprofile.i18n()),
+                title: Text(lang.accountDrawerProfile),
                 leading: const Icon(Icons.account_circle),
                 onTap: () {
                   Navigator.push(
@@ -144,7 +144,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //settings
               ListTile(
-                title: Text(Texts.accountDrawerSettings.i18n()),
+                title: Text(lang.settings),
                 leading: const Icon(Icons.settings),
                 onTap: () {
                   Navigator.push(
@@ -157,7 +157,7 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               //about app
               ListTile(
-                title: Text(Texts.about.i18n()),
+                title: Text(lang.about),
                 leading: const Icon(Icons.info_rounded),
                 onTap: () async {
                   if (!context.mounted) return;
@@ -168,15 +168,15 @@ class MainAccountDrawer extends StatelessWidget {
                   if (!context.mounted) return;
                   showAboutDialog(
                     context: context,
-                    applicationName: Texts.aboutAppName.i18n(),
-                    applicationLegalese: Texts.aboutCopyRight.i18n(['2023 - ${DateTime.now().year}']),
+                    applicationName: lang.appName,
+                    applicationLegalese: lang.aboutCopyRight(DateTime.now()),
                     applicationVersion: '${packageInfo.version} - ${kDebugMode ? "Debug" : "Release"}',
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                         child: ElevatedButton(
                           onPressed: (() => launchUrl(Uri.parse(Links.repo), mode: LaunchMode.externalApplication)),
-                          child: Text(Texts.aboutSourceCode.i18n()),
+                          child: Text(lang.aboutSourceCode),
                         ),
                       ),
                     ],
@@ -185,12 +185,12 @@ class MainAccountDrawer extends StatelessWidget {
               ),
               // share app
               ListTile(
-                title: Text(Texts.accountDrawerShareApp.i18n()),
+                title: Text(lang.accountDrawerShareApp),
                 leading: const Icon(Icons.share),
                 onTap: () async {
                   final RenderBox? box = context.findRenderObject() as RenderBox?;
                   String text = Links.autojidelna;
-                  String subject = Texts.shareDescription.i18n();
+                  String subject = lang.shareDescription;
                   await Share.share(
                     text,
                     subject: subject,
@@ -233,7 +233,7 @@ class MainAccountDrawer extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
-                              child: Row(children: [Text(Texts.accountDrawerPickLocation.i18n())]),
+                              child: Row(children: [Text(lang.accountDrawerPickLocation)]),
                             ),
                             const Divider(height: 0, indent: 10, endIndent: 10),
                             ListView.builder(

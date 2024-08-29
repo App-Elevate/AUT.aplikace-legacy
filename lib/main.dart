@@ -1,5 +1,7 @@
 // Purpose: Main file of the app, contains the main function and the main widget of the app as well as the loading screen on startup
 
+import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/lang/output/texts.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/pages_new/navigation.dart';
@@ -9,8 +11,6 @@ import 'package:autojidelna/shared_prefs.dart';
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:localization/localization.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
@@ -182,7 +182,7 @@ class _MyAppState extends State<MyApp> {
     // After it expires the timer resets and user has to press back button twice again
     Future.delayed(const Duration(seconds: 5), () => canExit.value = false);
     Fluttertoast.showToast(
-        msg: Texts.toastsExit.i18n(),
+        msg: lang.toastExit,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -202,30 +202,15 @@ class _MyAppState extends State<MyApp> {
       ],
       builder: (context, __) {
         appearanceMigration(context);
-        LocalJsonLocalization.delegate.directories = ['assets/lang'];
         context.read<AppearancePreferences>().loadFromShraredPreferences();
 
         // Rebuilds when themeMode, themeStyle or isPureBlack is changed
         return Selector<AppearancePreferences, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
           selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
-          builder: (context, theme, child) {
+          builder: (context, theme, ___) {
             return MaterialApp(
-              localizationsDelegates: [
-                // delegate from flutter_localization
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-
-                // delegate from localization package.
-                //json-file
-                LocalJsonLocalization.delegate,
-                //or map
-                MapLocalization.delegate,
-              ],
-              supportedLocales: const [
-                Locale('cs', 'CZ'),
-                //Locale('en', 'US'),
-              ],
+              localizationsDelegates: Texts.localizationsDelegates,
+              supportedLocales: Texts.supportedLocales,
               localeResolutionCallback: (locale, supportedLocales) {
                 if (supportedLocales.contains(locale)) return locale;
                 // default language
@@ -346,6 +331,7 @@ class LoggingInWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppTranslations.init(context);
     // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
       future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),
