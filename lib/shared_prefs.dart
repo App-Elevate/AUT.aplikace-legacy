@@ -16,6 +16,7 @@ class SharedPrefsKeys {
   static get sendTodaysFood => "SendTodaysFood";
   static get lowCredit => "LowCredit";
   static get weekLongFamine => "WeekLongFamine";
+  static get analytics => "analytics";
 }
 
 void saveIntToSharedPreferences(String key, int value) async {

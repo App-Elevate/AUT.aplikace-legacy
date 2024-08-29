@@ -7,7 +7,6 @@ import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/date_format_picker.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
-import 'package:autojidelna/shared_widgets/settings/tablet_ui_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +42,7 @@ class AppearanceScreen extends StatelessWidget {
           ),
           SectionTitle(lang.settingsDisplay),
           // TODO: implement this
-          const TabletUiButton(),
+          // const TabletUiButton(),
           Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormatOptions format})>(
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(

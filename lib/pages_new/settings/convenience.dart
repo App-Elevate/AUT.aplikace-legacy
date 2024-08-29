@@ -24,7 +24,6 @@ class ConvenienceScreen extends StatelessWidget {
               onChanged: listUi.set,
             ),
           ),
-          // TODO: implement this
           // skip weekends switch
           Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.getSkipWeekends, set: p1.setSkipWeekends),

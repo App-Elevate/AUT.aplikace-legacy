@@ -1,5 +1,6 @@
 import 'package:autojidelna/consts.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DataCollectionScreen extends StatelessWidget {
@@ -21,11 +23,15 @@ class DataCollectionScreen extends StatelessWidget {
       body: ScrollViewColumn(
         children: [
           SectionTitle(lang.settingsDataCollection),
-          SwitchListTile(
-            title: Text(lang.settingsStopDataCollection),
-            value: true,
-            onChanged: (value) {},
-          ),
+          Selector<AppearancePreferences, ({bool read, void Function(bool) set})>(
+              selector: (_, p1) => (read: p1.collectingData, set: p1.setDataCollection),
+              builder: (_, data, ___) {
+                return SwitchListTile(
+                  title: Text(lang.settingsStopDataCollection),
+                  value: data.read,
+                  onChanged: data.set,
+                );
+              }),
           const CustomDivider(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

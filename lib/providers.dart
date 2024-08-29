@@ -33,6 +33,7 @@ class AppearancePreferences with ChangeNotifier {
   bool _skipWeekends = false;
   DateFormatOptions _dateFormat = DateFormatOptions.dMy;
   bool _relTimeStamps = false;
+  bool _collectingData = true;
 
   /// Theme style getter
   ThemeStyle get themeStyle => _themeStyle;
@@ -60,6 +61,8 @@ class AppearancePreferences with ChangeNotifier {
 
   /// Relative TimeStamps getter
   bool get relTimeStamps => _relTimeStamps;
+
+  bool get collectingData => _collectingData;
 
   /// Loads settings from shared preferences
   void loadFromShraredPreferences() async {
@@ -137,6 +140,13 @@ class AppearancePreferences with ChangeNotifier {
     _skipWeekends = privateSkipWeekends;
     skipWeekends = privateSkipWeekends;
     saveBoolToSharedPreferences(SharedPrefsKeys.skipWeekends, _skipWeekends);
+    notifyListeners();
+  }
+
+  void setDataCollection(bool collecting) {
+    _collectingData = collecting;
+    analyticsEnabledGlobally = collecting;
+    saveBoolToSharedPreferences(SharedPrefsKeys.analytics, _collectingData);
     notifyListeners();
   }
 }

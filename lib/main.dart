@@ -103,13 +103,13 @@ void main() async {
 
   // Check if user has opped out of analytics
 
-  String? analyticsDisabled = await loggedInCanteen.readData(Prefs.disableAnalytics);
+  bool? analyticsDisabled = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics);
 
   // Know if this release is debug and disable analytics if it is
-  if (kDebugMode) analyticsDisabled = '1';
+  if (kDebugMode) analyticsDisabled = true;
 
   // Initializing firebase if analytics are not disabled
-  if (analyticsDisabled != '1') {
+  if (analyticsDisabled != true) {
     analyticsEnabledGlobally = true;
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
