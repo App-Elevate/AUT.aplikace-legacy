@@ -27,7 +27,7 @@ class ConvenienceScreen extends StatelessWidget {
           // TODO: implement this
           // skip weekends switch
           Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
-            selector: (_, p1) => (read: p1.skipWeekends, set: p1.setSkipWeekends),
+            selector: (_, p1) => (read: p1.getSkipWeekends, set: p1.setSkipWeekends),
             builder: (context, skipWeekends, child) => SwitchListTile(
               title: Text(lang.settingsSkipWeekends),
               value: skipWeekends.read,

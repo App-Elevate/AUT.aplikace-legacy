@@ -1,5 +1,6 @@
 import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/shared_prefs.dart';
+import 'package:autojidelna/methods_vars/widgets_tracking.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ import 'package:flutter/material.dart';
 ///
 /// [bigCalendarMarkers]    | If true, displays big markers in calendar
 ///
-/// [skipWeekends]          | If true, doesnt display or skips weekends in Canteen menu
+/// [getSkipWeekends]          | If true, doesnt display or skips weekends in Canteen menu
 ///
 /// [dateFormat]            | Date Format used in the app
 ///
@@ -52,7 +53,7 @@ class AppearancePreferences with ChangeNotifier {
   bool get bigCalendarMarkers => _bigCalendarMarkers;
 
   /// Skip weekends getter
-  bool get skipWeekends => _skipWeekends;
+  bool get getSkipWeekends => _skipWeekends;
 
   /// Date Format getter
   DateFormatOptions get dateFormat => _dateFormat;
@@ -132,8 +133,9 @@ class AppearancePreferences with ChangeNotifier {
   }
 
   /// Setter for skip weekends
-  void setSkipWeekends(bool skipWeekends) {
-    _skipWeekends = skipWeekends;
+  void setSkipWeekends(bool privateSkipWeekends) {
+    _skipWeekends = privateSkipWeekends;
+    skipWeekends = privateSkipWeekends;
     saveBoolToSharedPreferences(SharedPrefsKeys.skipWeekends, _skipWeekends);
     notifyListeners();
   }
