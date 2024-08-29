@@ -233,7 +233,7 @@ class MainAccountDrawer extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16),
-                              child: Row(children: [Text(lang.accountDrawerPickLocation)]),
+                              child: Row(children: [Text(lang.pickLocation)]),
                             ),
                             const Divider(height: 0, indent: 10, endIndent: 10),
                             ListView.builder(

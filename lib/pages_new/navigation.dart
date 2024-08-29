@@ -1,4 +1,5 @@
 import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/canteenwrapper.dart';
 import 'package:autojidelna/methods_vars/notifications.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
@@ -54,18 +55,16 @@ class _NavigationScreenState extends State<NavigationScreen> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: pageIndex,
         onDestinationSelected: changePageIndex,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.menu_book),
-            selectedIcon: Icon(Icons.menu_book_outlined),
-            label: "Canteen",
-            tooltip: "Canteen page",
+            icon: const Icon(Icons.menu_book),
+            selectedIcon: const Icon(Icons.menu_book_outlined),
+            label: lang.orders,
           ),
           NavigationDestination(
-            icon: Icon(Icons.more_horiz),
-            selectedIcon: Icon(Icons.more_horiz_outlined),
-            label: "More",
-            tooltip: "More page",
+            icon: const Icon(Icons.more_horiz),
+            selectedIcon: const Icon(Icons.more_horiz_outlined),
+            label: lang.more,
           ),
         ],
       ),

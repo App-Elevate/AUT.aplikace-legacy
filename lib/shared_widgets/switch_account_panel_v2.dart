@@ -11,7 +11,7 @@ class SwitchAccountPanelV2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SectionTitle("Accounts"),
+        SectionTitle(lang.switchAccountPanelTitle),
         Flexible(
           child: ListView.builder(
             itemCount: 1, // placeholder

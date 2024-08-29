@@ -1,6 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
-import 'package:autojidelna/methods_vars/string_extention.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
 import 'package:autojidelna/shared_widgets/configured_alert_dialog.dart';
@@ -17,7 +16,7 @@ class TabletUiButton extends StatelessWidget {
       selector: (_, p1) => (read: p1.tabletUi),
       builder: (context, tabletUi, child) => ListTile(
         title: Text(lang.tabletUi),
-        subtitle: Text(EnumToString.convertToString(tabletUi.read).capitalize()),
+        subtitle: Text(lang.tabletUiOptions(EnumToString.convertToString(tabletUi.read))),
         onTap: () => configuredDialog(context, builder: (context) => const TabletUiPicker()),
       ),
     );
@@ -30,7 +29,7 @@ class TabletUiPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConfiguredAlertDialog(
-      title: "Tablet UI",
+      title: lang.tabletUi,
       content: Selector<AppearancePreferences, ({TabletUi read, Function(TabletUi) set})>(
         selector: (_, p1) => (read: p1.tabletUi, set: p1.setTabletUi),
         builder: (context, tabletUi, child) => SingleChildScrollView(
@@ -41,7 +40,7 @@ class TabletUiPicker extends StatelessWidget {
                   (format) => ListTile(
                     minVerticalPadding: 0,
                     visualDensity: const VisualDensity(vertical: -4),
-                    title: Text(EnumToString.convertToString(format).capitalize()),
+                    title: Text(lang.tabletUiOptions(EnumToString.convertToString(format))),
                     titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                     trailing: tabletUi.read == format ? const Icon(Icons.check) : null,
                     onTap: () {

@@ -17,7 +17,10 @@ class DishList extends StatelessWidget {
         selector: (_, p1) => p1.menu,
         builder: (context, menu, child) {
           List<Jidlo> dishList = menu.jidla;
-          if (dishList.isEmpty) WidgetsBinding.instance.addPostFrameCallback((_) => child!);
+          if (dishList.isEmpty) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {});
+            return child!;
+          }
 
           return ListView.builder(
             itemCount: dishList.length,

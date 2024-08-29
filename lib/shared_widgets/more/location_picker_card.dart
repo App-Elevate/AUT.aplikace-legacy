@@ -30,8 +30,8 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
       children: [
         LinedCard(
           smallButton: false,
-          title: "Location",
-          footer: locations.length > 1 ? "Change location" : null,
+          title: lang.location,
+          footer: locations.length > 1 ? lang.pickLocation : null,
           footerTextAlign: TextAlign.end,
           onPressed: locations.length < 2 ? null : () => pickerDialog(context, locations),
           child: ListTile(
@@ -49,7 +49,7 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
     configuredDialog(
       context,
       builder: (context) => ConfiguredAlertDialog(
-        title: lang.accountDrawerPickLocation,
+        title: lang.pickLocation,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: List.generate(

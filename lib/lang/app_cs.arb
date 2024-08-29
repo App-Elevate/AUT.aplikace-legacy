@@ -66,10 +66,11 @@
   "popupNotNow": "Teď ne",
   "logoutUSure": "Opravdu se chcete odhlásit?",
   "logoutConfirm": "Odhlásit se",
-  "accountDrawerLocationsUnknown": "Neznámá lokalita",
+  "location": "Výdejna",
+  "pickLocation": "Vyberte výdejnu ",
+  "locationsUnknown": "Neznámá výdejna",
   "account": "Účet",
   "shareApp": "Sdílet aplikaci",
-  "accountDrawerPickLocation": "Vyberte lokaci: ",
   "about": "O aplikaci",
   "aboutCopyRight": "© 2023 - {time} Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
   "@aboutCopyRight": {
@@ -89,10 +90,10 @@
   "lightThemeMode": "Světlý",
   "darkThemeMode": "Tmavý",
   "settingsAmoled": "AMOLED mód",
-  "settingsAmoledSub": "Join the dark side!",
+  "settingsAmoledSub": "Přidej se k temné straně síly!",
   "settingsDisplay": "Zobrazení",
   "settingsRelativeTimestamps": "Relativní časové značky",
-  "settingsRelativeTimestampsSub": "'Dnes' místo '{date}'",
+  "settingsRelativeTimestampsSub": "„Dnes“ místo „{date}“",
   "@settingsRelativeTimestampsSub": {
     "placeholders": {
       "date": {
@@ -104,7 +105,7 @@
   "listUi": "List UI",
   "tabletUi": "Tablet UI",
   "settingsCalendarBigMarkers": "Velké ukazatele v kalendáři",
-  "settingsSkipWeekends": "Přeskakovat víkendy při procházení jídelníčku",
+  "settingsSkipWeekends": "Přeskakovat víkendy",
   "settingsNotificationFor": "Oznámení pro {username}",
   "@settingsNotificationFor": {
     "placeholders": {
@@ -309,7 +310,19 @@
       }
     }
   },
-  "licenses": "Licenses",
+  "licenses": "Licence",
   "statistics": "Statistiky",
-  "dateFormat": "Formát dat"
+  "dateFormat": "Formát dat",
+  "orders": "Objednávky",
+  "more": "Více",
+  "tabletUiOptions": "{arg, select, other{error} auto{Automaticky} always{Vždy} landscape{Na šířku} never{Nikdy}}",
+  "@tabletUiOptions": {
+    "description": "tabletUiOptions",
+    "placeholders": {
+      "arg": {
+        "type": "String",
+        "example": "always"
+      }
+    }
+  }
 }

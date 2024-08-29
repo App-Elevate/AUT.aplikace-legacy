@@ -361,11 +361,23 @@ abstract class Texts {
   /// **'Odhlásit se'**
   String get logoutConfirm;
 
-  /// No description provided for @accountDrawerLocationsUnknown.
+  /// No description provided for @location.
   ///
   /// In cs, this message translates to:
-  /// **'Neznámá lokalita'**
-  String get accountDrawerLocationsUnknown;
+  /// **'Výdejna'**
+  String get location;
+
+  /// No description provided for @pickLocation.
+  ///
+  /// In cs, this message translates to:
+  /// **'Vyberte výdejnu '**
+  String get pickLocation;
+
+  /// No description provided for @locationsUnknown.
+  ///
+  /// In cs, this message translates to:
+  /// **'Neznámá výdejna'**
+  String get locationsUnknown;
 
   /// No description provided for @account.
   ///
@@ -378,12 +390,6 @@ abstract class Texts {
   /// In cs, this message translates to:
   /// **'Sdílet aplikaci'**
   String get shareApp;
-
-  /// No description provided for @accountDrawerPickLocation.
-  ///
-  /// In cs, this message translates to:
-  /// **'Vyberte lokaci: '**
-  String get accountDrawerPickLocation;
 
   /// No description provided for @about.
   ///
@@ -454,7 +460,7 @@ abstract class Texts {
   /// No description provided for @settingsAmoledSub.
   ///
   /// In cs, this message translates to:
-  /// **'Join the dark side!'**
+  /// **'Přidej se k temné straně síly!'**
   String get settingsAmoledSub;
 
   /// No description provided for @settingsDisplay.
@@ -472,7 +478,7 @@ abstract class Texts {
   /// No description provided for @settingsRelativeTimestampsSub.
   ///
   /// In cs, this message translates to:
-  /// **'\'Dnes\' místo \'{date}\''**
+  /// **'„Dnes“ místo „{date}“'**
   String settingsRelativeTimestampsSub(String date);
 
   /// No description provided for @convenience.
@@ -502,7 +508,7 @@ abstract class Texts {
   /// No description provided for @settingsSkipWeekends.
   ///
   /// In cs, this message translates to:
-  /// **'Přeskakovat víkendy při procházení jídelníčku'**
+  /// **'Přeskakovat víkendy'**
   String get settingsSkipWeekends;
 
   /// No description provided for @settingsNotificationFor.
@@ -940,7 +946,7 @@ abstract class Texts {
   /// No description provided for @licenses.
   ///
   /// In cs, this message translates to:
-  /// **'Licenses'**
+  /// **'Licence'**
   String get licenses;
 
   /// No description provided for @statistics.
@@ -954,6 +960,24 @@ abstract class Texts {
   /// In cs, this message translates to:
   /// **'Formát dat'**
   String get dateFormat;
+
+  /// No description provided for @orders.
+  ///
+  /// In cs, this message translates to:
+  /// **'Objednávky'**
+  String get orders;
+
+  /// No description provided for @more.
+  ///
+  /// In cs, this message translates to:
+  /// **'Více'**
+  String get more;
+
+  /// tabletUiOptions
+  ///
+  /// In cs, this message translates to:
+  /// **'{arg, select, other{error} auto{Automaticky} always{Vždy} landscape{Na šířku} never{Nikdy}}'**
+  String tabletUiOptions(String arg);
 }
 
 class _TextsDelegate extends LocalizationsDelegate<Texts> {

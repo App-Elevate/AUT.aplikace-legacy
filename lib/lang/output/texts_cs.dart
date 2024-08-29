@@ -155,16 +155,19 @@ class TextsCs extends Texts {
   String get logoutConfirm => 'Odhlásit se';
 
   @override
-  String get accountDrawerLocationsUnknown => 'Neznámá lokalita';
+  String get location => 'Výdejna';
+
+  @override
+  String get pickLocation => 'Vyberte výdejnu ';
+
+  @override
+  String get locationsUnknown => 'Neznámá výdejna';
 
   @override
   String get account => 'Účet';
 
   @override
   String get shareApp => 'Sdílet aplikaci';
-
-  @override
-  String get accountDrawerPickLocation => 'Vyberte lokaci: ';
 
   @override
   String get about => 'O aplikaci';
@@ -206,7 +209,7 @@ class TextsCs extends Texts {
   String get settingsAmoled => 'AMOLED mód';
 
   @override
-  String get settingsAmoledSub => 'Join the dark side!';
+  String get settingsAmoledSub => 'Přidej se k temné straně síly!';
 
   @override
   String get settingsDisplay => 'Zobrazení';
@@ -216,7 +219,7 @@ class TextsCs extends Texts {
 
   @override
   String settingsRelativeTimestampsSub(String date) {
-    return 'Dnes místo {date}';
+    return '„Dnes“ místo „$date“';
   }
 
   @override
@@ -232,8 +235,7 @@ class TextsCs extends Texts {
   String get settingsCalendarBigMarkers => 'Velké ukazatele v kalendáři';
 
   @override
-  String get settingsSkipWeekends =>
-      'Přeskakovat víkendy při procházení jídelníčku';
+  String get settingsSkipWeekends => 'Přeskakovat víkendy';
 
   @override
   String settingsNotificationFor(String username) {
@@ -510,11 +512,32 @@ class TextsCs extends Texts {
   }
 
   @override
-  String get licenses => 'Licenses';
+  String get licenses => 'Licence';
 
   @override
   String get statistics => 'Statistiky';
 
   @override
   String get dateFormat => 'Formát dat';
+
+  @override
+  String get orders => 'Objednávky';
+
+  @override
+  String get more => 'Více';
+
+  @override
+  String tabletUiOptions(String arg) {
+    String _temp0 = intl.Intl.selectLogic(
+      arg,
+      {
+        'other': 'error',
+        'auto': 'Automaticky',
+        'always': 'Vždy',
+        'landscape': 'Na šířku',
+        'never': 'Nikdy',
+      },
+    );
+    return '$_temp0';
+  }
 }
