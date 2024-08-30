@@ -11,43 +11,40 @@ class SwitchAccountPanelV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<LoggedAccountsInAccountPanel> loggedAccounts =
-        ValueNotifier<LoggedAccountsInAccountPanel>(LoggedAccountsInAccountPanel(usernames: [], loggedInID: null));
+    return FutureBuilder<LoggedAccountsInAccountPanel>(
+      future: _fetchLoggedAccounts(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
 
-    // updating the value notifier based on secure storage
-    Future<void> updateAccountPanel() async {
-      LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
-      loggedAccounts.value.usernames.clear();
-      for (int i = 0; i < loginData.users.length; i++) {
-        loggedAccounts.value.usernames.add(loginData.users[i].username);
-      }
-      loggedAccounts.value = LoggedAccountsInAccountPanel(usernames: loggedAccounts.value.usernames, loggedInID: loginData.currentlyLoggedInId);
-    }
+        LoggedAccountsInAccountPanel data = snapshot.data!;
 
-    return Column(
-      children: [
-        SectionTitle(lang.switchAccountPanelTitle),
-        FutureBuilder(
-            future: updateAccountPanel(),
-            builder: (context, snapshot) {
-              return ValueListenableBuilder(
-                  valueListenable: loggedAccounts,
-                  builder: (context, data, child) {
-                    List<Widget> accounts = [];
-                    for (int i = 0; i < data.usernames.length; i++) {
-                      accounts.add(accountRow(context, i, username: data.usernames[i], currentAccount: i == data.loggedInID));
-                    }
-                    return Flexible(
-                      child: ListView.builder(
-                        itemCount: 1, // placeholder
-                        itemBuilder: (context, index) => accounts[index],
-                      ),
-                    );
-                  });
-            }),
-        const CustomDivider(height: 0, isTransparent: false),
-        addAccountButton(context)
-      ],
+        List<Widget> accounts = [];
+        for (int i = 0; i < data.usernames.length; i++) {
+          accounts.add(accountRow(context, i, username: data.usernames[i], currentAccount: i == data.loggedInID));
+        }
+
+        return Column(
+          children: [
+            SectionTitle(lang.switchAccountPanelTitle),
+            Flexible(
+              child: ListView.builder(
+                itemCount: accounts.length,
+                itemBuilder: (context, index) => accounts[index],
+              ),
+            ),
+            const CustomDivider(height: 0, isTransparent: false),
+            addAccountButton(context),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<LoggedAccountsInAccountPanel> _fetchLoggedAccounts() async {
+    LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+    return LoggedAccountsInAccountPanel(
+      usernames: loginData.users.map((user) => user.username).toList(),
+      loggedInID: loginData.currentlyLoggedInId,
     );
   }
 
@@ -61,7 +58,6 @@ class SwitchAccountPanelV2 extends StatelessWidget {
 
   Widget accountRow(BuildContext context, int id, {String username = "", bool currentAccount = false}) {
     return ListTile(
-      //leading: const Icon(Icons.account_circle),
       title: Text(username, style: currentAccount ? const TextStyle(fontWeight: FontWeight.w600) : null),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
