@@ -183,9 +183,8 @@ class Themes {
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           foregroundColor: WidgetStatePropertyAll(colorScheme.onSurface),
-          textStyle: WidgetStatePropertyAll(
+          textStyle: const WidgetStatePropertyAll(
             TextStyle(
-              fontFamily: Fonts.body,
               fontSize: 16,
               fontWeight: FontWeight.w500,
               height: 1.25,
