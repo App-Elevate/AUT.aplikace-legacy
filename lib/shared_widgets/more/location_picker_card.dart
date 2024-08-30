@@ -83,6 +83,7 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: Theme.of(context).colorScheme.onInverseSurface.withOpacity(.9),
+          border: Border.all(color: Theme.of(context).dividerTheme.color!),
         ),
         alignment: Alignment.center,
         child: const Icon(Icons.lock_outline_rounded),
