@@ -4,6 +4,7 @@ import 'package:autojidelna/shared_widgets/canteen/day_card.dart';
 import 'package:autojidelna/shared_widgets/canteen/error_loading_data.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ListViewCanteen extends StatelessWidget {
   const ListViewCanteen({super.key});
@@ -36,7 +37,8 @@ class ListViewCanteen extends StatelessWidget {
 
         if (dailyMenus.isEmpty) return const ErrorLoadingData();
 
-        return ListView.builder(
+        return ScrollablePositionedList.builder(
+          itemScrollController: itemScrollController,
           itemCount: dailyMenus.length,
           itemBuilder: (context, index) => DayCard(jidelnicek: dailyMenus[index]),
         );

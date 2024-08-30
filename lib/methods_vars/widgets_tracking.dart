@@ -5,6 +5,7 @@ import 'package:autojidelna/local_imports.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 bool reloading = false;
 
@@ -24,6 +25,9 @@ late final ValueNotifier<DateTime> dateListener;
 
 ///page controller for the PageView which tells which date is currently selected
 late final PageController pageviewController;
+
+///page controller for the PageView which tells which date is currently selected
+final ItemScrollController itemScrollController = ItemScrollController();
 
 bool loginScreenVisible = false;
 
