@@ -12,7 +12,7 @@ class CalendarButton extends StatelessWidget {
     return SizedBox(
       height: 40,
       child: OutlinedButton.icon(
-        onPressed: () {},
+        onPressed: () => CustomDatePicker().showDatePicker(context, dateListener.value),
         icon: const Icon(Icons.calendar_month_outlined),
         label: Selector<AppearancePreferences, DateFormatOptions>(
           selector: (_, p1) => p1.dateFormat,
