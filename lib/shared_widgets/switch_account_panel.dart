@@ -171,11 +171,11 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
           onPressed: () async {
             // popup asking the user if they are sure they want to logout
             try {
-              bool confirmation =
-                  /*await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) == */ true;
+              /*bool confirmation =
+                  await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) == true;
               if (!confirmation) {
                 return;
-              }
+              }*/
             } catch (e) {
               return;
             }

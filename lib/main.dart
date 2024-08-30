@@ -348,9 +348,7 @@ class LoggingInWidget extends StatelessWidget {
         }
         return Container(
           decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
+          child: const Center(child: CircularProgressIndicator()),
         );
       },
     );

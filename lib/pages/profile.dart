@@ -49,9 +49,9 @@ class ProfilePage extends StatelessWidget {
       child: IconButton(
         onPressed: () async {
           try {
-            if (!((/*await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) ==*/ true))) {
+            /*if (!((await showDialog(context: context, barrierDismissible: true, builder: (BuildContext context) => logoutDialog(context)) == true))) {
               return;
-            }
+            }*/
           } catch (e) {
             return;
           }
