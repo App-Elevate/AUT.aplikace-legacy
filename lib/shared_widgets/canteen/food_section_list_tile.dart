@@ -1,3 +1,4 @@
+import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/methods_vars/ordering.dart';
 import 'package:autojidelna/pages_new/dish_detail.dart';
 import 'package:canteenlib/canteenlib.dart';
@@ -39,15 +40,17 @@ class _DishListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    StavJidla stav = getStavJidla(dish);
     return ListTile(
-      enabled: dish.lzeObjednat,
+      enabled: dish.lzeObjednat || dish.objednano,
       visualDensity: VisualDensity.compact,
       contentPadding: EdgeInsets.zero,
       titleTextStyle: Theme.of(context).textTheme.bodyMedium,
       leading: Radio<bool>(
         value: dish.objednano,
         groupValue: true,
-        onChanged: dish.lzeObjednat ? (_) => pressed(context, dish, getStavJidla(dish)) : null,
+        onChanged: isButtonEnabled(stav) ? (_) => pressed(context, dish, stav) : null,
+        activeColor: Theme.of(context).colorScheme.primary,
       ),
       title: Text(title),
       subtitle:
