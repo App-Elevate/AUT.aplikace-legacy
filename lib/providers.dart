@@ -215,7 +215,7 @@ class DishesOfTheDay extends ChangeNotifier {
   void setMenu(Jidelnicek menu) {
     if (menu == _menu) return;
     _menu = menu;
-    notifyListeners(); // Can be called during build
+    notifyListeners();
   }
 
   void setOrdering(bool ordering) {

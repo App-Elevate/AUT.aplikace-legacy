@@ -17,7 +17,7 @@ class PageViewFoodCard extends StatelessWidget {
         smallButton: false,
         transparentFooterDivider: true,
         title: dish.varianta,
-        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DishDetail())),
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => DishDetail(dish: dish))),
         child: Column(
           children: [
             ListTile(

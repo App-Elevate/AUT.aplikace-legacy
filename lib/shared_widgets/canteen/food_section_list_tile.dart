@@ -61,7 +61,7 @@ class _DishListTile extends StatelessWidget {
 
   IconButton _detailButton(BuildContext context) {
     return IconButton(
-      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DishDetail())),
+      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DishDetail(dish: dish))),
       icon: Icon(
         Icons.info_outline,
         color: Theme.of(context).listTileTheme.subtitleTextStyle!.color,
