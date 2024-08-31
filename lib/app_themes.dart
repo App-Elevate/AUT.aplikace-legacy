@@ -149,6 +149,15 @@ class Themes {
         textColor: colorScheme.onSurface,
         childrenPadding: const EdgeInsets.only(bottom: 8),
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        modalElevation: 1,
+        clipBehavior: Clip.hardEdge,
+        surfaceTintColor: colorScheme.surfaceTint,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: pureBlack ? colorScheme.surfaceContainerHighest : Colors.transparent, strokeAlign: 1),
+        ),
+      ),
 
       // Buttons
       switchTheme: const SwitchThemeData(splashRadius: 0),

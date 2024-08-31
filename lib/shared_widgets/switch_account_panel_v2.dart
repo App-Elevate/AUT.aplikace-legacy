@@ -58,16 +58,20 @@ class SwitchAccountPanelV2 extends StatelessWidget {
 
   Widget accountRow(BuildContext context, int id, {String username = "", bool currentAccount = false}) {
     return ListTile(
-      title: Text(username, style: currentAccount ? const TextStyle(fontWeight: FontWeight.w600) : null),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Text(username, style: currentAccount ? const TextStyle(fontWeight: FontWeight.w600) : null),
           if (currentAccount) const Icon(Icons.check, size: 30),
-          IconButton(
-              padding: EdgeInsets.zero,
-              icon: Icon(Icons.logout, size: 30, color: Theme.of(context).colorScheme.onSurface),
-              onPressed: () => configuredDialog(context, builder: (BuildContext context) => logoutDialog(context, currentAccount, id))),
         ],
+      ),
+      trailing: IconButton(
+        padding: EdgeInsets.zero,
+        icon: Icon(Icons.logout, size: 30, color: Theme.of(context).colorScheme.onSurface),
+        onPressed: () => configuredDialog(
+          context,
+          builder: (BuildContext context) => logoutDialog(context, currentAccount: currentAccount, id: id),
+        ),
       ),
       onTap: () async {
         if (!currentAccount) {

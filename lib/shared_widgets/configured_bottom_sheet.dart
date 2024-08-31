@@ -5,7 +5,6 @@ void configuredBottomSheet(BuildContext context, {required Widget Function(Build
     context: context,
     builder: builder,
     useRootNavigator: true,
-    clipBehavior: Clip.hardEdge,
     constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * .6),
   );
 }
