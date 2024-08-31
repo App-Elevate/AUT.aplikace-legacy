@@ -174,7 +174,7 @@ class MainAppScreenState extends State<MainAppScreen> {
                       fixedSize: Size(MediaQuery.sizeOf(context).width * .5, 45),
                       side: BorderSide(color: Theme.of(context).colorScheme.onSurfaceVariant, width: 1.75),
                     ),
-                    onPressed: () async => await CustomDatePicker().showDatePicker(context, dateListener.value),
+                    onPressed: () => showCustomDatePicker(context, dateListener.value),
                     icon: const Icon(Icons.calendar_today_rounded, size: 27.5),
                     label: ValueListenableBuilder(
                       valueListenable: dateListener,

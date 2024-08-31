@@ -9,10 +9,11 @@ class CalendarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool disabled = context.watch<AppearancePreferences>().isListUi;
     return SizedBox(
       height: 40,
       child: OutlinedButton.icon(
-        onPressed: () => CustomDatePicker().showDatePicker(context, dateListener.value),
+        onPressed: disabled ? null : () => showCustomDatePicker(context, dateListener.value),
         icon: const Icon(Icons.calendar_month_outlined),
         label: Selector<AppearancePreferences, DateFormatOptions>(
           selector: (_, p1) => p1.dateFormat,
@@ -31,6 +32,7 @@ class TodayButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool disabled = context.watch<AppearancePreferences>().isListUi;
     return SizedBox(
       width: 35,
       height: 35,
@@ -41,8 +43,8 @@ class TodayButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(color: Theme.of(context).colorScheme.onSurfaceVariant, width: 1.75),
         ),
+        onPressed: disabled ? null : () => changeDate(newDate: DateTime.now(), animateToPage: true),
         child: Text(DateTime.now().day.toString()),
-        onPressed: () => changeDate(newDate: DateTime.now(), animateToPage: true),
       ),
     );
   }
