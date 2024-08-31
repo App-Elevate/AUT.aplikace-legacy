@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
 
-Widget logoutDialog(BuildContext context, bool currentAccount, int id) {
+Widget logoutDialog(BuildContext context, {bool currentAccount = true, int? id}) {
   return AlertDialog(
     title: Text(lang.logoutUSure),
     actionsAlignment: MainAxisAlignment.spaceBetween,

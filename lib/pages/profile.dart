@@ -129,7 +129,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.jmeno != null || loggedInCanteen.uzivatel!.prijmeni != null) {
                       return Text(
-                        lang.name(loggedInCanteen.uzivatel!.jmeno ?? '', loggedInCanteen.uzivatel!.prijmeni ?? ''),
+                        lang.name /*(loggedInCanteen.uzivatel!.jmeno ?? '', loggedInCanteen.uzivatel!.prijmeni ?? '')*/,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -141,7 +141,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.kategorie != null) {
                       return Text(
-                        lang.category(loggedInCanteen.uzivatel!.kategorie ?? ''),
+                        lang.category /*(loggedInCanteen.uzivatel!.kategorie ?? '')*/,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -177,7 +177,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.ucetProPlatby != null && loggedInCanteen.uzivatel!.ucetProPlatby != '') {
                       return Text(
-                        lang.paymentAccountNumber(loggedInCanteen.uzivatel!.ucetProPlatby ?? ''),
+                        lang.paymentAccountNumber /*(loggedInCanteen.uzivatel!.ucetProPlatby ?? '')*/,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -189,7 +189,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.specSymbol != null && loggedInCanteen.uzivatel!.specSymbol != '') {
                       return Text(
-                        lang.specificSymbol(loggedInCanteen.uzivatel!.specSymbol ?? ''),
+                        lang.specificSymbol /*(loggedInCanteen.uzivatel!.specSymbol ?? '')*/,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {
@@ -202,7 +202,7 @@ class ProfilePage extends StatelessWidget {
                   builder: (context) {
                     if (loggedInCanteen.uzivatel!.varSymbol != null && loggedInCanteen.uzivatel!.varSymbol != '') {
                       return Text(
-                        lang.variableSymbol(loggedInCanteen.uzivatel!.varSymbol ?? ''),
+                        lang.variableSymbol /*(loggedInCanteen.uzivatel!.varSymbol ?? '')*/,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontSize: 20),
                       );
                     } else {

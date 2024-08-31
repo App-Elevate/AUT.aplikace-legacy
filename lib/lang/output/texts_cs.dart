@@ -307,32 +307,22 @@ class TextsCs extends Texts {
   String get personalInfo => 'Osobní Údaje';
 
   @override
-  String name(String first, String last) {
-    return 'Jméno: $first $last';
-  }
+  String get name => 'Jméno';
 
   @override
-  String category(String category) {
-    return 'Kategorie: $category';
-  }
+  String get category => 'Kategorie';
 
   @override
   String get paymentInfo => 'Platební Údaje';
 
   @override
-  String paymentAccountNumber(String num) {
-    return 'Číslo účtu: $num';
-  }
+  String get paymentAccountNumber => 'Číslo účtu';
 
   @override
-  String specificSymbol(String symbol) {
-    return 'Specifický symbol: $symbol';
-  }
+  String get specificSymbol => 'Specifický symbol';
 
   @override
-  String variableSymbol(String symbol) {
-    return 'Variabilní symbol: $symbol';
-  }
+  String get variableSymbol => 'Variabilní symbol';
 
   @override
   String ordersWithAutojidelna(int ammount) {

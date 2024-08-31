@@ -33,7 +33,6 @@ class ConvenienceScreen extends StatelessWidget {
               onChanged: skipWeekends.set,
             ),
           ),
-          // TODO: implement this
           // big calendar markers switch
           Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.bigCalendarMarkers, set: p1.setCalendarMarkers),

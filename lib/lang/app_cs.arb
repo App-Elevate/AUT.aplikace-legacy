@@ -147,50 +147,12 @@
     }
   },
   "personalInfo": "Osobní Údaje",
-  "name": "Jméno: {first} {last}",
-  "@name": {
-    "placeholders": {
-      "first": {
-        "type": "String"
-      },
-      "last": {
-        "type": "String"
-      }
-    }
-  },
-  "category": "Kategorie: {category}",
-  "@category": {
-    "placeholders": {
-      "category": {
-        "type": "String"
-      }
-    }
-  },
+  "name": "Jméno",
+  "category": "Kategorie",
   "paymentInfo": "Platební Údaje",
-  "paymentAccountNumber": "Číslo účtu: {num}",
-  "@paymentAccountNumber": {
-    "placeholders": {
-      "num": {
-        "type": "String"
-      }
-    }
-  },
-  "specificSymbol": "Specifický symbol: {symbol}",
-  "@specificSymbol": {
-    "placeholders": {
-      "symbol": {
-        "type": "String"
-      }
-    }
-  },
-  "variableSymbol": "Variabilní symbol: {symbol}",
-  "@variableSymbol": {
-    "placeholders": {
-      "symbol": {
-        "type": "String"
-      }
-    }
-  },
+  "paymentAccountNumber": "Číslo účtu",
+  "specificSymbol": "Specifický symbol",
+  "variableSymbol": "Variabilní symbol",
   "ordersWithAutojidelna": "Objednávky s Autojídelnou: {ammount}",
   "@ordersWithAutojidelna": {
     "placeholders": {

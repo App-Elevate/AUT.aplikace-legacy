@@ -616,14 +616,14 @@ abstract class Texts {
   /// No description provided for @name.
   ///
   /// In cs, this message translates to:
-  /// **'Jméno: {first} {last}'**
-  String name(String first, String last);
+  /// **'Jméno'**
+  String get name;
 
   /// No description provided for @category.
   ///
   /// In cs, this message translates to:
-  /// **'Kategorie: {category}'**
-  String category(String category);
+  /// **'Kategorie'**
+  String get category;
 
   /// No description provided for @paymentInfo.
   ///
@@ -634,20 +634,20 @@ abstract class Texts {
   /// No description provided for @paymentAccountNumber.
   ///
   /// In cs, this message translates to:
-  /// **'Číslo účtu: {num}'**
-  String paymentAccountNumber(String num);
+  /// **'Číslo účtu'**
+  String get paymentAccountNumber;
 
   /// No description provided for @specificSymbol.
   ///
   /// In cs, this message translates to:
-  /// **'Specifický symbol: {symbol}'**
-  String specificSymbol(String symbol);
+  /// **'Specifický symbol'**
+  String get specificSymbol;
 
   /// No description provided for @variableSymbol.
   ///
   /// In cs, this message translates to:
-  /// **'Variabilní symbol: {symbol}'**
-  String variableSymbol(String symbol);
+  /// **'Variabilní symbol'**
+  String get variableSymbol;
 
   /// No description provided for @ordersWithAutojidelna.
   ///
