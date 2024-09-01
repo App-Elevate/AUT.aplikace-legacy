@@ -36,7 +36,7 @@ class _MenuContent extends StatelessWidget {
 
             // Check if widget is still in tree
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (context.mounted) data.setMenu(snapshot.data as Jidelnicek);
+              data.setMenu(snapshot.data as Jidelnicek);
             });
 
             return const DishList();
