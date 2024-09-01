@@ -15,7 +15,7 @@ class OrderDishButton extends StatelessWidget {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     StavJidla stavJidla = getStavJidla(dish);
     bool isPrimary = getPrimaryState(stavJidla);
-    bool disabled = !ordering ? isButtonEnabled(stavJidla) : true;
+    bool disabled = !ordering ? !isButtonEnabled(stavJidla) : true;
 
     return Selector<DishesOfTheDay, Jidelnicek>(
       selector: (_, p1) => p1.menu,

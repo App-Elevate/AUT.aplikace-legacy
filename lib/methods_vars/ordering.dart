@@ -211,14 +211,14 @@ StavJidla getStavJidla(Jidlo dish) {
 
 bool isButtonEnabled(StavJidla stavJidla) {
   switch (stavJidla) {
-    case StavJidla.objednano:
-    case StavJidla.neobjednano:
-    case StavJidla.objednanoNelzeOdebrat:
     case StavJidla.dostupneNaBurze:
     case StavJidla.naBurze:
-      return false;
-    default:
+    case StavJidla.neobjednano:
+    case StavJidla.objednano:
+    case StavJidla.objednanoNelzeOdebrat:
       return true;
+    default:
+      return false;
   }
 }
 
