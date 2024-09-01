@@ -16,12 +16,12 @@ late Canteen canteen;
 void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
   DishesOfTheDay prov = context.read<DishesOfTheDay>();
   bool ordering = context.read<Ordering>().ordering;
-  DateTime day = convertIndexToDatetime(prov.dayIndex);
-  int dishIndex = prov.menu.jidla.indexOf(dish);
+  DateTime day = dish.den;
+  int dishIndex = prov.getMenu(convertDateTimeToIndex(day))!.jidla.indexOf(dish);
 
   void updateJidelnicek(Jidelnicek jidelnicek) {
-    Jidelnicek menu = prov.menu;
-    prov.setMenu(jidelnicek);
+    Jidelnicek menu = prov.getMenu(convertDateTimeToIndex(day))!;
+    prov.setMenu(convertDateTimeToIndex(day), jidelnicek);
     loggedInCanteen.canteenDataUnsafe!.jidelnicky[menu.den] = menu;
     loggedInCanteen.canteenDataUnsafe!.pocetJidel[menu.den] = menu.jidla.length;
   }
@@ -180,8 +180,8 @@ void cannotBeOrderedFix(BuildContext context, int dayIndex) async {
       Jidelnicek jidelnicekCheck = await loggedInCanteen.getLunchesForDay(convertIndexToDatetime(dayIndex), requireNew: true);
 
       for (int i = 0; i < jidelnicekCheck.jidla.length; i++) {
-        if (dishesOfTheDay.menu.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
-          dishesOfTheDay.setMenu(jidelnicekCheck);
+        if (dishesOfTheDay.getMenu(dayIndex)!.jidla[i].lzeObjednat != jidelnicekCheck.jidla[i].lzeObjednat) {
+          dishesOfTheDay.setMenu(dayIndex, jidelnicekCheck);
           return;
         }
       }
@@ -224,8 +224,8 @@ bool isButtonEnabled(StavJidla stavJidla) {
 }
 
 String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
-  Jidelnicek menu = context.select<DishesOfTheDay, Jidelnicek>((data) => data.menu);
-  int dayIndex = context.select<DishesOfTheDay, int>((data) => data.dayIndex);
+  int dayIndex = convertDateTimeToIndex(dish.den);
+  Jidelnicek menu = context.select<DishesOfTheDay, Jidelnicek>((data) => data.getMenu(dayIndex)!);
   DateTime datumJidla = convertIndexToDatetime(dayIndex);
   switch (stavJidla) {
     case StavJidla.objednano:

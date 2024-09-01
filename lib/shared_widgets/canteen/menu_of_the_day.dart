@@ -7,41 +7,36 @@ import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MenuOfTheDay extends StatelessWidget {
+class MenuOfTheDay extends StatefulWidget {
   const MenuOfTheDay(this.dayIndex, {super.key});
   final int dayIndex;
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => DishesOfTheDay()..setDayIndex(dayIndex),
-      child: const _MenuContent(),
-    );
-  }
+  State<MenuOfTheDay> createState() => _MenuOfTheDayState();
 }
 
-class _MenuContent extends StatelessWidget {
-  const _MenuContent();
+class _MenuOfTheDayState extends State<MenuOfTheDay> {
+  Future<Jidelnicek>? _futureMenu;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch the data in initState to avoid context issues
+    _futureMenu = loggedInCanteen.getLunchesForDay(convertIndexToDatetime(widget.dayIndex));
+    _futureMenu!.then((menu) {
+      if (mounted) context.read<DishesOfTheDay>().setMenu(widget.dayIndex, menu);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DishesOfTheDay>(
-      builder: (context, data, child) {
-        return FutureBuilder(
-          future: loggedInCanteen.getLunchesForDay(convertIndexToDatetime(data.dayIndex)),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) return const ErrorLoadingData();
+    return FutureBuilder(
+      future: _futureMenu,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) return const ErrorLoadingData();
+        if (snapshot.connectionState == ConnectionState.done) return DishList(widget.dayIndex);
 
-            if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-
-            // Check if widget is still in tree
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              data.setMenu(snapshot.data as Jidelnicek);
-            });
-
-            return const DishList();
-          },
-        );
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

@@ -205,21 +205,22 @@ class NotificationPreferences with ChangeNotifier {
 }
 
 class DishesOfTheDay with ChangeNotifier {
-  Jidelnicek _menu = Jidelnicek(DateTime.now(), []);
-  int _dayIndex = 0;
+  Map<int, Jidelnicek> _menus = {}; // Store menus by day index
+  int _dayIndex = DateTime.now().difference(minimalDate).inDays; // Store day index separately if needed
 
-  Jidelnicek get menu => _menu;
+  Jidelnicek? getMenu(int dayIndex) => _menus[dayIndex];
 
   int get dayIndex => _dayIndex;
 
-  void setMenu(Jidelnicek menu) {
-    if (menu == _menu) return;
-    _menu = menu;
+  void setMenu(int dayIndex, Jidelnicek menu) {
+    if (_menus[dayIndex] == menu) return;
+    _menus.update(dayIndex, (_) => menu, ifAbsent: () => menu);
+    _menus = Map.from(_menus);
     notifyListeners();
   }
 
   void setDayIndex(int dayIndex) {
-    if (dayIndex == _dayIndex) return;
+    if (_dayIndex == dayIndex) return;
     _dayIndex = dayIndex;
     notifyListeners();
   }

@@ -10,15 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DishList extends StatelessWidget {
-  const DishList({super.key});
+  const DishList(this.dayIndex, {super.key});
+  final int dayIndex;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: portableSoftRefresh,
-      child: Selector<DishesOfTheDay, ({Jidelnicek read, void Function(Jidelnicek) set})>(
-        selector: (_, p1) => (read: p1.menu, set: p1.setMenu),
-        builder: (_, menu, child) {
-          List<Jidlo> dishList = menu.read.jidla;
+      child: Consumer<DishesOfTheDay>(
+        builder: (_, data, child) {
+          Jidelnicek? menu = data.getMenu(dayIndex);
+          if (menu == null) return const Center(child: CircularProgressIndicator());
+          List<Jidlo> dishList = menu.jidla;
 
           // Second layer fix pro api returning garbage when switching orders
           try {
@@ -26,7 +29,7 @@ class DishList extends StatelessWidget {
               Future.delayed(const Duration(milliseconds: 300)).then((_) async {
                 Jidelnicek jidelnicekNovy = (await loggedInCanteen.getLunchesForDay(dateListener.value, requireNew: true));
                 if (dishList.length < jidelnicekNovy.jidla.length) {
-                  menu.set(jidelnicekNovy);
+                  WidgetsBinding.instance.addPostFrameCallback((_) => data.setMenu(dayIndex, jidelnicekNovy));
                 }
               });
             }
@@ -34,10 +37,7 @@ class DishList extends StatelessWidget {
             // We're fine if it fails. Something else will scream instead
           }
 
-          if (dishList.isEmpty) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {});
-            return child!;
-          }
+          if (dishList.isEmpty) return child!;
 
           return ListView.builder(
             itemCount: dishList.length,

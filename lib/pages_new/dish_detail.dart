@@ -1,4 +1,5 @@
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/shared_widgets/canteen/order_dish_button.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,10 @@ class DishDetail extends StatelessWidget {
           if (courses.piti != null && courses.piti!.trim().isNotEmpty) categoryDetail(lang.drinks, content: courses.piti!),
           if (courses.ostatni != null && courses.ostatni!.trim().isNotEmpty) categoryDetail(lang.other, content: courses.ostatni!),
           if (dish.alergeny.isNotEmpty) categoryDetail(lang.allergens, allergens: dish.alergeny),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            child: OrderDishButton(dish),
+          )
         ],
       ),
     );

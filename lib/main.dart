@@ -195,13 +195,13 @@ class _MyAppState extends State<MyApp> {
     // Setting up providers
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<Settings>(create: (_) => Settings()),
+        ChangeNotifierProvider<Settings>(create: (_) => Settings()..loadFromShraredPreferences()),
         ChangeNotifierProvider<NotificationPreferences>(create: (_) => NotificationPreferences()),
         ChangeNotifierProvider<Ordering>(create: (_) => Ordering()),
+        ChangeNotifierProvider<DishesOfTheDay>(create: (_) => DishesOfTheDay())
       ],
       builder: (context, __) {
         appearanceMigration(context);
-        context.read<Settings>().loadFromShraredPreferences();
 
         // Rebuilds when themeMode, themeStyle or isPureBlack is changed
         return Selector<Settings, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
