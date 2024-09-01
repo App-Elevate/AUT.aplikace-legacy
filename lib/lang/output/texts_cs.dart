@@ -261,7 +261,8 @@ class TextsCs extends Texts {
   String get settingsDataCollection => 'Shromažďování údajů';
 
   @override
-  String get settingsStopDataCollection => 'Sledování analytických služeb';
+  String get settingsStopDataCollection =>
+      'Zastavit sledování analytických služeb';
 
   @override
   String get settingsDataCollectionDescription_1 =>

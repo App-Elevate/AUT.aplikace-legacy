@@ -556,7 +556,7 @@ abstract class Texts {
   /// No description provided for @settingsStopDataCollection.
   ///
   /// In cs, this message translates to:
-  /// **'Sledování analytických služeb'**
+  /// **'Zastavit sledování analytických služeb'**
   String get settingsStopDataCollection;
 
   /// No description provided for @settingsDataCollectionDescription_1.

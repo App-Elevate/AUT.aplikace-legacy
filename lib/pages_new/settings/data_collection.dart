@@ -24,7 +24,7 @@ class DataCollectionScreen extends StatelessWidget {
         children: [
           SectionTitle(lang.settingsDataCollection),
           Selector<Settings, ({bool read, void Function(bool) set})>(
-            selector: (_, p1) => (read: p1.analytics, set: p1.setAnalytics),
+            selector: (_, p1) => (read: p1.disableAnalytics, set: p1.setAnalytics),
             builder: (_, data, ___) {
               return SwitchListTile(
                 title: Text(lang.settingsStopDataCollection),

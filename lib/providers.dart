@@ -18,11 +18,13 @@ import 'package:flutter/material.dart';
 ///
 /// [bigCalendarMarkers]    | If true, displays big markers in calendar
 ///
-/// [getSkipWeekends]          | If true, doesnt display or skips weekends in Canteen menu
+/// [getSkipWeekends]       | If true, doesnt display or skips weekends in Canteen menu
 ///
 /// [dateFormat]            | Date Format used in the app
 ///
 /// [relTimeStamps]         | If true, displays "today" instead of 1.1.2024
+///
+/// [disableAnalytics]      | If true, disables analytics
 class Settings with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
   ThemeMode _themeMode = ThemeMode.system;
@@ -33,7 +35,7 @@ class Settings with ChangeNotifier {
   bool _skipWeekends = false;
   DateFormatOptions _dateFormat = DateFormatOptions.dMy;
   bool _relTimeStamps = false;
-  bool _analytics = true;
+  bool _disableAnalytics = false;
 
   /// Theme style getter
   ThemeStyle get themeStyle => _themeStyle;
@@ -63,7 +65,7 @@ class Settings with ChangeNotifier {
   bool get relTimeStamps => _relTimeStamps;
 
   /// Analytics getter
-  bool get analytics => _analytics;
+  bool get disableAnalytics => _disableAnalytics;
 
   /// Loads settings from shared preferences
   void loadFromShraredPreferences() async {
@@ -76,7 +78,7 @@ class Settings with ChangeNotifier {
     _skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? _skipWeekends;
     _dateFormat = await readEnumFromSharedPreferences(SharedPrefsKeys.dateFormat, DateFormatOptions.values, _dateFormat);
     _relTimeStamps = await readBoolFromSharedPreferences(SharedPrefsKeys.relTimeStamps) ?? _relTimeStamps;
-    _analytics = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics) ?? _analytics;
+    _disableAnalytics = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics) ?? _disableAnalytics;
     notifyListeners();
   }
 
@@ -145,10 +147,11 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAnalytics(bool collecting) {
-    _analytics = collecting;
-    analyticsEnabledGlobally = collecting;
-    saveBoolToSharedPreferences(SharedPrefsKeys.analytics, _analytics);
+  /// Setter for analytics
+  void setAnalytics(bool disabled) {
+    _disableAnalytics = disabled;
+    analyticsEnabledGlobally = disabled;
+    saveBoolToSharedPreferences(SharedPrefsKeys.analytics, _disableAnalytics);
     notifyListeners();
   }
 }
