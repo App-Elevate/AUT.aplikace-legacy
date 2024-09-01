@@ -12,7 +12,7 @@ class DateFormatPickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<AppearancePreferences, ({DateFormatOptions read})>(
+    return Selector<Settings, ({DateFormatOptions read})>(
       selector: (_, p1) => (read: p1.dateFormat),
       builder: (context, dateFormat, child) => ListTile(
         title: Text(lang.dateFormat),
@@ -30,7 +30,7 @@ class DateFormatPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConfiguredAlertDialog(
       title: "Date Format",
-      content: Selector<AppearancePreferences, ({DateFormatOptions read, Function(DateFormatOptions) set})>(
+      content: Selector<Settings, ({DateFormatOptions read, Function(DateFormatOptions) set})>(
         selector: (_, p1) => (read: p1.dateFormat, set: p1.setDateFormat),
         builder: (context, dateFormat, child) => SingleChildScrollView(
           child: Column(

@@ -75,7 +75,7 @@ class DayCardheader extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 8),
-          child: Selector<AppearancePreferences, DateFormatOptions>(
+          child: Selector<Settings, DateFormatOptions>(
             selector: (p0, p1) => p1.dateFormat,
             builder: (context, format, ___) {
               String day = DateFormat('EEEE', Localizations.localeOf(context).toLanguageTag()).format(date).capitalize();

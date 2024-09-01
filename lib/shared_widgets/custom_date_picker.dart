@@ -15,7 +15,7 @@ import 'package:table_calendar/table_calendar.dart';
 showCustomDatePicker(BuildContext context, DateTime currentDate) {
   ValueNotifier<DateTime> focusedDateNotifier = ValueNotifier<DateTime>(currentDate);
   List<DateTime> orderedFoodDays = [];
-  bool bigMarkersEnabled = context.read<AppearancePreferences>().bigCalendarMarkers;
+  bool bigMarkersEnabled = context.read<Settings>().bigCalendarMarkers;
   ColorScheme colorScheme = Theme.of(context).colorScheme;
   String locale = Localizations.localeOf(context).toLanguageTag();
   configuredDialog(

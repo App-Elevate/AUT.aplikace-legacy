@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 /// [dateFormat]            | Date Format used in the app
 ///
 /// [relTimeStamps]         | If true, displays "today" instead of 1.1.2024
-class AppearancePreferences with ChangeNotifier {
+class Settings with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
   ThemeMode _themeMode = ThemeMode.system;
   TabletUi _tabletUi = TabletUi.auto;

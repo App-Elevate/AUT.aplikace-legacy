@@ -12,7 +12,7 @@ class TabletUiButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<AppearancePreferences, ({TabletUi read})>(
+    return Selector<Settings, ({TabletUi read})>(
       selector: (_, p1) => (read: p1.tabletUi),
       builder: (context, tabletUi, child) => ListTile(
         title: Text(lang.tabletUi),
@@ -30,7 +30,7 @@ class TabletUiPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConfiguredAlertDialog(
       title: lang.tabletUi,
-      content: Selector<AppearancePreferences, ({TabletUi read, Function(TabletUi) set})>(
+      content: Selector<Settings, ({TabletUi read, Function(TabletUi) set})>(
         selector: (_, p1) => (read: p1.tabletUi, set: p1.setTabletUi),
         builder: (context, tabletUi, child) => SingleChildScrollView(
           child: Column(

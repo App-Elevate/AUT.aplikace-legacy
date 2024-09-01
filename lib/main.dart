@@ -195,15 +195,15 @@ class _MyAppState extends State<MyApp> {
     // Setting up providers
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AppearancePreferences>(create: (context) => AppearancePreferences()),
+        ChangeNotifierProvider<Settings>(create: (context) => Settings()),
         ChangeNotifierProvider<NotificationPreferences>(create: (context) => NotificationPreferences()),
       ],
       builder: (context, __) {
         appearanceMigration(context);
-        context.read<AppearancePreferences>().loadFromShraredPreferences();
+        context.read<Settings>().loadFromShraredPreferences();
 
         // Rebuilds when themeMode, themeStyle or isPureBlack is changed
-        return Selector<AppearancePreferences, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
+        return Selector<Settings, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
           selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
           builder: (context, theme, ___) {
             return MaterialApp(
@@ -309,7 +309,7 @@ class _MyAppState extends State<MyApp> {
               themeStyle = ThemeStyle.defaultStyle;
           }
           pureBlack = data[2] == "1";
-          AppearancePreferences userPreferences = context.read<AppearancePreferences>();
+          Settings userPreferences = context.read<Settings>();
           userPreferences.setThemeMode(themeMode);
           userPreferences.setThemeStyle(themeStyle);
           userPreferences.setPureBlack(pureBlack);

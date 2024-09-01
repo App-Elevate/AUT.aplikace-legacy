@@ -3,9 +3,9 @@ import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/settings/appearance.dart';
 import 'package:autojidelna/pages_new/settings/convenience.dart';
 import 'package:autojidelna/pages_new/settings/data_collection.dart';
-import 'package:autojidelna/pages_new/settings/notifications.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -31,7 +31,7 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.edit_notifications_outlined),
             title: Text(lang.notifications),
-            onTap: () async => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotificationScreen())),
+            onTap: () async => AwesomeNotifications().showNotificationConfigPage(),
           ),
           ListTile(
             leading: const Icon(Icons.cookie_outlined),

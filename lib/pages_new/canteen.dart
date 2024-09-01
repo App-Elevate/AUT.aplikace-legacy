@@ -28,7 +28,7 @@ class CanteenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<AppearancePreferences, bool>(
+    return Selector<Settings, bool>(
       selector: (_, p1) => p1.isListUi,
       builder: (context, data, child) => data ? const ListViewCanteen() : const PageViewCanteen(),
     );

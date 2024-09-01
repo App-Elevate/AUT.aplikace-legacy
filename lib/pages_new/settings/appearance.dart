@@ -15,7 +15,7 @@ class AppearanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLightMode = context.select<AppearancePreferences, ThemeMode>((value) => value.themeMode) == ThemeMode.light;
+    final bool isLightMode = context.select<Settings, ThemeMode>((value) => value.themeMode) == ThemeMode.light;
     final bool isBright = MediaQuery.platformBrightnessOf(context) == Brightness.light || isLightMode;
 
     return Scaffold(
@@ -31,7 +31,7 @@ class AppearanceScreen extends StatelessWidget {
           const ThemeStylePicker(),
           const CustomDivider(height: 30),
           // pure black mode switch
-          Selector<AppearancePreferences, ({bool read, Function(bool) set})>(
+          Selector<Settings, ({bool read, Function(bool) set})>(
             selector: (_, p1) => (read: p1.isPureBlack, set: p1.setPureBlack),
             builder: (context, pureBlack, child) => SwitchListTile(
               title: Text(lang.settingsAmoled),
@@ -42,7 +42,7 @@ class AppearanceScreen extends StatelessWidget {
           ),
           SectionTitle(lang.settingsDisplay),
           // TODO: const TabletUiButton(),
-          Selector<AppearancePreferences, ({bool read, Function(bool) set, DateFormatOptions format})>(
+          Selector<Settings, ({bool read, Function(bool) set, DateFormatOptions format})>(
             selector: (_, p1) => (read: p1.relTimeStamps, set: p1.setRelTimeStamps, format: p1.dateFormat),
             builder: (context, relTimeStamps, child) => SwitchListTile(
               title: Text(lang.settingsRelativeTimestamps),
