@@ -15,6 +15,7 @@ late Canteen canteen;
 
 void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
   DishesOfTheDay prov = context.read<DishesOfTheDay>();
+  bool ordering = context.read<Ordering>().ordering;
   DateTime day = convertIndexToDatetime(prov.dayIndex);
   int dishIndex = prov.menu.jidla.indexOf(dish);
 
@@ -27,16 +28,16 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
 
   void errorOrderingDish() {
     snackBarMessage(lang.errorsObjednavaniJidla);
-    prov.setOrdering(false);
+    ordering = false;
   }
 
-  if (prov.ordering) return;
+  if (ordering) return;
   if (!await InternetConnectionChecker().hasConnection) {
     errorOrderingDish();
     return;
   }
 
-  prov.setOrdering(true);
+  ordering = true;
 
   try {
     canteen = await loggedInCanteen.canteenInstance;
@@ -165,10 +166,10 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
   } catch (e) {
     snackBarMessage(lang.errorsObjednavaniJidla);
   } finally {
-    prov.setOrdering(false);
+    ordering = false;
   }
 
-  prov.setOrdering(false);
+  ordering = false;
 }
 
 void cannotBeOrderedFix(BuildContext context, int dayIndex) async {

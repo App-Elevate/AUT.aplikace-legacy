@@ -204,14 +204,11 @@ class NotificationPreferences with ChangeNotifier {
   }
 }
 
-class DishesOfTheDay extends ChangeNotifier {
+class DishesOfTheDay with ChangeNotifier {
   Jidelnicek _menu = Jidelnicek(DateTime.now(), []);
-  bool _ordering = false;
   int _dayIndex = 0;
 
   Jidelnicek get menu => _menu;
-
-  bool get ordering => _ordering;
 
   int get dayIndex => _dayIndex;
 
@@ -221,15 +218,21 @@ class DishesOfTheDay extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setOrdering(bool ordering) {
-    if (ordering == _ordering) return;
-    _ordering = ordering;
-    notifyListeners();
-  }
-
   void setDayIndex(int dayIndex) {
     if (dayIndex == _dayIndex) return;
     _dayIndex = dayIndex;
+    notifyListeners();
+  }
+}
+
+class Ordering with ChangeNotifier {
+  bool _ordering = false;
+
+  bool get ordering => _ordering;
+
+  set ordering(bool ordering) {
+    if (_ordering == ordering) return;
+    _ordering = ordering;
     notifyListeners();
   }
 }

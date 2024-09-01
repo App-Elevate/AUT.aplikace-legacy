@@ -195,8 +195,9 @@ class _MyAppState extends State<MyApp> {
     // Setting up providers
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<Settings>(create: (context) => Settings()),
-        ChangeNotifierProvider<NotificationPreferences>(create: (context) => NotificationPreferences()),
+        ChangeNotifierProvider<Settings>(create: (_) => Settings()),
+        ChangeNotifierProvider<NotificationPreferences>(create: (_) => NotificationPreferences()),
+        ChangeNotifierProvider<Ordering>(create: (_) => Ordering()),
       ],
       builder: (context, __) {
         appearanceMigration(context);
