@@ -10,3 +10,5 @@ DateTime convertIndexToDatetime(int index) {
   }
   return newDate;
 }
+
+int convertDateTimeToIndex(DateTime date) => minimalDate.difference(date).inDays.abs();
