@@ -11,7 +11,7 @@ class ListViewCanteen extends StatelessWidget {
     return ScrollablePositionedList.builder(
       itemScrollController: itemScrollController,
       initialScrollIndex: convertDateTimeToIndex(DateTime.now()),
-      itemCount: minimalDate.difference(DateTime.now().add(const Duration(days: 2 * 365))).inDays.abs(),
+      itemCount: minimalDate.difference(maximalDate).inDays.abs(),
       itemBuilder: (context, index) => DayCard(index),
     );
   }

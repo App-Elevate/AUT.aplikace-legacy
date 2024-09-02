@@ -18,7 +18,8 @@ FirebaseAnalytics? analytics;
 
 late void Function(Widget widget) setHomeWidgetPublic;
 
-final DateTime minimalDate = DateTime(2006, 5, 23);
+final DateTime minimalDate = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
+final DateTime maximalDate = DateTime(DateTime.now().year, DateTime.now().month + 2, 0);
 
 ///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
 late final ValueNotifier<DateTime> dateListener;

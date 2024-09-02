@@ -57,7 +57,7 @@ showCustomDatePicker(BuildContext context, DateTime currentDate) {
                   focusedDay: currentDate,
                   currentDay: DateTime.now(),
                   firstDay: minimalDate,
-                  lastDay: currentDate.add(const Duration(days: 365 * 2)),
+                  lastDay: maximalDate,
                   selectedDayPredicate: (day) => isSameDay(currentDate, day),
                   onDaySelected: (selectedDay, focusedDay) {
                     focusedDateNotifier.value = selectedDay;
