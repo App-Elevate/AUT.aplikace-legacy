@@ -79,9 +79,8 @@ void changeDateTillSuccess(int index) async {
 ///daysChange - animates the change of date by the number of days
 ///index - changes the date by the index of the page
 void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateToPage, int overflow = 0}) {
-  if (overflow > 5) {
-    return;
-  }
+  if (overflow > 5) return;
+
   if (newDate != null && animateToPage != null && animateToPage) {
     loggedInCanteen.smartPreIndexing(newDate);
     dateListener.value = newDate;
@@ -93,14 +92,14 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
               .animateToPage(
                 newDate.difference(minimalDate).inDays,
                 duration: const Duration(milliseconds: 150),
-                curve: Curves.linear,
+                curve: Curves.easeIn,
               )
               .then((value) => animating = false)
           : itemScrollController
               .scrollTo(
                 index: newDate.difference(minimalDate).inDays,
                 duration: const Duration(milliseconds: 300),
-                curve: Curves.linear,
+                curve: Curves.easeIn,
               )
               .then((value) => animating = false);
     } catch (e) {
@@ -117,13 +116,13 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
         ? pageviewController.animateToPage(
             newDate.difference(minimalDate).inDays,
             duration: const Duration(milliseconds: 150),
-            curve: Curves.linear,
+            curve: Curves.easeIn,
           )
         : itemScrollController
             .scrollTo(
               index: newDate.difference(minimalDate).inDays,
               duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
+              curve: Curves.easeIn,
             )
             .then((value) => animating = false);
   } else if (index != null) {
@@ -150,14 +149,14 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
                 .animateToPage(
                   index,
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear,
+                  curve: Curves.easeIn,
                 )
                 .then((value) => animating = false)
             : itemScrollController
                 .scrollTo(
                   index: index,
                   duration: const Duration(milliseconds: 300),
-                  curve: Curves.linear,
+                  curve: Curves.easeIn,
                 )
                 .then((value) => animating = false);
       } catch (e) {
