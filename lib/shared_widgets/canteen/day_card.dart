@@ -63,7 +63,7 @@ class _DayCard extends StatelessWidget {
         Map<String, List<Jidlo>> sortedDishes = mapDishesByVarianta(menu.jidla);
         return Card.outlined(
           elevation: 0.6,
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.onInverseSurface,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: Theme.of(context).dividerTheme.color!)),
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
