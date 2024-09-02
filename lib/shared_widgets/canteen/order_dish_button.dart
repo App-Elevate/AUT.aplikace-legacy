@@ -13,9 +13,8 @@ class OrderDishButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
-      child: Selector<Ordering, bool>(
-        selector: (_, p1) => p1.ordering,
-        builder: (context, ordering, ___) {
+      child: Consumer<Ordering>(
+        builder: (context, prov, ___) {
           ColorScheme colorScheme = Theme.of(context).colorScheme;
           StavJidla stavJidla = getStavJidla(dish);
           bool isPrimary = getPrimaryState(stavJidla);
@@ -25,7 +24,7 @@ class OrderDishButton extends StatelessWidget {
               backgroundColor: isPrimary ? colorScheme.primary : colorScheme.secondary,
               foregroundColor: isPrimary ? colorScheme.onPrimary : colorScheme.onSecondary,
             ),
-            onPressed: ordering || !isButtonEnabled(stavJidla) ? null : () => pressed(context, dish, stavJidla),
+            onPressed: prov.ordering || !isButtonEnabled(stavJidla) ? null : () => pressed(context, dish, stavJidla),
             child: Text(getObedText(context, dish, stavJidla)),
           );
         },

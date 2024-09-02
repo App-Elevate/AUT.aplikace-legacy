@@ -43,17 +43,17 @@ class _DishListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     StavJidla stav = getStavJidla(dish);
 
-    return Selector<Ordering, bool>(
-      selector: (_, p1) => p1.ordering,
-      builder: (context, ordering, _) => ListTile(
-        enabled: dish.lzeObjednat || dish.objednano,
+    return Consumer<Ordering>(
+      builder: (context, prov, _) => ListTile(
+        enabled: !prov.ordering && (dish.lzeObjednat || dish.objednano),
+        selected: dish.objednano,
         visualDensity: VisualDensity.compact,
         contentPadding: EdgeInsets.zero,
         titleTextStyle: Theme.of(context).textTheme.bodyMedium,
         leading: Radio<bool>(
           value: dish.objednano,
           groupValue: true,
-          onChanged: ordering || !isButtonEnabled(stav) ? null : (_) => pressed(context, dish, stav),
+          onChanged: prov.ordering || !isButtonEnabled(stav) ? null : (_) => pressed(context, dish, stav),
           activeColor: Theme.of(context).colorScheme.primary,
         ),
         title: Text(title),
