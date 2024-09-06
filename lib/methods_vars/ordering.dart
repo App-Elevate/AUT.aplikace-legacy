@@ -14,162 +14,156 @@ import 'package:provider/provider.dart';
 late Canteen canteen;
 
 void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
-  DishesOfTheDay prov = context.read<DishesOfTheDay>();
+  final prov = context.read<DishesOfTheDay>();
   Ordering ordering = context.read<Ordering>();
   DateTime day = dish.den;
   int dishIndex = prov.getMenu(convertDateTimeToIndex(day))!.jidla.indexOf(dish);
-
   void updateJidelnicek(Jidelnicek jidelnicek) {
     Jidelnicek menu = prov.getMenu(convertDateTimeToIndex(day))!;
     prov.setMenu(convertDateTimeToIndex(day), jidelnicek);
-    loggedInCanteen.canteenDataUnsafe!.jidelnicky[menu.den] = menu;
-    loggedInCanteen.canteenDataUnsafe!.pocetJidel[menu.den] = menu.jidla.length;
-  }
-
-  void errorOrderingDish() {
-    snackBarMessage(lang.errorsObjednavaniJidla);
-    ordering.ordering = false;
+    loggedInCanteen.canteenDataUnsafe!.jidelnicky[day] = menu;
+    loggedInCanteen.canteenDataUnsafe!.pocetJidel[day] = menu.jidla.length;
   }
 
   if (ordering.ordering) return;
   if (!await InternetConnectionChecker().hasConnection) {
-    errorOrderingDish();
+    snackBarMessage(lang.errorsObjednavaniJidla);
     return;
   }
 
   ordering.ordering = true;
-
   try {
     canteen = await loggedInCanteen.canteenInstance;
   } catch (e) {
-    errorOrderingDish();
+    snackBarMessage(lang.errorsObjednavaniJidla);
     return;
   }
-
   Jidlo jidloSafe;
   try {
     jidloSafe = (await loggedInCanteen.getLunchesForDay(day, requireNew: true)).jidla[dishIndex];
   } catch (e) {
-    errorOrderingDish();
+    snackBarMessage(lang.errorsObjednavaniJidla);
+    if (context.mounted) ordering.ordering = false;
+
     return;
   }
-
-  Future<Jidelnicek> retryObjednavka(Jidelnicek jidelnicek, int dishIndex, DateTime day) async {
-    jidelnicek = await loggedInCanteen.getLunchesForDay(day, requireNew: true);
-    return await canteen.objednat(jidelnicek.jidla[dishIndex]);
-  }
-
-  Future<Jidelnicek> retryDoBurzy(Jidelnicek jidelnicek, int dishIndex, DateTime day) async {
-    jidelnicek = await loggedInCanteen.getLunchesForDay(day, requireNew: true);
-    return await canteen.doBurzy(jidelnicek.jidla[dishIndex]);
-  }
-
-  Future<void> handleBurzaOrder(Burza jidloNaBurze, int dishIndex) async {
-    Jidelnicek jidelnicek = await canteen.objednatZBurzy(jidloNaBurze);
-    if (!jidelnicek.jidla[dishIndex].objednano) {
-      jidelnicek = await retryObjednavka(jidelnicek, dishIndex, jidloNaBurze.den);
-    }
-    updateJidelnicek(jidelnicek);
-    loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
-  }
-
-  Future<void> processNeobjednano(Jidlo jidloSafe, int dishIndex, DateTime day) async {
-    Jidelnicek jidelnicek = await canteen.objednat(jidloSafe);
-    if (!jidelnicek.jidla[dishIndex].objednano) {
-      jidelnicek = await retryObjednavka(jidelnicek, dishIndex, day);
-    }
-    updateJidelnicek(jidelnicek);
-    loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
-  }
-
-  Future<void> processDostupneNaBurze(Jidlo jidloSafe, int dishIndex) async {
-    bool foundOnBurza = false;
-    for (var jidloNaBurze in (await loggedInCanteen.canteenData).jidlaNaBurze) {
-      if (jidloNaBurze.den == jidloSafe.den && jidloNaBurze.varianta == jidloSafe.varianta) {
-        foundOnBurza = true;
-        await handleBurzaOrder(jidloNaBurze, dishIndex);
+  switch (stavJidla) {
+    case StavJidla.neobjednano:
+      {
+        try {
+          Jidelnicek jidelnicek = await canteen.objednat(jidloSafe);
+          if (jidelnicek.jidla[dishIndex].objednano == false) {
+            jidelnicek = await loggedInCanteen.getLunchesForDay(day, requireNew: true);
+            jidelnicek = await canteen.objednat(jidelnicek.jidla[dishIndex]);
+          }
+          updateJidelnicek(jidelnicek);
+          loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
+        } catch (e) {
+          snackBarMessage(lang.errorsObjednavaniJidla);
+        }
       }
-    }
-    if (!foundOnBurza) {
-      snackBarMessage(lang.errorsJidloNeniNaBurze);
-    }
-  }
-
-  Future<void> processObjednanoNelzeOdebrat(Jidlo jidloSafe, int dishIndex, DateTime day) async {
-    Jidelnicek jidelnicek = await canteen.doBurzy(jidloSafe);
-    if (!jidelnicek.jidla[dishIndex].naBurze) {
-      jidelnicek = await retryDoBurzy(jidelnicek, dishIndex, day);
-    }
-    updateJidelnicek(jidelnicek);
-  }
-
-  void processNedostupne(Jidlo jidloSafe, DateTime day) {
-    if (day.isBefore(DateTime.now())) {
-      snackBarMessage(lang.errorsNelzeObjednat);
-      return;
-    }
-    if (loggedInCanteen.uzivatel!.kredit < jidloSafe.cena!) {
-      snackBarMessage(lang.errorsNelzeObjednatKredit);
-      return;
-    }
-    snackBarMessage(lang.errorsNelzeObjednat);
-  }
-
-  Future<void> processObjednano(Jidlo jidloSafe, int dishIndex, DateTime day) async {
-    try {
-      Jidelnicek jidelnicek = await canteen.objednat(jidloSafe);
-      if (jidelnicek.jidla[dishIndex].objednano) {
-        jidelnicek = await retryObjednavka(jidelnicek, dishIndex, day);
+      break;
+    case StavJidla.dostupneNaBurze:
+      {
+        try {
+          String varianta = jidloSafe.varianta;
+          DateTime den = jidloSafe.den;
+          bool nalezenoJidloNaBurze = false;
+          for (var jidloNaBurze in (await loggedInCanteen.canteenData).jidlaNaBurze) {
+            if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
+              try {
+                // first try
+                Jidelnicek jidelnicek = await canteen.objednatZBurzy(jidloNaBurze);
+                if (jidelnicek.jidla[dishIndex].objednano == false) {
+                  List<Burza> burza = await canteen.ziskatBurzu();
+                  for (var jidloNaBurze in burza) {
+                    if (jidloNaBurze.den == den && jidloNaBurze.varianta == varianta) {
+                      // second try
+                      jidelnicek = await canteen.objednatZBurzy(jidloNaBurze);
+                    }
+                  }
+                }
+                updateJidelnicek(jidelnicek);
+                loggedInCanteen.pridatStatistiku(TypStatistiky.objednavka);
+              } catch (e) {
+                snackBarMessage(lang.errorsObjednavaniJidla);
+              }
+            }
+          }
+          if (nalezenoJidloNaBurze == false) {
+            snackBarMessage(lang.errorsJidloNeniNaBurze);
+          }
+        } catch (e) {
+          snackBarMessage(lang.errorsObjednavaniJidla);
+        }
       }
-      updateJidelnicek(jidelnicek);
-    } catch (e) {
-      snackBarMessage(lang.errorsChybaPriRuseni);
-    }
-  }
-
-  Future<void> processNaBurze(Jidlo jidloSafe, int dishIndex, DateTime day) async {
-    try {
-      Jidelnicek jidelnicek = await canteen.doBurzy(jidloSafe);
-      if (jidelnicek.jidla[dishIndex].naBurze) {
-        jidelnicek = await retryDoBurzy(jidelnicek, dishIndex, day);
-        updateJidelnicek(jidelnicek);
-      }
-    } catch (e) {
-      snackBarMessage(lang.errorsChybaPriDavaniNaBurzu);
-    }
-  }
-
-  try {
-    switch (stavJidla) {
-      case StavJidla.neobjednano:
-        await processNeobjednano(jidloSafe, dishIndex, day);
-        break;
-      case StavJidla.dostupneNaBurze:
-        await processDostupneNaBurze(jidloSafe, dishIndex);
-        break;
-      case StavJidla.objednanoNelzeOdebrat:
-        await processObjednanoNelzeOdebrat(jidloSafe, dishIndex, day);
-        break;
-      case StavJidla.nedostupne:
-        processNedostupne(jidloSafe, day);
-        break;
-      case StavJidla.objednano:
-        await processObjednano(jidloSafe, dishIndex, day);
-        break;
-      case StavJidla.naBurze:
-        await processNaBurze(jidloSafe, dishIndex, day);
-        break;
-      case StavJidla.objednanoVyprsenaPlatnost:
+      break;
+    case StavJidla.objednanoVyprsenaPlatnost:
+      {
         snackBarMessage(lang.errorsObedNelzeZrusit);
-        break;
-    }
-  } catch (e) {
-    snackBarMessage(lang.errorsObjednavaniJidla);
-  } finally {
-    ordering.ordering = false;
+      }
+      break;
+    case StavJidla.objednanoNelzeOdebrat:
+      {
+        try {
+          Jidelnicek jidelnicek = await canteen.doBurzy(jidloSafe);
+          if (jidelnicek.jidla[dishIndex].naBurze == false) {
+            jidelnicek = await loggedInCanteen.getLunchesForDay(day, requireNew: true);
+            jidelnicek = await canteen.doBurzy(jidelnicek.jidla[dishIndex]);
+          }
+          updateJidelnicek(jidelnicek);
+        } catch (e) {
+          snackBarMessage(lang.errorsObjednavaniJidla);
+        }
+      }
+      break;
+    case StavJidla.nedostupne:
+      {
+        if (day.isBefore(DateTime.now())) {
+          snackBarMessage(lang.errorsNelzeObjednat);
+          break;
+        }
+        try {
+          if (loggedInCanteen.uzivatel!.kredit < jidloSafe.cena!) {
+            snackBarMessage(lang.errorsNelzeObjednatKredit);
+            break;
+          }
+        } catch (e) {
+          //pokud se nepodaří načíst kredit, tak to necháme být
+        }
+        snackBarMessage(lang.errorsNelzeObjednat);
+      }
+      break;
+    case StavJidla.objednano:
+      {
+        try {
+          Jidelnicek jidelnicek = await canteen.objednat(jidloSafe);
+          if (jidelnicek.jidla[dishIndex].objednano == true) {
+            jidelnicek = await loggedInCanteen.getLunchesForDay(day, requireNew: true);
+            jidelnicek = await canteen.objednat(jidelnicek.jidla[dishIndex]);
+          }
+          updateJidelnicek(jidelnicek);
+        } catch (e) {
+          snackBarMessage(lang.errorsChybaPriRuseni);
+        }
+      }
+      break;
+    case StavJidla.naBurze:
+      {
+        try {
+          Jidelnicek jidelnicek = await canteen.doBurzy(jidloSafe);
+          if (jidelnicek.jidla[dishIndex].naBurze == true) {
+            jidelnicek = await loggedInCanteen.getLunchesForDay(day, requireNew: true);
+            jidelnicek = await canteen.doBurzy(jidelnicek.jidla[dishIndex]);
+          }
+          updateJidelnicek(jidelnicek);
+        } catch (e) {
+          snackBarMessage(lang.errorsChybaPriDavaniNaBurzu);
+        }
+      }
+      break;
   }
-
-  ordering.ordering = false;
+  if (context.mounted) ordering.ordering = false;
 }
 
 void cannotBeOrderedFix(BuildContext context, int dayIndex) async {
@@ -226,7 +220,7 @@ bool isButtonEnabled(StavJidla stavJidla) {
 String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
   int dayIndex = convertDateTimeToIndex(dish.den);
   Jidelnicek menu = context.select<DishesOfTheDay, Jidelnicek>((data) => data.getMenu(dayIndex)!);
-  DateTime datumJidla = convertIndexToDatetime(dayIndex);
+  DateTime day = convertIndexToDatetime(dayIndex);
   switch (stavJidla) {
     case StavJidla.objednano:
       return lang.cancel;
@@ -244,11 +238,11 @@ String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
       try {
         bool jeVeDneDostupnyObed = false;
         int prvniIndex = -1;
-        for (int i = 0; i < loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla.length; i++) {
-          if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i].lzeObjednat ||
-              loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i].objednano ||
-              loggedInCanteen.jeJidloNaBurze(loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i]) ||
-              loggedInCanteen.canteenDataUnsafe!.jidelnicky[datumJidla]!.jidla[i].burzaUrl != null) {
+        for (int i = 0; i < loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla.length; i++) {
+          if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i].lzeObjednat ||
+              loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i].objednano ||
+              loggedInCanteen.jeJidloNaBurze(loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i]) ||
+              loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i].burzaUrl != null) {
             jeVeDneDostupnyObed = true;
             break;
           } else {
@@ -261,7 +255,7 @@ String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
 
         //hope it's not important
       }
-      if (loggedInCanteen.uzivatel!.kredit < dish.cena! && !datumJidla.isBefore(DateTime.now())) {
+      if (loggedInCanteen.uzivatel!.kredit < dish.cena! && !day.isBefore(DateTime.now())) {
         return lang.nedostatekKreditu;
       } else {
         return lang.nelzeObjednat;
