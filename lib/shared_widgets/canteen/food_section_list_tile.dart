@@ -1,4 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/methods_vars/datetime_wrapper.dart';
 import 'package:autojidelna/methods_vars/ordering.dart';
 import 'package:autojidelna/pages_new/dish_detail.dart';
 import 'package:autojidelna/providers.dart';
@@ -41,26 +42,34 @@ class _DishListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StavJidla stav = getStavJidla(dish);
+    return Consumer<DishesOfTheDay>(
+      builder: (context, data, ___) {
+        Jidelnicek? menu = data.getMenu(convertDateTimeToIndex(dish.den));
+        Jidlo updatedDish = menu!.jidla.where((e) => e.nazev == dish.nazev).first;
+        StavJidla stav = getStavJidla(updatedDish);
 
-    return Consumer<Ordering>(
-      builder: (context, prov, _) => ListTile(
-        enabled: !prov.ordering && (dish.lzeObjednat || dish.objednano),
-        selected: dish.objednano,
-        visualDensity: VisualDensity.compact,
-        contentPadding: EdgeInsets.zero,
-        titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-        leading: Radio<bool>(
-          value: dish.objednano,
-          groupValue: true,
-          onChanged: prov.ordering || !isButtonEnabled(stav) ? null : (_) => pressed(context, dish, stav),
-          activeColor: Theme.of(context).colorScheme.primary,
-        ),
-        title: Text(title),
-        subtitle:
-            dish.cena == null ? null : Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(dish.cena)),
-        trailing: _detailButton(context),
-      ),
+        return Consumer<Ordering>(
+          builder: (context, prov, ___) => ListTile(
+            enabled: !prov.ordering && (updatedDish.lzeObjednat || updatedDish.objednano),
+            selected: getPrimaryState(stav),
+            visualDensity: VisualDensity.compact,
+            contentPadding: EdgeInsets.zero,
+            titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+            leading: Radio<bool>(
+              toggleable: true,
+              value: getPrimaryState(stav),
+              groupValue: true,
+              onChanged: prov.ordering || !isButtonEnabled(stav) ? null : (_) => pressed(context, updatedDish, stav),
+              activeColor: Theme.of(context).colorScheme.primary,
+            ),
+            title: Text(title),
+            subtitle: updatedDish.cena == null
+                ? null
+                : Text(NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toLanguageTag()).format(updatedDish.cena)),
+            trailing: _detailButton(context),
+          ),
+        );
+      },
     );
   }
 
