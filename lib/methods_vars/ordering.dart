@@ -38,6 +38,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
     snackBarMessage(lang.errorsObjednavaniJidla);
     return;
   }
+
   Jidlo jidloSafe;
   try {
     jidloSafe = (await loggedInCanteen.getLunchesForDay(day, requireNew: true)).jidla[dishIndex];
@@ -47,6 +48,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
 
     return;
   }
+
   switch (stavJidla) {
     case StavJidla.neobjednano:
       {

@@ -29,7 +29,7 @@ class DateFormatPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ConfiguredAlertDialog(
-      title: "Date Format",
+      title: lang.dateFormat,
       content: Selector<Settings, ({DateFormatOptions read, Function(DateFormatOptions) set})>(
         selector: (_, p1) => (read: p1.dateFormat, set: p1.setDateFormat),
         builder: (context, dateFormat, child) => SingleChildScrollView(
