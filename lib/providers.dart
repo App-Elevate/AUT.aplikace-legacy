@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 /// [disableAnalytics]      | If true, disables analytics
 class Settings with ChangeNotifier {
   ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = ThemeMode.dark;
   TabletUi _tabletUi = TabletUi.auto;
   bool _isListUi = false;
   bool _isPureBlack = false;

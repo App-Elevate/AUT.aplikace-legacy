@@ -37,11 +37,12 @@ class MorePage extends StatelessWidget {
           title: Text(lang.account),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AccountScreen())),
         ),
+        /* TODO: make the page
         ListTile(
           leading: const Icon(Icons.analytics_outlined),
           title: Text(lang.statistics),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const StatisticsScreen())),
-        ),
+        ),*/
         const CustomDivider(isTransparent: false),
         ListTile(
           leading: const Icon(Icons.settings_outlined),
