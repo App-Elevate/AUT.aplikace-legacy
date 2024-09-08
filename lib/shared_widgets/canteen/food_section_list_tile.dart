@@ -2,7 +2,7 @@ import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/methods_vars/ordering.dart';
 import 'package:autojidelna/pages_new/dish_detail.dart';
 import 'package:autojidelna/providers.dart';
-import 'package:autojidelna/shared_widgets/canteen/burzaAlertDialog.dart';
+import 'package:autojidelna/shared_widgets/canteen/burza_alert_dialog.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
