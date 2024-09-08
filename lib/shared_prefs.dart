@@ -17,6 +17,7 @@ class SharedPrefsKeys {
   static get lowCredit => "LowCredit";
   static get weekLongFamine => "WeekLongFamine";
   static get analytics => "analytics";
+  static get hideBurzaAlertDialog => "hideBurzaAlertDialog";
 }
 
 void saveIntToSharedPreferences(String key, int value) async {

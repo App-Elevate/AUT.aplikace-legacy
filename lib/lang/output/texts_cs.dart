@@ -530,4 +530,11 @@ class TextsCs extends Texts {
     );
     return '$_temp0';
   }
+
+  @override
+  String get burzaAlertDialogContent =>
+      'Přidáváte jídlo na burzu. Peníze se Vám vrátí pouze v případě, že si jídlo objedná někdo jiný.';
+
+  @override
+  String get dontShowAgain => 'Příště nezobrazovat';
 }

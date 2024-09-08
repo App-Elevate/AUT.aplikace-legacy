@@ -38,6 +38,8 @@ int lastChangeDateIndex = 0;
 
 bool animating = false;
 
+bool hideBurzaAlertDialog = false;
+
 //index (jaký den)
 int? indexJidlaCoMaBytZobrazeno;
 //index (kolikáté jídlo ve dni)

@@ -125,6 +125,8 @@ void main() async {
   // Loading settings from preferences
   skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? false;
 
+  hideBurzaAlertDialog = await readBoolFromSharedPreferences(SharedPrefsKeys.hideBurzaAlertDialog) ?? false;
+
   // Skipping to next monday if we are currently on saturday or sunday
   // If not initializing normally
   if (skipWeekends) {

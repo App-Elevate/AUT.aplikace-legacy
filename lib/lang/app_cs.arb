@@ -286,5 +286,7 @@
         "example": "always"
       }
     }
-  }
+  },
+  "burzaAlertDialogContent": "Přidáváte jídlo na burzu. Peníze se Vám vrátí pouze v případě, že si jídlo objedná někdo jiný.",
+  "dontShowAgain": "Příště nezobrazovat"
 }

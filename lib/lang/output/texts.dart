@@ -978,6 +978,18 @@ abstract class Texts {
   /// In cs, this message translates to:
   /// **'{arg, select, other{error} auto{Automaticky} always{Vždy} landscape{Na šířku} never{Nikdy}}'**
   String tabletUiOptions(String arg);
+
+  /// No description provided for @burzaAlertDialogContent.
+  ///
+  /// In cs, this message translates to:
+  /// **'Přidáváte jídlo na burzu. Peníze se Vám vrátí pouze v případě, že si jídlo objedná někdo jiný.'**
+  String get burzaAlertDialogContent;
+
+  /// No description provided for @dontShowAgain.
+  ///
+  /// In cs, this message translates to:
+  /// **'Příště nezobrazovat'**
+  String get dontShowAgain;
 }
 
 class _TextsDelegate extends LocalizationsDelegate<Texts> {
