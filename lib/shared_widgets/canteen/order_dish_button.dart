@@ -1,6 +1,7 @@
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/methods_vars/ordering.dart';
 import 'package:autojidelna/providers.dart';
+import 'package:autojidelna/shared_widgets/canteen/burzaAlertDialog.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,13 +24,22 @@ class OrderDishButton extends StatelessWidget {
               ColorScheme colorScheme = Theme.of(context).colorScheme;
               StavJidla stavJidla = getStavJidla(updatedDish);
               bool isPrimary = getPrimaryState(stavJidla);
+              bool burzaColor = stavJidla == StavJidla.objednanoNelzeOdebrat;
 
               return ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isPrimary ? colorScheme.primary : colorScheme.secondary,
-                  foregroundColor: isPrimary ? colorScheme.onPrimary : colorScheme.onSecondary,
+                  backgroundColor: isPrimary
+                      ? burzaColor
+                          ? colorScheme.tertiary
+                          : colorScheme.primary
+                      : colorScheme.secondary,
+                  foregroundColor: isPrimary
+                      ? burzaColor
+                          ? colorScheme.onTertiary
+                          : colorScheme.onPrimary
+                      : colorScheme.onSecondary,
                 ),
-                onPressed: prov.ordering || !isButtonEnabled(stavJidla) ? null : () => pressed(context, updatedDish, stavJidla),
+                onPressed: prov.ordering || !isButtonEnabled(stavJidla) ? null : () => burzaAlertDialog(context, updatedDish, stavJidla),
                 child: Text(getObedText(context, updatedDish, stavJidla)),
               );
             },
