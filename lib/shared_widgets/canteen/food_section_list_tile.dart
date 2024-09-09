@@ -54,7 +54,7 @@ class _DishListTile extends StatelessWidget {
         return Consumer<Ordering>(
           builder: (context, prov, ___) => ListTile(
             selectedColor: enabledColor,
-            enabled: !prov.ordering && (updatedDish.lzeObjednat || updatedDish.objednano),
+            enabled: !prov.ordering && isButtonEnabled(stav),
             selected: getPrimaryState(stav),
             visualDensity: VisualDensity.compact,
             contentPadding: EdgeInsets.zero,
