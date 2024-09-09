@@ -1,6 +1,4 @@
-import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
-import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/all_settings_widgets.dart';

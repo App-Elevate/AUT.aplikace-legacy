@@ -2,7 +2,6 @@ import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/more/account.dart';
 import 'package:autojidelna/pages_new/settings/settings.dart';
-import 'package:autojidelna/pages_new/more/statistics.dart';
 import 'package:autojidelna/shared_widgets/more/account_overview_card.dart';
 import 'package:autojidelna/shared_widgets/more/location_picker_card.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
