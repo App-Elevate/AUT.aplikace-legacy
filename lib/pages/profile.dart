@@ -2,6 +2,7 @@
 
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/shared_prefs.dart';
 
 import 'package:flutter/material.dart';
 
@@ -232,7 +233,7 @@ class ProfilePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: FutureBuilder(
-              future: loggedInCanteen.readData(Prefs.statistikaObjednavka),
+              future: readStringFromSharedPreferences(Prefs.statistikaObjednavka),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                   return Text(

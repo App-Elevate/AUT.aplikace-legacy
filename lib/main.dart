@@ -35,24 +35,24 @@ void main() async {
   // Awesome notifications initialization
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String version = packageInfo.version;
-  String? lastVersion = await loggedInCanteen.readData(Prefs.lastVersion);
+  String? lastVersion = await readStringFromSharedPreferences(Prefs.lastVersion);
 
   // Removing the already set notifications if we updated versions
   if (lastVersion != version) {
     // Set the new version
-    loggedInCanteen.saveData(Prefs.lastVersion, version);
+    saveStringToSharedPreferences(Prefs.lastVersion, version);
 
     // PREFS ID CHANGES
-    await loggedInCanteen.readData(OldPrefs.theme).then((value) {
+    await readStringFromSharedPreferences(OldPrefs.theme).then((value) {
       if (value != null) {
-        loggedInCanteen.saveData(Prefs.theme, value);
-        loggedInCanteen.removeData(OldPrefs.theme);
+        saveStringToSharedPreferences(Prefs.theme, value);
+        removeFromSharedPreferences(OldPrefs.theme);
       }
     });
-    await loggedInCanteen.readData(OldPrefs.disableAnalytics).then((value) {
+    await readStringFromSharedPreferences(OldPrefs.disableAnalytics).then((value) {
       if (value != null) {
-        loggedInCanteen.saveData(Prefs.disableAnalytics, value);
-        loggedInCanteen.removeData(OldPrefs.disableAnalytics);
+        saveStringToSharedPreferences(Prefs.disableAnalytics, value);
+        removeFromSharedPreferences(OldPrefs.disableAnalytics);
       }
     });
 
@@ -68,10 +68,10 @@ void main() async {
           Prefs.nemateObjednanoNotifications
         ];
         for (String pref in prefs) {
-          await loggedInCanteen.readData(pref + uzivatel.username).then((value) {
+          await readStringFromSharedPreferences(pref + uzivatel.username).then((value) {
             if (value != null) {
-              loggedInCanteen.saveData('$pref${uzivatel.username}_${uzivatel.url}', value);
-              loggedInCanteen.removeData(pref + uzivatel.username);
+              saveStringToSharedPreferences('$pref${uzivatel.username}_${uzivatel.url}', value);
+              removeFromSharedPreferences(pref + uzivatel.username);
             }
           });
         }

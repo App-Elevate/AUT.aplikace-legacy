@@ -1,6 +1,7 @@
 // Purpose: Login screen for the app
 
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -83,7 +84,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void setLastUrl() async {
-    _urlController.text = await loggedInCanteen.readData(Prefs.url) ?? "";
+    _urlController.text = await readStringFromSharedPreferences(Prefs.url) ?? "";
   }
 
   Form loginForm(context) {
@@ -217,7 +218,7 @@ class LoginScreen extends StatelessWidget {
       String url = _urlController.text;
       try {
         await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
-        loggedInCanteen.saveData(Prefs.url, url);
+        saveStringToSharedPreferences(Prefs.url, url);
         try {
           changeDate(newDate: DateTime.now());
           if (context.mounted) {

@@ -2,6 +2,7 @@
 
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/shared_prefs.dart';
 
 import 'package:background_fetch/background_fetch.dart';
 
@@ -59,7 +60,7 @@ class MainAppScreenState extends State<MainAppScreen> {
 
   @override
   initState() {
-    loggedInCanteen.readData(Prefs.firstTime).then((value) {
+    readStringFromSharedPreferences(Prefs.firstTime).then((value) {
       if (value != '1') {
         initPlatformState().then((value) async {
           await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -83,7 +84,7 @@ class MainAppScreenState extends State<MainAppScreen> {
       } else {
         initPlatformState();
       }
-      loggedInCanteen.saveData(Prefs.firstTime, '1');
+      saveStringToSharedPreferences(Prefs.firstTime, '1');
     });
     super.initState();
   }

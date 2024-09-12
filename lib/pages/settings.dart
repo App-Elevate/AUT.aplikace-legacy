@@ -1,5 +1,6 @@
 // settings page. Can be called from account drawer or login screen
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 // kDebugMode
@@ -36,8 +37,8 @@ class SettingsPage extends StatelessWidget {
   Future<void> resetAndDoNotifications() async {
     LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
     for (LoggedInUser uzivatel in loginData.users) {
-      await loggedInCanteen.removeData('${Prefs.lastJidloDneCheck}${uzivatel.username}_${uzivatel.url}');
-      await loggedInCanteen.removeData('${Prefs.lastNotificationCheck}${uzivatel.username}_${uzivatel.url}');
+      await removeFromSharedPreferences('${Prefs.lastJidloDneCheck}${uzivatel.username}_${uzivatel.url}');
+      await removeFromSharedPreferences('${Prefs.lastNotificationCheck}${uzivatel.username}_${uzivatel.url}');
     }
     await doNotifications();
   }
@@ -53,7 +54,7 @@ class SettingsPage extends StatelessWidget {
     disableAnalyticsNotifier.value = analyticsDisabled;
     analyticsEnabledGlobally = !analyticsDisabled;
 
-    List<String>? themeSettingsList = await loggedInCanteen.readListData(Prefs.theme);
+    List<String>? themeSettingsList = await readListStringFromSharedPreferences(Prefs.theme);
     if (themeSettingsList != null) {
       if (themeSettingsList[0] != "") {
         themeModeNotifier.value = themeSettingsList[0];
@@ -73,12 +74,12 @@ class SettingsPage extends StatelessWidget {
 
     jidloNotificationNotifier.value = await loggedInCanteen.isPrefTrue('${Prefs.dailyFoodInfo}${username}_$url');
 
-    String? jidloNotificationTimeString = await loggedInCanteen.readData(Prefs.foodNotifTime);
+    String? jidloNotificationTimeString = await readStringFromSharedPreferences(Prefs.foodNotifTime);
     if (jidloNotificationTimeString != null && jidloNotificationTimeString != '') {
       jidloNotificationTime.value = jidloNotificationTimeString;
     }
 
-    String? lowCreditNotificationString = await loggedInCanteen.readData('${Prefs.kreditNotifications}${username}_$url');
+    String? lowCreditNotificationString = await readStringFromSharedPreferences('${Prefs.kreditNotifications}${username}_$url');
     if (lowCreditNotificationString == '') {
       //notifications allowed
       lowCreditNotificationNotifier.value = true;
@@ -95,7 +96,7 @@ class SettingsPage extends StatelessWidget {
       }
     }
 
-    String? nextWeekOrderNotificationNotifierString = await loggedInCanteen.readData('${Prefs.nemateObjednanoNotifications}${username}_$url');
+    String? nextWeekOrderNotificationNotifierString = await readStringFromSharedPreferences('${Prefs.nemateObjednanoNotifications}${username}_$url');
     if (nextWeekOrderNotificationNotifierString == '') {
       //notifications allowed
       nextWeekOrderNotificationNotifier.value = true;
@@ -335,9 +336,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     calendarBigMarkersNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData(Prefs.calendarBigMarkers, '1');
+                      saveStringToSharedPreferences(Prefs.calendarBigMarkers, '1');
                     } else {
-                      loggedInCanteen.saveData(Prefs.calendarBigMarkers, '');
+                      saveStringToSharedPreferences(Prefs.calendarBigMarkers, '');
                     }
                   },
                 );
@@ -371,9 +372,9 @@ class SettingsPage extends StatelessWidget {
                     skipWeekendsNotifier.value = value;
                     skipWeekends = value;
                     if (value) {
-                      loggedInCanteen.saveData(Prefs.skipWeekends, '1');
+                      saveStringToSharedPreferences(Prefs.skipWeekends, '1');
                     } else {
-                      loggedInCanteen.saveData(Prefs.skipWeekends, '');
+                      saveStringToSharedPreferences(Prefs.skipWeekends, '');
                     }
                   },
                 );
@@ -406,9 +407,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     jidloNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('${Prefs.dailyFoodInfo}${username}_$url', '1');
+                      saveStringToSharedPreferences('${Prefs.dailyFoodInfo}${username}_$url', '1');
                     } else {
-                      loggedInCanteen.saveData('${Prefs.dailyFoodInfo}${username}_$url', '');
+                      saveStringToSharedPreferences('${Prefs.dailyFoodInfo}${username}_$url', '');
                     }
                     resetAndDoNotifications();
                   },
@@ -435,7 +436,7 @@ class SettingsPage extends StatelessWidget {
                                 initialTime: TimeOfDay(hour: int.parse(value.split(':')[0]), minute: int.parse(value.split(':')[1])));
                             if (timeOfDay != null && context.mounted) {
                               jidloNotificationTime.value = timeOfDay.format(context);
-                              await loggedInCanteen.saveData(Prefs.foodNotifTime, timeOfDay.format(context));
+                              saveStringToSharedPreferences(Prefs.foodNotifTime, timeOfDay.format(context));
                               resetAndDoNotifications();
                             }
                           },
@@ -458,9 +459,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     lowCreditNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('${Prefs.kreditNotifications}${username}_$url', '');
+                      saveStringToSharedPreferences('${Prefs.kreditNotifications}${username}_$url', '');
                     } else {
-                      loggedInCanteen.saveData('${Prefs.kreditNotifications}${username}_$url', '1');
+                      saveStringToSharedPreferences('${Prefs.kreditNotifications}${username}_$url', '1');
                     }
                     resetAndDoNotifications();
                   },
@@ -478,9 +479,9 @@ class SettingsPage extends StatelessWidget {
                   onChanged: (value) async {
                     nextWeekOrderNotificationNotifier.value = value;
                     if (value) {
-                      loggedInCanteen.saveData('${Prefs.nemateObjednanoNotifications}${username}_$url', '');
+                      saveStringToSharedPreferences('${Prefs.nemateObjednanoNotifications}${username}_$url', '');
                     } else {
-                      loggedInCanteen.saveData('${Prefs.nemateObjednanoNotifications}${username}_$url', '1');
+                      saveStringToSharedPreferences('${Prefs.nemateObjednanoNotifications}${username}_$url', '1');
                     }
                     resetAndDoNotifications();
                   },
@@ -527,9 +528,9 @@ class SettingsPage extends StatelessWidget {
                     disableAnalyticsNotifier.value = value;
                     analyticsEnabledGlobally = !value;
                     if (value) {
-                      loggedInCanteen.saveData(Prefs.disableAnalytics, '1');
+                      saveStringToSharedPreferences(Prefs.disableAnalytics, '1');
                     } else {
-                      loggedInCanteen.saveData(Prefs.disableAnalytics, '');
+                      saveStringToSharedPreferences(Prefs.disableAnalytics, '');
                     }
                   },
                 );

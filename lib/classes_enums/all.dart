@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/material.dart';
@@ -296,7 +297,7 @@ class NotifyTheme {
         themeStyle = "0";
     }
     pureBlack = settings.pureBlack ? "1" : "0";
-    loggedInCanteen.saveListData(Prefs.theme, [themeMode, themeStyle, pureBlack]);
+    saveStringListToSharedPreferences(Prefs.theme, [themeMode, themeStyle, pureBlack]);
   }
 }
 

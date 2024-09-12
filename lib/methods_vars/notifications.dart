@@ -2,6 +2,7 @@
 
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/shared_prefs.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -166,7 +167,7 @@ Future<void> doNotifications({bool force = false}) async {
     DateTime now = DateTime.now();
     String nowString = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
-    String? timeOfDayFoodNotification = await loggedInCanteen.readData(Prefs.foodNotifTime);
+    String? timeOfDayFoodNotification = await readStringFromSharedPreferences(Prefs.foodNotifTime);
     timeOfDayFoodNotification ??= '11:00';
     TimeOfDay timeOfDay =
         TimeOfDay(hour: int.parse(timeOfDayFoodNotification.split(':')[0]), minute: int.parse(timeOfDayFoodNotification.split(':')[1]));
@@ -174,22 +175,24 @@ Future<void> doNotifications({bool force = false}) async {
     int difference = time.difference(now).inMinutes;
     //difference from time of day to now
 
-    if ((await loggedInCanteen.readData('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString ||
-            await loggedInCanteen.readData('${Prefs.dailyFoodInfo}${loginData.users[i].username}_${loginData.users[i].url}') != '1' ||
+    if ((await readStringFromSharedPreferences('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString ||
+            await readStringFromSharedPreferences('${Prefs.dailyFoodInfo}${loginData.users[i].username}_${loginData.users[i].url}') != '1' ||
             difference > 120 ||
             difference < -120) &&
         !force) {
       jidloDne = false;
     } else {
-      await loggedInCanteen.saveData('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
+      saveStringToSharedPreferences('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
     }
 
-    if (await loggedInCanteen.readData('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString &&
+    if (await readStringFromSharedPreferences('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') ==
+            nowString &&
         !force) {
       kredit = false;
     }
 
-    if (await loggedInCanteen.readData('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString &&
+    if (await readStringFromSharedPreferences('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') ==
+            nowString &&
         !force) {
       objednavka = false;
     }
@@ -207,7 +210,7 @@ Future<void> doNotifications({bool force = false}) async {
     if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
-    loggedInCanteen.saveData('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
+    saveStringToSharedPreferences('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
 
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
@@ -294,7 +297,8 @@ Future<void> doNotifications({bool force = false}) async {
         }
       }
       //parse ignore date to DateTime
-      String? ignoreDateStr = await loggedInCanteen.readData('${Prefs.kreditNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
+      String? ignoreDateStr =
+          await readStringFromSharedPreferences('${Prefs.kreditNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
       DateTime ignoreDate;
       switch (ignoreDateStr) {
         //not ignored
@@ -335,7 +339,7 @@ Future<void> doNotifications({bool force = false}) async {
       //pokud chybí aspoň 3 obědy z příštích 10 dní
       //parse ignore date to DateTime
       String? ignoreDateStrObjednano =
-          await loggedInCanteen.readData('${Prefs.nemateObjednanoNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
+          await readStringFromSharedPreferences('${Prefs.nemateObjednanoNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
       DateTime ignoreDateObjednano;
       switch (ignoreDateStrObjednano) {
         //not ignored
@@ -406,11 +410,11 @@ class NotificationController {
     if (receivedAction?.buttonKeyPressed != null && receivedAction?.buttonKeyPressed != '') {
       if (receivedAction!.buttonKeyPressed.substring(0, 16) == Prefs.nemateObjednanoNotifications) {
         DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
+        saveStringToSharedPreferences(receivedAction.buttonKeyPressed,
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
       } else if (receivedAction.buttonKeyPressed.substring(0, 14) == Prefs.kreditNotifications) {
         DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        await loggedInCanteen.saveData(receivedAction.buttonKeyPressed,
+        saveStringToSharedPreferences(receivedAction.buttonKeyPressed,
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
       } else if (receivedAction.buttonKeyPressed.substring(0, 9) == NotificationIds.objednatButton) {
         String username = receivedAction.buttonKeyPressed.substring(9).split('_')[0];

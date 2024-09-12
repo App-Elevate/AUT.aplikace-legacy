@@ -241,3 +241,14 @@ class Ordering with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class CurrentUser with ChangeNotifier {
+  Uzivatel _user = Uzivatel();
+
+  Uzivatel get user => _user;
+
+  set user(Uzivatel user) {
+    _user = user;
+    notifyListeners();
+  }
+}

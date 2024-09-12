@@ -2,6 +2,7 @@
 
 // kDebugMode
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -110,7 +111,7 @@ class MainAccountDrawer extends StatelessWidget {
                           //location
                           if (locations.isNotEmpty)
                             FutureBuilder(
-                                future: loggedInCanteen.readIntData('${Prefs.location}${username}_${loggedInCanteen.canteenDataUnsafe!.url}'),
+                                future: readIntFromSharedPreferences('${Prefs.location}${username}_${loggedInCanteen.canteenDataUnsafe!.url}'),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     pickedLocationNotifier.value = snapshot.data as int;

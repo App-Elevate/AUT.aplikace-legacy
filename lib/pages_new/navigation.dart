@@ -1,9 +1,9 @@
 import 'package:autojidelna/consts.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
-import 'package:autojidelna/methods_vars/canteenwrapper.dart';
 import 'package:autojidelna/methods_vars/notifications.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
 import 'package:autojidelna/pages_new/more/more.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   initState() {
-    loggedInCanteen.readData(Prefs.firstTime).then((value) {
+    readStringFromSharedPreferences(Prefs.firstTime).then((value) {
       if (value != '1') {
         initPlatformState().then((value) async {
           await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
@@ -36,7 +36,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       } else {
         initPlatformState();
       }
-      loggedInCanteen.saveData(Prefs.firstTime, '1');
+      saveStringToSharedPreferences(Prefs.firstTime, '1');
     });
     super.initState();
   }
