@@ -333,6 +333,7 @@ class LoggingInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppTranslations.init(context);
+    context.read<DishesOfTheDay>().resetMenu();
     // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
       future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),

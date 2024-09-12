@@ -5,6 +5,7 @@ import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/methods_vars/string_extention.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
+import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -66,13 +67,16 @@ showCustomDatePicker(BuildContext context, DateTime currentDate) {
                   eventLoader: (day) {
                     orderedFoodDays = [];
                     DateTime date = DateTime(day.year, day.month, day.day);
-
-                    if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[date] != null) {
-                      for (int i = 0; i < loggedInCanteen.canteenDataUnsafe!.jidelnicky[date]!.jidla.length; i++) {
-                        if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[date]!.jidla[i].objednano) orderedFoodDays.add(date);
+                    Map<int, Jidelnicek> menus = context.read<DishesOfTheDay>().allMenus;
+                    Jidelnicek? menu = menus[convertDateTimeToIndex(date)];
+                    if (menu != null) {
+                      for (Jidlo dish in menu.jidla) {
+                        if (dish.objednano) {
+                          orderedFoodDays.add(date);
+                          break;
+                        }
                       }
                     }
-
                     return orderedFoodDays;
                   },
                   calendarBuilders: CalendarBuilders(

@@ -208,9 +208,13 @@ class DishesOfTheDay with ChangeNotifier {
   Map<int, Jidelnicek> _menus = {}; // Store menus by day index
   int _dayIndex = DateTime.now().difference(minimalDate).inDays; // Store day index separately if needed
 
+  Map<int, Jidelnicek> get allMenus => _menus;
+
   Jidelnicek? getMenu(int dayIndex) => _menus[dayIndex];
 
   int get dayIndex => _dayIndex;
+
+  void resetMenu() => _menus.clear();
 
   void setMenu(int dayIndex, Jidelnicek menu) {
     if (_menus[dayIndex] == menu) return;
