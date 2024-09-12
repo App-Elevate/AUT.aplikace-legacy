@@ -19,6 +19,8 @@ Widget logoutDialog(BuildContext context, {bool currentAccount = true, int? id})
           // if the account is current it has to reload the main app screen
           if (currentAccount && context.mounted) {
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoggingInWidget()), (route) => false);
+          } else if (context.mounted) {
+            Navigator.of(context).pop(true);
           }
         },
         child: Text(lang.logoutConfirm),
