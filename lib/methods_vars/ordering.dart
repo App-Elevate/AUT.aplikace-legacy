@@ -16,13 +16,15 @@ late Canteen canteen;
 void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
   final prov = context.read<DishesOfTheDay>();
   Ordering ordering = context.read<Ordering>();
+
   DateTime day = dish.den;
-  int dishIndex = prov.getMenu(convertDateTimeToIndex(day))!.jidla.indexOf(dish);
+  int dayIndex = convertDateTimeToIndex(day);
+  int dishIndex = prov.getMenu(dayIndex)!.jidla.indexOf(dish);
+
   void updateJidelnicek(Jidelnicek jidelnicek) {
-    Jidelnicek menu = prov.getMenu(convertDateTimeToIndex(day))!;
-    prov.setMenu(convertDateTimeToIndex(day), jidelnicek);
-    loggedInCanteen.canteenDataUnsafe!.jidelnicky[day] = menu;
-    loggedInCanteen.canteenDataUnsafe!.pocetJidel[day] = menu.jidla.length;
+    Jidelnicek menu = prov.getMenu(dayIndex)!;
+    prov.setMenu(dayIndex, jidelnicek);
+    prov.setNumberOfDishes(dayIndex, menu.jidla.length);
   }
 
   if (ordering.ordering) return;
@@ -240,11 +242,12 @@ String getObedText(BuildContext context, Jidlo dish, StavJidla stavJidla) {
       try {
         bool jeVeDneDostupnyObed = false;
         int prvniIndex = -1;
-        for (int i = 0; i < loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla.length; i++) {
-          if (loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i].lzeObjednat ||
-              loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i].objednano ||
-              loggedInCanteen.jeJidloNaBurze(loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i]) ||
-              loggedInCanteen.canteenDataUnsafe!.jidelnicky[day]!.jidla[i].burzaUrl != null) {
+
+        for (int i = 0; i < menu.jidla.length; i++) {
+          if (menu.jidla[i].lzeObjednat ||
+              menu.jidla[i].objednano ||
+              loggedInCanteen.jeJidloNaBurze(menu.jidla[i]) ||
+              menu.jidla[i].burzaUrl != null) {
             jeVeDneDostupnyObed = true;
             break;
           } else {
