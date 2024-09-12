@@ -49,11 +49,10 @@ class _DishListTile extends StatelessWidget {
         Jidelnicek? menu = data.getMenu(convertDateTimeToIndex(dish.den));
         Jidlo updatedDish = menu!.jidla.where((e) => e.nazev == dish.nazev).first;
         StavJidla stav = getStavJidla(updatedDish);
-        Color enabledColor = stav == StavJidla.objednanoNelzeOdebrat ? theme.colorScheme.tertiary : theme.colorScheme.primary;
 
         return Consumer<Ordering>(
           builder: (context, prov, ___) => ListTile(
-            selectedColor: enabledColor,
+            selectedColor: theme.colorScheme.primary,
             enabled: !prov.ordering && isButtonEnabled(stav),
             selected: getPrimaryState(stav),
             visualDensity: VisualDensity.compact,
@@ -64,7 +63,7 @@ class _DishListTile extends StatelessWidget {
               value: getPrimaryState(stav),
               groupValue: true,
               onChanged: prov.ordering || !isButtonEnabled(stav) ? null : (_) => burzaAlertDialog(context, updatedDish, stav),
-              activeColor: enabledColor,
+              activeColor: theme.colorScheme.primary,
             ),
             title: Text(title),
             subtitle: updatedDish.cena == null

@@ -24,20 +24,11 @@ class OrderDishButton extends StatelessWidget {
               ColorScheme colorScheme = Theme.of(context).colorScheme;
               StavJidla stavJidla = getStavJidla(updatedDish);
               bool isPrimary = getPrimaryState(stavJidla);
-              bool burzaColor = stavJidla == StavJidla.objednanoNelzeOdebrat;
 
               return ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isPrimary
-                      ? burzaColor
-                          ? colorScheme.tertiary
-                          : colorScheme.primary
-                      : colorScheme.secondary,
-                  foregroundColor: isPrimary
-                      ? burzaColor
-                          ? colorScheme.onTertiary
-                          : colorScheme.onPrimary
-                      : colorScheme.onSecondary,
+                  backgroundColor: isPrimary ? colorScheme.primary : colorScheme.secondary,
+                  foregroundColor: isPrimary ? colorScheme.onPrimary : colorScheme.onSecondary,
                 ),
                 onPressed: prov.ordering || !isButtonEnabled(stavJidla) ? null : () => burzaAlertDialog(context, updatedDish, stavJidla),
                 child: Text(getObedText(context, updatedDish, stavJidla)),
