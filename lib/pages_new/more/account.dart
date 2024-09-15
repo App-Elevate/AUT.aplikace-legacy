@@ -2,6 +2,7 @@ import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
 import 'package:autojidelna/shared_widgets/more/account_overview_card.dart';
+import 'package:autojidelna/shared_widgets/popups.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:canteenlib/canteenlib.dart';

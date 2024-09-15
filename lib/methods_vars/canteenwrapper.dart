@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/shared_widgets/popups.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:canteenlib/canteenlib.dart';
