@@ -42,20 +42,6 @@ void main() async {
     // Set the new version
     saveStringToSharedPreferences(Prefs.lastVersion, version);
 
-    // PREFS ID CHANGES
-    await readStringFromSharedPreferences(OldPrefs.theme).then((value) {
-      if (value != null) {
-        saveStringToSharedPreferences(Prefs.theme, value);
-        removeFromSharedPreferences(OldPrefs.theme);
-      }
-    });
-    await readStringFromSharedPreferences(OldPrefs.disableAnalytics).then((value) {
-      if (value != null) {
-        saveStringToSharedPreferences(Prefs.disableAnalytics, value);
-        removeFromSharedPreferences(OldPrefs.disableAnalytics);
-      }
-    });
-
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
       for (LoggedInUser uzivatel in loginData.users) {
@@ -105,11 +91,8 @@ void main() async {
 
   bool? analyticsDisabled = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics);
 
-  // Know if this release is debug and disable analytics if it is
-  if (kDebugMode) analyticsDisabled = true;
-
   // Initializing firebase if analytics are not disabled
-  if (analyticsDisabled != true) {
+  if (analyticsDisabled != true || !kDebugMode) {
     analyticsEnabledGlobally = true;
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -163,10 +146,6 @@ class _MyAppState extends State<MyApp> {
 
   // Handling the back button on android being pressed.
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
-    if (SwitchAccountVisible().isVisible()) {
-      SwitchAccountVisible().setVisible(false);
-      return Future<bool>.value(false);
-    }
     // Checks if current Navigator still has screens on the stack.
     // And doesn't exit the app if it does
     if (yourKey.currentState!.canPop()) {
@@ -203,8 +182,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<DishesOfTheDay>(create: (_) => DishesOfTheDay())
       ],
       builder: (context, __) {
-        appearanceMigration(context);
-
         // Rebuilds when themeMode, themeStyle or isPureBlack is changed
         return Selector<Settings, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
           selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
@@ -254,99 +231,23 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
-  /// Migration logic for older versions
-  void appearanceMigration(BuildContext context) {
-    readListStringFromSharedPreferences(Prefs.theme).then(
-      (data) {
-        removeFromSharedPreferences(Prefs.theme);
-
-        ThemeMode themeMode;
-        ThemeStyle themeStyle;
-        bool pureBlack;
-        // Migration from v1.2.8 and lower
-        readStringFromSharedPreferences("ThemeMode").then((value) {
-          if (value != null && value != "" && value.length < 2) {
-            removeFromSharedPreferences("ThemeMode");
-            switch (value) {
-              case "2":
-                themeMode = ThemeMode.dark;
-                break;
-              case "1":
-                themeMode = ThemeMode.light;
-                break;
-              default:
-                themeMode = ThemeMode.system;
-            }
-          }
-        });
-        //  Migration from v1.3.1 and lower
-        if (data != null && data.length == 3) {
-          switch (data[0]) {
-            case "2":
-              themeMode = ThemeMode.dark;
-              break;
-            case "1":
-              themeMode = ThemeMode.light;
-              break;
-            default:
-              themeMode = ThemeMode.system;
-          }
-          switch (data[1]) {
-            case "5":
-              themeStyle = ThemeStyle.crimsonEarth;
-              break;
-            case "4":
-              themeStyle = ThemeStyle.evergreenSlate;
-              break;
-            case "3":
-              themeStyle = ThemeStyle.rustOlive;
-              break;
-            case "2":
-              themeStyle = ThemeStyle.blueMauve;
-              break;
-            case "1":
-              themeStyle = ThemeStyle.plumBrown;
-              break;
-            default:
-              themeStyle = ThemeStyle.defaultStyle;
-          }
-          pureBlack = data[2] == "1";
-          Settings userPreferences = context.read<Settings>();
-          userPreferences.setThemeMode(themeMode);
-          userPreferences.setThemeStyle(themeStyle);
-          userPreferences.setPureBlack(pureBlack);
-        }
-      },
-    );
-  }
 }
 
 class LoggingInWidget extends StatelessWidget {
-  const LoggingInWidget({
-    super.key,
-    this.pageIndex = -1,
-  });
-  // index aktualniho dne - pro refresh button v pravo nahoře
-  final int pageIndex;
+  const LoggingInWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     AppTranslations.init(context);
     context.read<DishesOfTheDay>().resetMenu();
+
     // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
       future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          if (snapshot.error == ConnectionErrors.noLogin) return LoginScreenV2();
+          if (snapshot.error == ConnectionErrors.noLogin) return LoginScreen();
         } else if (snapshot.connectionState == ConnectionState.done) {
-          // setting the initial date
-          if (pageIndex != -1) {
-            Future.delayed(Duration.zero, () => changeDateTillSuccess(pageIndex));
-          } else {
-            setCurrentDate();
-          }
           // routing to main app screen (jidelnicek)
           return const NavigationScreen();
         }

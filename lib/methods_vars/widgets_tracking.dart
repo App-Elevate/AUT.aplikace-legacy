@@ -7,8 +7,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-bool reloading = false;
-
 // snackbar je ze začátku skrytý
 SnackBarShown snackbarshown = SnackBarShown(shown: false);
 
@@ -16,18 +14,16 @@ bool analyticsEnabledGlobally = false;
 
 FirebaseAnalytics? analytics;
 
-late void Function(Widget widget) setHomeWidgetPublic;
-
 final DateTime minimalDate = DateTime(DateTime.now().year, DateTime.now().month - 1, 1);
 final DateTime maximalDate = DateTime(DateTime.now().year, DateTime.now().month + 2, 0);
 
-///date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
+/// Date listener for the ValueListenableBuilder which tells which date is currently selected to the button and updates it
 late final ValueNotifier<DateTime> dateListener;
 
-///page controller for the PageView which tells which date is currently selected
+/// Page controller for the PageView which tells which date is currently selected
 late final PageController pageviewController;
 
-///page controller for the PageView which tells which date is currently selected
+/// Item controller for the ListView which tells which date is currently selected
 final ItemScrollController itemScrollController = ItemScrollController();
 
 bool loginScreenVisible = false;
@@ -44,37 +40,6 @@ bool hideBurzaAlertDialog = false;
 int? indexJidlaCoMaBytZobrazeno;
 //index (kolikáté jídlo ve dni)
 int? indexJidlaKtereMaBytZobrazeno;
-
-void setCurrentDate() async {
-  DateTime newDate = DateTime.now();
-  if (skipWeekends) {
-    while (newDate.weekday == 6 || newDate.weekday == 7) {
-      newDate = newDate.add(const Duration(days: 1));
-    }
-  }
-
-  for (int i = 0; i < 20; i++) {
-    try {
-      changeDate(newDate: newDate, animateToPage: true);
-      return;
-    } catch (e) {
-      Future.delayed(const Duration(milliseconds: 50));
-    }
-  }
-}
-
-void changeDateTillSuccess(int index) async {
-  DateTime newDate = convertIndexToDatetime(index);
-
-  for (int i = 0; i < 20; i++) {
-    try {
-      changeDate(newDate: newDate);
-      return;
-    } catch (e) {
-      Future.delayed(const Duration(milliseconds: 50));
-    }
-  }
-}
 
 ///changes the date of the Jidelnicek
 ///newDate - just sets the new date

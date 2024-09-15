@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
 
-class LoginScreenV2 extends StatelessWidget {
-  LoginScreenV2({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
   // Static is fix for keyboard disapearing when this screen is pushed (problem with rebuilding the widget)
   static final _formKey = GlobalKey<FormState>();
   // Without static the text in the textfields would be deleted for the same reasons.

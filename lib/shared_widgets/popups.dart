@@ -56,7 +56,7 @@ void failedLunchDialog(BuildContext context, String message) async {
             onPressed: () {
               loggedInCanteen.logout();
               Navigator.of(context).pop();
-              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreenV2())), (route) => false);
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreen())), (route) => false);
             },
             child: Text(lang.logoutConfirm),
           ),
@@ -91,7 +91,7 @@ void failedLoginDialog(BuildContext context, String message) async {
               onPressed: () {
                 loggedInCanteen.logout();
                 Navigator.of(context).pop();
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreenV2())), (route) => false);
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => (LoginScreen())), (route) => false);
               },
               child: Text(lang.logoutConfirm),
             ),

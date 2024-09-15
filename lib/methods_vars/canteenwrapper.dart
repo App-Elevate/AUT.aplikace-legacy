@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/shared_prefs.dart';
 import 'package:autojidelna/shared_widgets/popups.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -18,13 +19,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'package:http/http.dart' as http;
 
-///variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
+/// variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
 const int numberOfMaxLunches = 3;
 // třída pro funkcionalitu celé aplikace
 LoggedInCanteen loggedInCanteen = LoggedInCanteen();
@@ -77,28 +77,28 @@ class LoggedInCanteen {
     switch (statistika) {
       //default case
       case TypStatistiky.objednavka:
-        String? str = await readData('statistika:objednavka');
+        String? str = await readStringFromSharedPreferences('statistika:objednavka');
         str ??= '0';
         int pocetStatistiky = int.parse(str);
         pocetStatistiky++;
         if (analyticsEnabledGlobally && analytics != null) {
           analytics!.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
         }
-        saveData('statistika:objednavka', '$pocetStatistiky');
+        saveStringToSharedPreferences('statistika:objednavka', '$pocetStatistiky');
         break;
       case TypStatistiky.auto:
-        String? str = await readData('statistika:auto');
+        String? str = await readStringFromSharedPreferences('statistika:auto');
         str ??= '0';
         int pocetStatistiky = int.parse(str);
         pocetStatistiky++;
-        saveData('statistika:auto', '$pocetStatistiky');
+        saveStringToSharedPreferences('statistika:auto', '$pocetStatistiky');
         break;
       case TypStatistiky.burzaCatcher:
-        String? str = await readData('statistika:burzaCatcher');
+        String? str = await readStringFromSharedPreferences('statistika:burzaCatcher');
         str ??= '0';
         int pocetStatistiky = int.parse(str);
         pocetStatistiky++;
-        saveData('statistika:burzaCatcher', '$pocetStatistiky');
+        saveStringToSharedPreferences('statistika:burzaCatcher', '$pocetStatistiky');
         break;
     }
   }
@@ -131,9 +131,12 @@ class LoggedInCanteen {
     try {
       LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
       if (loginData.currentlyLoggedIn) {
-        _canteenInstance = await _login(loginData.users[loginData.currentlyLoggedInId!].url, loginData.users[loginData.currentlyLoggedInId!].username,
-            loginData.users[loginData.currentlyLoggedInId!].password,
-            safetyId: (_canteenData?.id ?? 0) + 1);
+        _canteenInstance = await _login(
+          loginData.users[loginData.currentlyLoggedInId!].url,
+          loginData.users[loginData.currentlyLoggedInId!].username,
+          loginData.users[loginData.currentlyLoggedInId!].password,
+          safetyId: (_canteenData?.id ?? 0) + 1,
+        );
         return loginData.currentlyLoggedInId!;
       } else {
         return Future.error(ConnectionErrors.noLogin);
@@ -215,7 +218,7 @@ class LoggedInCanteen {
       return Future.error(ConnectionErrors.connectionFailed);
     }
     if (indexLunches) {
-      int vydejna = (await readIntData('${Prefs.location}${username}_$url') ?? 0) + 1;
+      int vydejna = (await readIntFromSharedPreferences('${Prefs.location}${username}_$url') ?? 0) + 1;
       (await canteenInstance).vydejna = vydejna;
       await _indexLunchesMonth();
       smartPreIndexing(DateTime.now());
@@ -246,11 +249,11 @@ class LoggedInCanteen {
     smartPreIndexing(DateTime.now());
   }
 
-  ///získá Jídelníček pro den [den]
-  ///tuto funkci nevolat globálně, nebere informace z canteenData a zároveň je neukládá
-  ///uživatel musí být přihlášen
-  ///Jinak vyhodí chybu 'Nejdříve se musíte přihlásit'
-  ///může vyhodit chybu 'no internet'
+  /// získá Jídelníček pro den [den]
+  /// tuto funkci nevolat globálně, nebere informace z canteenData a zároveň je neukládá
+  /// uživatel musí být přihlášen
+  /// Jinak vyhodí chybu 'Nejdříve se musíte přihlásit'
+  /// může vyhodit chybu 'no internet'
   Future<Jidelnicek> _ziskatJidelnicekDen(DateTime den, {int? tries}) async {
     if (_currentlyLoading.containsKey(den) && (tries == 0 || tries == null)) {
       return _currentlyLoading[den]!.future;
@@ -364,14 +367,14 @@ class LoggedInCanteen {
     return;
   }
 
-  //just switches the account - YOU NEED TO CALL [loginFromStorage] AFTER THIS
+  // just switches the account - YOU NEED TO CALL [loginFromStorage] AFTER THIS
   Future<void> switchAccount(int id) async {
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     loginData.currentlyLoggedInId = id;
     await saveLoginToSecureStorage(loginData);
   }
 
-  //switches the account and logs in as the new account
+  // switches the account and logs in as the new account
   Future<bool> changeAccount(int id, {bool indexLunches = false, bool saveToStorage = true}) async {
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     String url = loginData.users[id].url;
@@ -404,18 +407,18 @@ class LoggedInCanteen {
   }
 
   /// save data to secure storage used for storing username and password
-  Future<void> saveDataToSecureStorage(String key, String value) async {
+  Future<void> saveStringToSharedPreferencesToSecureStorage(String key, String value) async {
     const storage = FlutterSecureStorage();
     await storage.write(key: key, value: value);
   }
 
-  ///saves the loginData class to secure storage
+  /// saves the loginData class to secure storage
   Future<void> saveLoginToSecureStorage(LoginDataAutojidelna loginData) async {
-    await saveDataToSecureStorage('loginData', jsonEncode(loginData));
+    await saveStringToSharedPreferencesToSecureStorage('loginData', jsonEncode(loginData));
     initAwesome();
   }
 
-  ///gets an instance of loginData.
+  /// gets an instance of loginData.
 
   /// get data from secure storage
   /// can return null if there is no data
@@ -427,41 +430,6 @@ class LoggedInCanteen {
     } catch (e) {
       return null;
     }
-  }
-
-  /// save data to shared preferences used for storing url, statistics and settings
-  Future<void> saveData(String key, String value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(key, value);
-  }
-
-  /// get data from shared preferences used for storing url, statistics and settings
-  Future<String?> readData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(key);
-  }
-
-  Future<int?> readIntData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(key);
-  }
-
-  /// save data to shared preferences used for storing url, statistics and settings in a list
-  Future<void> saveListData(String key, List<String> value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(key, value);
-  }
-
-  /// get data from shared preferences used for storing url, statistics and settings in a list
-  Future<List<String>?> readListData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList(key);
-  }
-
-  /// removes entry from shared preferences
-  Future<void> removeData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove(key);
   }
 
   ///logs out a user with [id].
@@ -524,27 +492,6 @@ class LoggedInCanteen {
     _canteenData = null;
     saveLoginToSecureStorage(loginData);
     return;
-  }
-
-  String ziskatDenZData(int den) {
-    switch (den) {
-      case 1:
-        return 'Pondělí';
-      case 2:
-        return 'Úterý';
-      case 3:
-        return 'Středa';
-      case 4:
-        return 'Čtvrtek';
-      case 5:
-        return 'Pátek';
-      case 6:
-        return 'Sobota';
-      case 7:
-        return 'Neděle';
-      default:
-        throw Exception('Invalid day');
-    }
   }
 
   Future<LoginDataAutojidelna> getLoginDataFromSecureStorage() async {
@@ -610,14 +557,6 @@ class LoggedInCanteen {
       } catch (e) {
         return false;
       }
-    }
-    return false;
-  }
-
-  Future<bool> isPrefTrue(String sharedPrefenceKey) async {
-    String? bigMarkersString = await readData(sharedPrefenceKey);
-    if (bigMarkersString == "1") {
-      return true;
     }
     return false;
   }

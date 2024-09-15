@@ -1,14 +1,7 @@
 // Všechny objekty a enumy, které se používají v aplikaci
 import 'dart:async';
 
-import 'package:autojidelna/local_imports.dart';
-import 'package:autojidelna/shared_prefs.dart';
 import 'package:canteenlib/canteenlib.dart';
-
-import 'package:flutter/material.dart';
-
-///enum pro výběr stránky v navigačním menu
-enum NavigationDrawerItem { jidelnicek, automatickeObjednavky, burzaCatcher }
 
 enum ConnectionErrors {
   /// user is not logged in (no username and password in secure storage)
@@ -159,12 +152,6 @@ class SnackBarShown {
   bool shown = false;
 }
 
-///class pro public access k aktuální zobrazované stránce
-class JidelnicekPageNum {
-  JidelnicekPageNum({required this.pageNumber});
-  int pageNumber;
-}
-
 ///Popisuje všechny možné stavy jídla
 enum StavJidla {
   /// je objednano a lze odebrat
@@ -207,124 +194,6 @@ enum TypStatistiky {
 
   ///objednávky chycené burzaCatherem
   burzaCatcher
-}
-
-//Dovoluje otevřít account switcher z account drawer
-class SwitchAccountVisible {
-  bool visible = false;
-  VoidCallback? visibilityCallback; // Callback to notify changes
-
-  // Private constructor for singleton
-  SwitchAccountVisible._();
-
-  // Singleton instance
-  static final SwitchAccountVisible _instance = SwitchAccountVisible._();
-
-  // Factory constructor to provide the singleton instance
-  factory SwitchAccountVisible() => _instance;
-
-  void setVisible(bool value) {
-    visible = value;
-    if (visibilityCallback != null) {
-      visibilityCallback!(); // Notify changes using the callback
-    }
-  }
-
-  bool isVisible() {
-    return visible;
-  }
-
-  // Function to set the visibility callback
-  void setVisibilityCallback(VoidCallback callback) {
-    visibilityCallback = callback;
-  }
-}
-
-class NotifyTheme {
-  // Private constructor to prevent external instantiation
-  NotifyTheme._();
-
-  static final NotifyTheme _instance = NotifyTheme._();
-
-  factory NotifyTheme() {
-    return _instance;
-  }
-
-  ValueNotifier<ThemeSettings> themeNotifier = ValueNotifier<ThemeSettings>(ThemeSettings());
-
-  /// Method to update and save the theme and notify listeners.
-  void setTheme(ThemeSettings mode) {
-    themeNotifier.value = ThemeSettings(
-      themeMode: mode.themeMode,
-      themeStyle: mode.themeStyle,
-      pureBlack: mode.pureBlack,
-    );
-    saveThemeSettings(themeNotifier.value);
-  }
-
-  /// Saves theme settings to shared preferences
-  void saveThemeSettings(ThemeSettings settings) {
-    String themeMode = "0";
-    String themeStyle = "0";
-    String pureBlack = "0";
-    switch (settings.themeMode) {
-      case ThemeMode.dark:
-        themeMode = "2";
-        break;
-      case ThemeMode.light:
-        themeMode = "1";
-        break;
-      default:
-        themeMode = "0";
-    }
-    switch (settings.themeStyle) {
-      case ThemeStyle.crimsonEarth:
-        themeStyle = "5";
-        break;
-      case ThemeStyle.evergreenSlate:
-        themeStyle = "4";
-        break;
-      case ThemeStyle.rustOlive:
-        themeStyle = "3";
-        break;
-      case ThemeStyle.blueMauve:
-        themeStyle = "2";
-        break;
-      case ThemeStyle.plumBrown:
-        themeStyle = "1";
-        break;
-      default:
-        themeStyle = "0";
-    }
-    pureBlack = settings.pureBlack ? "1" : "0";
-    saveStringListToSharedPreferences(Prefs.theme, [themeMode, themeStyle, pureBlack]);
-  }
-}
-
-/// Represents the configuration settings for the theme
-class ThemeSettings {
-  ThemeMode themeMode;
-  ThemeStyle themeStyle;
-  bool pureBlack;
-
-  ThemeSettings({
-    this.themeMode = ThemeMode.system,
-    this.themeStyle = ThemeStyle.defaultStyle,
-    this.pureBlack = false,
-  });
-
-  /// Creates a copy of theme settings but with the given fields replaced with the new values.
-  ThemeSettings copyWith({
-    ThemeMode? themeMode,
-    ThemeStyle? themeStyle,
-    bool? pureBlack,
-  }) {
-    return ThemeSettings(
-      themeMode: themeMode ?? this.themeMode,
-      themeStyle: themeStyle ?? this.themeStyle,
-      pureBlack: pureBlack ?? this.pureBlack,
-    );
-  }
 }
 
 /// Describes what colors will be used by the app
