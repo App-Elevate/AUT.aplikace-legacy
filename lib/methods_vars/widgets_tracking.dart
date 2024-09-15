@@ -76,7 +76,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     }
   } else if (daysChange != null) {
     newDate = dateListener.value.add(Duration(days: daysChange));
-    if (newDate.weekday == 6 || newDate.weekday == 7 && skipWeekends) {
+    if (newDate.isWeekend && skipWeekends) {
       return changeDate(daysChange: daysChange > 0 ? daysChange + 1 : daysChange - 1, overflow: overflow + 1);
     }
     loggedInCanteen.smartPreIndexing(newDate);
@@ -96,7 +96,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
   } else if (index != null) {
     newDate = convertIndexToDatetime(index);
     bool hasToBeAnimated = false;
-    if ((newDate.weekday == 6 || newDate.weekday == 7) && skipWeekends && !animating) {
+    if (newDate.isWeekend && skipWeekends && !animating) {
       hasToBeAnimated = true;
       bool forwardOrBackward = index > lastChangeDateIndex;
       switch (forwardOrBackward) {

@@ -114,7 +114,7 @@ void main() async {
   // If not initializing normally
   if (skipWeekends) {
     DateTime initialDate = DateTime.now();
-    while (initialDate.weekday == 6 || initialDate.weekday == 7) {
+    while (initialDate.isWeekend) {
       initialDate = initialDate.add(const Duration(days: 1));
     }
     int index = initialDate.difference(minimalDate).inDays;
