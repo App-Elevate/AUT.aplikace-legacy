@@ -7,8 +7,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
-import 'package:autojidelna/shared_prefs.dart';
 import 'package:autojidelna/shared_widgets/popups.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -19,6 +19,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:autojidelna/local_imports.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
@@ -74,31 +75,25 @@ class LoggedInCanteen {
 
   ///přidá +1 pro counter statistiky a pokud je zapnutý analytics tak ji pošle do firebase
   void pridatStatistiku(TypStatistiky statistika) async {
+    Box box = Hive.box(Boxes.statistics);
     switch (statistika) {
       //default case
       case TypStatistiky.objednavka:
-        String? str = await readStringFromSharedPreferences('statistika:objednavka');
-        str ??= '0';
-        int pocetStatistiky = int.parse(str);
+        int pocetStatistiky = box.get(HiveKeys.statistikaObjednavka, defaultValue: 0);
         pocetStatistiky++;
-        if (analyticsEnabledGlobally && analytics != null) {
-          analytics!.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
-        }
-        saveStringToSharedPreferences('statistika:objednavka', '$pocetStatistiky');
+        if (analyticsEnabledGlobally && analytics != null) analytics!.logEvent(name: 'objednavka', parameters: {'pocet': pocetStatistiky});
+
+        box.put(HiveKeys.statistikaObjednavka, pocetStatistiky);
         break;
       case TypStatistiky.auto:
-        String? str = await readStringFromSharedPreferences('statistika:auto');
-        str ??= '0';
-        int pocetStatistiky = int.parse(str);
+        int pocetStatistiky = box.get(HiveKeys.statistikaAuto, defaultValue: 0);
         pocetStatistiky++;
-        saveStringToSharedPreferences('statistika:auto', '$pocetStatistiky');
+        box.put(HiveKeys.statistikaAuto, pocetStatistiky);
         break;
       case TypStatistiky.burzaCatcher:
-        String? str = await readStringFromSharedPreferences('statistika:burzaCatcher');
-        str ??= '0';
-        int pocetStatistiky = int.parse(str);
+        int pocetStatistiky = box.get(HiveKeys.statistikaBurzaCatcher, defaultValue: 0);
         pocetStatistiky++;
-        saveStringToSharedPreferences('statistika:burzaCatcher', '$pocetStatistiky');
+        box.put(HiveKeys.statistikaBurzaCatcher, pocetStatistiky);
         break;
     }
   }
@@ -218,7 +213,7 @@ class LoggedInCanteen {
       return Future.error(ConnectionErrors.connectionFailed);
     }
     if (indexLunches) {
-      int vydejna = (await readIntFromSharedPreferences('${Prefs.location}${username}_$url') ?? 0) + 1;
+      int vydejna = (Hive.box(Boxes.appState).get(HiveKeys.location(username, url), defaultValue: 0)) + 1;
       (await canteenInstance).vydejna = vydejna;
       await _indexLunchesMonth();
       smartPreIndexing(DateTime.now());

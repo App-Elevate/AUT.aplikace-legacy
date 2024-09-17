@@ -15,6 +15,9 @@ class App {
     Hive.registerAdapter(TabletUiAdapter());
     Hive.registerAdapter(DateFormatOptionsAdapter());
     await Hive.openBox(Boxes.settings);
+    await Hive.openBox(Boxes.appState);
+    await Hive.openBox(Boxes.notifications);
+    await Hive.openBox(Boxes.statistics);
 
     _initHiveExecuted = true;
   }

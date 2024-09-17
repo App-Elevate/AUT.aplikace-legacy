@@ -1,13 +1,14 @@
 // Purpose: Login screen for the app
 
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/navigation.dart';
 import 'package:autojidelna/pages_new/settings/data_collection.dart';
-import 'package:autojidelna/shared_prefs.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -82,7 +83,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void setLastUrl() async {
-    _urlController.text = await readStringFromSharedPreferences(Prefs.url) ?? "";
+    _urlController.text = Hive.box(Boxes.appState).get(HiveKeys.url, defaultValue: '');
   }
 
   Form loginForm(context) {
@@ -213,7 +214,7 @@ class LoginScreen extends StatelessWidget {
       String url = _urlController.text;
       try {
         await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
-        saveStringToSharedPreferences(Prefs.url, url);
+        Hive.box(Boxes.appState).put(HiveKeys.url, url);
         try {
           changeDate(newDate: DateTime.now());
           MyApp.navigatorKey.currentState!.popUntil((route) => route.isFirst);

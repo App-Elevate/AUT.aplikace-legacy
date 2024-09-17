@@ -1,8 +1,8 @@
 // File containing all code for notifications. This includes background fetch and awesome notifications.
 
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/local_imports.dart';
-import 'package:autojidelna/shared_prefs.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -12,6 +12,7 @@ import 'package:canteenlib/canteenlib.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 // Platform messages are asynchronous, so we initialize in an async method.
 Future<void> initPlatformState() async {
@@ -167,35 +168,28 @@ Future<void> doNotifications({bool force = false}) async {
     DateTime now = DateTime.now();
     String nowString = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
-    String? timeOfDayFoodNotification = await readStringFromSharedPreferences(Prefs.foodNotifTime);
-    timeOfDayFoodNotification ??= '11:00';
-    TimeOfDay timeOfDay =
-        TimeOfDay(hour: int.parse(timeOfDayFoodNotification.split(':')[0]), minute: int.parse(timeOfDayFoodNotification.split(':')[1]));
+    TimeOfDay timeOfDay = const TimeOfDay(hour: 11, minute: 0);
     DateTime time = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
     int difference = time.difference(now).inMinutes;
-    //difference from time of day to now
 
-    if ((await readStringFromSharedPreferences('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}') == nowString ||
-            await readStringFromSharedPreferences('${Prefs.dailyFoodInfo}${loginData.users[i].username}_${loginData.users[i].url}') != '1' ||
+    Box box = Hive.box(Boxes.notifications);
+    //difference from time of day to now
+    box.get(HiveKeys.lastNotificationCheck(loginData.users[i].username, loginData.users[i].url));
+    if ((box.get(HiveKeys.lastNotificationCheck(loginData.users[i].username, loginData.users[i].url)) == nowString ||
+            box.get(HiveKeys.dailyFoodInfo(loginData.users[i].username, loginData.users[i].url)) != '1' ||
             difference > 120 ||
             difference < -120) &&
         !force) {
       jidloDne = false;
     } else {
-      saveStringToSharedPreferences('${Prefs.lastJidloDneCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
+      box.put(HiveKeys.lastJidloDneCheck(loginData.users[i].username, loginData.users[i].url), nowString);
     }
 
-    if (await readStringFromSharedPreferences('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') ==
-            nowString &&
-        !force) {
+    if (box.get(HiveKeys.lastNotificationCheck(loginData.users[i].username, loginData.users[i].url)) == nowString && !force) {
       kredit = false;
-    }
-
-    if (await readStringFromSharedPreferences('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}') ==
-            nowString &&
-        !force) {
       objednavka = false;
     }
+
     /*
     if (kDebugMode) {
       AwesomeNotifications().createNotification(
@@ -210,7 +204,8 @@ Future<void> doNotifications({bool force = false}) async {
     if (!jidloDne && !kredit && !objednavka) {
       continue;
     }
-    saveStringToSharedPreferences('${Prefs.lastNotificationCheck}${loginData.users[i].username}_${loginData.users[i].url}', nowString);
+
+    box.put(HiveKeys.lastNotificationCheck(loginData.users[i].username, loginData.users[i].url), nowString);
 
     try {
       await loggedInCanteen.changeAccount(i, saveToStorage: false);
@@ -297,8 +292,7 @@ Future<void> doNotifications({bool force = false}) async {
         }
       }
       //parse ignore date to DateTime
-      String? ignoreDateStr =
-          await readStringFromSharedPreferences('${Prefs.kreditNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
+      String? ignoreDateStr = box.get(HiveKeys.kreditNotifications(loginData.users[i].username, loginData.users[i].url));
       DateTime ignoreDate;
       switch (ignoreDateStr) {
         //not ignored
@@ -338,8 +332,7 @@ Future<void> doNotifications({bool force = false}) async {
       }
       //pokud chybí aspoň 3 obědy z příštích 10 dní
       //parse ignore date to DateTime
-      String? ignoreDateStrObjednano =
-          await readStringFromSharedPreferences('${Prefs.nemateObjednanoNotifications}${loginData.users[i].username}_${loginData.users[i].url}');
+      String? ignoreDateStrObjednano = box.get(HiveKeys.nemateObjednanoNotifications(loginData.users[i].username, loginData.users[i].url));
       DateTime ignoreDateObjednano;
       switch (ignoreDateStrObjednano) {
         //not ignored
@@ -408,13 +401,13 @@ class NotificationController {
   static Future<void> handleNotificationAction(ReceivedAction? receivedAction) async {
     //tlačítka ztlumení a objednání prvního oběda
     if (receivedAction?.buttonKeyPressed != null && receivedAction?.buttonKeyPressed != '') {
-      if (receivedAction!.buttonKeyPressed.substring(0, 16) == Prefs.nemateObjednanoNotifications) {
+      if (receivedAction!.buttonKeyPressed.substring(0, 16) == HiveKeys.onlyNemateObjednanoNotifications) {
         DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        saveStringToSharedPreferences(receivedAction.buttonKeyPressed,
+        Hive.box(Boxes.notifications).put(receivedAction.buttonKeyPressed,
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
-      } else if (receivedAction.buttonKeyPressed.substring(0, 14) == Prefs.kreditNotifications) {
+      } else if (receivedAction.buttonKeyPressed.substring(0, 14) == HiveKeys.onlykreditNotifications) {
         DateTime dateTillIgnore = DateTime.now().add(const Duration(days: 7));
-        saveStringToSharedPreferences(receivedAction.buttonKeyPressed,
+        Hive.box(Boxes.notifications).put(receivedAction.buttonKeyPressed,
             '${dateTillIgnore.year}-${dateTillIgnore.month.toString().padLeft(2, '0')}-${dateTillIgnore.day.toString().padLeft(2, '0')}');
       } else if (receivedAction.buttonKeyPressed.substring(0, 9) == NotificationIds.objednatButton) {
         String username = receivedAction.buttonKeyPressed.substring(9).split('_')[0];

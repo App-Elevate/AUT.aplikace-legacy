@@ -1,5 +1,6 @@
 // Purpose: Main file of the app, contains the main function and the main widget of the app as well as the loading screen on startup
 
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/lang/output/texts.dart';
 import 'package:autojidelna/local_imports.dart';
@@ -7,7 +8,6 @@ import 'package:autojidelna/methods_vars/app.dart';
 import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/pages_new/navigation.dart';
 import 'package:autojidelna/providers.dart';
-import 'package:autojidelna/shared_prefs.dart';
 
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -38,32 +39,17 @@ void main() async {
   // Awesome notifications initialization
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String version = packageInfo.version;
-  String? lastVersion = await readStringFromSharedPreferences(Prefs.lastVersion);
+  String? lastVersion = Hive.box(Boxes.appState).get(HiveKeys.lastVersion);
 
   // Removing the already set notifications if we updated versions
   if (lastVersion != version) {
     // Set the new version
-    saveStringToSharedPreferences(Prefs.lastVersion, version);
+    Hive.box(Boxes.appState).put(HiveKeys.lastVersion, version);
 
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+
       for (LoggedInUser uzivatel in loginData.users) {
-        List<String> prefs = [
-          Prefs.dailyFoodInfo,
-          Prefs.foodNotifTime,
-          Prefs.kreditNotifications,
-          Prefs.lastJidloDneCheck,
-          Prefs.lastNotificationCheck,
-          Prefs.nemateObjednanoNotifications
-        ];
-        for (String pref in prefs) {
-          await readStringFromSharedPreferences(pref + uzivatel.username).then((value) {
-            if (value != null) {
-              saveStringToSharedPreferences('$pref${uzivatel.username}_${uzivatel.url}', value);
-              removeFromSharedPreferences(pref + uzivatel.username);
-            }
-          });
-        }
         AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${uzivatel.username}_${uzivatel.url}');
         await AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${uzivatel.username}_${uzivatel.url}');
       }
@@ -111,7 +97,7 @@ void main() async {
   // Loading settings from preferences
   skipWeekends = Settings().getSkipWeekends;
 
-  hideBurzaAlertDialog = await readBoolFromSharedPreferences(SharedPrefsKeys.hideBurzaAlertDialog) ?? false;
+  hideBurzaAlertDialog = Hive.box(Boxes.appState).get(HiveKeys.hideBurzaAlertDialog, defaultValue: false);
 
   // Skipping to next monday if we are currently on saturday or sunday
   // If not initializing normally

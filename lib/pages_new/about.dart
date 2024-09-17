@@ -51,6 +51,7 @@ class AboutScreen extends StatelessWidget {
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LicensePage())),
           ),
           // collected data list tile
+          // TODO: replace strings with variables
           ListTile(
             title: Text(lang.settingsDataCollectionDescription_4("0")),
             onTap: () {

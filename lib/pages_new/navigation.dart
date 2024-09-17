@@ -1,12 +1,12 @@
-import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/notifications.dart';
 import 'package:autojidelna/pages_new/canteen.dart';
 import 'package:autojidelna/pages_new/more/more.dart';
-import 'package:autojidelna/shared_prefs.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -22,27 +22,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   initState() {
-    readStringFromSharedPreferences(Prefs.firstTime).then((value) {
-      if (value != '1') {
-        initPlatformState().then((value) async {
-          await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-            if (!isAllowed) {
-              //TODO: less annoying popup for notifications - show a friendly screen before asking
-              AwesomeNotifications().requestPermissionToSendNotifications();
-            }
-            BackgroundFetch.start();
-          });
-        });
-      } else {
-        initPlatformState();
-      }
-      saveStringToSharedPreferences(Prefs.firstTime, '1');
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    firstTimePopUp();
+
     return Scaffold(
       appBar: <PreferredSizeWidget>[
         const CanteenAppBar(),
@@ -72,5 +58,23 @@ class _NavigationScreenState extends State<NavigationScreen> {
         ],
       ),
     );
+  }
+
+  void firstTimePopUp() {
+    bool firstTime = Hive.box(Boxes.appState).get(HiveKeys.firstTime, defaultValue: true);
+    if (firstTime) {
+      initPlatformState().then((value) async {
+        await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+          if (!isAllowed) {
+            //TODO: less annoying popup for notifications - show a friendly screen before asking
+            AwesomeNotifications().requestPermissionToSendNotifications();
+          }
+          BackgroundFetch.start();
+        });
+      });
+    } else {
+      initPlatformState();
+    }
+    Hive.box(Boxes.appState).put(HiveKeys.firstTime, false);
   }
 }

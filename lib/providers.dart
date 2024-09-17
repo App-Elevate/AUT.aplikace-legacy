@@ -11,7 +11,7 @@ import 'package:hive/hive.dart';
 ///
 /// [themeMode]             | Theme mode of the app
 ///
-/// [isTabletUi]            | If true, the app will use a tablet friendly ui
+/// [tabletUi]            | If true, the app will use a tablet friendly ui
 ///
 /// [isListUi]              | If true, Canteen menu is displayed in a list
 ///

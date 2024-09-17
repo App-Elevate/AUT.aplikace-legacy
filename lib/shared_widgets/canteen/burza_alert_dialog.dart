@@ -1,13 +1,14 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/main.dart';
 import 'package:autojidelna/methods_vars/ordering.dart';
 import 'package:autojidelna/methods_vars/widgets_tracking.dart';
-import 'package:autojidelna/shared_prefs.dart';
 import 'package:autojidelna/shared_widgets/configured_alert_dialog.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 void burzaAlertDialog(BuildContext context, Jidlo updatedDish, StavJidla stav) {
   if (!hideBurzaAlertDialog && stav == StavJidla.objednanoNelzeOdebrat) {
@@ -35,7 +36,7 @@ void burzaAlertDialog(BuildContext context, Jidlo updatedDish, StavJidla stav) {
                       onChanged: (data) {
                         checkbox.value = data!; // Checkbox isn't tristate so it's save
                         hideBurzaAlertDialog = data;
-                        saveBoolToSharedPreferences(SharedPrefsKeys.hideBurzaAlertDialog, data);
+                        Hive.box(Boxes.appState).put(HiveKeys.hideBurzaAlertDialog, data);
                       },
                     ),
                   ),

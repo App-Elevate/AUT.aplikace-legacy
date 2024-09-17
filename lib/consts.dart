@@ -1,29 +1,5 @@
 // Purpose: stores constants used throughout the app.
 
-/// Shared Preferences Ids
-class Prefs {
-  static const String theme = 'theme';
-  static const String calendarBigMarkers = 'calendar_big_markers';
-  static const String disableAnalytics = 'analytics';
-  static const String skipWeekends = 'skipWeekends';
-  static const String dailyFoodInfo = 'sendFoodInfo-';
-  static const String foodNotifTime = 'FoodNotificationTime';
-  static const String kreditNotifications = 'ignore_kredit_';
-  static const String nemateObjednanoNotifications = 'ignore_objednat_';
-  static const String lastJidloDneCheck = 'lastJidloDneCheck-';
-  static const String lastNotificationCheck = 'lastCheck-';
-  static const String lastVersion = 'lastVersion';
-  static const String statistikaObjednavka = 'statistika:objednavka';
-  static const String url = 'url';
-  static const String firstTime = 'firstTime';
-  static const String location = 'location_';
-}
-
-class OldPrefs {
-  static const String theme = 'themeMode';
-  static const String disableAnalytics = 'disableAnalytics';
-}
-
 class NotificationIds {
   static const String kreditChannel = 'kredit_channel_';
   static const String objednanoChannel = 'objednano_channel_';

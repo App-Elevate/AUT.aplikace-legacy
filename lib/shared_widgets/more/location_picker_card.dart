@@ -1,12 +1,11 @@
-import 'package:autojidelna/consts.dart';
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/methods_vars/canteenwrapper.dart';
 import 'package:autojidelna/shared_widgets/configured_alert_dialog.dart';
 import 'package:autojidelna/shared_widgets/configured_dialog.dart';
 import 'package:autojidelna/shared_widgets/lined_card.dart';
 import 'package:flutter/material.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class LocationPickerCard extends StatefulWidget {
   const LocationPickerCard({super.key});
@@ -66,8 +65,8 @@ class _LocationPickerCardState extends State<LocationPickerCard> {
                 updatePicked(i);
                 loggedInCanteen.zmenitVydejnu(i + 1);
                 Navigator.of(context).popUntil((route) => route.isFirst);
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setInt('${Prefs.location}${loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? ''}_${loggedInCanteen.canteenDataUnsafe!.url}', i);
+                Hive.box(Boxes.appState)
+                    .put(HiveKeys.location(loggedInCanteen.uzivatel?.uzivatelskeJmeno ?? '', loggedInCanteen.canteenDataUnsafe!.url), i);
               },
             ),
           ),
