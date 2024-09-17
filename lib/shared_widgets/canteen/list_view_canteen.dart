@@ -3,14 +3,41 @@ import 'package:autojidelna/shared_widgets/canteen/day_card.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class ListViewCanteen extends StatelessWidget {
+class ListViewCanteen extends StatefulWidget {
   const ListViewCanteen({super.key});
+
+  @override
+  State<ListViewCanteen> createState() => _ListViewCanteenState();
+}
+
+class _ListViewCanteenState extends State<ListViewCanteen> {
+  @override
+  void initState() {
+    super.initState();
+
+    itemPositionsListener.itemPositions.addListener(() {
+      final positions = itemPositionsListener.itemPositions.value.toList();
+
+      // Sort positions by itemLeadingEdge to ensure the top item is at the beginning
+      positions.sort((a, b) => a.itemLeadingEdge.compareTo(b.itemLeadingEdge));
+
+      if (positions.isEmpty) return;
+
+      final topItem = positions.first;
+
+      // Include the first item only if more than 10% of it is visible
+      if (topItem.itemTrailingEdge > .05) {
+        dateListener.value = convertIndexToDatetime(topItem.index);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
       itemScrollController: itemScrollController,
-      initialScrollIndex: convertDateTimeToIndex(DateTime.now()),
+      itemPositionsListener: itemPositionsListener,
+      initialScrollIndex: convertDateTimeToIndex(dateListener.value),
       itemCount: minimalDate.difference(maximalDate).inDays.abs(),
       itemBuilder: (context, index) => DayCard(index),
     );
