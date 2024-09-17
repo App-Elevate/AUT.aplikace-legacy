@@ -73,8 +73,8 @@ class NotificationsTexts {
 
 class Links {
   static const String autojidelna = 'https://autojidelna.cz/';
-  static const String repo = 'https://github.com/Autojidelna/autojidelna';
-  static const latestVersionApi = 'https://api.github.com/repos/Autojidelna/autojidelna/releases/latest';
+  static const String repo = 'https://github.com/App-Elevate/AUT.aplikace';
+  static const latestVersionApi = 'https://api.github.com/repos/App-Elevate/AUT.aplikace/releases/latest';
   static const String appStore = 'https://autojidelna.cz/release/appStore.json';
   static String currentVersionCode(String appVersion) {
     return '$repo/blob/v$appVersion';
