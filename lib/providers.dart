@@ -1,6 +1,5 @@
 import 'package:autojidelna/classes_enums/all.dart';
 import 'package:autojidelna/classes_enums/hive.dart';
-import 'package:autojidelna/shared_prefs.dart';
 import 'package:autojidelna/methods_vars/widgets_tracking.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
@@ -141,54 +140,6 @@ class Settings with ChangeNotifier {
     _disableAnalytics = disabled;
     analyticsEnabledGlobally = disabled;
     box.put(HiveKeys.analytics, _disableAnalytics);
-    notifyListeners();
-  }
-}
-
-class NotificationPreferences with ChangeNotifier {
-  bool _todaysFood = false;
-  TimeOfDay _sendTodaysFood = const TimeOfDay(hour: 11, minute: 0);
-  bool _lowCredit = false;
-  bool _weekLongFamine = false;
-
-  bool get todaysFood => _todaysFood;
-  TimeOfDay get sendTodaysFood => _sendTodaysFood;
-  bool get lowCredit => _lowCredit;
-  bool get weekLongFamine => _weekLongFamine;
-
-  void setAll({
-    bool? todaysFood,
-    TimeOfDay? sendTodaysFood,
-    bool? lowCredit,
-    bool? weekLongFamine,
-  }) {
-    _todaysFood = todaysFood ?? _todaysFood;
-    _sendTodaysFood = sendTodaysFood ?? _sendTodaysFood;
-    _lowCredit = lowCredit ?? _lowCredit;
-    _weekLongFamine = weekLongFamine ?? _weekLongFamine;
-  }
-
-  void setTodaysFood(bool todaysFood) {
-    _todaysFood = todaysFood;
-    saveBoolToSharedPreferences(SharedPrefsKeys.todaysFood, _todaysFood);
-    notifyListeners();
-  }
-
-  void setSendTodaysFood(TimeOfDay sendTodaysFood) {
-    _sendTodaysFood = sendTodaysFood;
-    saveStringToSharedPreferences(SharedPrefsKeys.sendTodaysFood, _sendTodaysFood.toString());
-    notifyListeners();
-  }
-
-  void setLowCredit(bool lowCredit) {
-    _lowCredit = lowCredit;
-    saveBoolToSharedPreferences(SharedPrefsKeys.lowCredit, _lowCredit);
-    notifyListeners();
-  }
-
-  void setWeekLongFamine(bool weekLongFamine) {
-    _weekLongFamine = weekLongFamine;
-    saveBoolToSharedPreferences(SharedPrefsKeys.weekLongFamine, _weekLongFamine);
     notifyListeners();
   }
 }

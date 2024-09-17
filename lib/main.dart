@@ -180,7 +180,6 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Settings>(create: (_) => Settings()),
-        ChangeNotifierProvider<NotificationPreferences>(create: (_) => NotificationPreferences()),
         ChangeNotifierProvider<Ordering>(create: (_) => Ordering()),
         ChangeNotifierProvider<DishesOfTheDay>(create: (_) => DishesOfTheDay())
       ],
