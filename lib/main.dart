@@ -3,6 +3,7 @@
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/lang/output/texts.dart';
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/methods_vars/app.dart';
 import 'package:autojidelna/pages_new/login.dart';
 import 'package:autojidelna/pages_new/navigation.dart';
 import 'package:autojidelna/providers.dart';
@@ -31,6 +32,8 @@ import 'package:background_fetch/background_fetch.dart';
 void main() async {
   // Ensure that the app is initialized
   WidgetsFlutterBinding.ensureInitialized();
+
+  await App.initHive();
 
   // Awesome notifications initialization
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -89,7 +92,7 @@ void main() async {
 
   // Check if user has opped out of analytics
 
-  bool? analyticsDisabled = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics);
+  bool? analyticsDisabled = Settings().disableAnalytics;
 
   // Initializing firebase if analytics are not disabled
   if (analyticsDisabled != true || !kDebugMode) {
@@ -106,7 +109,7 @@ void main() async {
   }
 
   // Loading settings from preferences
-  skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? false;
+  skipWeekends = Settings().getSkipWeekends;
 
   hideBurzaAlertDialog = await readBoolFromSharedPreferences(SharedPrefsKeys.hideBurzaAlertDialog) ?? false;
 
@@ -176,7 +179,7 @@ class _MyAppState extends State<MyApp> {
     // Setting up providers
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<Settings>(create: (_) => Settings()..loadFromShraredPreferences()),
+        ChangeNotifierProvider<Settings>(create: (_) => Settings()),
         ChangeNotifierProvider<NotificationPreferences>(create: (_) => NotificationPreferences()),
         ChangeNotifierProvider<Ordering>(create: (_) => Ordering()),
         ChangeNotifierProvider<DishesOfTheDay>(create: (_) => DishesOfTheDay())

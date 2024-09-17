@@ -1,8 +1,10 @@
 import 'package:autojidelna/classes_enums/all.dart';
+import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/shared_prefs.dart';
 import 'package:autojidelna/methods_vars/widgets_tracking.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 /// Manages user preferences related to UI settings.
 ///
@@ -26,16 +28,18 @@ import 'package:flutter/material.dart';
 ///
 /// [disableAnalytics]      | If true, disables analytics
 class Settings with ChangeNotifier {
-  ThemeStyle _themeStyle = ThemeStyle.defaultStyle;
-  ThemeMode _themeMode = ThemeMode.dark;
-  TabletUi _tabletUi = TabletUi.auto;
-  bool _isListUi = false;
-  bool _isPureBlack = false;
-  bool _bigCalendarMarkers = false;
-  bool _skipWeekends = false;
-  DateFormatOptions _dateFormat = DateFormatOptions.dMy;
-  bool _relTimeStamps = false;
-  bool _disableAnalytics = false;
+  static Box box = Hive.box(Boxes.settings);
+
+  ThemeStyle _themeStyle = box.get(HiveKeys.themeStyle, defaultValue: ThemeStyle.defaultStyle);
+  ThemeMode _themeMode = box.get(HiveKeys.themeMode, defaultValue: ThemeMode.dark);
+  TabletUi _tabletUi = box.get(HiveKeys.tabletUi, defaultValue: TabletUi.auto);
+  bool _isListUi = box.get(HiveKeys.listUi, defaultValue: false);
+  bool _isPureBlack = box.get(HiveKeys.pureBlack, defaultValue: false);
+  bool _bigCalendarMarkers = box.get(HiveKeys.bigCalendarMarkers, defaultValue: false);
+  bool _skipWeekends = box.get(HiveKeys.skipWeekends, defaultValue: false);
+  DateFormatOptions _dateFormat = box.get(HiveKeys.dateFormat, defaultValue: DateFormatOptions.dMy);
+  bool _relTimeStamps = box.get(HiveKeys.relTimeStamps, defaultValue: false);
+  bool _disableAnalytics = box.get(HiveKeys.analytics, defaultValue: false);
 
   /// Theme style getter
   ThemeStyle get themeStyle => _themeStyle;
@@ -67,75 +71,60 @@ class Settings with ChangeNotifier {
   /// Analytics getter
   bool get disableAnalytics => _disableAnalytics;
 
-  /// Loads settings from shared preferences
-  void loadFromShraredPreferences() async {
-    _themeStyle = await readEnumFromSharedPreferences(SharedPrefsKeys.themeStyle, ThemeStyle.values, _themeStyle);
-    _themeMode = await readEnumFromSharedPreferences(SharedPrefsKeys.themeMode, ThemeMode.values, _themeMode);
-    _tabletUi = await readEnumFromSharedPreferences(SharedPrefsKeys.tabletUi, TabletUi.values, _tabletUi);
-    _isListUi = await readBoolFromSharedPreferences(SharedPrefsKeys.listUi) ?? _isListUi;
-    _isPureBlack = await readBoolFromSharedPreferences(SharedPrefsKeys.pureBlack) ?? _isPureBlack;
-    _bigCalendarMarkers = await readBoolFromSharedPreferences(SharedPrefsKeys.bigCalendarMarkers) ?? _bigCalendarMarkers;
-    _skipWeekends = await readBoolFromSharedPreferences(SharedPrefsKeys.skipWeekends) ?? _skipWeekends;
-    _dateFormat = await readEnumFromSharedPreferences(SharedPrefsKeys.dateFormat, DateFormatOptions.values, _dateFormat);
-    _relTimeStamps = await readBoolFromSharedPreferences(SharedPrefsKeys.relTimeStamps) ?? _relTimeStamps;
-    _disableAnalytics = await readBoolFromSharedPreferences(SharedPrefsKeys.analytics) ?? _disableAnalytics;
-    notifyListeners();
-  }
-
   /// Setter for theme style
   void setThemeStyle(ThemeStyle themeStyle) {
     if (_themeStyle == themeStyle) return;
     _themeStyle = themeStyle;
-    saveEnumToSharedPreferences(SharedPrefsKeys.themeStyle, _themeStyle);
+    box.put(HiveKeys.themeStyle, _themeStyle);
     notifyListeners();
   }
 
   /// Setter for theme mode
   void setThemeMode(ThemeMode themeMode) {
     _themeMode = themeMode;
-    saveEnumToSharedPreferences(SharedPrefsKeys.themeMode, _themeMode);
+    box.put(HiveKeys.themeMode, _themeMode);
     notifyListeners();
   }
 
   /// Setter for tablet ui
   void setTabletUi(TabletUi tabletui) {
     _tabletUi = tabletui;
-    saveEnumToSharedPreferences(SharedPrefsKeys.tabletUi, _tabletUi);
+    box.put(HiveKeys.tabletUi, _tabletUi);
     notifyListeners();
   }
 
   /// Setter for list UI
   void setListUi(bool isListUi) {
     _isListUi = isListUi;
-    saveBoolToSharedPreferences(SharedPrefsKeys.listUi, _isListUi);
+    box.put(HiveKeys.listUi, _isListUi);
     notifyListeners();
   }
 
   /// Setter for pure black
   void setPureBlack(bool isPureBlack) {
     _isPureBlack = isPureBlack;
-    saveBoolToSharedPreferences(SharedPrefsKeys.pureBlack, _isPureBlack);
+    box.put(HiveKeys.pureBlack, _isPureBlack);
     notifyListeners();
   }
 
   /// Setter for big calendar markers
   void setCalendarMarkers(bool bigCalendarMarkers) {
     _bigCalendarMarkers = bigCalendarMarkers;
-    saveBoolToSharedPreferences(SharedPrefsKeys.bigCalendarMarkers, _bigCalendarMarkers);
+    box.put(HiveKeys.bigCalendarMarkers, _bigCalendarMarkers);
     notifyListeners();
   }
 
   /// Setter for date format
   void setDateFormat(DateFormatOptions dateFormat) {
     _dateFormat = dateFormat;
-    saveEnumToSharedPreferences(SharedPrefsKeys.dateFormat, _dateFormat);
+    box.put(HiveKeys.dateFormat, _dateFormat);
     notifyListeners();
   }
 
   /// Setter for relative timestamps
   void setRelTimeStamps(bool relTimeStamps) {
     _relTimeStamps = relTimeStamps;
-    saveBoolToSharedPreferences(SharedPrefsKeys.relTimeStamps, _relTimeStamps);
+    box.put(HiveKeys.relTimeStamps, _relTimeStamps);
     notifyListeners();
   }
 
@@ -143,7 +132,7 @@ class Settings with ChangeNotifier {
   void setSkipWeekends(bool privateSkipWeekends) {
     _skipWeekends = privateSkipWeekends;
     skipWeekends = privateSkipWeekends;
-    saveBoolToSharedPreferences(SharedPrefsKeys.skipWeekends, _skipWeekends);
+    box.put(HiveKeys.skipWeekends, _skipWeekends);
     notifyListeners();
   }
 
@@ -151,7 +140,7 @@ class Settings with ChangeNotifier {
   void setAnalytics(bool disabled) {
     _disableAnalytics = disabled;
     analyticsEnabledGlobally = disabled;
-    saveBoolToSharedPreferences(SharedPrefsKeys.analytics, _disableAnalytics);
+    box.put(HiveKeys.analytics, _disableAnalytics);
     notifyListeners();
   }
 }
