@@ -25,6 +25,7 @@ late final PageController pageviewController;
 
 /// Item controller for the ListView which tells which date is currently selected
 final ItemScrollController itemScrollController = ItemScrollController();
+final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
 bool loginScreenVisible = false;
 
@@ -54,22 +55,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
     dateListener.value = newDate;
     lastChangeDateIndex = newDate.difference(minimalDate).inDays;
     try {
-      animating = true;
-      pageviewController.hasClients
-          ? pageviewController
-              .animateToPage(
-                newDate.difference(minimalDate).inDays,
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeIn,
-              )
-              .then((value) => animating = false)
-          : itemScrollController
-              .scrollTo(
-                index: newDate.difference(minimalDate).inDays,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeIn,
-              )
-              .then((value) => animating = false);
+      _animate(newDate.difference(minimalDate).inDays, short: true);
     } catch (e) {
       animating = false;
       rethrow;
@@ -80,19 +66,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
       return changeDate(daysChange: daysChange > 0 ? daysChange + 1 : daysChange - 1, overflow: overflow + 1);
     }
     loggedInCanteen.smartPreIndexing(newDate);
-    pageviewController.hasClients
-        ? pageviewController.animateToPage(
-            newDate.difference(minimalDate).inDays,
-            duration: const Duration(milliseconds: 150),
-            curve: Curves.easeIn,
-          )
-        : itemScrollController
-            .scrollTo(
-              index: newDate.difference(minimalDate).inDays,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            )
-            .then((value) => animating = false);
+    _animate(newDate.difference(minimalDate).inDays, short: true);
   } else if (index != null) {
     newDate = convertIndexToDatetime(index);
     bool hasToBeAnimated = false;
@@ -108,25 +82,9 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
           break;
       }
     }
-    newDate = convertIndexToDatetime(index);
     if (hasToBeAnimated) {
       try {
-        animating = true;
-        pageviewController.hasClients
-            ? pageviewController
-                .animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                )
-                .then((value) => animating = false)
-            : itemScrollController
-                .scrollTo(
-                  index: index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                )
-                .then((value) => animating = false);
+        _animate(index);
       } catch (e) {
         animating = false;
         rethrow;
@@ -143,4 +101,14 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
         ? pageviewController.jumpToPage(newDate.difference(minimalDate).inDays)
         : itemScrollController.jumpTo(index: newDate.difference(minimalDate).inDays);
   }
+}
+
+void _animate(int index, {bool short = false}) {
+  animating = true;
+  Duration duration = Duration(milliseconds: short ? 150 : 300);
+  Curve curve = Curves.easeIn;
+
+  pageviewController.hasClients
+      ? pageviewController.animateToPage(index, duration: duration, curve: curve).then((_) => animating = false)
+      : itemScrollController.scrollTo(index: index, duration: duration, curve: curve).then((_) => animating = false);
 }
