@@ -266,25 +266,17 @@ class TextsCs extends Texts {
 
   @override
   String get settingsDataCollectionDescription_1 =>
-      'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve ';
+      'Informace shromažďujeme výhradně za účelem oprav chyb v aplikaci a udržování základních statistických údajů. Nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup, jsme na těchto informacích závislí. Podrobnější informace naleznete ve ';
 
   @override
   String get settingsDataCollectionDescription_2 => 'Zdrojovém kódu';
 
   @override
-  String get settingsDataCollectionDescription_3 => ' nebo na ';
+  String get settingsDataCollectionDescription_3 => ' nebo v ';
 
   @override
-  String settingsDataCollectionDescription_4(String arg) {
-    String _temp0 = intl.Intl.selectLogic(
-      arg,
-      {
-        '1': 'seznamu',
-        'other': 'Seznam',
-      },
-    );
-    return '$_temp0 sbíraných dat';
-  }
+  String get settingsDataCollectionDescription_4 =>
+      'Zásadách ochrany osobních údajů.';
 
   @override
   String get settingsDebugOptions => 'Debug Options';
@@ -537,4 +529,7 @@ class TextsCs extends Texts {
 
   @override
   String get dontShowAgain => 'Příště nezobrazovat';
+
+  @override
+  String get privacyPolicy => 'Zásady ochrany osobních údajů';
 }

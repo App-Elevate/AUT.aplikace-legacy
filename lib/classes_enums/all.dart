@@ -218,8 +218,8 @@ enum DateFormatOptions {
 
 /// Class containing all fonts used by the apps
 class Fonts {
-  static String get body => "Inter";
-  static String get headings => "Lexend";
+  static String get body => 'Inter';
+  static String get headings => 'Lexend';
 }
 
 enum TabletUi {

@@ -48,7 +48,7 @@ class DataCollectionScreen extends StatelessWidget {
                   ),
                   TextSpan(text: lang.settingsDataCollectionDescription_3),
                   TextSpan(
-                    text: lang.settingsDataCollectionDescription_4("1"),
+                    text: lang.settingsDataCollectionDescription_4,
                     style: style,
                     recognizer: TapGestureRecognizer()..onTap = () => openDataCollectionUrl(false),
                   ),
@@ -65,7 +65,7 @@ class DataCollectionScreen extends StatelessWidget {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String appVersion = packageInfo.version;
 
-    String url = sourceCode ? Links.currentVersionCode(appVersion) : Links.listSbiranychDat(appVersion);
+    String url = sourceCode ? Links.currentVersionCode(appVersion) : Links.privacyPolicy;
     launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
   }
 }

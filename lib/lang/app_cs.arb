@@ -121,19 +121,10 @@
   "settingsAnotherOptions": "Další možnosti v nastavení systému...",
   "settingsDataCollection": "Shromažďování údajů",
   "settingsStopDataCollection": "Zastavit sledování analytických služeb",
-  "settingsDataCollectionDescription_1": "Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve ",
+  "settingsDataCollectionDescription_1": "Informace shromažďujeme výhradně za účelem oprav chyb v aplikaci a udržování základních statistických údajů. Nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup, jsme na těchto informacích závislí. Podrobnější informace naleznete ve ",
   "settingsDataCollectionDescription_2": "Zdrojovém kódu",
-  "settingsDataCollectionDescription_3": " nebo na ",
-  "settingsDataCollectionDescription_4": "{arg, select, 1{seznamu} other{Seznam}} sbíraných dat",
-  "@settingsDataCollectionDescription_4": {
-    "description": "0 -> Seznam zbíraných dat 1 -> seznamu zbíraných dat",
-    "placeholders": {
-      "arg": {
-        "type": "String",
-        "example": "1"
-      }
-    }
-  },
+  "settingsDataCollectionDescription_3": " nebo v ",
+  "settingsDataCollectionDescription_4": "Zásadách ochrany osobních údajů.",
   "settingsDebugOptions": "Debug Options",
   "settingsDebugForceNotifications": "Force send notifications",
   "settingsDebugNotifications": "Send Notifications",
@@ -288,5 +279,6 @@
     }
   },
   "burzaAlertDialogContent": "Přidáváte jídlo na burzu. Peníze se Vám vrátí pouze v případě, že si jídlo objedná někdo jiný.",
-  "dontShowAgain": "Příště nezobrazovat"
+  "dontShowAgain": "Příště nezobrazovat",
+  "privacyPolicy": "Zásady ochrany osobních údajů"
 }

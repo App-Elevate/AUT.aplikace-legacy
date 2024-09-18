@@ -180,7 +180,7 @@ class _MyAppState extends State<MyApp> {
               localeResolutionCallback: (locale, supportedLocales) {
                 if (supportedLocales.contains(locale)) return locale;
                 // default language
-                return const Locale('cs', 'CZ');
+                return Locales.csCZ;
               },
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,

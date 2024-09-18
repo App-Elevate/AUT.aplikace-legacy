@@ -492,7 +492,7 @@ class LoggedInCanteen {
   Future<LoginDataAutojidelna> getLoginDataFromSecureStorage() async {
     try {
       String? value = await getDataFromSecureStorage('loginData');
-      if (value == null || value == '') {
+      if (value == null || value.trim().isEmpty) {
         return LoginDataAutojidelna(currentlyLoggedIn: false);
       }
       return LoginDataAutojidelna.fromJson(jsonDecode(value));

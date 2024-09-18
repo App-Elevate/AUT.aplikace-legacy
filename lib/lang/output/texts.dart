@@ -562,7 +562,7 @@ abstract class Texts {
   /// No description provided for @settingsDataCollectionDescription_1.
   ///
   /// In cs, this message translates to:
-  /// **'Informace sbíráme pouze pro opravování chyb v aplikaci a udržování velmi základních statistik. Vzhledem k tomu, že nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup musíme záviset na tomto. Více informací naleznete ve '**
+  /// **'Informace shromažďujeme výhradně za účelem oprav chyb v aplikaci a udržování základních statistických údajů. Nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup, jsme na těchto informacích závislí. Podrobnější informace naleznete ve '**
   String get settingsDataCollectionDescription_1;
 
   /// No description provided for @settingsDataCollectionDescription_2.
@@ -574,14 +574,14 @@ abstract class Texts {
   /// No description provided for @settingsDataCollectionDescription_3.
   ///
   /// In cs, this message translates to:
-  /// **' nebo na '**
+  /// **' nebo v '**
   String get settingsDataCollectionDescription_3;
 
-  /// 0 -> Seznam zbíraných dat 1 -> seznamu zbíraných dat
+  /// No description provided for @settingsDataCollectionDescription_4.
   ///
   /// In cs, this message translates to:
-  /// **'{arg, select, 1{seznamu} other{Seznam}} sbíraných dat'**
-  String settingsDataCollectionDescription_4(String arg);
+  /// **'Zásadách ochrany osobních údajů.'**
+  String get settingsDataCollectionDescription_4;
 
   /// No description provided for @settingsDebugOptions.
   ///
@@ -990,6 +990,12 @@ abstract class Texts {
   /// In cs, this message translates to:
   /// **'Příště nezobrazovat'**
   String get dontShowAgain;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In cs, this message translates to:
+  /// **'Zásady ochrany osobních údajů'**
+  String get privacyPolicy;
 }
 
 class _TextsDelegate extends LocalizationsDelegate<Texts> {

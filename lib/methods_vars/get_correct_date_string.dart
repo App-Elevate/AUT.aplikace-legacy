@@ -30,6 +30,6 @@ String getCorrectDateString(DateFormatOptions format, {DateTime? date, bool inSe
       formatStr = 'd. M. y';
   }
   String dateStr = DateFormat(formatStr).format(date ?? DateTime.now());
-  String settingsStr = "$formatStr ($dateStr)";
+  String settingsStr = '$formatStr ($dateStr)';
   return inSettings ? settingsStr : dateStr;
 }

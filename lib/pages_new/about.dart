@@ -1,3 +1,4 @@
+import 'package:autojidelna/consts.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/shared_widgets/scroll_view_column.dart';
 import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
@@ -21,7 +22,7 @@ class AboutScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 85.0),
             child: SvgPicture.asset(
-              "assets/images/logo.svg",
+              Assets.logo,
               colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn),
               height: MediaQuery.sizeOf(context).height * .10,
             ),
@@ -50,13 +51,10 @@ class AboutScreen extends StatelessWidget {
             title: Text(lang.licenses),
             onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const LicensePage())),
           ),
-          // collected data list tile
-          // TODO: replace strings with variables
+          // privacy policy
           ListTile(
-            title: Text(lang.settingsDataCollectionDescription_4("0")),
-            onTap: () {
-              launchUrl(Uri.parse("https://github.com/Autojidelna/autojidelna/blob/main/listSbiranychDat.md"));
-            },
+            title: Text(lang.privacyPolicy),
+            onTap: () => launchUrl(Uri.parse(Links.privacyPolicy)),
           ),
           const CustomDivider(isTransparent: false),
           // links
@@ -64,15 +62,15 @@ class AboutScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                onPressed: () => launchUrl(Uri.parse("https://autojidelna.cz")),
+                onPressed: () => launchUrl(Uri.parse(Links.autojidelna)),
                 icon: const Icon(Icons.public_outlined),
               ),
               IconButton(
-                onPressed: () => launchUrl(Uri.parse("https://github.com/Autojidelna/autojidelna")),
+                onPressed: () => launchUrl(Uri.parse(Links.repo)),
                 icon: const Icon(Octicons.mark_github),
               ),
               IconButton(
-                onPressed: () => launchUrl(Uri(scheme: "mailto", path: "autojidelna@tomprotiva.com")),
+                onPressed: () => launchUrl(Uri(scheme: 'mailto', path: Links.email)),
                 icon: const Icon(Icons.email_outlined),
               ),
             ],

@@ -57,7 +57,7 @@ class SwitchAccountPanel extends StatelessWidget {
     );
   }
 
-  Widget accountRow(BuildContext context, int id, {String username = "", bool currentAccount = false}) {
+  Widget accountRow(BuildContext context, int id, {String username = '', bool currentAccount = false}) {
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

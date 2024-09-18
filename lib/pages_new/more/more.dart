@@ -1,3 +1,4 @@
+import 'package:autojidelna/consts.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
 import 'package:autojidelna/pages_new/about.dart';
 import 'package:autojidelna/pages_new/more/account.dart';
@@ -56,7 +57,7 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.share_outlined),
           title: Text(lang.shareApp),
-          onTap: () async => await Share.share("https://autojidelna.cz/", subject: lang.appName),
+          onTap: () async => await Share.share(Links.autojidelna, subject: lang.appName),
         ),
       ],
     );
