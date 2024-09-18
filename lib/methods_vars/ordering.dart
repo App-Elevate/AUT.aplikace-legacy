@@ -274,6 +274,7 @@ bool getPrimaryState(StavJidla stavJidla) {
   switch (stavJidla) {
     case StavJidla.objednano:
     case StavJidla.objednanoNelzeOdebrat:
+    case StavJidla.objednanoVyprsenaPlatnost:
       return true;
     default:
       return false;
