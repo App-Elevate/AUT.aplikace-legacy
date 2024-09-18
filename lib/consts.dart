@@ -7,16 +7,17 @@ class Locales {
 }
 
 class NotificationIds {
-  static String get kreditChannel => 'kredit_channel_';
-  static String get objednanoChannel => 'objednano_channel_';
-  static String get dnesniJidloChannel => 'jidlo_channel_';
-  static String get channelGroup => 'channel_group_';
+  static String kreditChannel(String userName, String url) => 'kredit_channel_${userName}_$url';
+  static String objednanoChannel(String userName, String url) => 'objednano_channel_${userName}_$url';
+  static String dnesniJidloChannel(String userName, String url) => 'jidlo_channel_${userName}_$url';
+  static String channelGroup(String userName, String url) => 'channel_group_${userName}_$url';
   static String get channelGroupElse => 'channel_group_else';
   static String get channelElse => 'else_channel';
   static String get payloadUser => 'user';
   static String get payloadIndex => 'index';
   static String get payloadIndexDne => 'indexDne';
-  static String get objednatButton => 'objednat_';
+  static String objednatButton(String userName, String url) => 'objednat_${userName}_$url';
+  static String get onlyObjednatButton => 'objednat_';
 }
 
 class Nums {

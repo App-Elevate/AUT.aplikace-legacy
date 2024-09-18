@@ -50,8 +50,8 @@ void main() async {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
 
       for (LoggedInUser uzivatel in loginData.users) {
-        AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${uzivatel.username}_${uzivatel.url}');
-        await AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${uzivatel.username}_${uzivatel.url}');
+        AwesomeNotifications().removeChannel(NotificationIds.kreditChannel(uzivatel.username, uzivatel.url));
+        await AwesomeNotifications().removeChannel(NotificationIds.objednanoChannel(uzivatel.username, uzivatel.url));
       }
     } catch (e) {
       //do nothing

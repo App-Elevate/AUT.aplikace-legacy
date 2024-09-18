@@ -446,9 +446,9 @@ class LoggedInCanteen {
       }
     }
     if (!isDuplicate) {
-      AwesomeNotifications().removeChannel('${NotificationIds.dnesniJidloChannel}${loginData.users[id].username}_${loginData.users[id].url}');
-      AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${loginData.users[id].username}_${loginData.users[id].url}');
-      AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel(NotificationIds.dnesniJidloChannel(loginData.users[id].username, loginData.users[id].url));
+      AwesomeNotifications().removeChannel(NotificationIds.objednanoChannel(loginData.users[id].username, loginData.users[id].url));
+      AwesomeNotifications().removeChannel(NotificationIds.kreditChannel(loginData.users[id].username, loginData.users[id].url));
     }
     //removing just the one item from the array
 
@@ -479,8 +479,8 @@ class LoggedInCanteen {
     loginData.users.clear();
     loginData.currentlyLoggedInId = null;
     for (int id = 0; id < loginData.users.length; id++) {
-      AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${loginData.users[id].username}_${loginData.users[id].url}');
-      AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${loginData.users[id].username}_${loginData.users[id].url}');
+      AwesomeNotifications().removeChannel(NotificationIds.objednanoChannel(loginData.users[id].username, loginData.users[id].url));
+      AwesomeNotifications().removeChannel(NotificationIds.kreditChannel(loginData.users[id].username, loginData.users[id].url));
     }
     //even though I don't like this it is safe because this is called rarely
     _canteenInstance = null;
