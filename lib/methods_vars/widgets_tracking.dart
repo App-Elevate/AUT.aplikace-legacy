@@ -24,8 +24,8 @@ late final ValueNotifier<DateTime> dateListener;
 late final PageController pageviewController;
 
 /// Item controller for the ListView which tells which date is currently selected
-final ItemScrollController itemScrollController = ItemScrollController();
-final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
+ItemScrollController? itemScrollController;
+ItemPositionsListener? itemPositionsListener;
 
 bool loginScreenVisible = false;
 
@@ -99,7 +99,7 @@ void changeDate({DateTime? newDate, int? daysChange, int? index, bool? animateTo
 
     pageviewController.hasClients
         ? pageviewController.jumpToPage(newDate.difference(minimalDate).inDays)
-        : itemScrollController.jumpTo(index: newDate.difference(minimalDate).inDays);
+        : itemScrollController!.jumpTo(index: newDate.difference(minimalDate).inDays);
   }
 }
 
@@ -110,5 +110,5 @@ void _animate(int index, {bool short = false}) {
 
   pageviewController.hasClients
       ? pageviewController.animateToPage(index, duration: duration, curve: curve).then((_) => animating = false)
-      : itemScrollController.scrollTo(index: index, duration: duration, curve: curve).then((_) => animating = false);
+      : itemScrollController!.scrollTo(index: index, duration: duration, curve: curve).then((_) => animating = false);
 }

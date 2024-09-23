@@ -15,21 +15,16 @@ class _ListViewCanteenState extends State<ListViewCanteen> {
   void initState() {
     super.initState();
 
-    itemPositionsListener.itemPositions.addListener(() {
-      final positions = itemPositionsListener.itemPositions.value.toList();
+    itemScrollController = ItemScrollController();
+    itemPositionsListener = ItemPositionsListener.create();
 
-      // Sort positions by itemLeadingEdge to ensure the top item is at the beginning
-      positions.sort((a, b) => a.itemLeadingEdge.compareTo(b.itemLeadingEdge));
+    itemPositionsListener!.itemPositions.addListener(_listener);
+  }
 
-      if (positions.isEmpty) return;
-
-      final topItem = positions.first;
-
-      // Include the first item only if more than 10% of it is visible
-      if (topItem.itemTrailingEdge > .05) {
-        dateListener.value = convertIndexToDatetime(topItem.index);
-      }
-    });
+  @override
+  void dispose() {
+    super.dispose();
+    itemPositionsListener!.itemPositions.removeListener(_listener);
   }
 
   @override
@@ -41,5 +36,21 @@ class _ListViewCanteenState extends State<ListViewCanteen> {
       itemCount: minimalDate.difference(maximalDate).inDays.abs(),
       itemBuilder: (context, index) => DayCard(index),
     );
+  }
+
+  /// Used to change the date in calendar button
+  void _listener() {
+    final positions = itemPositionsListener!.itemPositions.value.toList();
+    // Sort positions by itemLeadingEdge to ensure the top item is at the beginning
+    positions.sort((a, b) => a.itemLeadingEdge.compareTo(b.itemLeadingEdge));
+
+    if (positions.isEmpty) return;
+
+    final topItem = positions.first;
+
+    // Include the first item only if more than 10% of it is visible
+    if (topItem.itemTrailingEdge > .05) {
+      dateListener.value = convertIndexToDatetime(topItem.index);
+    }
   }
 }
