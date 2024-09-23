@@ -1,18 +1,17 @@
 // Purpose: Login screen for the app
 
+import 'package:autojidelna/classes_enums/hive.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/pages_new/navigation.dart';
+import 'package:autojidelna/pages_new/settings/data_collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
-
-import 'package:localization/localization.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({
-    super.key,
-    required this.setHomeWidget,
-  });
-  final Function(Widget widget) setHomeWidget;
+  LoginScreen({super.key});
   // Static is fix for keyboard disapearing when this screen is pushed (problem with rebuilding the widget)
   static final _formKey = GlobalKey<FormState>();
   // Without static the text in the textfields would be deleted for the same reasons.
@@ -55,7 +54,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(top: AppBar().preferredSize.height),
                 child: Text(
-                  Texts.aboutAppName.i18n(),
+                  lang.appName,
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
@@ -84,7 +83,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void setLastUrl() async {
-    _urlController.text = await loggedInCanteen.readData(Prefs.url) ?? "";
+    _urlController.text = Hive.box(Boxes.appState).get(HiveKeys.url, defaultValue: '');
   }
 
   Form loginForm(context) {
@@ -103,11 +102,11 @@ class LoginScreen extends StatelessWidget {
                       controller: _urlController,
                       autocorrect: false,
                       decoration: InputDecoration(
-                        labelText: Texts.loginUrlFieldLabel.i18n(),
+                        labelText: lang.loginUrlFieldLabel,
                         errorText: value,
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return Texts.loginUrlFieldHint.i18n();
+                        if (value == null || value.isEmpty) return lang.loginUrlFieldHint;
                         return null;
                       },
                     );
@@ -123,9 +122,9 @@ class LoginScreen extends StatelessWidget {
                       controller: _usernameController,
                       textInputAction: TextInputAction.next,
                       autocorrect: false,
-                      decoration: InputDecoration(labelText: Texts.loginUserFieldLabel.i18n()),
+                      decoration: InputDecoration(labelText: lang.loginUserFieldLabel),
                       validator: (value) {
-                        if (value == null || value.isEmpty) return Texts.loginUserFieldHint.i18n();
+                        if (value == null || value.isEmpty) return lang.loginUserFieldHint;
                         return null;
                       },
                     ),
@@ -142,7 +141,7 @@ class LoginScreen extends StatelessWidget {
                           obscureText: value[1] ? false : true,
                           autocorrect: false,
                           decoration: InputDecoration(
-                            labelText: Texts.loginPasswordFieldLabel.i18n(),
+                            labelText: lang.loginPasswordFieldLabel,
                             errorText: value[0],
                             suffixIcon: IconButton(
                               onPressed: () => passwordNotifier.value = [passwordNotifier.value[0], !passwordNotifier.value[1]],
@@ -150,7 +149,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           validator: (value) {
-                            if (value == null || value.isEmpty) return Texts.loginPasswordFieldHint.i18n();
+                            if (value == null || value.isEmpty) return lang.loginPasswordFieldHint;
                             return null;
                           },
                         );
@@ -163,11 +162,11 @@ class LoginScreen extends StatelessWidget {
             loginSubmitButton(context),
             RichText(
               text: TextSpan(
-                text: Texts.dataCollectionAgreement.i18n(),
+                text: lang.dataCollectionAgreement,
                 style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 children: [
                   TextSpan(
-                    text: Texts.moreInfo.i18n(),
+                    text: lang.moreInfo,
                     style: const TextStyle(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -175,9 +174,7 @@ class LoginScreen extends StatelessWidget {
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SettingsPage(onlyAnalytics: true),
-                          ),
+                          MaterialPageRoute(builder: (context) => const DataCollectionScreen()),
                         );
                       },
                   ),
@@ -195,16 +192,15 @@ class LoginScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 60,
       width: 400,
-      child: ElevatedButton(
-        onPressed: loggingIn.value ? null : () => loginFieldCheck(context),
-        style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-        child: ValueListenableBuilder(
-          valueListenable: loggingIn,
-          builder: (context, value, child) {
-            if (value) return CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary);
-            return Text(Texts.loginButton.i18n());
-          },
-        ),
+      child: ValueListenableBuilder(
+        valueListenable: loggingIn,
+        builder: (context, value, child) {
+          return ElevatedButton(
+            onPressed: value ? null : () => loginFieldCheck(context),
+            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+            child: value ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary) : Text(lang.loginButton),
+          );
+        },
       ),
     );
   }
@@ -218,29 +214,27 @@ class LoginScreen extends StatelessWidget {
       String url = _urlController.text;
       try {
         await loggedInCanteen.addAccount(_urlController.text, _usernameController.text, _passwordController.text);
-        loggedInCanteen.saveData(Prefs.url, url);
+        Hive.box(Boxes.appState).put(HiveKeys.url, url);
         try {
           changeDate(newDate: DateTime.now());
-          if (context.mounted) {
-            Navigator.maybeOf(context)!.popUntil((route) => route.isFirst);
-          }
+          MyApp.navigatorKey.currentState!.popUntil((route) => route.isFirst);
         } catch (e) {
           //if it is not connected we don't have to do anything
         }
-        setHomeWidget(MainAppScreen(setHomeWidget: setHomeWidget));
+        MyApp.navigatorKey.currentState!.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const NavigationScreen()), (route) => false);
       } catch (e) {
         switch (e) {
           case ConnectionErrors.noInternet:
-            _setErrorText(Texts.errorsNoInternet.i18n(), LoginFormErrorField.url);
+            _setErrorText(lang.errorsNoInternet, LoginFormErrorField.url);
             break;
           case ConnectionErrors.wrongUrl:
-            _setErrorText(Texts.errorsBadUrl.i18n(), LoginFormErrorField.url);
+            _setErrorText(lang.errorsBadUrl, LoginFormErrorField.url);
             break;
           case ConnectionErrors.badLogin:
-            _setErrorText(Texts.errorsBadLogin.i18n(), LoginFormErrorField.password);
+            _setErrorText(lang.errorsBadLogin, LoginFormErrorField.password);
             break;
           default:
-            _setErrorText(Texts.errorsBadConnection.i18n(), LoginFormErrorField.url);
+            _setErrorText(lang.errorsBadConnection, LoginFormErrorField.url);
             break;
         }
       }

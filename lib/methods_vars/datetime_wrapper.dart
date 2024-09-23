@@ -10,3 +10,9 @@ DateTime convertIndexToDatetime(int index) {
   }
   return newDate;
 }
+
+int convertDateTimeToIndex(DateTime date) => minimalDate.difference(date).inDays.abs();
+
+extension IsWeekend on DateTime {
+  bool get isWeekend => weekday > 5;
+}

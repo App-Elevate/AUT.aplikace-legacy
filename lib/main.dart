@@ -1,17 +1,24 @@
 // Purpose: Main file of the app, contains the main function and the main widget of the app as well as the loading screen on startup
 
+import 'package:autojidelna/classes_enums/hive.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/lang/output/texts.dart';
 import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/methods_vars/app.dart';
+import 'package:autojidelna/pages_new/login.dart';
+import 'package:autojidelna/pages_new/navigation.dart';
+import 'package:autojidelna/providers.dart';
 
 // Foundation for kDebugMode
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:localization/localization.dart';
 
 // Firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 // Toast for exiting the app
@@ -27,51 +34,24 @@ void main() async {
   // Ensure that the app is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
+  await App.initHive();
+
   // Awesome notifications initialization
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String version = packageInfo.version;
-  String? lastVersion = await loggedInCanteen.readData(Prefs.lastVersion);
+  String? lastVersion = Hive.box(Boxes.appState).get(HiveKeys.lastVersion);
 
   // Removing the already set notifications if we updated versions
   if (lastVersion != version) {
     // Set the new version
-    loggedInCanteen.saveData(Prefs.lastVersion, version);
-
-    // PREFS ID CHANGES
-    await loggedInCanteen.readData(OldPrefs.theme).then((value) {
-      if (value != null) {
-        loggedInCanteen.saveData(Prefs.theme, value);
-        loggedInCanteen.removeData(OldPrefs.theme);
-      }
-    });
-    await loggedInCanteen.readData(OldPrefs.disableAnalytics).then((value) {
-      if (value != null) {
-        loggedInCanteen.saveData(Prefs.disableAnalytics, value);
-        loggedInCanteen.removeData(OldPrefs.disableAnalytics);
-      }
-    });
+    Hive.box(Boxes.appState).put(HiveKeys.lastVersion, version);
 
     try {
       LoginDataAutojidelna loginData = await loggedInCanteen.getLoginDataFromSecureStorage();
+
       for (LoggedInUser uzivatel in loginData.users) {
-        List<String> prefs = [
-          Prefs.dailyFoodInfo,
-          Prefs.foodNotifTime,
-          Prefs.kreditNotifications,
-          Prefs.lastJidloDneCheck,
-          Prefs.lastNotificationCheck,
-          Prefs.nemateObjednanoNotifications
-        ];
-        for (String pref in prefs) {
-          await loggedInCanteen.readData(pref + uzivatel.username).then((value) {
-            if (value != null) {
-              loggedInCanteen.saveData('$pref${uzivatel.username}_${uzivatel.url}', value);
-              loggedInCanteen.removeData(pref + uzivatel.username);
-            }
-          });
-        }
-        AwesomeNotifications().removeChannel('${NotificationIds.kreditChannel}${uzivatel.username}_${uzivatel.url}');
-        await AwesomeNotifications().removeChannel('${NotificationIds.objednanoChannel}${uzivatel.username}_${uzivatel.url}');
+        AwesomeNotifications().removeChannel(NotificationIds.kreditChannel(uzivatel.username, uzivatel.url));
+        await AwesomeNotifications().removeChannel(NotificationIds.objednanoChannel(uzivatel.username, uzivatel.url));
       }
     } catch (e) {
       //do nothing
@@ -98,19 +78,12 @@ void main() async {
 
   // Check if user has opped out of analytics
 
-  String? analyticsDisabled = await loggedInCanteen.readData(Prefs.disableAnalytics);
-
-  // Know if this release is debug and disable analytics if it is
-  if (kDebugMode) {
-    analyticsDisabled = '1';
-  }
+  bool? analyticsDisabled = Settings().disableAnalytics;
 
   // Initializing firebase if analytics are not disabled
-  if (analyticsDisabled != '1') {
+  if (analyticsDisabled != true || !kDebugMode) {
     analyticsEnabledGlobally = true;
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
     // Setting up crashlytics
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -122,13 +95,15 @@ void main() async {
   }
 
   // Loading settings from preferences
-  skipWeekends = await loggedInCanteen.isPrefTrue(Prefs.skipWeekends);
+  skipWeekends = Settings().getSkipWeekends;
+
+  hideBurzaAlertDialog = Hive.box(Boxes.appState).get(HiveKeys.hideBurzaAlertDialog, defaultValue: false);
 
   // Skipping to next monday if we are currently on saturday or sunday
   // If not initializing normally
   if (skipWeekends) {
     DateTime initialDate = DateTime.now();
-    while (initialDate.weekday == 6 || initialDate.weekday == 7) {
+    while (initialDate.isWeekend) {
       initialDate = initialDate.add(const Duration(days: 1));
     }
     int index = initialDate.difference(minimalDate).inDays;
@@ -156,17 +131,10 @@ class _MyAppState extends State<MyApp> {
   // Key for the navigator
   final GlobalKey<NavigatorState> _myAppKey = GlobalKey<NavigatorState>();
 
-  // root widget of the app
-  late Widget homeWidget;
-
   ValueNotifier<bool> canExit = ValueNotifier<bool>(false);
 
   // Handling the back button on android being pressed.
   Future<bool> _backPressed(GlobalKey<NavigatorState> yourKey) async {
-    if (SwitchAccountVisible().isVisible()) {
-      SwitchAccountVisible().setVisible(false);
-      return Future<bool>.value(false);
-    }
     // Checks if current Navigator still has screens on the stack.
     // And doesn't exit the app if it does
     if (yourKey.currentState!.canPop()) {
@@ -182,7 +150,7 @@ class _MyAppState extends State<MyApp> {
     // After it expires the timer resets and user has to press back button twice again
     Future.delayed(const Duration(seconds: 5), () => canExit.value = false);
     Fluttertoast.showToast(
-        msg: Texts.toastsExit.i18n(),
+        msg: lang.toastExit,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -192,124 +160,41 @@ class _MyAppState extends State<MyApp> {
     return Future<bool>.value(true);
   }
 
-  // function for replacing the route stack and setting a new widget
-  void setHomeWidget(Widget widget) {
-    Navigator.of(_myAppKey.currentContext!).popUntil((route) => route.isFirst);
-    setState(() {
-      homeWidget = widget;
-    });
-  }
-
-  @override
-  void initState() {
-    setHomeWidgetPublic = setHomeWidget;
-    // Only after at least the action method is set, the notification events are delivered
-    homeWidget = LoggingInWidget(setHomeWidget: setHomeWidget);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Setting the theme
-    return FutureBuilder(
-      future: loggedInCanteen.readListData(Prefs.theme),
-      initialData: ThemeMode.system,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          List<String> themeSettings;
-          if (snapshot.data == null) {
-            loggedInCanteen.saveListData(Prefs.theme, ["0", "0", "0"]);
-            themeSettings = ["0", "0", "0"];
-          } else {
-            themeSettings = snapshot.data as List<String>;
-          }
-          ThemeMode themeMode;
-          ThemeStyle themeStyle;
-          bool pureBlack;
-
-          // Migration from v1.2.8 and lower
-          loggedInCanteen.readData("ThemeMode").then((value) {
-            if (value != null && value != "") {
-              themeSettings[0] = value;
-              loggedInCanteen.removeData("ThemeMode");
-            }
-          });
-
-          switch (themeSettings[0]) {
-            case "2":
-              themeMode = ThemeMode.dark;
-              break;
-            case "1":
-              themeMode = ThemeMode.light;
-              break;
-            default:
-              themeMode = ThemeMode.system;
-          }
-          switch (themeSettings[1]) {
-            case "5":
-              themeStyle = ThemeStyle.crimsonEarth;
-              break;
-            case "4":
-              themeStyle = ThemeStyle.evergreenSlate;
-              break;
-            case "3":
-              themeStyle = ThemeStyle.rustOlive;
-              break;
-            case "2":
-              themeStyle = ThemeStyle.blueMauve;
-              break;
-            case "1":
-              themeStyle = ThemeStyle.plumBrown;
-              break;
-            default:
-              themeStyle = ThemeStyle.defaultStyle;
-          }
-          pureBlack = themeSettings[2] == "1";
-          NotifyTheme().setTheme(NotifyTheme().themeNotifier.value.copyWith(themeMode: themeMode, themeStyle: themeStyle, pureBlack: pureBlack));
-        }
-
-        LocalJsonLocalization.delegate.directories = ['assets/lang'];
-
-        return ValueListenableBuilder(
-          valueListenable: NotifyTheme().themeNotifier,
-          builder: (context, themeSettings, child) {
-            bool pureBlack = themeSettings.pureBlack;
+    // Setting up providers
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Settings>(create: (_) => Settings()),
+        ChangeNotifierProvider<Ordering>(create: (_) => Ordering()),
+        ChangeNotifierProvider<DishesOfTheDay>(create: (_) => DishesOfTheDay())
+      ],
+      builder: (context, __) {
+        // Rebuilds when themeMode, themeStyle or isPureBlack is changed
+        return Selector<Settings, ({ThemeMode mode, ThemeStyle style, bool isPureBlack})>(
+          selector: (_, userPrefs) => (mode: userPrefs.themeMode, style: userPrefs.themeStyle, isPureBlack: userPrefs.isPureBlack),
+          builder: (context, theme, ___) {
             return MaterialApp(
-              localizationsDelegates: [
-                // delegate from flutter_localization
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-
-                // delegate from localization package.
-                //json-file
-                LocalJsonLocalization.delegate,
-                //or map
-                MapLocalization.delegate,
-              ],
-              supportedLocales: const [
-                Locale('cs', 'CZ'),
-                //Locale('en', 'US'),
-              ],
+              localizationsDelegates: Texts.localizationsDelegates,
+              supportedLocales: Texts.supportedLocales,
               localeResolutionCallback: (locale, supportedLocales) {
-                if (supportedLocales.contains(locale)) {
-                  return locale;
-                }
+                if (supportedLocales.contains(locale)) return locale;
                 // default language
-                return const Locale('cs', 'CZ');
+                return Locales.csCZ;
               },
               navigatorKey: MyApp.navigatorKey,
               debugShowCheckedModeBanner: false,
               //debugShowMaterialGrid: true,
-              theme: Themes.getTheme(themeSettings.themeStyle),
-              darkTheme: Themes.getTheme(themeSettings.themeStyle, isPureBlack: pureBlack),
-              themeMode: themeSettings.themeMode,
-              home: child,
+              theme: Themes.getTheme(theme.style),
+              darkTheme: Themes.getTheme(theme.style, isPureBlack: theme.isPureBlack),
+              themeMode: theme.mode,
+              home: const LoggingInWidget(),
+              title: "Autojídelna",
             );
           },
-          child: _pop(),
         );
       },
+      child: _pop(),
     );
   }
 
@@ -327,9 +212,7 @@ class _MyAppState extends State<MyApp> {
       },
       child: Navigator(
         key: _myAppKey,
-        pages: [
-          MaterialPage(child: homeWidget),
-        ],
+        pages: const [MaterialPage(child: LoggingInWidget())],
         onPopPage: (route, result) {
           return route.didPop(result);
         },
@@ -339,41 +222,26 @@ class _MyAppState extends State<MyApp> {
 }
 
 class LoggingInWidget extends StatelessWidget {
-  const LoggingInWidget({
-    super.key,
-    required this.setHomeWidget,
-    this.pageIndex = -1,
-  });
-  // index aktualniho dne - pro refresh button v pravo nahoře
-  final int pageIndex;
-
-  final Function(Widget widget) setHomeWidget;
+  const LoggingInWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AppTranslations.init(context);
+    context.read<DishesOfTheDay>().resetMenu();
+
     // získání dat z secure storage a následné přihlášení
     return FutureBuilder(
       future: loggedInCanteen.runWithSafety(loggedInCanteen.loginFromStorage()),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          if (snapshot.error == ConnectionErrors.noLogin) {
-            return LoginScreen(setHomeWidget: setHomeWidget);
-          }
+          if (snapshot.error == ConnectionErrors.noLogin) return LoginScreen();
         } else if (snapshot.connectionState == ConnectionState.done) {
-          // setting the initial date
-          if (pageIndex != -1) {
-            Future.delayed(Duration.zero, () => changeDateTillSuccess(pageIndex));
-          } else {
-            setCurrentDate();
-          }
           // routing to main app screen (jidelnicek)
-          return MainAppScreen(setHomeWidget: setHomeWidget);
+          return const NavigationScreen();
         }
         return Container(
           decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
+          child: const Center(child: CircularProgressIndicator()),
         );
       },
     );

@@ -27,24 +27,37 @@ class Themes {
       splashFactory: NoSplash.splashFactory,
       typography: Typography.material2021(),
 
-      // Main
-      iconTheme: IconThemeData(
-        size: 30,
-        color: colorScheme.onSurface,
+      // Texts
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: Fonts.body),
+        bodyMedium: TextStyle(fontFamily: Fonts.body),
+        bodyLarge: TextStyle(fontFamily: Fonts.body),
+        labelSmall: TextStyle(fontFamily: Fonts.headings, color: colorScheme.onSurfaceVariant),
+        labelMedium: TextStyle(fontFamily: Fonts.headings, color: colorScheme.onSurfaceVariant),
+        labelLarge: TextStyle(fontFamily: Fonts.headings, color: colorScheme.onSurfaceVariant),
+        titleSmall: TextStyle(fontFamily: Fonts.headings),
+        titleMedium: TextStyle(fontFamily: Fonts.headings),
+        titleLarge: TextStyle(fontFamily: Fonts.headings),
+        headlineSmall: TextStyle(fontFamily: Fonts.headings),
+        headlineMedium: TextStyle(fontFamily: Fonts.headings),
+        headlineLarge: TextStyle(fontFamily: Fonts.headings),
+        displaySmall: TextStyle(fontFamily: Fonts.headings),
+        displayMedium: TextStyle(fontFamily: Fonts.headings),
+        displayLarge: TextStyle(fontFamily: Fonts.headings),
       ),
+
+      // Main
+      iconTheme: IconThemeData(size: 30, color: colorScheme.onSurface),
       appBarTheme: AppBarTheme(
         scrolledUnderElevation: pureBlack ? 0 : 2,
         elevation: pureBlack ? 0 : 2,
-        backgroundColor: dark ? colorScheme.surface : colorScheme.primary,
-        foregroundColor: dark ? colorScheme.onSurface : colorScheme.onPrimary,
-        iconTheme: IconThemeData(
-          color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
-        ),
-        actionsIconTheme: IconThemeData(
-          color: dark ? colorScheme.onSurface : colorScheme.onPrimary,
-        ),
+        actionsIconTheme: IconThemeData(color: colorScheme.onSurfaceVariant),
       ),
-      cardTheme: const CardTheme(elevation: 2),
+      cardTheme: CardTheme(
+        elevation: 2,
+        clipBehavior: Clip.hardEdge,
+        surfaceTintColor: colorScheme.surfaceTint,
+      ),
       dividerTheme: DividerThemeData(color: colorScheme.surfaceContainerHighest),
       drawerTheme: DrawerThemeData(
         surfaceTintColor: colorScheme.surfaceTint,
@@ -53,16 +66,19 @@ class Themes {
         elevation: 2,
         width: 275,
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        indicatorColor: colorScheme.secondary,
+        surfaceTintColor: colorScheme.surfaceTint,
+        elevation: pureBlack ? 0 : null,
+      ),
 
       // Popups
       snackBarTheme: SnackBarThemeData(
         backgroundColor: colorScheme.inverseSurface,
         elevation: pureBlack ? 0 : 2,
-        contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
+        contentTextStyle: TextStyle(fontFamily: Fonts.body, color: colorScheme.onInverseSurface),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(16),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         behavior: SnackBarBehavior.floating,
         insetPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
@@ -78,52 +94,53 @@ class Themes {
       ),
       dialogTheme: DialogTheme(
         backgroundColor: colorScheme.surface,
-        elevation: pureBlack ? 3 : 2,
+        elevation: 3,
         surfaceTintColor: colorScheme.surfaceTint,
         alignment: Alignment.center,
         iconColor: colorScheme.onSurface,
         titleTextStyle: TextStyle(
+          fontFamily: Fonts.headings,
           color: colorScheme.onSurface,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        contentTextStyle: const TextStyle(
-          fontSize: 15,
-        ),
+        contentTextStyle: TextStyle(fontFamily: Fonts.body, fontSize: 15),
         actionsPadding: const EdgeInsets.fromLTRB(12, 0, 16, 7),
       ),
       timePickerTheme: TimePickerThemeData(
         backgroundColor: colorScheme.surface,
         dialHandColor: dark ? colorScheme.onSurface.withOpacity(0.1) : colorScheme.secondary,
-        elevation: pureBlack ? 3 : 2,
+        elevation: 3,
       ),
 
       // Inputs
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         alignLabelWithHint: true,
         isDense: true,
         errorMaxLines: 1,
-        labelStyle: TextStyle(),
+        labelStyle: TextStyle(fontFamily: Fonts.body),
         floatingLabelAlignment: FloatingLabelAlignment.start,
-        hintStyle: TextStyle(),
-        helperStyle: TextStyle(),
-        border: OutlineInputBorder(),
+        hintStyle: TextStyle(fontFamily: Fonts.body),
+        helperStyle: TextStyle(fontFamily: Fonts.body),
+        border: const OutlineInputBorder(),
       ),
 
       // List tiles
       listTileTheme: ListTileThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         dense: false,
         selectedColor: colorScheme.primary,
-        iconColor: colorScheme.onSurface,
-        textColor: colorScheme.onSurface,
-        titleTextStyle: const TextStyle(
-          fontSize: 20,
+        iconColor: colorScheme.primary.withOpacity(.75),
+        titleTextStyle: TextStyle(
+          fontSize: 19,
+          fontFamily: Fonts.body,
           fontWeight: FontWeight.w400,
+          color: colorScheme.onSurface,
         ),
-        subtitleTextStyle: const TextStyle(
+        subtitleTextStyle: TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.normal,
+          fontFamily: Fonts.body,
+          color: colorScheme.onSurfaceVariant,
         ),
         visualDensity: VisualDensity.comfortable,
       ),
@@ -132,28 +149,34 @@ class Themes {
         textColor: colorScheme.onSurface,
         childrenPadding: const EdgeInsets.only(bottom: 8),
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        modalElevation: 1,
+        clipBehavior: Clip.hardEdge,
+        surfaceTintColor: colorScheme.surfaceTint,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: pureBlack ? colorScheme.surfaceContainerHighest : Colors.transparent, strokeAlign: 1),
+        ),
+      ),
 
       // Buttons
       switchTheme: const SwitchThemeData(splashRadius: 0),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          textStyle: const WidgetStatePropertyAll(
+          textStyle: WidgetStatePropertyAll(
             TextStyle(
+              fontFamily: Fonts.headings,
               fontSize: 18,
               fontWeight: FontWeight.w500,
               height: 1.25,
             ),
           ),
           backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return colorScheme.surfaceContainerHighest; // Disabled color
-            }
+            if (states.contains(WidgetState.disabled)) return colorScheme.surfaceContainerHighest; // Disabled color
             return colorScheme.surface; // Regular color
           }),
           foregroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.disabled)) {
-              return colorScheme.onSurfaceVariant;
-            }
+            if (states.contains(WidgetState.disabled)) return colorScheme.onSurfaceVariant;
             return colorScheme.onSurface;
           }),
           fixedSize: const WidgetStatePropertyAll(Size.fromHeight(50)),
@@ -164,9 +187,7 @@ class Themes {
         ),
       ),
       iconButtonTheme: const IconButtonThemeData(
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-        ),
+        style: ButtonStyle(splashFactory: NoSplash.splashFactory),
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
@@ -180,6 +201,14 @@ class Themes {
           ),
           splashFactory: NoSplash.splashFactory,
           overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          side: WidgetStatePropertyAll(BorderSide(
+            width: 1.75,
+            color: colorScheme.onSurfaceVariant,
+          )),
         ),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
@@ -298,7 +327,7 @@ class ColorSchemes {
     onSecondary: Colors.white,
     error: Color(0xFFCF6679),
     onError: Colors.white,
-    surface: Color(0xff121212),
+    surface: Colors.black,
     onSurface: Colors.white,
     surfaceContainerHighest: Colors.white12,
     onSurfaceVariant: Colors.white54,

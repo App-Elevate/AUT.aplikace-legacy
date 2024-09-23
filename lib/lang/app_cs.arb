@@ -1,0 +1,284 @@
+{
+  "@@locale": "cs",
+  "toastExit": "Zmáčkněte tlačítko zpět pro ukončení aplikace",
+  "errorsBadLogin": "Nesprávné přihlašovací údaje",
+  "errorsBadUrl": "Nesprávné Url",
+  "errorsBadPassword": "Špatné heslo nebo uživatelské jméno",
+  "errorsUpdatingData": "Nastala chyba při aktualizaci dat",
+  "errorsLoadingData": "Nastala chyba při načítání dat",
+  "errorsObjednavaniJidla": "Nastala chyba při objednávání jídla",
+  "errorsJidloNeniNaBurze": "Jídlo není na burze",
+  "errorsChybaPriDavaniNaBurzu": "Nastala chyba při dávání jídla na burzu",
+  "errorsBadConnection": "Nepodařilo se připojit k serveru icanteen. Zkuste to znovu později",
+  "errorsNoInternet": "Nemáte připojení k internetu",
+  "errorsLoginFailed": "Přihlašování selhalo",
+  "errorsLoginFailedDetail": "Při přihlašování došlo k chybě: {error}",
+  "@errorsLoginFailedDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "errorsDownloadingApp": "Aktualizace aplikace selhala",
+  "errorsDownloadingAppDetail": "Při Stahování aplikace došlo k chybě. Ověřte vaše připojení a zkuste znovu.",
+  "errorsLoad": "Selhalo načítání jídelníčku",
+  "errorsObedNelzeZrusit": "Oběd nelze zrušit. Platnost objednávky vypršela.",
+  "errorsNelzeObjednat": "Oběd nelze objednat",
+  "errorsNelzeObjednatKredit": "Oběd nelze objednat - Nedostatečný kredit.",
+  "errorsChybaPriRuseni": "Nastala chyba při rušení objednávky",
+  "errorsUndefined": "Nastala Chyba",
+  "errorsChangelog": "Nepodařilo se získat změny :/",
+  "tryAgain": "Zkusit znovu",
+  "cancel": "Zrušit",
+  "ok": "OK",
+  "currency": "Kč",
+  "appName": "Autojídelna",
+  "shareDescription": "Autojídelna (aplikace na objednávání jídla)",
+  "settings": "Nastavení",
+  "menu": "Jídelníček",
+  "addAccount": "Přidat účet",
+  "changeAccount": "Změnit účet",
+  "switchAccountPanelTitle": "Účty",
+  "updateSnackbarWaiting": "Aktualizace - Čeká se na oprávnění",
+  "updateSnackbarError": "Došlo k chybě při stahování. Ověřte připojení a zkuste to znovu",
+  "updateSnackbarDownloading": "Nová Aktualizace se stahuje - {value}%",
+  "@updateSnackbarDownloading": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      }
+    }
+  },
+  "updateSnackbarDownloaded": "Aktualizace byla stažena, instalování",
+  "popupNewVersionAvailable": "Nová verze aplikace - {version}",
+  "@popupNewVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "popupNewUpdateInfo": "Nová verze přináší: ",
+  "popupChangelogNotAvailable": "Changelog není k dispozici",
+  "popupUpdate": "Aktualizovat",
+  "popupShowOnGithub": "Zobrazit na Githubu",
+  "popupNotNow": "Teď ne",
+  "logoutUSure": "Opravdu se chcete odhlásit?",
+  "logoutConfirm": "Odhlásit se",
+  "location": "Výdejna",
+  "pickLocation": "Vyberte výdejnu ",
+  "locationsUnknown": "Neznámá výdejna",
+  "account": "Účet",
+  "shareApp": "Sdílet aplikaci",
+  "about": "O aplikaci",
+  "aboutCopyRight": "© 2023 - {time} Tomáš Protiva, Matěj Verhaegen a kolaborátoři\nZveřejněno pod licencí GNU GPLv3",
+  "@aboutCopyRight": {
+    "placeholders": {
+      "time": {
+        "type": "DateTime",
+        "format": "y"
+      }
+    }
+  },
+  "aboutSourceCode": "Zdrojový kód",
+  "aboutLatestVersion": "Aktuálně jste na nejnovější verzi aplikace 👍",
+  "aboutCheckForUpdates": "Zkontrolovat aktualizace",
+  "settingsAppearence": "Vzhled",
+  "settingsTheme": "Schéma",
+  "systemThemeMode": "Systém",
+  "lightThemeMode": "Světlý",
+  "darkThemeMode": "Tmavý",
+  "settingsAmoled": "AMOLED mód",
+  "settingsAmoledSub": "Přidej se k temné straně síly!",
+  "settingsDisplay": "Zobrazení",
+  "settingsRelativeTimestamps": "Relativní časové značky",
+  "settingsRelativeTimestampsSub": "„Dnes“ místo „{date}“",
+  "@settingsRelativeTimestampsSub": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "convenience": "Pohodlí",
+  "listUi": "List UI",
+  "tabletUi": "Tablet UI",
+  "settingsCalendarBigMarkers": "Velké ukazatele v kalendáři",
+  "settingsSkipWeekends": "Přeskakovat víkendy",
+  "settingsNotificationFor": "Oznámení pro {username}",
+  "@settingsNotificationFor": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitleTodaysFood": "Dnešní jídlo",
+  "settingsTitleCredit": "Nízký credit",
+  "settingsNotificationTime": "Čas oznámení: ",
+  "settingsNemateObjednano": "Nemáte objednáno na příští týden",
+  "settingsAnotherOptions": "Další možnosti v nastavení systému...",
+  "settingsDataCollection": "Shromažďování údajů",
+  "settingsStopDataCollection": "Zastavit sledování analytických služeb",
+  "settingsDataCollectionDescription_1": "Informace shromažďujeme výhradně za účelem oprav chyb v aplikaci a udržování základních statistických údajů. Nemůžeme vyzkoušet autojídelnu u jídelen, kde nemáme přístup, jsme na těchto informacích závislí. Podrobnější informace naleznete ve ",
+  "settingsDataCollectionDescription_2": "Zdrojovém kódu",
+  "settingsDataCollectionDescription_3": " nebo v ",
+  "settingsDataCollectionDescription_4": "Zásadách ochrany osobních údajů.",
+  "settingsDebugOptions": "Debug Options",
+  "settingsDebugForceNotifications": "Force send notifications",
+  "settingsDebugNotifications": "Send Notifications",
+  "credit": "Kredit: {ammount} Kč",
+  "@credit": {
+    "placeholders": {
+      "ammount": {
+        "type": "double",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "personalInfo": "Osobní Údaje",
+  "name": "Jméno",
+  "category": "Kategorie",
+  "paymentInfo": "Platební Údaje",
+  "paymentAccountNumber": "Číslo účtu",
+  "specificSymbol": "Specifický symbol",
+  "variableSymbol": "Variabilní symbol",
+  "ordersWithAutojidelna": "Objednávky s Autojídelnou: {ammount}",
+  "@ordersWithAutojidelna": {
+    "placeholders": {
+      "ammount": {
+        "type": "int"
+      }
+    }
+  },
+  "allowPermission": "Udělit oprávnění",
+  "neededPermission": "Potřebné oprávnění",
+  "neededPermissionDescription_1": "Pro automatickou instalaci aktualizace je potřeba povolit oprávnění pro instalaci aplikací z neznámých zdrojů.",
+  "neededPermissionDescription_2": "Ta může vypadat takto:",
+  "neededPermissionDescription_3": "Toto oprávnění používáme pouze k aktualizaci aplikace. Pokud si nepřejete oprávnění povolit můžete stále stáhnout apk z githubu.",
+  "loginUrlFieldLabel": "Url stránky icanteen - např. jidelna.trebesin.cz",
+  "loginUrlFieldHint": "Zadejte prosím url stránky icanteen - např. jidelna.trebesin.cz",
+  "loginUserFieldLabel": "Uživatelské jméno",
+  "loginUserFieldHint": "Zadejte prosím své uživatelské jméno",
+  "loginPasswordFieldLabel": "Heslo",
+  "loginPasswordFieldHint": "Zadejte prosím své heslo",
+  "dataCollectionAgreement": "Používáním aplikace souhlasíte se zasíláním anonymních dat. ",
+  "moreInfo": "Více informací.",
+  "loginButton": "Přihlásit se",
+  "soup": "Polévka",
+  "mainCourse": "Hlavní chod",
+  "drinks": "Pití",
+  "sideDish": "Přílohy",
+  "other": "Ostatní",
+  "allergens": "Alergeny",
+  "noFood": "Žádná jídla pro tento den.",
+  "objednat": "Objednat",
+  "nelzeZrusit": "Nelze zrušit",
+  "nedostatekKreditu": "Nedostatek kreditu",
+  "nelzeObjednat": "Nelze objednat",
+  "vlozitNaBurzu": "Vložit na burzu",
+  "objednatZBurzy": "Objednat z burzy",
+  "odebratZBurzy": "Odebrat z burzy",
+  "notifications": "Oznámení",
+  "notificationsFor": "Oznámení pro {username}",
+  "@notificationsFor": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "jidloChannelName": "Dnešní jídlo",
+  "jidloChannelDescription": "Oznámení každý den o tom jaké je dnes jídlo pro {username}",
+  "@jidloChannelDescription": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "dochazejiciKreditChannelName": "Docházející kredit",
+  "dochazejiciKreditChannelDescription": "Oznámení o tom, zda vám dochází kredit týden dopředu pro {username}",
+  "@dochazejiciKreditChannelDescription": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "objednanoChannelName": "Objednáno?",
+  "objednanoChannelDescription": "Oznámení týden dopředu o tom, zda jste si objednal jídlo na příští týden pro {username}",
+  "@objednanoChannelDescription": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "otherDescription": "Ostatní oznámení, např. chybové hlášky",
+  "gettingDataNotifications": "Získávám data pro oznámení",
+  "notificationDochaziVamKredit": "Dochází vám kredit!",
+  "notificationKreditPro": "Kredit pro {first} {last}: {ammount} Kč",
+  "@notificationKreditPro": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      },
+      "ammount": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationZtlumit": "Ztlumit na týden",
+  "notificationObjednejteSi": "Objednejte si na příští týden",
+  "notificationObjednejteSiDetail": "Uživatel {fist} {last} si stále ještě neobjenal na příští týden",
+  "@notificationObjednejteSiDetail": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "objednatAction": "Objednat náhodně",
+  "version": "Verze",
+  "debug": "Debug",
+  "stable": "Stable",
+  "aboutVersionSubtitle": "{arg, select, true{Debug} other{Stable}} {version}",
+  "@aboutVersionSubtitle": {
+    "description": "aboutVersionSubtitle",
+    "placeholders": {
+      "arg": {
+        "type": "String",
+        "example": "true"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "licenses": "Licence",
+  "statistics": "Statistiky",
+  "dateFormat": "Formát dat",
+  "orders": "Objednávky",
+  "more": "Více",
+  "tabletUiOptions": "{arg, select, other{error} auto{Automaticky} always{Vždy} landscape{Na šířku} never{Nikdy}}",
+  "@tabletUiOptions": {
+    "description": "tabletUiOptions",
+    "placeholders": {
+      "arg": {
+        "type": "String",
+        "example": "always"
+      }
+    }
+  },
+  "burzaAlertDialogContent": "Přidáváte jídlo na burzu. Peníze se Vám vrátí pouze v případě, že si jídlo objedná někdo jiný.",
+  "dontShowAgain": "Příště nezobrazovat",
+  "privacyPolicy": "Zásady ochrany osobních údajů"
+}

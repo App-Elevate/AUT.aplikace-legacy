@@ -1,10 +1,9 @@
 // Snackbar widgets
 
-import 'package:autojidelna/local_imports.dart';
+import 'package:autojidelna/lang/l10n_global.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:localization/localization.dart';
 
 SnackBar snackbarFunction(String snackBarText) {
   return SnackBar(
@@ -29,7 +28,7 @@ SnackBar updateSnackbar(BuildContext context, ValueListenable valueListenable) {
       builder: (ctx, value, child) {
         switch (value) {
           case -1:
-            return Text(Texts.updateSnackbarWaiting.i18n());
+            return Text(lang.updateSnackbarWaiting);
           case -2:
             closeSnackbarAfterDelay(context);
             return failedUpdate(context);
@@ -37,7 +36,7 @@ SnackBar updateSnackbar(BuildContext context, ValueListenable valueListenable) {
             closeSnackbarAfterDelay(context);
             return updateFinished(context);
           default:
-            return Text(Texts.updateSnackbarDownloading.i18n([(value * 100).toInt().toString()]));
+            return Text(lang.updateSnackbarDownloading((value * 100).toInt()));
         }
       },
     ),
@@ -59,7 +58,7 @@ Row failedUpdate(BuildContext context) {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           //light or dark theme
-          child: Text(Texts.updateSnackbarError.i18n()),
+          child: Text(lang.updateSnackbarError),
         ),
       ),
       Flexible(
@@ -68,7 +67,7 @@ Row failedUpdate(BuildContext context) {
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
             },
-            child: Text(Texts.updateSnackbarTryAgain.i18n()),
+            child: Text(lang.tryAgain),
           );
         }),
       ),
@@ -94,7 +93,7 @@ Row updateFinished(BuildContext context) {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           //light or dark theme
-          child: Text(Texts.updateSnackbarDownloaded.i18n()),
+          child: Text(lang.updateSnackbarDownloaded),
         ),
       ),
       Builder(
