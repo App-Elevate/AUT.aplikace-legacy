@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:autojidelna/local_imports.dart';
 
-Widget logoutDialog(BuildContext context, {bool currentAccount = true, int? id}) {
+Widget logoutDialog(BuildContext context, {bool currentAccount = false, int? id}) {
   return AlertDialog(
     title: Text(lang.logoutUSure),
     actionsAlignment: MainAxisAlignment.spaceBetween,
@@ -19,14 +19,12 @@ Widget logoutDialog(BuildContext context, {bool currentAccount = true, int? id})
           // if the account is current it has to reload the main app screen
           if (currentAccount && context.mounted) {
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoggingInWidget()), (route) => false);
-          } else if (context.mounted) {
-            Navigator.of(context).pop(true);
           }
         },
         child: Text(lang.logoutConfirm),
       ),
       TextButton(
-        onPressed: () => Navigator.of(context).pop(false),
+        onPressed: () => Navigator.of(context).pop(),
         style: Theme.of(context).textButtonTheme.style!.copyWith(foregroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.primary)),
         child: Text(lang.cancel),
       ),

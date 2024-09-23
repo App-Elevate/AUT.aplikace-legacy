@@ -7,9 +7,14 @@ import 'package:autojidelna/shared_widgets/settings/custom_divider.dart';
 import 'package:autojidelna/shared_widgets/settings/section_title.dart';
 import 'package:flutter/material.dart';
 
-class SwitchAccountPanel extends StatelessWidget {
+class SwitchAccountPanel extends StatefulWidget {
   const SwitchAccountPanel({super.key});
 
+  @override
+  State<SwitchAccountPanel> createState() => _SwitchAccountPanelState();
+}
+
+class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LoggedAccountsInAccountPanel>(
@@ -67,13 +72,19 @@ class SwitchAccountPanel extends StatelessWidget {
         ],
       ),
       trailing: IconButton(
-        padding: EdgeInsets.zero,
-        icon: Icon(Icons.logout, size: 30, color: Theme.of(context).colorScheme.onSurface),
-        onPressed: () => configuredDialog(
-          context,
-          builder: (BuildContext context) => logoutDialog(context, currentAccount: currentAccount, id: id),
-        ),
-      ),
+          padding: EdgeInsets.zero,
+          icon: Icon(Icons.logout, size: 30, color: Theme.of(context).colorScheme.onSurface),
+          onPressed: () async {
+            if (currentAccount && context.mounted) {
+              configuredDialog(
+                context,
+                builder: (BuildContext context) => logoutDialog(context, currentAccount: currentAccount, id: id),
+              );
+            } else if (context.mounted) {
+              await loggedInCanteen.logout(id: id);
+              setState(() {});
+            }
+          }),
       onTap: () async {
         if (!currentAccount) {
           await loggedInCanteen.switchAccount(id);
