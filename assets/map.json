@@ -1,0 +1,3216 @@
+{
+  "0": {
+    "den": "2024-08-01T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "1": {
+    "den": "2024-08-02T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "2": {
+    "den": "2024-08-03T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "3": {
+    "den": "2024-08-04T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "4": {
+    "den": "2024-08-05T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "5": {
+    "den": "2024-08-06T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "6": {
+    "den": "2024-08-07T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "7": {
+    "den": "2024-08-08T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "8": {
+    "den": "2024-08-09T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "9": {
+    "den": "2024-08-10T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "10": {
+    "den": "2024-08-11T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "11": {
+    "den": "2024-08-12T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "12": {
+    "den": "2024-08-13T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "13": {
+    "den": "2024-08-14T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "14": {
+    "den": "2024-08-15T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "15": {
+    "den": "2024-08-16T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "16": {
+    "den": "2024-08-17T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "17": {
+    "den": "2024-08-18T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "18": {
+    "den": "2024-08-19T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka kmínová s vejcem, přírodní máslový řízek, bramborová kaše, salát okurkový, čaj, sirup, voda",
+        "kategorizovano": {
+          "polevka": "Polévka kmínová s vejcem",
+          "hlavniJidlo": "Přírodní máslový řízek, bramborová kaše",
+          "salatovyBar": "Salát okurkový",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-19T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          },
+          {
+            "kod": null,
+            "nazev": "Vlčí bob",
+            "popis": "Vlčí bob (LUPINA) a výrobky z něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "19": {
+    "den": "2024-08-20T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka rýžová se zeleninou, boloňské špagety, salát mrkvový, čaj, sirup, voda",
+        "kategorizovano": {
+          "polevka": "Polévka rýžová se zeleninou",
+          "hlavniJidlo": "Boloňské špagety",
+          "salatovyBar": "Salát mrkvový",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-20T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Korýši",
+            "popis": "Korýši a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Podzemnice olejná",
+            "popis": "Podzemnice olejná (arašídy) a výrobky z nich - patří mezi potraviny ohrožující život"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "20": {
+    "den": "2024-08-21T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka hovězí s masem a těstovinou, kuřecí stehno pečené, brambory, řepa červená, čaj, sirup, voda",
+        "kategorizovano": {
+          "polevka": "Polévka hovězí s masem a těstovinou",
+          "hlavniJidlo": "Kuřecí stehno pečené, brambory, řepa červená",
+          "salatovyBar": "",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-21T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "21": {
+    "den": "2024-08-22T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka hrstková, vepřový steak přírodní, rýže dušená, salát zelný s červ. paprikou, čaj, sirup, voda",
+        "kategorizovano": {
+          "polevka": "Polévka hrstková",
+          "hlavniJidlo": "Vepřový steak přírodní, rýže dušená",
+          "salatovyBar": "Salát zelný s červ. paprikou",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-22T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "22": {
+    "den": "2024-08-23T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka bramborová, masové koule v rajčatové omáčce, knedlíky houskové, ovoce, čaj, sirup, voda",
+        "kategorizovano": {
+          "polevka": "Polévka bramborová",
+          "hlavniJidlo": "Masové koule v rajčatové omáčce, knedlíky houskové",
+          "salatovyBar": "",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": "Ovoce"
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-23T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "23": {
+    "den": "2024-08-24T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "24": {
+    "den": "2024-08-25T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "25": {
+    "den": "2024-08-26T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka česneková, kuřecí steak přírodní, bramborová kaše, čaj, sirup, voda, řepa červená",
+        "kategorizovano": {
+          "polevka": "Polévka česneková",
+          "hlavniJidlo": "Kuřecí steak přírodní, bramborová kaše, řepa červená",
+          "salatovyBar": "",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-26T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          },
+          {
+            "kod": null,
+            "nazev": "Vlčí bob",
+            "popis": "Vlčí bob (LUPINA) a výrobky z něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "26": {
+    "den": "2024-08-27T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka brokolicová, uzená plec, čočka, okurka sterilovaná, čaj, sirup, voda",
+        "kategorizovano": {
+          "polevka": "Polévka brokolicová",
+          "hlavniJidlo": "Uzená plec, čočka, okurka sterilovaná",
+          "salatovyBar": "",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-27T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "27": {
+    "den": "2024-08-28T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka čočková, vepřový řízek smažený, brambory, citron, čaj, sirup, voda, salát mrkvový",
+        "kategorizovano": {
+          "polevka": "Polévka čočková",
+          "hlavniJidlo": "Vepřový řízek smažený, brambory, citron",
+          "salatovyBar": "Salát mrkvový",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-28T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "28": {
+    "den": "2024-08-29T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka pórková s vejcem, těstoviny s masem a rajčaty, čaj, sirup, voda, salát rajčatový",
+        "kategorizovano": {
+          "polevka": "Polévka pórková s vejcem",
+          "hlavniJidlo": "Těstoviny s masem a rajčaty",
+          "salatovyBar": "Salát rajčatový",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-29T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Korýši",
+            "popis": "Korýši a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Podzemnice olejná",
+            "popis": "Podzemnice olejná (arašídy) a výrobky z nich - patří mezi potraviny ohrožující život"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "29": {
+    "den": "2024-08-30T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka bramborový krém, české buchty s povidly, čaj, sirup, voda, salát zelný",
+        "kategorizovano": {
+          "polevka": "Polévka bramborový krém",
+          "hlavniJidlo": "České buchty s povidly",
+          "salatovyBar": "Salát zelný",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-08-30T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "30": {
+    "den": "2024-08-31T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "31": {
+    "den": "2024-09-01T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "32": {
+    "den": "2024-09-02T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Bageta salámová, ovoce",
+        "kategorizovano": {
+          "polevka": "",
+          "hlavniJidlo": "Bageta salámová",
+          "salatovyBar": "",
+          "piti": "",
+          "ostatni": "Ovoce"
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-02T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Korýši",
+            "popis": "Korýši a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Podzemnice olejná",
+            "popis": "Podzemnice olejná (arašídy) a výrobky z nich - patří mezi potraviny ohrožující život"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka zeleninová, květák smažený, brambory vařené, tatarská omáčka, čaj, sirup, voda, salátový bar, pro celiaky-květák jako mozeček",
+        "kategorizovano": {
+          "polevka": "Polévka zeleninová",
+          "hlavniJidlo": "Květák smažený, brambory vařené, tatarská omáčka, pro celiaky-květák jako mozeček",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-02T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "33": {
+    "den": "2024-09-03T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka francouzská cibulačka,drůbeží STROGANOFF, rýže dušená, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka francouzská cibulačka",
+          "hlavniJidlo": "Drůbeží STROGANOFF, rýže dušená, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-03T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka francouzská cibulačka, koprová omáčka, vejce vařená, houskový knedlík, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka francouzská cibulačka",
+          "hlavniJidlo": "Koprová omáčka, vejce vařená, houskový knedlík",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-03T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "34": {
+    "den": "2024-09-04T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka žampionová s vejcem, špecle sypané uzeným masem, zelí sterilované, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka žampionová s vejcem",
+          "hlavniJidlo": "Špecle sypané uzeným masem, zelí sterilované",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-04T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka žampionová s vejcem, vepřová plec šťavnatá, bramborová kaše, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka žampionová s vejcem",
+          "hlavniJidlo": "Vepřová plec šťavnatá, bramborová kaše, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-04T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Vlčí bob",
+            "popis": "Vlčí bob (LUPINA) a výrobky z něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "35": {
+    "den": "2024-09-05T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka z hlívy ústřičné, maso v mrkvi, brambory, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka z hlívy ústřičné",
+          "hlavniJidlo": "Maso v mrkvi, brambory, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-05T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka z hlívy ústřičné, dušená drůbeží játra na cibulce, rýže dušená, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka z hlívy ústřičné",
+          "hlavniJidlo": "Dušená drůbeží játra na cibulce, rýže dušená",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-05T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "36": {
+    "den": "2024-09-06T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka květáková, omáčka houbová bílá, hovězí maso dušené, knedlíky houskové, čaj, sirup, voda, salátový bar, pro celiaky-bezlepkové těstoviny",
+        "kategorizovano": {
+          "polevka": "Polévka květáková",
+          "hlavniJidlo": "Omáčka houbová bílá, hovězí maso dušené, knedlíky houskové, pro celiaky-bezlepkové těstoviny",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-06T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka květáková, bramborový guláš s uzeninou, chléb, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka květáková",
+          "hlavniJidlo": "Bramborový guláš s uzeninou",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": "Chléb"
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-06T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "37": {
+    "den": "2024-09-07T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "38": {
+    "den": "2024-09-08T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "39": {
+    "den": "2024-09-09T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka krupicová s vejcem, kuře pečené na špeku, brambory, čaj, sirup, voda, salátový bar-vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka krupicová s vejcem",
+          "hlavniJidlo": "Kuře pečené na špeku, brambory",
+          "salatovyBar": "Salátový bar-vhodné pro celiaky",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-09T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka krupicová s vejcem, rizoto zeleninové s tofu a sýrem, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka krupicová s vejcem",
+          "hlavniJidlo": "Rizoto zeleninové s tofu a sýrem",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-09T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "40": {
+    "den": "2024-09-10T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka hovězí s rýží a hráškem, vepřová krkovice na pivu, šťouchané brambory, čaj, voda, sirup, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka hovězí s rýží a hráškem",
+          "hlavniJidlo": "Vepřová krkovice na pivu, šťouchané brambory, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, voda, sirup",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-10T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka hovězí s rýží a hráškem, zeleninové řízečky, brambory, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka hovězí s rýží a hráškem",
+          "hlavniJidlo": "Zeleninové řízečky, brambory",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-10T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "41": {
+    "den": "2024-09-11T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka bramborová s houbami, uzená plec, zelí sterilované, knedlíky houskové, čaj, sirup, voda, salátový bar, pro celiaky-příloha brambory",
+        "kategorizovano": {
+          "polevka": "Polévka bramborová s houbami",
+          "hlavniJidlo": "Uzená plec, zelí sterilované, knedlíky houskové, pro celiaky-příloha brambory",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-11T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka bramborová s houbami, čočka vařená, vejce sázená, cibulka, sterilovaná okurka, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka bramborová s houbami",
+          "hlavniJidlo": "Čočka vařená, vejce sázená, cibulka, sterilovaná okurka",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-11T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "42": {
+    "den": "2024-09-12T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka rajčatová s rýží, krůtí plátek na žampionech, rýže dušená, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka rajčatová s rýží",
+          "hlavniJidlo": "Krůtí plátek na žampionech, rýže dušená, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-12T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka rajčatová s rýží, ryba na másle, kmín, citrón, brambory, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka rajčatová s rýží",
+          "hlavniJidlo": "Ryba na másle, kmín, citrón, brambory",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-12T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Ryby",
+            "popis": "Ryby  a výrobky  z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "43": {
+    "den": "2024-09-13T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka svekolnikdruh boršče, guláš hovězí, těstoviny, čaj, sirup, voda, salátový bar, pro celiaky-příloha bezlepkové těstoviny",
+        "kategorizovano": {
+          "polevka": "Polévka svekolnikdruh boršče",
+          "hlavniJidlo": "Guláš hovězí, těstoviny, pro celiaky-příloha bezlepkové těstoviny",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-13T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka svekolnikdruh boršče, sýr smažený, brambory, tatarská omáčka, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka svekolnikdruh boršče",
+          "hlavniJidlo": "Sýr smažený, brambory, tatarská omáčka",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-13T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "44": {
+    "den": "2024-09-14T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "45": {
+    "den": "2024-09-15T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "46": {
+    "den": "2024-09-16T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka zelná bílá, ragú vepřové, brambory, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka zelná bílá",
+          "hlavniJidlo": "Ragú vepřové, brambory, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-16T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka zelná bílá, fazole bretaňské s párkem, chléb, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka zelná bílá",
+          "hlavniJidlo": "Fazole bretaňské s párkem",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": "Chléb"
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-16T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "47": {
+    "den": "2024-09-17T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka chlebová drožďová, vejpečky, špenát, bramborové knedlíky, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka chlebová drožďová",
+          "hlavniJidlo": "Vejpečky, špenát, bramborové knedlíky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-17T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka chlebová drožďová, pánev wok, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka chlebová drožďová",
+          "hlavniJidlo": "Pánev wok, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-17T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Podzemnice olejná",
+            "popis": "Podzemnice olejná (arašídy) a výrobky z nich - patří mezi potraviny ohrožující život"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "48": {
+    "den": "2024-09-18T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka hovězí s masem a těstovinou, sekaná, bramborová kaše, okurka sterilovaná, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka hovězí s masem a těstovinou",
+          "hlavniJidlo": "Sekaná, bramborová kaše, okurka sterilovaná",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-18T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          },
+          {
+            "kod": null,
+            "nazev": "Vlčí bob",
+            "popis": "Vlčí bob (LUPINA) a výrobky z něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka hovězí s masem a těstovinou, dýňové rizoto se žampiony, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka hovězí s masem a těstovinou",
+          "hlavniJidlo": "Dýňové rizoto se žampiony, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-18T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "49": {
+    "den": "2024-09-19T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka z fazolových lusků, hovězí pečeně frankfurtskápřidává se uzenina, knedlíky houskové, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka z fazolových lusků",
+          "hlavniJidlo": "Hovězí pečeně frankfurtskápřidává se uzenina, knedlíky houskové",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-19T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka z fazolových lusků, kuskus s drůbežím masem, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka z fazolových lusků",
+          "hlavniJidlo": "Kuskus s drůbežím masem",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-19T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "50": {
+    "den": "2024-09-20T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka gulášová, rybí filé smažené, citron, brambory, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka gulášová",
+          "hlavniJidlo": "Rybí filé smažené, citron, brambory",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-20T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Ryby",
+            "popis": "Ryby  a výrobky  z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka gulášová, bramborové knedlíky plněné švestkami, sypané mákem, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka gulášová",
+          "hlavniJidlo": "Bramborové knedlíky plněné švestkami, sypané mákem",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-20T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "51": {
+    "den": "2024-09-21T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "52": {
+    "den": "2024-09-22T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "53": {
+    "den": "2024-09-23T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka krupicová s vejcem, hovězí maso dušené, špenát, bramborové knedlíky, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka krupicová s vejcem",
+          "hlavniJidlo": "Hovězí maso dušené, špenát, bramborové knedlíky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-23T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka krupicová s vejcem, lečo s vejci a uzeninou, brambory, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka krupicová s vejcem",
+          "hlavniJidlo": "Lečo s vejci a uzeninou, brambory, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-23T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "54": {
+    "den": "2024-09-24T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka drůbková, kuřecí paličky/stehna BBQ, čaj, vařený brambor, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka drůbková",
+          "hlavniJidlo": "Kuřecí paličky/stehna BBQ, vařený brambor, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-24T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Korýši",
+            "popis": "Korýši a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Ryby",
+            "popis": "Ryby  a výrobky  z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Sójové boby",
+            "popis": "Sójové boby (sója) a výrobky z nich"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka drůbková, houbový kuba",
+        "kategorizovano": {
+          "polevka": "Polévka drůbková",
+          "hlavniJidlo": "Houbový kuba",
+          "salatovyBar": "",
+          "piti": "",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-24T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "kroupy",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "grilované žampiony a cibule",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "čaj",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "sirup",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "voda",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "salátový bar",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "55": {
+    "den": "2024-09-25T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka česneková, živáňskáalobal plněný bramborami, vepř. masem, angl. slaninou a cibulí, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka česneková",
+          "hlavniJidlo": "Živáňskáalobal plněný bramborami, vepř. masem, angl. slaninou a cibulí",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-25T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka česneková, bramborové knedlíky plněné uzeným masem, zelí sterilované, čaj, sirup, voda, salátový bar, pro celiaky-bezlepkové těstoviny",
+        "kategorizovano": {
+          "polevka": "Polévka česneková",
+          "hlavniJidlo": "Bramborové knedlíky plněné uzeným masem, zelí sterilované, pro celiaky-bezlepkové těstoviny",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": false,
+        "naBurze": false,
+        "den": "2024-09-25T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": null,
+        "burzaUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=2T5URUjUkAedNVX76J%2BsD62%2BpaTLFzNhbqccjKNQLlk%3D&ID=712420&day=2024-09-25&type=plusburza&week=&terminal=false&keyboard=false&printer=false"
+      }
+    ],
+    "vydejny": {}
+  },
+  "56": {
+    "den": "2024-09-26T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka selská, guláš segedínský, knedlíky houskové, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka selská",
+          "hlavniJidlo": "Guláš segedínský, knedlíky houskové",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": true,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-09-26T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Korýši",
+            "popis": "Korýši a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Ryby",
+            "popis": "Ryby  a výrobky  z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          },
+          {
+            "kod": null,
+            "nazev": "Měkkýši",
+            "popis": "Měkkýši a výrobky z nich"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=E6AXq40gWPDjGT8nBDWTUU9rZqybBueE%2FfPA16VkQ0I%3D&ID=713905&day=2024-09-26&type=delete&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka selská, kuře pečené, brambory, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka selská",
+          "hlavniJidlo": "Kuře pečené, brambory, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-09-26T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Korýši",
+            "popis": "Korýši a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Ryby",
+            "popis": "Ryby  a výrobky  z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          },
+          {
+            "kod": null,
+            "nazev": "Měkkýši",
+            "popis": "Měkkýši a výrobky z nich"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=24CoJ39891u2Vcaj2JaXsshyIG9IEf3P0IcynTXA2iI%3D&ID=5&day=2024-09-26&type=reorder&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "57": {
+    "den": "2024-09-27T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka ovarová, uzená plec, hrachová kaše, okurka sterilovaná, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka ovarová",
+          "hlavniJidlo": "Uzená plec, hrachová kaše, okurka sterilovaná, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-09-27T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          },
+          {
+            "kod": null,
+            "nazev": "Vlčí bob",
+            "popis": "Vlčí bob (LUPINA) a výrobky z něj"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=PC2GptB0LiE8oAcXAoduQrBmZoXDnDz0QPZKPEu9AtI%3D&ID=4&day=2024-09-27&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka ovarová, květák smažený, brambory, tatarská omáčka, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka ovarová",
+          "hlavniJidlo": "Květák smažený, brambory, tatarská omáčka",
+          "salatovyBar": "Salátový bar",
+          "piti": "Sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-09-27T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=rOUxbnQFA8pYXyMMN%2BHRgtCJ685HHCogfHoFZJNFkk0%3D&ID=5&day=2024-09-27&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "58": {
+    "den": "2024-09-28T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "59": {
+    "den": "2024-09-29T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "60": {
+    "den": "2024-09-30T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka bramborový krém, drůbeží nudličky na zázvoru, rýže dušená, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka bramborový krém",
+          "hlavniJidlo": "Drůbeží nudličky na zázvoru, rýže dušená, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-09-30T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=Qq2PdI4ql%2BLP6kXHouZ5%2FDwtCKbAyQeIxBK2LcHEWb4%3D&ID=4&day=2024-09-30&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka bramborový krém, čevabčiči, brambory, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka bramborový krém",
+          "hlavniJidlo": "Čevabčiči, brambory",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-09-30T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=xoRbUlq5T7IJQMTVWbk6EfcbYcuFQrT%2B2fQuEpFX0Rc%3D&ID=5&day=2024-09-30&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "61": {
+    "den": "2024-10-01T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka brokolicová, vepřové na paprice, knedlíky houskové, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka brokolicová",
+          "hlavniJidlo": "Vepřové na paprice, knedlíky houskové",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-10-01T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=oiNLKdnkcp%2FFu9dcMFyD92OT%2B3wYVXw6p%2FI5uXOdMuQ%3D&ID=4&day=2024-10-01&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka brokolicová, krůtí steak na rozmarýnu se zeleninou, brambory, čaj, sirup, voda, salátový bar, vhodné pro celiaky",
+        "kategorizovano": {
+          "polevka": "Polévka brokolicová",
+          "hlavniJidlo": "Krůtí steak na rozmarýnu se zeleninou, brambory, vhodné pro celiaky",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-10-01T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=M6eAEtoKZiQQ8JladEIpTEhfdHGVg%2FnG1HK%2F9Im8eUM%3D&ID=5&day=2024-10-01&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "62": {
+    "den": "2024-10-02T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka drůbeží, špagety milánské, čaj, sirup, voda, salátový bar, pro celiaky-bezlepkové těstoviny",
+        "kategorizovano": {
+          "polevka": "Polévka drůbeží",
+          "hlavniJidlo": "Špagety milánské, pro celiaky-bezlepkové těstoviny",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-10-02T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=4uE%2BiTklpe31fo2DP6%2BzIiXb%2FT9M341lVv6uVnfBM0U%3D&ID=4&day=2024-10-02&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka drůbeží, dušená drůbeží játra na cibulce, rýže dušená, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka drůbeží",
+          "hlavniJidlo": "Dušená drůbeží játra na cibulce, rýže dušená",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-10-02T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=gbtPvR09nnE6JFdguh0ct9GRYL4RyN5wpQFVeidVAzo%3D&ID=5&day=2024-10-02&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "63": {
+    "den": "2024-10-03T00:00:00.000",
+    "jidla": [
+      {
+        "nazev": "Polévka čočková, kuřecí maso po asijsku, rýže dušená s kurkumou čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka čočková",
+          "hlavniJidlo": "Kuřecí maso po asijsku",
+          "salatovyBar": "Salátový bar",
+          "piti": "Rýže dušená s kurkumou čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 1",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-10-03T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Podzemnice olejná",
+            "popis": "Podzemnice olejná (arašídy) a výrobky z nich - patří mezi potraviny ohrožující život"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=GWyah9l0%2FkAtor1z8%2BbmcB4bttRxYPjo6Y0Aj8tpscs%3D&ID=4&day=2024-10-03&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      },
+      {
+        "nazev": "Polévka čočková, vejce sázená, zelenina restovaná, brambory šťouchané, čaj, sirup, voda, salátový bar",
+        "kategorizovano": {
+          "polevka": "Polévka čočková",
+          "hlavniJidlo": "Vejce sázená, zelenina restovaná, brambory šťouchané",
+          "salatovyBar": "Salátový bar",
+          "piti": "Čaj, sirup, voda",
+          "ostatni": ""
+        },
+        "objednano": false,
+        "varianta": "Oběd 2",
+        "cena": 42.0,
+        "lzeObjednat": true,
+        "naBurze": false,
+        "den": "2024-10-03T00:00:00.000",
+        "alergeny": [
+          {
+            "kod": null,
+            "nazev": "Obiloviny",
+            "popis": "Obiloviny obsahující lepek–nejedná se o celiakii, výrobky z nich"
+          },
+          {
+            "kod": null,
+            "nazev": "Vejce",
+            "popis": "Vejce a výrobky z nich - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Mléko",
+            "popis": "Mléko  a  výrobky  z  něj - patří mezi potraviny ohrožující život"
+          },
+          {
+            "kod": null,
+            "nazev": "Skořápkové plody",
+            "popis": "Skořápkové  plody a výrobky z nich – jedná se o všechny druhy ořechů"
+          },
+          {
+            "kod": null,
+            "nazev": "Celer",
+            "popis": "Celer a výrobky z  něj"
+          },
+          {
+            "kod": null,
+            "nazev": "Hořčice",
+            "popis": "Hořčice a  výrobky z ní"
+          }
+        ],
+        "orderUrl": "db/dbProcessOrder.jsp?time=1727197570297&token=C70X9xpWgawjUVQkCrQSjstDN4n1vndTUjHIBUNsS94%3D&ID=5&day=2024-10-03&type=make&week=&terminal=false&keyboard=false&printer=false",
+        "burzaUrl": null
+      }
+    ],
+    "vydejny": {}
+  },
+  "64": {
+    "den": "2024-10-04T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "65": {
+    "den": "2024-10-05T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "66": {
+    "den": "2024-10-06T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "67": {
+    "den": "2024-10-07T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "68": {
+    "den": "2024-10-08T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "69": {
+    "den": "2024-10-09T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "70": {
+    "den": "2024-10-10T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "71": {
+    "den": "2024-10-11T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "72": {
+    "den": "2024-10-12T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "73": {
+    "den": "2024-10-13T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "74": {
+    "den": "2024-10-14T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "75": {
+    "den": "2024-10-15T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "76": {
+    "den": "2024-10-16T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "77": {
+    "den": "2024-10-17T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "78": {
+    "den": "2024-10-18T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "79": {
+    "den": "2024-10-19T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "80": {
+    "den": "2024-10-20T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "81": {
+    "den": "2024-10-21T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "82": {
+    "den": "2024-10-22T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "83": {
+    "den": "2024-10-23T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "84": {
+    "den": "2024-10-24T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "85": {
+    "den": "2024-10-25T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "86": {
+    "den": "2024-10-26T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "87": {
+    "den": "2024-10-27T00:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "88": {
+    "den": "2024-10-27T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "89": {
+    "den": "2024-10-28T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "90": {
+    "den": "2024-10-29T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "91": {
+    "den": "2024-10-30T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "92": {
+    "den": "2024-10-31T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "93": {
+    "den": "2024-11-01T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "94": {
+    "den": "2024-11-02T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "95": {
+    "den": "2024-11-03T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "96": {
+    "den": "2024-11-04T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "97": {
+    "den": "2024-11-05T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "98": {
+    "den": "2024-11-06T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  },
+  "99": {
+    "den": "2024-11-07T23:00:00.000",
+    "jidla": [],
+    "vydejny": {}
+  }
+}
