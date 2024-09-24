@@ -50,6 +50,8 @@
 	<string>Autojídelna potřebuje přístup k mikrofonu pro nahrání vaší odpovědi</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
