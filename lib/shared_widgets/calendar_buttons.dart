@@ -3,6 +3,7 @@ import 'package:autojidelna/methods_vars/get_correct_date_string.dart';
 import 'package:autojidelna/providers.dart';
 import 'package:autojidelna/shared_widgets/custom_date_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CalendarButton extends StatelessWidget {
@@ -19,7 +20,11 @@ class CalendarButton extends StatelessWidget {
           selector: (_, p1) => p1.dateFormat,
           builder: (context, dateFormat, _) => ValueListenableBuilder(
             valueListenable: dateListener,
-            builder: (context, value, ___) => Text(getCorrectDateString(dateFormat, date: value)),
+            builder: (context, value, ___) {
+              String day = DateFormat(DateFormat.ABBR_WEEKDAY, Localizations.localeOf(context).toLanguageTag()).format(value);
+              String date = getCorrectDateString(dateFormat, date: value);
+              return Text('$day - $date');
+            },
           ),
         ),
       ),
