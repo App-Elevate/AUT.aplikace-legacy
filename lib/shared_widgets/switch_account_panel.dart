@@ -23,7 +23,7 @@ class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
         FutureBuilder<LoggedAccountsInAccountPanel>(
           future: _fetchLoggedAccounts(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+            if (snapshot.connectionState == ConnectionState.waiting) return const Flexible(child: Center(child: CircularProgressIndicator()));
 
             LoggedAccountsInAccountPanel data = snapshot.data!;
 
