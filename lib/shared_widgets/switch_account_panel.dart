@@ -17,32 +17,32 @@ class SwitchAccountPanel extends StatefulWidget {
 class _SwitchAccountPanelState extends State<SwitchAccountPanel> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LoggedAccountsInAccountPanel>(
-      future: _fetchLoggedAccounts(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+    return Column(
+      children: [
+        SectionTitle(lang.switchAccountPanelTitle),
+        FutureBuilder<LoggedAccountsInAccountPanel>(
+          future: _fetchLoggedAccounts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
 
-        LoggedAccountsInAccountPanel data = snapshot.data!;
+            LoggedAccountsInAccountPanel data = snapshot.data!;
 
-        List<Widget> accounts = [];
-        for (int i = 0; i < data.usernames.length; i++) {
-          accounts.add(accountRow(context, i, username: data.usernames[i], currentAccount: i == data.loggedInID));
-        }
+            List<Widget> accounts = [];
+            for (int i = 0; i < data.usernames.length; i++) {
+              accounts.add(accountRow(context, i, username: data.usernames[i], currentAccount: i == data.loggedInID));
+            }
 
-        return Column(
-          children: [
-            SectionTitle(lang.switchAccountPanelTitle),
-            Flexible(
+            return Flexible(
               child: ListView.builder(
                 itemCount: accounts.length,
                 itemBuilder: (context, index) => accounts[index],
               ),
-            ),
-            const CustomDivider(height: 0, isTransparent: false),
-            addAccountButton(context),
-          ],
-        );
-      },
+            );
+          },
+        ),
+        const CustomDivider(height: 0, isTransparent: false),
+        addAccountButton(context),
+      ],
     );
   }
 
