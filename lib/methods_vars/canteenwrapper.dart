@@ -9,6 +9,7 @@ import 'dart:math';
 
 import 'package:autojidelna/classes_enums/hive.dart';
 import 'package:autojidelna/lang/l10n_global.dart';
+import 'package:autojidelna/sandbox/sandbox.dart';
 import 'package:autojidelna/shared_widgets/popups.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -69,7 +70,7 @@ class LoggedInCanteen {
 
   /// this should be safe to get since we are always logged in and the data is created with the login.
   /// DO NOT CALL BEFORE LOGGIN IN
-  Uzivatel? get uzivatel => _canteenData?.uzivatel;
+  Uzivatel? get uzivatel => sandbox ? Sandbox.user : _canteenData?.uzivatel;
 
   CanteenData? get canteenDataUnsafe => _canteenData;
 
@@ -126,12 +127,17 @@ class LoggedInCanteen {
     try {
       LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
       if (loginData.currentlyLoggedIn) {
-        _canteenInstance = await _login(
-          loginData.users[loginData.currentlyLoggedInId!].url,
-          loginData.users[loginData.currentlyLoggedInId!].username,
-          loginData.users[loginData.currentlyLoggedInId!].password,
-          safetyId: (_canteenData?.id ?? 0) + 1,
-        );
+        int testUserIndex = loginData.users.indexWhere((user) => user.username == Sandbox.credentials.username);
+        if (loginData.users.contains(Sandbox.credentials) && loginData.currentlyLoggedInId! == testUserIndex) {
+          Sandbox.login();
+        } else {
+          _canteenInstance = await _login(
+            loginData.users[loginData.currentlyLoggedInId!].url,
+            loginData.users[loginData.currentlyLoggedInId!].username,
+            loginData.users[loginData.currentlyLoggedInId!].password,
+            safetyId: (_canteenData?.id ?? 0) + 1,
+          );
+        }
         return loginData.currentlyLoggedInId!;
       } else {
         return Future.error(ConnectionErrors.noLogin);
@@ -297,6 +303,7 @@ class LoggedInCanteen {
   /// can throw errors if there is no internet connection or if there is no user logged in and if there are no credentials in storage.
   /// in both cases it throws 'no internet'
   Future<Jidelnicek> getLunchesForDay(DateTime date, {bool? requireNew}) async {
+    if (sandbox) return await Sandbox.fakeLunchesForDay(date);
     date = DateTime(date.year, date.month, date.day);
     if ((_canteenData == null || _canteenInstance == null || !_canteenInstance!.prihlasen)) {
       try {
@@ -364,6 +371,7 @@ class LoggedInCanteen {
 
   // just switches the account - YOU NEED TO CALL [loginFromStorage] AFTER THIS
   Future<void> switchAccount(int id) async {
+    Sandbox.logout();
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     loginData.currentlyLoggedInId = id;
     await saveLoginToSecureStorage(loginData);
@@ -371,6 +379,7 @@ class LoggedInCanteen {
 
   // switches the account and logs in as the new account
   Future<bool> changeAccount(int id, {bool indexLunches = false, bool saveToStorage = true}) async {
+    Sandbox.logout();
     LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
     String url = loginData.users[id].url;
     String username = loginData.users[id].username;
@@ -389,7 +398,13 @@ class LoggedInCanteen {
 
   Future<bool> addAccount(String url, String username, String password) async {
     try {
-      await _login(url, username, password, safetyId: (_canteenData?.id ?? 0) + 1);
+      if (username == Sandbox.credentials.username && password == Sandbox.credentials.password) {
+        Sandbox.login();
+      } else {
+        Sandbox.logout();
+        await _login(url, username, password, safetyId: (_canteenData?.id ?? 0) + 1);
+      }
+
       LoginDataAutojidelna loginData = await getLoginDataFromSecureStorage();
       loginData.users.add(LoggedInUser(username: username, password: password, url: url));
       loginData.currentlyLoggedInId = loginData.users.length - 1;
