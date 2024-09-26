@@ -41,6 +41,18 @@ class LoggedInUser {
         'password': password,
         'url': url,
       };
+
+  // Override == to compare properties
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is LoggedInUser && other.username == username && other.password == password && other.url == url;
+  }
+
+  // Override hashCode to generate a consistent hash code based on properties
+  @override
+  int get hashCode => username.hashCode ^ password.hashCode ^ url.hashCode;
 }
 
 ///všichni přihlášení uživatelé
