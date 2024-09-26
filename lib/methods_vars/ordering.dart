@@ -8,7 +8,7 @@ import 'package:autojidelna/providers.dart';
 import 'package:canteenlib/canteenlib.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:provider/provider.dart';
 
 late Canteen canteen;
@@ -28,7 +28,7 @@ void pressed(BuildContext context, Jidlo dish, StavJidla stavJidla) async {
   }
 
   if (ordering.ordering) return;
-  if (!await InternetConnectionChecker().hasConnection) {
+  if (!await InternetConnection().hasInternetAccess) {
     snackBarMessage(lang.errorsObjednavaniJidla);
     return;
   }

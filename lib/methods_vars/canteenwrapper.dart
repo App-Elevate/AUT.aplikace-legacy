@@ -22,9 +22,8 @@ import 'package:autojidelna/local_imports.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-
 import 'package:http/http.dart' as http;
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 /// variable that sets how many max lunches are expected. The higher the worse performance but less missing lunches. This is a fix for the api sometimes not sending all the lunches
 const int numberOfMaxLunches = 3;
@@ -186,7 +185,7 @@ class LoggedInCanteen {
       try {
         await _canteenInstance!.login(username, password); //second try's the charm
       } catch (e) {
-        bool connected = await InternetConnectionChecker().hasConnection;
+        bool connected = await InternetConnection().hasInternetAccess;
         _loginCompleter!.completeError(ConnectionErrors.noInternet);
         if (!connected) return Future.error(ConnectionErrors.noInternet);
         try {
@@ -321,7 +320,7 @@ class LoggedInCanteen {
     if (_canteenData!.currentlyLoading[date] != null) {
       return _canteenData!.currentlyLoading[date]!.future;
     }
-    if (!await InternetConnectionChecker().hasConnection) {
+    if (!await InternetConnection().hasInternetAccess) {
       return Future.error(ConnectionErrors.connectionFailed);
     }
     Jidelnicek jidelnicek = await _ziskatJidelnicekDen(date);
