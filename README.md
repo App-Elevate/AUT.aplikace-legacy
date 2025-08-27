@@ -2,6 +2,12 @@
 
 Aplikace pro objednávání ze systému Icanteen. Cíl této aplikace je zjednodušit, zrychlit, (případně i zautomatizovat) objednávání obědů.
 
+## Archivace
+
+Tento repozitář je archivován a již se nevyvíjí.
+
+Vývoj byl přesunut na nový repozitář [Autojídelny](https://github.com/Autojidelna/autojidelna)
+
 ## Kód pro přistup do Icanteen
 
 Aplikace používá package [canteenlib](https://github.com/tpkowastaken/canteenlib), ve které se nachází všechen kód ohledně přihlašování, objednávání obědů apod. Pokud by vás zajímalo jak aplikace ukládá vaše údaje podívejte se do [canteenwrapper.dart](./lib/methods_vars/canteenwrapper.dart)
